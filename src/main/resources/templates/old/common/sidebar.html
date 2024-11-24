@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Sidebar Responsive</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    </head>
+    <body>
+        <div th:fragment="sidebar" class="d-flex overflow:hidden">
+            <div class="flex-shrink-0 p-3 bg-light" style="width: 50px;">
+                <h5 class="text-start" th:text="#{sidebar.title}"></h5>
+                <h5 class="text-end"><i class="bi bi-chevron-bar-right"></i></h5>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li>
+                        <a class="nav-link" data-bs-toggle="collapse" href="#adminCollapse" role="button" aria-expanded="false" aria-controls="adminCollapse">
+                            <i class="bi bi-icon-name"></i>
+                            <span class="ms-1 d-none d-sm-inline" th:text="#{sidebar.manage}"></span>
+                        </a>
+                        <div class="collapse" id="adminCollapse">
+                            <ul class="btn-toggle-nav list-unstyled ps-3" aria-labelledby="dropdown">
+                                <li><a href="passengersCrud" class="nav-link" th:text="#{sidebar.manage.passengers}"></a></li>
+                                <li><a href="driversCrud" class="nav-link" th:text="#{sidebar.manage.drivers}"></a></li>
+                                <li><a href="weeklyTransportsCrud" class="nav-link" th:text="#{sidebar.manage.weeklyTransports}"></a></li>
+                                <li><a href="specialDaysCrud" class="nav-link" th:text="#{sidebar.manage.specialDays}"></a></li>
+                                <li><a href="abscensesCrud" class="nav-link" th:text="#{sidebar.manage.abscenses}"></a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="config" class="nav-link">
+                            <i class="bi bi-gear"></i>
+                            <span th:text="#{sidebar.config}"class="ms-1 d-none d-sm-inline"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex-grow-1 p-3">
+                <h1>Bienvenido a Transportes</h1>
+                <p>Este es el contenido principal de la página.</p>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    </body>
+</html>
