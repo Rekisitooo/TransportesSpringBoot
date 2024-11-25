@@ -19,66 +19,53 @@
 
     <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
 
-        <th:block th:insert="~{components/sidebar :: sidebar}">  </th:block>
+            <th:block th:insert="~{components/sidebar :: sidebar}">  </th:block>
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
-            <div id="content">
+                <!-- Main Content -->
+                <div id="content">
 
-                <th:block th:insert="~{components/topbar :: topbar}">  </th:block>
+                    <th:block th:insert="~{components/topbar :: topbar}">  </th:block>
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
-                        <h1 class="text-dark" th:text="#{passengerCRUD.title}"></h1>
-                    </div>
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
+                            <h1 class="text-dark" th:text="#{passengerCRUD.title}"></h1>
+                        </div>
 
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th th:text="passengerCRUD.nameTableHeading"></th>
-                            <th th:text="passengerCRUD.surnameTableHeading"></th>
-                            <th th:text="passengerCRUD.occupiedSeatsTableHeading"></th>
-                            <th th:text="passengerCRUD.activeTableHeading"></th>
-                            <th th:text="passengerCRUD.sharedTableHeading"></th>
-                            <th:block th:each="transportDay : ${activeTransportDays}">
-                                <th th:text="#{passengerDriverCRUD.assits} + '' + ${transportDay.description}"></th>
-                            </th:block>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <th th:text="passengerCRUD.nameTableHeading"></th>
-                            <th th:text="passengerCRUD.surnameTableHeading"></th>
-                            <th th:text="passengerCRUD.occupiedSeatsTableHeading"></th>
-                            <th th:text="passeng
-erCRUD.activeTableHeading"></th>
-                                    <th th:text="passengerCRUD.sharedTableHeading"></th>
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th th:text="#{passengerCRUD.nameTableHeading}"></th>
+                                    <th th:text="#{passengerCRUD.surnameTableHeading}"></th>
+                                    <th th:text="#{passengerCRUD.occupiedSeatsTableHeading}"></th>
+                                    <th th:text="#{passengerCRUD.activeTableHeading}"></th>
+                                    <th th:text="#{passengerCRUD.sharedTableHeading}"></th>
                                     <th:block th:each="transportDay : ${activeTransportDays}">
-                                        <th th:text="#{passengerDriverCRUD.assits} + '' + ${transportDay.description}"></th>
+                                        <th th:text="#{passengerDriverCRUD.assits} + ' ' + ${transportDay.description}"></th>
                                     </th:block>
                                 </tr>
-                            </tfoot>
+                            </thead>
                             <tbody>
                                 <tr>
                                     <th:block th:each="passenger : ${passengerList}">
                                         <td th:text="${passenger.name}"></td>
                                         <td th:text="${passenger.surname}"></td>
                                         <td th:text="${passenger.occupiedSeats}"></td>
-                                        <td th:if="${passenger.active == 0}" th:text="${negative}"></td>
-                                        <td th:unless="${passenger.active == 0}" th:text="${affirmative}"></td>
-                                        <td th:if="${passenger.shared == 0}" th:text="${negative}"></td>
-                                        <td th:unless="${passenger.shared == 0}" th:text="${affirmative}"></td>
-                                        <th:block th:each="assistance : ${passenger.meetingAsistance}">
-                                            <th th:if="${assistance == 0}" th:text="${negative}"></th>
-                                            <th th:unless="${assistance == 0}" th:text="${affirmative}"></th>
+                                        <td th:if="${passenger.active == 0}" th:text="#{negative}"></td>
+                                        <td th:unless="${passenger.active == 0}" th:text="#{affirmative}"></td>
+                                        <td th:if="${passenger.shared == 0}" th:text="#{negative}"></td>
+                                        <td th:unless="${passenger.shared == 0}" th:text="#{affirmative}"></td>
+                                        <th:block th:each="assistance : ${passenger.availableInWeeklyTransportDayList}">
+                                            <th th:if="${assistance == 0}" th:text="#{negative}"></th>
+                                            <th th:unless="${assistance == 0}" th:text="#{affirmative}"></th>
                                         </th:block>
                                     </th:block>
                                 </tr>

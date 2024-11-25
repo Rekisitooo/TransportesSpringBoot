@@ -1,6 +1,5 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
 import com.transports.spring.model.WeeklyTransportDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +10,6 @@ import java.util.List;
 @Repository
 public interface IWeeklyTransportDayRepository extends JpaRepository<WeeklyTransportDay, Integer> {
 
-    @Query("SELECT description FROM WeeklyTransportDay WHERE isActive = TRUE")
+    @Query("SELECT new WeeklyTransportDay(id, description, dayOfTheWeek, isActive, userCode, groupCode) FROM WeeklyTransportDay WHERE isActive = TRUE")
     List<WeeklyTransportDay> findActiveWeeklyTransportDayList();
 }

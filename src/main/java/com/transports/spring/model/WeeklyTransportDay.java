@@ -6,6 +6,15 @@ import jakarta.persistence.*;
 @Table(name = "dia_transporte_semanal")
 public final class WeeklyTransportDay {
 
+    public WeeklyTransportDay(int id, String description, int dayOfTheWeek, boolean isActive, int userCode, int groupCode) {
+        this.id = id;
+        this.description = description;
+        this.dayOfTheWeek = dayOfTheWeek;
+        this.isActive = isActive;
+        this.userCode = userCode;
+        this.groupCode = groupCode;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -18,6 +27,12 @@ public final class WeeklyTransportDay {
 
     @Column(name = "ACTIVO")
     private boolean isActive;
+
+    @Column(name = "COD_USUARIO_PROPIETARIO")
+    private int userCode;
+
+    @Column(name = "COD_GRUPO_USUARIO")
+    private int groupCode;
 
     public String getDescription() {
         return description;
@@ -36,7 +51,7 @@ public final class WeeklyTransportDay {
     }
 
     public boolean isActive() {
-        return isActive;
+        return this.isActive;
     }
 
     public void setActive(boolean active) {
@@ -49,5 +64,21 @@ public final class WeeklyTransportDay {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(int userCode) {
+        this.userCode = userCode;
+    }
+
+    public int getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(int groupCode) {
+        this.groupCode = groupCode;
     }
 }

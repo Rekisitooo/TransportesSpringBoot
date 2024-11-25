@@ -1,26 +1,43 @@
 package com.transports.spring.controller.passenger_controller.dto;
 
-import com.transports.spring.model.WeeklyTransportDay;
-
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public final class DtoGetAllPassengers {
     private String name;
     private String surname;
     private int seatsRequider;
-    private HashMap<String, Boolean> availableInWeeklyTransportDayMap;
+    private boolean isActive;
+    private boolean isShared;
+    private List<Boolean> availableInWeeklyTransportDayList;
 
-    public DtoGetAllPassengers(String name, String surname, int seatsRequider, Map<String, Boolean> availableInWeeklyTransportDayMap) {
+    public DtoGetAllPassengers(final String name, final String surname, final int seatsRequider, final boolean isActive, final boolean isShared, final List<Boolean> availableInWeeklyTransportDayList) {
         this.name = name;
         this.surname = surname;
         this.seatsRequider = seatsRequider;
-        this.availableInWeeklyTransportDayMap = new HashMap<>(availableInWeeklyTransportDayMap);
+        this.isShared = isShared;
+        this.isActive = isActive;
+        this.availableInWeeklyTransportDayList = new ArrayList<>(availableInWeeklyTransportDayList);
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isShared() {
+        return isShared;
+    }
+
+    public void setShared(boolean shared) {
+        isShared = shared;
     }
 
     public void setName(String name) {
@@ -43,11 +60,11 @@ public final class DtoGetAllPassengers {
         this.seatsRequider = seatsRequider;
     }
 
-    public Map<String, Boolean> getAvailableInWeeklyTransportDayMap() {
-        return new HashMap<>(availableInWeeklyTransportDayMap);
+    public List<Boolean> getAvailableInWeeklyTransportDayList() {
+        return new ArrayList<>(availableInWeeklyTransportDayList);
     }
 
-    public void setAvailableInWeeklyTransportDayMap(Map<String, Boolean> availableInWeeklyTransportDayMap) {
-        this.availableInWeeklyTransportDayMap = new HashMap<>(availableInWeeklyTransportDayMap);
+    public void setAvailableInWeeklyTransportDayMap(List<Boolean> availableInWeeklyTransportDayList) {
+        this.availableInWeeklyTransportDayList = new ArrayList<>(availableInWeeklyTransportDayList);
     }
 }

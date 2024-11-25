@@ -1,14 +1,14 @@
 package com.transports.spring.controller;
 
-import com.transports.spring.controller.passenger_controller.GetAllPassengers;
+import com.transports.spring.controller.passenger_controller.ProcedureRepository;
 import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
 import com.transports.spring.model.AbstractInvolved;
-import com.transports.spring.model.WeeklyTransportDay;
 import com.transports.spring.repository.IPassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -17,25 +17,26 @@ public final class PassengerController {
     @Autowired
     private IPassengerRepository passengerRepository;
 
+    @Autowired
+    private ProcedureRepository procedureRepository;
+
     @GetMapping("/getPassengerById")
-    public final AbstractInvolved getPassengerById(@PathVariable (value = "id") final int passengerId) {
+    public AbstractInvolved getPassengerById(@PathVariable (value = "id") final int passengerId) {
         return this.passengerRepository.findById(passengerId).orElseThrow();
     }
 
     @GetMapping("/getAllPassenger")
-    public final List<DtoGetAllPassengers> getAllPassengers() {
-        final WeeklyTransportDayController weeklyTransportDayController = new WeeklyTransportDayController();
-        final List<WeeklyTransportDay> activeWeeklyTransportDays = weeklyTransportDayController.getActiveWeeklyTransportDays();
-        return GetAllPassengers.getOnlyActive(activeWeeklyTransportDays);
+    public List<DtoGetAllPassengers> getAllPassengers() throws SQLException {
+        return procedureRepository.getAllPassengers(1, "null");
     }
 
     @GetMapping("/createPassenger")
-    public final AbstractInvolved createPassenger(@RequestBody final AbstractInvolved passenger) {
+    public AbstractInvolved createPassenger(@RequestBody final AbstractInvolved passenger) {
         return this.passengerRepository.save(passenger);
     }
 
     @GetMapping("/updatePassenger")
-    public final AbstractInvolved updatePassenger(@RequestBody final AbstractInvolved passengerToUpdate, @PathVariable (value = "id") final int passengerId) {
+    public AbstractInvolved updatePassenger(@RequestBody final AbstractInvolved passengerToUpdate, @PathVariable (value = "id") final int passengerId) {
         final AbstractInvolved passenger = this.passengerRepository.findById(passengerId).orElseThrow();
         passenger.setActive(passengerToUpdate.isActive());
         passenger.setName(passengerToUpdate.getName());
@@ -49,7 +50,7 @@ public final class PassengerController {
      * @return AbstractInvolved
      */
     @GetMapping("/deletePassenger")
-    public final AbstractInvolved deletePassenger(@PathVariable (value = "id") final int passengerId) {
+    public AbstractInvolved deletePassenger(@PathVariable (value = "id") final int passengerId) {
         final AbstractInvolved passenger = this.passengerRepository.findById(passengerId).orElseThrow();
         passenger.setActive(false);
         return this.passengerRepository.save(passenger);
