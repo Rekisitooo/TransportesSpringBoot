@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DtoGetAllPassengersBuilder {
+    private int id;
     private String name;
     private String surname;
     private int occupiedSeats;
@@ -16,8 +17,14 @@ public final class DtoGetAllPassengersBuilder {
     }
 
     public DtoGetAllPassengers build(){
-        return new DtoGetAllPassengers(this.name, this.surname, this.occupiedSeats, this.isActive, this.isShared, this.availableInWeeklyTransportDayList);
+        return new DtoGetAllPassengers(this.id, this.name, this.surname, this.occupiedSeats, this.isActive, this.isShared, this.availableInWeeklyTransportDayList);
     }
+
+    public DtoGetAllPassengersBuilder id(int id) {
+        this.id = id;
+        return this;
+    }
+
     public DtoGetAllPassengersBuilder active(boolean active) {
         this.isActive = active;
         return this;

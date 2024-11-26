@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DtoGetAllPassengers {
+    private int id;
     private String name;
     private String surname;
     private int occupiedSeats;
@@ -11,13 +12,30 @@ public final class DtoGetAllPassengers {
     private boolean isShared;
     private List<Boolean> availableInWeeklyTransportDayList;
 
-    public DtoGetAllPassengers(final String name, final String surname, final int occupiedSeats, final boolean isActive, final boolean isShared, final List<Boolean> availableInWeeklyTransportDayList) {
+    public DtoGetAllPassengers(final int id, final String name, final String surname, final int occupiedSeats, final boolean isActive, final boolean isShared, final List<Boolean> availableInWeeklyTransportDayList) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.occupiedSeats = occupiedSeats;
         this.isShared = isShared;
         this.isActive = isActive;
         this.availableInWeeklyTransportDayList = new ArrayList<>(availableInWeeklyTransportDayList);
+    }
+
+    public int getOccupiedSeats() {
+        return this.occupiedSeats;
+    }
+
+    public void setOccupiedSeats(int occupiedSeats) {
+        this.occupiedSeats = occupiedSeats;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -50,14 +68,6 @@ public final class DtoGetAllPassengers {
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public int getOccupiedSeats() {
-        return occupiedSeats;
-    }
-
-    public void setOcuppiedSeats(int occupiedSeats) {
-        this.occupiedSeats = occupiedSeats;
     }
 
     public List<Boolean> getAvailableInWeeklyTransportDayList() {

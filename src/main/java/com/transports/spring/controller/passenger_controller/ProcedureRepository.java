@@ -30,14 +30,15 @@ public class ProcedureRepository {
 
                     while (resultSet.next()) {
                         final DtoGetAllPassengersBuilder passengersBuilder = new DtoGetAllPassengersBuilder();
-                        passengersBuilder.name(resultSet.getString("Nombre")).
+                        passengersBuilder.id(resultSet.getInt("Id")).
+                                name(resultSet.getString("Nombre")).
                                 surname(resultSet.getString("Apellidos")).
                                 occupiedSeats(resultSet.getInt("plazas_ocupadas")).
                                 active(resultSet.getBoolean("activo")).
                                 shared(resultSet.getBoolean("usuario_compartido_grupo"));
 
-                        for (int i = 6; i <= columnCount; i++) {
-                                final String columnName = metaData.getColumnName(i);
+                        for (int i = 7; i <= columnCount; i++) {
+                            final String columnName = metaData.getColumnName(i);
                             final boolean value = resultSet.getBoolean(i);
                             passengersBuilder.availableInWeeklyTransportDay(value);
                         }
