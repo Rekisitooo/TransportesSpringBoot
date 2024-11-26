@@ -6,7 +6,7 @@ import java.util.List;
 public final class DtoGetAllPassengersBuilder {
     private String name;
     private String surname;
-    private int ocuppiedSeats;
+    private int occupiedSeats;
     private boolean isActive;
     private boolean isShared;
     private final List<Boolean> availableInWeeklyTransportDayList;
@@ -16,7 +16,7 @@ public final class DtoGetAllPassengersBuilder {
     }
 
     public DtoGetAllPassengers build(){
-        return new DtoGetAllPassengers(this.name, this.surname, this.ocuppiedSeats, this.isActive, this.isShared, this.availableInWeeklyTransportDayList);
+        return new DtoGetAllPassengers(this.name, this.surname, this.occupiedSeats, this.isActive, this.isShared, this.availableInWeeklyTransportDayList);
     }
     public DtoGetAllPassengersBuilder active(boolean active) {
         this.isActive = active;
@@ -38,8 +38,8 @@ public final class DtoGetAllPassengersBuilder {
         return this;
     }
 
-    public DtoGetAllPassengersBuilder ocuppiedSeats(int ocuppiedSeats) {
-        this.ocuppiedSeats = ocuppiedSeats;
+    public DtoGetAllPassengersBuilder occupiedSeats(int occupiedSeats) {
+        this.occupiedSeats = occupiedSeats;
         return this;
     }
 

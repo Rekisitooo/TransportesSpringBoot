@@ -6,15 +6,15 @@ import java.util.List;
 public final class DtoGetAllPassengers {
     private String name;
     private String surname;
-    private int seatsRequider;
+    private int occupiedSeats;
     private boolean isActive;
     private boolean isShared;
     private List<Boolean> availableInWeeklyTransportDayList;
 
-    public DtoGetAllPassengers(final String name, final String surname, final int seatsRequider, final boolean isActive, final boolean isShared, final List<Boolean> availableInWeeklyTransportDayList) {
+    public DtoGetAllPassengers(final String name, final String surname, final int occupiedSeats, final boolean isActive, final boolean isShared, final List<Boolean> availableInWeeklyTransportDayList) {
         this.name = name;
         this.surname = surname;
-        this.seatsRequider = seatsRequider;
+        this.occupiedSeats = occupiedSeats;
         this.isShared = isShared;
         this.isActive = isActive;
         this.availableInWeeklyTransportDayList = new ArrayList<>(availableInWeeklyTransportDayList);
@@ -52,12 +52,12 @@ public final class DtoGetAllPassengers {
         this.surname = surname;
     }
 
-    public int getSeatsRequider() {
-        return seatsRequider;
+    public int getOccupiedSeats() {
+        return occupiedSeats;
     }
 
-    public void setSeatsRequider(int seatsRequider) {
-        this.seatsRequider = seatsRequider;
+    public void setOcuppiedSeats(int occupiedSeats) {
+        this.occupiedSeats = occupiedSeats;
     }
 
     public List<Boolean> getAvailableInWeeklyTransportDayList() {

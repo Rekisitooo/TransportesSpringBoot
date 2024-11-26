@@ -27,7 +27,7 @@ public final class PassengerController {
 
     @GetMapping("/getAllPassenger")
     public List<DtoGetAllPassengers> getAllPassengers() throws SQLException {
-        return procedureRepository.getAllPassengers(1, "null");
+        return procedureRepository.getAllPassengers(1, 1);
     }
 
     @GetMapping("/createPassenger")

@@ -54,8 +54,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th:block th:each="passenger : ${passengerList}">
+                                <th:block th:each="passenger : ${passengerList}">
+                                    <tr>
                                         <td th:text="${passenger.name}"></td>
                                         <td th:text="${passenger.surname}"></td>
                                         <td th:text="${passenger.occupiedSeats}"></td>
@@ -67,8 +67,8 @@
                                             <th th:if="${assistance == 0}" th:text="#{negative}"></th>
                                             <th th:unless="${assistance == 0}" th:text="#{affirmative}"></th>
                                         </th:block>
-                                    </th:block>
-                                </tr>
+                                    </tr>
+                                </th:block>
                             </tbody>
                         </table>
                     </div>

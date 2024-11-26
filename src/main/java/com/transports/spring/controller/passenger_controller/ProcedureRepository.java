@@ -16,7 +16,7 @@ public class ProcedureRepository {
     @Autowired
     private DataSource dataSource;
 
-    public List<DtoGetAllPassengers> getAllPassengers(final int user_id, final String group_id) throws SQLException {
+    public List<DtoGetAllPassengers> getAllPassengers(final int user_id, final Integer group_id) throws SQLException {
         try (final Connection connection = dataSource.getConnection();
              final CallableStatement callableStatement = connection.prepareCall("{CALL crud_viajeros('0,1', " + user_id + ", " + group_id + ")}")
         ) {
@@ -32,12 +32,13 @@ public class ProcedureRepository {
                         final DtoGetAllPassengersBuilder passengersBuilder = new DtoGetAllPassengersBuilder();
                         passengersBuilder.name(resultSet.getString("Nombre")).
                                 surname(resultSet.getString("Apellidos")).
-                                ocuppiedSeats(resultSet.getInt("plazas_ocupadas")).
+                                occupiedSeats(resultSet.getInt("plazas_ocupadas")).
                                 active(resultSet.getBoolean("activo")).
                                 shared(resultSet.getBoolean("usuario_compartido_grupo"));
 
-                        for (int i = 1; i <= columnCount; i++) {
-                            final Boolean value = (Boolean) resultSet.getObject(i);
+                        for (int i = 6; i <= columnCount; i++) {
+                                final String columnName = metaData.getColumnName(i);
+                            final boolean value = resultSet.getBoolean(i);
                             passengersBuilder.availableInWeeklyTransportDay(value);
                         }
 
