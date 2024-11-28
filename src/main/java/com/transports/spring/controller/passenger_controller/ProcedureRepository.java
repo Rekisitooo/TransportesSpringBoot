@@ -1,7 +1,6 @@
 package com.transports.spring.controller.passenger_controller;
 
 import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
-import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengersBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
