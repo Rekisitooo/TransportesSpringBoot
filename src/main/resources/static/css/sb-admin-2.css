@@ -11276,3 +11276,8 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+td input:focus {
+    box-shadow: none;
+    outline: none;
+}
