@@ -1,17 +1,21 @@
 package com.transports.spring.controller;
 
+import com.transports.spring.controller.passenger_controller.FormDtoGetAllPassengers;
 import com.transports.spring.controller.passenger_controller.ProcedureRepository;
 import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
 import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.WeeklyTransportDay;
 import com.transports.spring.repository.IPassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Controller
+@RequestMapping("/passenger")
 public final class PassengerController {
 
     @Autowired
@@ -19,6 +23,24 @@ public final class PassengerController {
 
     @Autowired
     private ProcedureRepository procedureRepository;
+
+    @Autowired
+    private WeeklyTransportDayController weeklyTransportDayController;
+
+    @RequestMapping("/Crud")
+    public String passengersCrud(final Model model) {
+        final List<WeeklyTransportDay> activeWeeklyTransportDays = this.weeklyTransportDayController.getActiveWeeklyTransportDays();
+        try {
+            final List<DtoGetAllPassengers> passengerList = procedureRepository.getAllPassengers(1, 1);
+            final FormDtoGetAllPassengers formDtoGetAllPassengers = new FormDtoGetAllPassengers(passengerList);
+            model.addAttribute("FormDtoGetAllPassengers", formDtoGetAllPassengers);
+        } catch (final SQLException e) {
+            //TODO log
+            model.addAttribute("error", true);
+        }
+        model.addAttribute("activeTransportDays", activeWeeklyTransportDays);
+        return "passengerCRUD";
+    }
 
     @GetMapping("/getPassengerById")
     public AbstractInvolved getPassengerById(@PathVariable (value = "id") final int passengerId) {
