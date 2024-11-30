@@ -3,6 +3,7 @@ package com.transports.spring;
 import com.transports.spring.controller.PassengerController;
 import com.transports.spring.controller.TemplateController;
 import com.transports.spring.controller.WeeklyTransportDayController;
+import com.transports.spring.controller.passenger_controller.FormDtoGetAllPassengers;
 import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
 import com.transports.spring.model.Template;
 import com.transports.spring.model.WeeklyTransportDay;
@@ -39,7 +40,8 @@ public class MainController {
         final List<WeeklyTransportDay> activeWeeklyTransportDays = this.weeklyTransportDayController.getActiveWeeklyTransportDays();
         try {
             final List<DtoGetAllPassengers> passengerList = passengerController.getAllPassengers();
-            model.addAttribute("passengerList", passengerList);
+            final FormDtoGetAllPassengers formDtoGetAllPassengers = new FormDtoGetAllPassengers(passengerList);
+            model.addAttribute("FormDtoGetAllPassengers", formDtoGetAllPassengers);
         } catch (final SQLException e) {
             //TODO log
             model.addAttribute("error", true);

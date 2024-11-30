@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
-@Builder
 @Data
 @AllArgsConstructor
+@Builder
 public final class DtoGetAllPassengers {
     private int id;
     private String name;
@@ -16,5 +16,5 @@ public final class DtoGetAllPassengers {
     private int occupiedSeats;
     private boolean isActive;
     private boolean isShared;
-    private List<Boolean> availableInWeeklyTransportDayList;
+    private Map<Integer, Integer> availableInWeeklyTransportDayMap;
 }

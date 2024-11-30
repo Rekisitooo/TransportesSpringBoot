@@ -15,22 +15,22 @@ public final class WeeklyTransportDayController {
     private IWeeklyTransportDayRepository weeklyTransportDayRepository;
 
     @GetMapping("/getActiveWeeklyTransportDays")
-    public final List<WeeklyTransportDay> getActiveWeeklyTransportDays() {
+    public List<WeeklyTransportDay> getActiveWeeklyTransportDays() {
         return this.weeklyTransportDayRepository.findActiveWeeklyTransportDayList();
     }
 
     @GetMapping("/getAllWeeklyTransportDays")
-    public final List<WeeklyTransportDay> getAllWeeklyTransportDays() {
+    public List<WeeklyTransportDay> getAllWeeklyTransportDays() {
         return weeklyTransportDayRepository.findAll();
     }
 
     @GetMapping("/createWeeklyTransportDays")
-    public final WeeklyTransportDay createWeeklyTransportDay(@RequestBody final WeeklyTransportDay weeklyTransportDay) {
+    public WeeklyTransportDay createWeeklyTransportDay(@RequestBody final WeeklyTransportDay weeklyTransportDay) {
         return this.weeklyTransportDayRepository.save(weeklyTransportDay);
     }
 
     @GetMapping("/updateWeeklyTransportDays")
-    public final WeeklyTransportDay updatePassenger(@RequestBody final WeeklyTransportDay weeklyTransportDayToUpdate, @PathVariable (value = "id") final int passengerId) {
+    public WeeklyTransportDay updatePassenger(@RequestBody final WeeklyTransportDay weeklyTransportDayToUpdate, @PathVariable(value = "id") final int passengerId) {
         final WeeklyTransportDay weeklyTransportDay = this.weeklyTransportDayRepository.findById(passengerId).orElseThrow();
         weeklyTransportDay.setActive(weeklyTransportDayToUpdate.isActive());
         weeklyTransportDay.setDescription(weeklyTransportDayToUpdate.getDescription());
@@ -44,7 +44,7 @@ public final class WeeklyTransportDayController {
      * @return AbstractInvolved
      */
     @GetMapping("/deleteWeeklyTransportDays")
-    public final WeeklyTransportDay deletePassenger(@PathVariable (value = "id") final int weeklyTransportDayId) {
+    public WeeklyTransportDay deletePassenger(@PathVariable(value = "id") final int weeklyTransportDayId) {
         final WeeklyTransportDay weeklyTransportDay = this.weeklyTransportDayRepository.findById(weeklyTransportDayId).orElseThrow();
         weeklyTransportDay.setActive(false);
         return this.weeklyTransportDayRepository.save(weeklyTransportDay);

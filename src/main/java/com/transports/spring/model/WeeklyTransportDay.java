@@ -12,15 +12,6 @@ import lombok.*;
 @Table(name = "dia_transporte_semanal")
 public final class WeeklyTransportDay {
 
-    public WeeklyTransportDay(int id, String description, int dayOfTheWeek, boolean isActive, int userCode, int groupCode) {
-        this.id = id;
-        this.description = description;
-        this.dayOfTheWeek = dayOfTheWeek;
-        this.isActive = isActive;
-        this.userCode = userCode;
-        this.groupCode = groupCode;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

@@ -15,6 +15,12 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
+        <style>
+            td input:focus {
+                box-shadow: none;
+                outline: none;
+            }
+        </style>
     </head>
 
     <body id="page-top">
@@ -39,59 +45,55 @@
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
                             <h1 class="text-dark" th:text="#{passengerCRUD.title}"></h1>
                         </div>
-
-                        <table class="table table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th th:text="#{passengerCRUD.nameTableHeading}" class="bg-primary text-white align-middle text-center"></th>
-                                    <th th:text="#{passengerCRUD.surnameTableHeading}" class="bg-primary text-white align-middle text-center"></th>
-                                    <th th:text="#{passengerCRUD.occupiedSeatsTableHeading}" class="bg-primary text-white align-middle text-center"></th>
-                                    <th th:text="#{passengerCRUD.activeTableHeading}" class="bg-primary text-white align-middle text-center"></th>
-                                    <th th:text="#{passengerCRUD.sharedTableHeading}" class="bg-primary text-white align-middle text-center"></th>
-                                    <th:block th:each="transportDay : ${activeTransportDays}">
-                                        <th th:text="#{passengerDriverCRUD.assits} + ' ' + ${transportDay.description}" class="bg-primary text-white  align-middle text-center  "></th>
-                                    </th:block>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <th:block th:each="passenger : ${passengerList}">
+                        <form th:action="@{updatePassengers}" th:object="${FormDtoGetAllPassengers}" th:method="post">
+                            <input type="submit" th:value="#{passengerCRUD.saveChanges}" name="submitBtnPassengerCrud" class="mb-3 btn btn-sm btn-success shadow-sm"/>
+                            <table class="table table-striped table-bordered shadow-lg" id="dataTable" width="100%" cellspacing="0">
+                                <thead class="bg-light">
                                     <tr>
-                                        <form th:action="@{updatePassengerName}" th:method="post">
-                                            <input type="hidden" th:value="${passenger.id}" name="passengerId"/>
-                                            <td>
-                                                <input th:aria-label="#{passengerCRUD.nameTableHeading}" type="text" th:value="${passenger.name}" name="passengerName" class="bg-transparent border border-0"/>
-                                            </td>
-                                            <td>
-                                                <input th:aria-label="#{passengerCRUD.surnameTableHeading}" type="text" th:value="${passenger.surname}" name="passengerSurname" class="bg-transparent border border-0"/>
-                                            </td>
-                                            <td>
-                                                <input th:aria-label="#{passengerCRUD.occupiedSeatsTableHeading}" type="number" min="0" max="11" th:value="${passenger.occupiedSeats}" name="passengerOccupiedSeats" class="bg-transparent border border-0"/>
-                                            </td>
-                                            <td>
-                                                <select name="passengerActive" th:aria-label="#{passengerCRUD.activeTableHeading}" class="bg-transparent border border-0">
-                                                    <option th:value="1" th:selected="${passenger.active == true}" th:text="#{affirmative}"></option>
-                                                    <option th:value="0" th:selected="${passenger.active == false}" th:text="#{negative}"></option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select name="passengerShared" th:aria-label="#{passengerCRUD.sharedTableHeading}" class="bg-transparent border border-0">
-                                                    <option th:value="1" th:selected="${passenger.shared == true}" th:text="#{affirmative}"></option>
-                                                    <option th:value="0" th:selected="${passenger.shared == false}" th:text="#{negative}"></option>
-                                                </select>
-                                            </td>
-                                            <th:block th:each="transportDay, stat : ${activeTransportDays}">
-                                                <td>
-                                                    <select name="weeklyTransportDayAssistance" th:aria-label="#{passengerCRUD.sharedTableHeading}" class="bg-transparent border border-0">
-                                                        <option th:value="1" th:selected="${passenger.availableInWeeklyTransportDayList[stat.index] == true}" th:text="#{affirmative}"></option>
-                                                        <option th:value="0" th:selected="${passenger.availableInWeeklyTransportDayList[stat.index] == false}" th:text="#{negative}"></option>
-                                                    </select>
-                                                </td>
-                                            </th:block>
-                                        </form>
+                                        <th th:text="#{passengerCRUD.nameTableHeading}" class="bg-primary text-white align-middle text-center"></th>
+                                        <th th:text="#{passengerCRUD.surnameTableHeading}" class="bg-primary text-white align-middle text-center"></th>
+                                        <th th:text="#{passengerCRUD.occupiedSeatsTableHeading}" class="bg-primary text-white align-middle text-center"></th>
+                                        <th th:text="#{passengerCRUD.activeTableHeading}" class="bg-primary text-white align-middle text-center"></th>
+                                        <th th:text="#{passengerCRUD.sharedTableHeading}" class="bg-primary text-white align-middle text-center"></th>
+                                        <th:block th:each="transportDay : ${activeTransportDays}">
+                                            <th th:text="#{passengerDriverCRUD.assits} + ' ' + ${transportDay.description}" class="bg-primary text-white  align-middle text-center  "></th>
+                                        </th:block>
                                     </tr>
-                                </th:block>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="passenger, stat : ${FormDtoGetAllPassengers.passengersList}">
+                                        <input th:field="*{passengersList[__${stat.index}__].id}" type="hidden" th:value="${passenger.id}" aria-label="id"/>
+                                        <td>
+                                            <input th:field="*{passengersList[__${stat.index}__].name}" type="text" th:value="${passenger.name}" th:aria-label="#{passengerCRUD.nameTableHeading}" class="bg-transparent border border-0 w-100"/>
+                                        </td>
+                                        <td>
+                                            <input th:field="*{passengersList[__${stat.index}__].surname}" type="text" th:value="${passenger.surname}" th:aria-label="#{passengerCRUD.surnameTableHeading}" class="bg-transparent border border-0  w-100"/>
+                                        </td>
+                                        <td>
+                                            <input th:field="*{passengersList[__${stat.index}__].occupiedSeats}" type="number" min="1" max="11" th:value="${passenger.occupiedSeats}" th:aria-label="#{passengerCRUD.occupiedSeatsTableHeading}" class="bg-transparent border border-0  w-100"/>
+                                        </td>
+                                        <td>
+                                            <select th:aria-label="#{passengerCRUD.activeTableHeading}" th:field="*{passengersList[__${stat.index}__].active}" class="bg-transparent border border-0 w-100">
+                                                <option th:value="1" th:selected="${passenger.isActive == true}" th:text="#{affirmative}"></option>
+                                                <option th:value="0" th:selected="${passenger.isActive == false}" th:text="#{negative}"></option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select th:aria-label="#{passengerCRUD.sharedTableHeading}" th:field="*{passengersList[__${stat.index}__].shared}" class="bg-transparent border border-0 w-100">
+                                                <option th:value="1" th:selected="${passenger.isShared == true}" th:text="#{affirmative}"></option>
+                                                <option th:value="0" th:selected="${passenger.isShared == false}" th:text="#{negative}"></option>
+                                            </select>
+                                        </td>
+                                        <td th:each="transportDay, indexStat : ${activeTransportDays}">
+                                            <select th:name="passengersList[__${stat.index}__].availableInWeeklyTransportDayMap[__${transportDay.id}__]" th:aria-label="#{passengerDriverCRUD.assits} + ' ' + ${transportDay.description}" class="bg-transparent border border-0 w-100">
+                                                <option th:value="1" th:selected="${passenger.availableInWeeklyTransportDayMap[__${transportDay.id}__] == 1}" th:text="#{affirmative}"></option>
+                                                <option th:value="0" th:selected="${passenger.availableInWeeklyTransportDayMap[__${transportDay.id}__] == 0}" th:text="#{negative}"></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                     <!-- End Page Content -->
 
