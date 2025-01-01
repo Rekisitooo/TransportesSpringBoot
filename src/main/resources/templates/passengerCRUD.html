@@ -19,6 +19,9 @@
                 outline: none;
             }
         </style>
+        <noscript>
+            <meta http-equiv="refresh" content="0; url=/enable_javascript">
+        </noscript>
     </head>
 
     <body id="page-top">
@@ -43,7 +46,7 @@
                         <div class="d-sm-flex align-items-center justify-content-between mt-4">
                             <h1 class="text-dark" th:text="#{passengerCRUD.title}"></h1>
                         </div>
-                        <form th:action="@{/passenger/updatePassengers}" th:object="${FormDtoGetAllPassengers}" th:method="post">
+                        <form th:action="@{/passenger/updatePassengers}" th:object="${DtoFormGetAllPassengers}" th:method="post">
                             <div class="d-flex justify-content-start">
                                 <span th:if="${updateError != null}" th:text="${CRUD.updateError}" class="text-danger"></span>
                                 <span th:if="${updateSuccess != null}" th:text="${CRUD.updateSuccess}" class="text-success"></span>
@@ -70,7 +73,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="passenger, stat : ${FormDtoGetAllPassengers.passengersList}">
+                                    <tr th:each="passenger, stat : ${DtoFormGetAllPassengers.passengersList}">
                                         <input th:field="*{passengersList[__${stat.index}__].id}" type="hidden" th:value="${passenger.id}" aria-label="id"/>
                                         <td>
                                             <input th:field="*{passengersList[__${stat.index}__].name}" type="text" th:value="${passenger.name}" th:aria-label="#{passengerCRUD.nameTableHeading}" class="bg-transparent border border-0 w-100"/>
