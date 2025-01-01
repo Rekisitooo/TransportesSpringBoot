@@ -22,6 +22,7 @@ public final class DtoGetAllPassengers implements IPassengerDtoGetAllPassengersC
     private boolean isSharedFieldToBeModified;
     private String ownerAlias;
     private Map<Integer, Integer> availableInWeeklyTransportDayMap;
+    private int totalNumberOfElements;
 
     @Override
     public boolean isShared() {

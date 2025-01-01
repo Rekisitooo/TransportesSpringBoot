@@ -13,6 +13,7 @@ import java.util.Map;
 @Repository
 public class PassengerProcedureRepository {
 
+    public static final int FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS = 11;
     private final DataSource dataSource;
 
     public PassengerProcedureRepository(DataSource dataSource) {
@@ -39,14 +40,15 @@ public class PassengerProcedureRepository {
                                 occupiedSeats(resultSet.getInt("plazas_ocupadas")).
                                 isActive(resultSet.getBoolean("activo")).
                                 isShared(resultSet.getBoolean("usuario_compartido_grupo")).
-                                ownerAlias(resultSet.getString("alias_usuario_propietario"));
+                                ownerAlias(resultSet.getString("alias_usuario_propietario")).
+                                totalNumberOfElements(resultSet.getInt("total_registros"));
 
                         int appUserId = 1; // extract user form session
                         int involvedUserIdCreator = resultSet.getInt("codigo_usuario_propietario");
                         dtoGetAllPassengersBuilder.isSharedFieldToBeModified(involvedUserIdCreator == appUserId);
 
                         final Map<Integer, Integer> weeklyTransportDayAssitanceByTransportDayIdMap = new HashMap<>();
-                        for (int i = 10; i <= columnCount; i=i+2) {
+                        for (int i = FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS; i <= columnCount; i=i+2) {
                             //final String columnName = metaData.getColumnName(i); //DEBUG
                             final int weeklyTransportDayAssitance = resultSet.getInt(i);
                             final int weeklyTransportDayId = resultSet.getInt(i-1);

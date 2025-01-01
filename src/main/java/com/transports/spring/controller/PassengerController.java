@@ -5,6 +5,7 @@ import com.transports.spring.dto.DtoGetAllPassengers;
 import com.transports.spring.exception.TransportsException;
 import com.transports.spring.model.*;
 import com.transports.spring.service.PassengerService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public final class PassengerController {
     }
 
     @RequestMapping("/Crud")
-    public String passengersCrud(final Model model) {
+    public String passengersCrud(final Model model, @ModelAttribute DtoGetAllPassengers passengerFilters) {
         final List<WeeklyTransportDay> activeWeeklyTransportDays = this.weeklyTransportDayController.getActiveWeeklyTransportDays();
         try {
             final List<DtoGetAllPassengers> passengerList = this.passengerService.getAllPassengers(1, 1);
