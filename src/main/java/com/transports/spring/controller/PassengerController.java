@@ -1,12 +1,10 @@
 package com.transports.spring.controller;
 
-import com.transports.spring.controller.passenger_controller.FormDtoGetAllPassengers;
-import com.transports.spring.controller.passenger_controller.ProcedureRepository;
-import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
-import com.transports.spring.model.AbstractInvolved;
-import com.transports.spring.model.WeeklyTransportDay;
-import com.transports.spring.repository.IPassengerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.transports.spring.dto.DtoFormGetAllPassengers;
+import com.transports.spring.dto.DtoGetAllPassengers;
+import com.transports.spring.exception.TransportsException;
+import com.transports.spring.model.*;
+import com.transports.spring.service.PassengerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,63 +16,44 @@ import java.util.List;
 @RequestMapping("/passenger")
 public final class PassengerController {
 
-    @Autowired
-    private IPassengerRepository passengerRepository;
+    private final PassengerService passengerService;
+    private final WeeklyTransportDayController weeklyTransportDayController;
 
-    @Autowired
-    private ProcedureRepository procedureRepository;
-
-    @Autowired
-    private WeeklyTransportDayController weeklyTransportDayController;
+    public PassengerController(PassengerService passengerService, WeeklyTransportDayController weeklyTransportDayController) {
+        this.passengerService = passengerService;
+        this.weeklyTransportDayController = weeklyTransportDayController;
+    }
 
     @RequestMapping("/Crud")
     public String passengersCrud(final Model model) {
         final List<WeeklyTransportDay> activeWeeklyTransportDays = this.weeklyTransportDayController.getActiveWeeklyTransportDays();
         try {
-            final List<DtoGetAllPassengers> passengerList = procedureRepository.getAllPassengers(1, 1);
-            final FormDtoGetAllPassengers formDtoGetAllPassengers = new FormDtoGetAllPassengers(passengerList);
-            model.addAttribute("FormDtoGetAllPassengers", formDtoGetAllPassengers);
+            final List<DtoGetAllPassengers> passengerList = this.passengerService.getAllPassengers(1, 1);
+            model.addAttribute("DtoFormGetAllPassengers", new DtoFormGetAllPassengers(passengerList));
         } catch (final SQLException e) {
-            //TODO log
+            //TODO log exception
             model.addAttribute("error", true);
         }
         model.addAttribute("activeTransportDays", activeWeeklyTransportDays);
+        model.addAttribute("userCode", 1);
         return "passengerCRUD";
     }
 
-    @GetMapping("/getPassengerById")
-    public AbstractInvolved getPassengerById(@PathVariable (value = "id") final int passengerId) {
-        return this.passengerRepository.findById(passengerId).orElseThrow();
+    @PostMapping("/updatePassengers")
+    public String updatePassengers(final Model model, final DtoFormGetAllPassengers passengersCRUDform) {
+        try {
+            this.passengerService.updatePassenger(passengersCRUDform);
+        } catch (final TransportsException e) {
+            //TODO log exception
+            model.addAttribute("updateError", true);
+        }
+        this.passengersCrud(model);
+        return "redirect:/passenger/Crud";
     }
+
 
     @GetMapping("/getAllPassenger")
     public List<DtoGetAllPassengers> getAllPassengers() throws SQLException {
-        return procedureRepository.getAllPassengers(1, 1);
-    }
-
-    @GetMapping("/createPassenger")
-    public AbstractInvolved createPassenger(@RequestBody final AbstractInvolved passenger) {
-        return this.passengerRepository.save(passenger);
-    }
-
-    @GetMapping("/updatePassenger")
-    public AbstractInvolved updatePassenger(@RequestBody final AbstractInvolved passengerToUpdate, @PathVariable (value = "id") final int passengerId) {
-        final AbstractInvolved passenger = this.passengerRepository.findById(passengerId).orElseThrow();
-        passenger.setActive(passengerToUpdate.isActive());
-        passenger.setName(passengerToUpdate.getName());
-        passenger.setSurname(passengerToUpdate.getSurname());
-        return this.passengerRepository.save(passenger);
-    }
-
-    /**
-     * Does not delete the passenger, it mantains it for the history and statistics.
-     * @param passengerId
-     * @return AbstractInvolved
-     */
-    @GetMapping("/deletePassenger")
-    public AbstractInvolved deletePassenger(@PathVariable (value = "id") final int passengerId) {
-        final AbstractInvolved passenger = this.passengerRepository.findById(passengerId).orElseThrow();
-        passenger.setActive(false);
-        return this.passengerRepository.save(passenger);
+        return this.passengerService.getAllPassengers(1, 1);
     }
 }

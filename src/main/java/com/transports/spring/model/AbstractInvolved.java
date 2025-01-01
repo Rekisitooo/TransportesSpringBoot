@@ -2,13 +2,15 @@ package com.transports.spring.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "INVOLUCRADO")
 public class AbstractInvolved {
 
@@ -24,5 +26,14 @@ public class AbstractInvolved {
 
     @Column(name = "ACTIVO")
     private boolean isActive;
+
+    @Column(name = "COD_ROL")
+    private int roleCode;
+
+    @Column(name = "COD_USUARIO_PROPIETARIO")
+    private int userCode;
+
+    @Column(name = "COD_GRUPO_USUARIO")
+    private Integer userCodeGroup;
 
 }

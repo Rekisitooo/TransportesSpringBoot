@@ -87,11 +87,15 @@
                                                 <option th:value="0" th:selected="${passenger.isActive == false}" th:text="#{negative}"></option>
                                             </select>
                                         </td>
-                                        <td>
-                                            <select th:aria-label="#{passengerCRUD.sharedTableHeading}" th:field="*{passengersList[__${stat.index}__].shared}" class="bg-transparent border border-0 w-100">
+                                        <td th:if="${passenger.isSharedFieldToBeModified == true}">
+                                            <select th:aria-label="#{passengerCRUD.sharedTableHeading}" th:field="*{passengersList[__${stat.index}__].isShared}" class="bg-transparent border border-0 w-100">
                                                 <option th:value="1" th:selected="${passenger.isShared == true}" th:text="#{affirmative}"></option>
                                                 <option th:value="0" th:selected="${passenger.isShared == false}" th:text="#{negative}"></option>
                                             </select>
+                                        </td>
+                                        <td th:unless="${passenger.isSharedFieldToBeModified == true}">
+                                            <span th:if="${passenger.isShared == true}" th:text="#{affirmative}"></span>
+                                            <span th:unless="${passenger.isShared == true}" th:text="#{affirmative}"></span>
                                         </td>
                                         <td th:each="transportDay, indexStat : ${activeTransportDays}">
                                             <select th:name="passengersList[__${stat.index}__].availableInWeeklyTransportDayMap[__${transportDay.id}__]" th:aria-label="#{passengerDriverCRUD.assits} + ' ' + ${transportDay.description}" class="bg-transparent border border-0 w-100">

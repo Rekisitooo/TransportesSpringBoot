@@ -1,7 +1,6 @@
-package com.transports.spring.controller.passenger_controller;
+package com.transports.spring.repository;
 
-import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.transports.spring.dto.DtoGetAllPassengers;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -12,14 +11,17 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class ProcedureRepository {
+public class PassengerProcedureRepository {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    public List<DtoGetAllPassengers> getAllPassengers(final int user_id, final Integer group_id) throws SQLException {
+    public PassengerProcedureRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId) throws SQLException {
         try (final Connection connection = dataSource.getConnection();
-             final CallableStatement callableStatement = connection.prepareCall("{CALL crud_viajeros('0,1', " + user_id + ", " + group_id + ")}")
+             final CallableStatement callableStatement = connection.prepareCall("{CALL crud_viajeros('0,1', " + userId + ", " + groupId + ")}")
         ) {
             final boolean hasResults = callableStatement.execute();
             final List<DtoGetAllPassengers> results = new ArrayList<>();
@@ -30,24 +32,27 @@ public class ProcedureRepository {
                     final int columnCount = metaData.getColumnCount();
 
                     while (resultSet.next()) {
-                        Map<Integer, Integer> weeklyTransportDayAssitanceByTransportDayIdMap = new HashMap<>();
                         final DtoGetAllPassengers.DtoGetAllPassengersBuilder dtoGetAllPassengersBuilder = DtoGetAllPassengers.builder().
                                 id(resultSet.getInt("Id")).
                                 name(resultSet.getString("Nombre")).
                                 surname(resultSet.getString("Apellidos")).
                                 occupiedSeats(resultSet.getInt("plazas_ocupadas")).
                                 isActive(resultSet.getBoolean("activo")).
-                                isShared(resultSet.getBoolean("usuario_compartido_grupo"));
+                                isShared(resultSet.getBoolean("usuario_compartido_grupo")).
+                                ownerAlias(resultSet.getString("alias_usuario_propietario"));
 
-                        //columnCount will always be an even number because for every day, it will bring transport day id and assistance (boolean)
-                        for (int i = 8; i <= columnCount; i=i+2) {
+                        int appUserId = 1; // extract user form session
+                        int involvedUserIdCreator = resultSet.getInt("codigo_usuario_propietario");
+                        dtoGetAllPassengersBuilder.isSharedFieldToBeModified(involvedUserIdCreator == appUserId);
+
+                        final Map<Integer, Integer> weeklyTransportDayAssitanceByTransportDayIdMap = new HashMap<>();
+                        for (int i = 10; i <= columnCount; i=i+2) {
                             //final String columnName = metaData.getColumnName(i); //DEBUG
                             final int weeklyTransportDayAssitance = resultSet.getInt(i);
                             final int weeklyTransportDayId = resultSet.getInt(i-1);
                             weeklyTransportDayAssitanceByTransportDayIdMap.put(weeklyTransportDayId, weeklyTransportDayAssitance);
                         }
-                        DtoGetAllPassengers build = dtoGetAllPassengersBuilder.build();
-                        boolean active = build.isActive();
+
                         dtoGetAllPassengersBuilder.availableInWeeklyTransportDayMap(weeklyTransportDayAssitanceByTransportDayIdMap);
                         results.add(dtoGetAllPassengersBuilder.build());
                     }

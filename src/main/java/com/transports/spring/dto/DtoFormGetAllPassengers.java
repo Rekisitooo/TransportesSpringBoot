@@ -1,6 +1,5 @@
-package com.transports.spring.controller.passenger_controller;
+package com.transports.spring.dto;
 
-import com.transports.spring.controller.passenger_controller.dto.DtoGetAllPassengers;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class FormDtoGetAllPassengers {
-
+public class DtoFormGetAllPassengers {
     private List<DtoGetAllPassengers> passengersList;
 }
