@@ -13,7 +13,7 @@ import java.util.Map;
 @Repository
 public class PassengerProcedureRepository {
 
-    public static final int FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS = 11;
+    public static final int FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS = 9;
     private final DataSource dataSource;
 
     public PassengerProcedureRepository(DataSource dataSource) {
@@ -48,7 +48,7 @@ public class PassengerProcedureRepository {
                         dtoGetAllPassengersBuilder.isSharedFieldToBeModified(involvedUserIdCreator == appUserId);
 
                         final Map<Integer, Integer> weeklyTransportDayAssitanceByTransportDayIdMap = new HashMap<>();
-                        for (int i = FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS; i <= columnCount; i=i+2) {
+                        for (int i = 1 + FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS; i <= columnCount; i=i+2) {
                             //final String columnName = metaData.getColumnName(i); //DEBUG
                             final int weeklyTransportDayAssitance = resultSet.getInt(i);
                             final int weeklyTransportDayId = resultSet.getInt(i-1);

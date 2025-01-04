@@ -1086,8 +1086,8 @@ BEGIN
     -- Paso 2: Construir la consulta SQL completa
     SET @query_sql = CONCAT(
         "SELECT 
+			total.total_registros
 			resultados.*, 
-            total.total_registros
 				FROM 
                 (
 					SELECT 
