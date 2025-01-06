@@ -7,6 +7,7 @@ import com.transports.spring.exception.TransportsException;
 import com.transports.spring.repository.IPassengerRepository;
 import com.transports.spring.service.passenger.UpdatePassenger;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -30,8 +31,8 @@ public class PassengerService {
         this.updatePassenger.updatePassenger(passengersCRUDform);
     }
 
-    public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId) throws SQLException {
-        return this.procedureRepository.getAllPassengers(userId, groupId);
+    public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId, final Pageable pageable) throws SQLException {
+        return this.procedureRepository.getAllPassengers(userId, groupId, pageable);
     }
 
 }

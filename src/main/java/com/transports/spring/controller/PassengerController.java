@@ -6,6 +6,7 @@ import com.transports.spring.exception.TransportsException;
 import com.transports.spring.model.*;
 import com.transports.spring.service.PassengerService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +27,10 @@ public final class PassengerController {
     }
 
     @RequestMapping("/Crud")
-    public String passengersCrud(final Model model, @ModelAttribute DtoGetAllPassengers passengerFilters) {
+    public String passengersCrud(final Model model, final Pageable pageable) {
         final List<WeeklyTransportDay> activeWeeklyTransportDays = this.weeklyTransportDayController.getActiveWeeklyTransportDays();
         try {
-            final List<DtoGetAllPassengers> passengerList = this.passengerService.getAllPassengers(1, 1);
+            final List<DtoGetAllPassengers> passengerList = this.passengerService.getAllPassengers(1, 1, pageable);
             model.addAttribute("DtoFormGetAllPassengers", new DtoFormGetAllPassengers(passengerList));
         } catch (final SQLException e) {
             //TODO log exception
@@ -41,14 +42,14 @@ public final class PassengerController {
     }
 
     @PostMapping("/updatePassengers")
-    public String updatePassengers(final Model model, final DtoFormGetAllPassengers passengersCRUDform) {
+    public String updatePassengers(final Model model, final DtoFormGetAllPassengers passengersCRUDform, final Pageable pageable) {
         try {
             this.passengerService.updatePassenger(passengersCRUDform);
         } catch (final TransportsException e) {
             //TODO log exception
             model.addAttribute("updateError", true);
         }
-        this.passengersCrud(model);
+        this.passengersCrud(model, pageable);
         return "redirect:/passenger/Crud";
     }
 

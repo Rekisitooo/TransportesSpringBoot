@@ -47,8 +47,8 @@
                             </a>
                         </div>
 
-                        <div th:insert="~{index_components/templateList :: templateList}"            th:if="${not #lists.isEmpty(templateList)}"></div>
-                        <div th:insert="~{index_components/createNewTemplate :: newTemplateRow}"     th:unless="${not #lists.isEmpty(templateList)}"></div>
+                        <div th:insert="~{components/index/templateList :: templateList}"            th:if="${not #lists.isEmpty(templateList)}"></div>
+                        <div th:insert="~{components/index/createNewTemplate :: newTemplateRow}"     th:unless="${not #lists.isEmpty(templateList)}"></div>
 
                     </div>
                     <!-- End Page Content -->

@@ -1,6 +1,8 @@
 package com.transports.spring.repository;
 
 import com.transports.spring.dto.DtoGetAllPassengers;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Repository
 public class PassengerProcedureRepository {
@@ -16,14 +19,34 @@ public class PassengerProcedureRepository {
     public static final int FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS = 9;
     private final DataSource dataSource;
 
-    public PassengerProcedureRepository(DataSource dataSource) {
+    public PassengerProcedureRepository(DataSource dataSource) throws SQLException {
         this.dataSource = dataSource;
     }
 
-    public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId) throws SQLException {
+    public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId, final Pageable pageable) throws SQLException {
+        final StringBuffer sorting = new StringBuffer();
+        long offset = 1L;
+        int pageSize = 10;
+
+        if (pageable != null) {
+            offset = pageable.getOffset();
+            pageSize = pageable.getPageSize();
+            pageable.getSort().forEach(order -> {
+                sorting.append(order.getProperty());
+                sorting.append(",");
+                sorting.append(order.getDirection().toString());
+            });
+        }
+
         try (final Connection connection = dataSource.getConnection();
-             final CallableStatement callableStatement = connection.prepareCall("{CALL crud_viajeros('0,1', " + userId + ", " + groupId + ")}")
-        ) {
+             final CallableStatement callableStatement = connection.prepareCall("{CALL crud_viajeros('0,1', :userId, :groupId, :offset, :pageSize, :sorting)}");
+         ){
+            callableStatement.setString("userId", String.valueOf(userId));
+            callableStatement.setString("groupId", String.valueOf(groupId));
+            callableStatement.setLong("offset", offset);
+            callableStatement.setInt("pageSize", pageSize);
+            callableStatement.setString("sorting", sorting.toString());
+
             final boolean hasResults = callableStatement.execute();
             final List<DtoGetAllPassengers> results = new ArrayList<>();
 

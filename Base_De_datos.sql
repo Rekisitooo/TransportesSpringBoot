@@ -1051,9 +1051,9 @@ CREATE PROCEDURE crud_viajeros(
     IN cod_grupo_usuario TEXT,
     IN elemento_inicial INT,
     IN tamano_pagina INT,
-    IN campo_ordenacion VARCHAR(20),
-    IN orden VARCHAR(4)
+    IN orden TEXT
 )
+
 BEGIN
     DECLARE query_sql TEXT;
     DECLARE disponibilidad_por_dia_transporte TEXT;
@@ -1063,8 +1063,7 @@ BEGIN
 	SET cod_grupo_usuario = COALESCE(cod_grupo_usuario, '\'\'');
 	SET elemento_inicial = COALESCE(elemento_inicial, 1);
 	SET tamano_pagina = COALESCE(tamano_pagina, 10);
-	SET campo_ordenacion = COALESCE(campo_ordenacion, 'viajero.ID');
-	SET orden = COALESCE(orden, 'DESC');
+	SET orden = COALESCE(orden, 'viajero.ID DESC');
 
     -- Paso 1: Construir dinámicamente las columnas de dias de transporte
 	SELECT 
@@ -1086,8 +1085,8 @@ BEGIN
     -- Paso 2: Construir la consulta SQL completa
     SET @query_sql = CONCAT(
         "SELECT 
-			total.total_registros
-			resultados.*, 
+			total.total_registros,
+			resultados.*
 				FROM 
                 (
 					SELECT 
@@ -1113,7 +1112,7 @@ BEGIN
 							AND viajero.activo IN (", mostrar_viajeros_activos ,")
 						GROUP BY viajero.ID
 						ORDER BY 
-							", campo_ordenacion, " ", orden, ", 
+							", orden, ",
 							CASE 
 								WHEN codigo_usuario_propietario = ", cod_usuario ," THEN 0
 								ELSE 1
@@ -1154,7 +1153,7 @@ BEGIN
 END $$
 DELIMITER ;
             
-CALL crud_viajeros2(1, 1, 1, null, null, null, null);
+CALL crud_viajeros(1, 1, 1, null, null, null);
 
 DELIMITER $$
 CREATE PROCEDURE crud_conductores(
