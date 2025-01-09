@@ -9,16 +9,13 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "PLANTILLA")
-public final class Template {
+@Table(name = "GRUPO_USUARIO")
+public final class UserGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "ANNO")
-    private String year;
-
-    @Column(name = "MES")
-    private String month;
+    @Column(name = "NOMBRE")
+    private String name;
 }

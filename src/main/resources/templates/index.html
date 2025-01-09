@@ -16,6 +16,9 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
+        <noscript>
+            <meta http-equiv="refresh" content="0; url=/enable_javascript">
+        </noscript>
     </head>
 
     <body id="page-top">
@@ -39,13 +42,13 @@
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
                             <h1 class="text-dark" th:text="#{index.templates}"></h1>
-                            <a href="createTemplate" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <a href="createTemplate" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
                                 <span th:text="#{index.generateTemplate}"></span>
                             </a>
                         </div>
 
-                        <div th:insert="~{index_components/templateList :: templateList}"            th:if="${not #lists.isEmpty(templateList)}"></div>
-                        <div th:insert="~{index_components/createNewTemplate :: newTemplateRow}"     th:unless="${not #lists.isEmpty(templateList)}"></div>
+                        <div th:insert="~{components/index/templateList :: templateList}"            th:if="${not #lists.isEmpty(templateList)}"></div>
+                        <div th:insert="~{components/index/createNewTemplate :: newTemplateRow}"     th:unless="${not #lists.isEmpty(templateList)}"></div>
 
                     </div>
                     <!-- End Page Content -->
