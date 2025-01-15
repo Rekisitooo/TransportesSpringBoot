@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "FECHA_TRANSPORTE_POR_PLANTILLA")
-public final class TemplateTransportDate {
+public final class TransportByTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +24,9 @@ public final class TemplateTransportDate {
     @Column(name = "FECHA_TRANSPORTE")
     private LocalDate transportDate;
 
-    @Column(name = "PLAZAS")
+    @Column(name = "COD_DIA_DE_LA_SEMANA")
     private int dayOfTheWeek;
+
+    private String dayOfTheWeekName;
 
 }

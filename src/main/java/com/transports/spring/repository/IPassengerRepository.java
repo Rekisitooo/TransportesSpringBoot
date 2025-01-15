@@ -1,6 +1,7 @@
 package com.transports.spring.repository;
 
 import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IPassengerRepository extends JpaRepository<AbstractInvolved, Integer> {
+public interface IPassengerRepository extends JpaRepository<Passenger, Integer> {
 
     @Modifying
     @Query("UPDATE Passenger i SET i.name = :name, i.surname = :surname, i.isActive = :isActive, i.occupiedSeats = :occupiedSeats, i.userCodeGroup = :userGroupCode WHERE i.userCode = :ownerUserCode")

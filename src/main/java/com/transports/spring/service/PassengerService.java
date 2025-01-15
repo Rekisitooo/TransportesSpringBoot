@@ -1,6 +1,8 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoFormGetAllPassengers;
+import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.Passenger;
 import com.transports.spring.repository.PassengerProcedureRepository;
 import com.transports.spring.dto.DtoGetAllPassengers;
 import com.transports.spring.exception.TransportsException;
@@ -35,4 +37,7 @@ public class PassengerService {
         return this.procedureRepository.getAllPassengers(userId, groupId, pageable);
     }
 
+    public List<Passenger> getAll() {
+        return this.passengerRepository.findAll();
+    }
 }

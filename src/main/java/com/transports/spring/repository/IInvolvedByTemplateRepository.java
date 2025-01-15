@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Driver;
+import java.util.List;
 
 @Repository
 public interface IInvolvedByTemplateRepository extends JpaRepository<InvolvedByTemplate, Integer> {
@@ -24,7 +25,7 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<InvolvedByT
             "       WHERE " +
             "           rol.DESCRIPCION = 'Viajero' " +
             "           AND ipp.COD_PLANTILLA = :templateCode")
-    Passenger getAllPassengersFromTemplate(@Param("templateCode") final int templateId);
+    List<Passenger> getAllPassengersFromTemplate(@Param("templateCode") final int templateId);
 
     @Query("SELECT " +
             "   i.ID," +
@@ -38,6 +39,6 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<InvolvedByT
             "       WHERE " +
             "           rol.DESCRIPCION = 'Conductor' " +
             "           AND ipp.COD_PLANTILLA = :templateCode")
-    Driver getAllDriversFromTemplate(@Param("templateCode") final int templateId);
+    List<Driver> getAllDriversFromTemplate(@Param("templateCode") final int templateId);
 }
 
