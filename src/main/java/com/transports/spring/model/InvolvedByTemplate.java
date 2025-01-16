@@ -21,4 +21,7 @@ public final class InvolvedByTemplate {
     @Column(name = "PLAZAS")
     private int seats;
 
+    @Column(name = "COD_ROL")
+    private int roleCode;
+
 }

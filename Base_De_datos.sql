@@ -81,15 +81,13 @@ CREATE TABLE IF NOT EXISTS INVOLUCRADO (
 
 INSERT  INTO INVOLUCRADO (NOMBRE, APELLIDOS, ACTIVO, NUMERO_PLAZAS, COD_ROL, COD_USUARIO_PROPIETARIO, COD_GRUPO_USUARIO)
 VALUES 
-	('Ikeriano no compartido', '', FALSE, 1, 1, 1, NULL),
-    ('Fuencarral1 no compartido', '', FALSE, 1, 1, 2, NULL),
 	('Adolfo', '', TRUE, 1, 1, 1, 1),
     ('Julio', '', TRUE, 1, 1, 1, 1),
     ('Carmen', '', TRUE, 1, 1, 1, 1),
     ('Enriqueta', '', TRUE, 1, 1, 1, 1),
     ('Pilar', 'Pérez', TRUE, 1, 1, 1, 1),
 	('Pepe y Bea', '', TRUE, 2, 1, 1, 1),
-    ('Roselia', '', FALSE, 1, 1, 1, 1),
+    ('Roselia', '', TRUE, 1, 1, 1, 1),
     ('Nicolás', '', TRUE, 1, 1, 1, 1),
     ('Ino', '', TRUE, 1, 1, 1, 1),
     ('Tolli', '', TRUE, 1, 1, 1, 1),
@@ -97,15 +95,17 @@ VALUES
 	('Silvia', '', TRUE, 1, 1, 1, 1),
     ('Iker', 'Quijano', TRUE, 4, 2, 1, 1),
     ('Paco y Carmela', '', TRUE, 3, 2, 1, 1),
-    ('Juan Manuel', '', FALSE, 4, 2, 1, 1),
-    ('Familia Cárceles', '', FALSE, 1, 2, 1, 1),
-    ('Familia Conde', '', FALSE, 3, 2, 1, 1),
+    ('Juan Manuel', '', TRUE, 4, 2, 1, 1),
+    ('Familia Cárceles', '', TRUE, 1, 2, 1, 1),
+    ('Familia Conde', '', TRUE, 3, 2, 1, 1),
     ('Frutos y Rosi', '', TRUE, 2, 2, 1, 1),
     ('Luisi y Jacinto', '', TRUE, 2, 2, 1, 1),
     ('Verónica', '', TRUE, 4, 2, 1, 1),
     ('Abel y Mariana', '', TRUE, 2, 2, 1, 1),
     ('Familia Cerezo', '', TRUE, 1, 2, 1, 1),
-    ('Vanessa', '', TRUE, 2, 2, 1, 1);
+    ('Vanessa', '', TRUE, 2, 2, 1, 1),
+    ('Ikeriano no compartido', '', TRUE, 1, 1, 1, NULL),
+    ('Fuencarral1 no compartido', '', TRUE, 1, 1, 2, NULL);
 
 DROP TABLE IF EXISTS DIA_DE_LA_SEMANA;
 CREATE TABLE IF NOT EXISTS DIA_DE_LA_SEMANA (
@@ -163,22 +163,22 @@ CREATE TABLE IF NOT EXISTS PLANTILLA (
 );
 
 -- Se rellena al crear la plantilla y se va cambiando según se va haciendo la plantilla
-DROP TABLE IF EXISTS TRANSPORTE_POR_PLANTILLA;
-CREATE TABLE IF NOT EXISTS TRANSPORTE_POR_PLANTILLA (
+DROP TABLE IF EXISTS FECHA_TRANSPORTE_POR_PLANTILLA;
+CREATE TABLE IF NOT EXISTS FECHA_TRANSPORTE_POR_PLANTILLA (
 	ID INT UNSIGNED AUTO_INCREMENT,
     COD_PLANTILLA INT UNSIGNED NOT NULL,
     FECHA_TRANSPORTE VARCHAR(10) NOT NULL,
     COD_DIA_DE_LA_SEMANA ENUM('1', '2', '3', '4', '5', '6', '7') NOT NULL,
     
-    CONSTRAINT PRIMARY KEY PK_DIAS_TRANSPORTE_POR_PLANTILLA (ID),
+    CONSTRAINT PRIMARY KEY PK_FECHA_TRANSPORTE_POR_PLANTILLA (ID),
 	CONSTRAINT FOREIGN KEY FK_COD_DIA_DE_LA_SEMANA (COD_DIA_DE_LA_SEMANA) REFERENCES DIA_DE_LA_SEMANA (ID) ON DELETE NO ACTION ON UPDATE CASCADE,
     CONSTRAINT FOREIGN KEY FK_COD_PLANTILLA(COD_PLANTILLA) REFERENCES PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DELIMITER //
 
-CREATE TRIGGER after_insert_transporte_por_plantilla
-AFTER INSERT ON TRANSPORTE_POR_PLANTILLA
+CREATE TRIGGER after_insert_fecha_transporte_por_plantilla
+AFTER INSERT ON FECHA_TRANSPORTE_POR_PLANTILLA
 FOR EACH ROW
 BEGIN
 
@@ -225,9 +225,9 @@ CREATE TABLE IF NOT EXISTS DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (
 	COD_INVOLUCRADO INT UNSIGNED,
     COD_TRANSPORTE INT UNSIGNED,
     
-    CONSTRAINT PRIMARY KEY PK_INVOLUCRADO_POR_DIA_TRANSPORTE_POR_PLANTILLA (COD_INVOLUCRADO, COD_TRANSPORTE),
+    CONSTRAINT PRIMARY KEY PK_INVOLUCRADO_POR_FECHA_TRANSPORTE_POR_PLANTILLA (COD_INVOLUCRADO, COD_TRANSPORTE),
     CONSTRAINT FOREIGN KEY FK_COD_INVOLUCRADO_POR_DIA_TRANSPORTE (COD_INVOLUCRADO) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE(COD_TRANSPORTE) REFERENCES TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE(COD_TRANSPORTE) REFERENCES FECHA_TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DELIMITER //
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE (
     PLAZAS_OCUPADAS	VARCHAR(2) NOT NULL DEFAULT 0,
     
     CONSTRAINT PRIMARY KEY PK_PLAZAS_DISPONIBLES_INVOLUCRADO_POR_PLANTILLA (COD_CONDUCTOR, COD_TRANSPORTE),
-    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE (COD_TRANSPORTE) REFERENCES TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE (COD_TRANSPORTE) REFERENCES FECHA_TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FOREIGN KEY FK_COD_INVOLUCRADO_POR_DIA_TRANSPORTE (COD_CONDUCTOR) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -282,7 +282,7 @@ BEGIN
     DECLARE cursor_ft_terminado INT DEFAULT FALSE;
     DECLARE cod_dia_de_la_semana INT;
 
-    DECLARE cursor_insertar_en_TRANSPORTE_POR_PLANTILLA CURSOR FOR
+    DECLARE cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA CURSOR FOR
         SELECT 
             dts.COD_DIA_DE_LA_SEMANA
 			FROM DIA_TRANSPORTE_SEMANAL dts
@@ -291,15 +291,15 @@ BEGIN
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_ft_terminado = 1;
 
 	-- Inserta las fechas de transporte para la plantilla
-    OPEN cursor_insertar_en_TRANSPORTE_POR_PLANTILLA;    
+    OPEN cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA;    
 		read_loop: LOOP
-			FETCH cursor_insertar_en_TRANSPORTE_POR_PLANTILLA INTO cod_dia_de_la_semana;
+			FETCH cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA INTO cod_dia_de_la_semana;
 
 			IF cursor_ft_terminado THEN
 				LEAVE read_loop;
 			END IF;
 
-			INSERT INTO TRANSPORTE_POR_PLANTILLA (FECHA_TRANSPORTE, COD_DIA_DE_LA_SEMANA, COD_PLANTILLA)
+			INSERT INTO FECHA_TRANSPORTE_POR_PLANTILLA (FECHA_TRANSPORTE, COD_DIA_DE_LA_SEMANA, COD_PLANTILLA)
 			SELECT dias_del_mes.dia_de_la_semana, cod_dia_de_la_semana, NEW.ID
 				FROM (
 					SELECT 
@@ -324,7 +324,7 @@ BEGIN
 				) dias_del_mes;
             
 		END LOOP;
-    CLOSE cursor_insertar_en_TRANSPORTE_POR_PLANTILLA;
+    CLOSE cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA;
     
     -- Inserta los involucrados activos que haya en ese momento en la tabla INVOLUCRADO
     INSERT INTO INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO, COD_PLANTILLA, PLAZAS, COD_ROL)
@@ -336,14 +336,16 @@ END //
 
 DELIMITER ;
 
-DROP TABLE IF EXISTS INVOLUCRADO_POR_TRANSPORTE;
-CREATE TABLE IF NOT EXISTS INVOLUCRADO_POR_TRANSPORTE (
-	COD_TRANSPORTE INT UNSIGNED,
-    COD_INVOLUCRADO_POR_PLANTILLA INT UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS TRANSPORTE_POR_PLANTILLA;
+CREATE TABLE IF NOT EXISTS TRANSPORTE_POR_PLANTILLA (
+	COD_FECHA_TRANSPORTE INT UNSIGNED,
+    COD_CONDUCTOR INT UNSIGNED NOT NULL,
+    COD_VIAJERO INT UNSIGNED NOT NULL,
     
-    CONSTRAINT PRIMARY KEY PK_COD_INVOLUCRADO_POR_TRANSPORTE (COD_TRANSPORTE, COD_INVOLUCRADO_POR_PLANTILLA),
-    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE_INVOLUCRADO_POR_TRANSPORTE (COD_TRANSPORTE) REFERENCES TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT FOREIGN KEY FK_COD_INVOLUCRADO_POR_TRANSPORTE (COD_INVOLUCRADO_POR_PLANTILLA) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT PRIMARY KEY PK_COD_INVOLUCRADO_POR_TRANSPORTE (COD_FECHA_TRANSPORTE, COD_CONDUCTOR, COD_VIAJERO),
+    CONSTRAINT FOREIGN KEY FK_COD_TRANSPORTE_INVOLUCRADO_POR_TRANSPORTE (COD_FECHA_TRANSPORTE) REFERENCES FECHA_TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY FK_COD_CONDUCTOR (COD_CONDUCTOR) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY FK_COD_VIAJERO (COD_VIAJERO) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS AUSENCIA_POR_INVOLUCRADO;
@@ -405,8 +407,227 @@ INSERT INTO PLANTILLA (NOMBRE, ANNO, MES, COD_USUARIO_PROPIETARIO, COD_GRUPO_USU
 	VALUES 
 		('mayo_2025', '2025', 5, 1, 1),
         ('junio_2025','2025', 6, 1, 1);
-        
--- SELECT * FROM PLANTILLA;
+
+/* TRANSPORTE */
+/* SACAR LOS CONDUCTORES DE UNA PLANTILLA
+SELECT conductor.nombre, conductor.id
+	FROM INVOLUCRADO_POR_PLANTILLA ipp 
+		INNER JOIN INVOLUCRADO conductor 
+			ON ipp.COD_INVOLUCRADO = conductor.ID 
+		INNER JOIN ROL_INVOLUCRADO rol_conductor
+			ON conductor.COD_ROL = rol_conductor.ID
+            AND rol_conductor.DESCRIPCION = 'Conductor'
+	WHERE 
+		ipp.COD_PLANTILLA = 1
+	ORDER BY conductor.nombre DESC;
+*/
+
+/* SACAR LOS CONDUCTORES DE UNA PLANTILLA DISPONIBLES PARA UN DIA DE LA SEMANA EN CONCRETO 
+SELECT conductor.nombre, conductor.id
+	FROM INVOLUCRADO_POR_PLANTILLA ipp 
+		INNER JOIN INVOLUCRADO conductor 
+			ON ipp.COD_INVOLUCRADO = conductor.ID 
+		INNER JOIN ROL_INVOLUCRADO rol_conductor
+			ON conductor.COD_ROL = rol_conductor.ID
+            AND rol_conductor.DESCRIPCION = 'Conductor'
+		INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL didts
+			ON didts.COD_INVOLUCRADO = conductor.ID
+            AND didts.DISPONIBLE = TRUE
+	WHERE 
+		ipp.COD_PLANTILLA = 1
+        AND didts.COD_DIA_TRANSPORTE_SEMANAL = 1 -- VIDA Y MINISTERIO
+	ORDER BY conductor.nombre DESC;
+*/
+	
+INSERT INTO TRANSPORTE_POR_PLANTILLA (COD_FECHA_TRANSPORTE, COD_CONDUCTOR, COD_VIAJERO)
+	VALUES 
+		-- DOMINGO 2025-05-04
+        (8, 16, 11), -- Carceles, Ramona
+        (8, 17, 3), -- Conde, Carmen
+        (8, 17, 4), -- Conde, Enriqueta
+        (8, 14, 5), -- Paco, Pilar P.
+        (8, 14, 2), -- Paco, Julio
+		(8, 14, 1), -- Paco, Adolfo
+        (8, 18, 8), -- Frutos y Rosi, Nico
+        (8, 18, 12), -- Frutos y Rosi, Silvia
+        (8, 20, 9), -- Vero, Ino 
+        (8, 20, 6), -- Vero, Pepe y Bea
+		-- MARTES 2025-05-06
+		(1, 13, 1), -- Iker, Adolfo
+        (1, 13, 2), -- Iker, Julio
+        (1, 13, 11), -- Iker, Ramona
+		(1, 23, 3), -- Vane, Carmen
+        (1, 23, 4), -- Vane, Enriqueta
+        (1, 19, 6), -- Luisi, Pepe y Bea
+        -- DOMINGO 2025-05-11
+        (10, 16, 11), -- Carceles, Ramona
+        (10, 17, 3), -- Conde, Carmen
+        (10, 17, 4), -- Conde, Enriqueta
+        (10, 14, 5), -- Paco, Pilar P.
+        (10, 14, 2), -- Paco, Julio
+		(10, 14, 1), -- Paco, Adolfo
+        (10, 18, 8), -- Frutos y Rosi, Nico
+        (10, 18, 12), -- Frutos y Rosi, Silvia
+        (10, 20, 9), -- Vero, Ino 
+        (10, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-05-13
+		(3, 13, 1), -- Iker, Adolfo
+        (3, 13, 2), -- Iker, Julio
+        (3, 13, 11), -- Iker, Ramona
+		(3, 23, 3), -- Vane, Carmen
+        (3, 23, 4), -- Vane, Enriqueta
+        (3, 19, 6), -- Luisi, Pepe y Bea
+        -- DOMINGO 2025-05-18
+        (9, 16, 11), -- Carceles, Ramona
+        (9, 17, 3), -- Conde, Carmen
+        (9, 17, 4), -- Conde, Enriqueta
+        (9, 14, 5), -- Paco, Pilar P.
+        (9, 14, 2), -- Paco, Julio
+		(9, 14, 1), -- Paco, Adolfo
+        (9, 18, 8), -- Frutos y Rosi, Nico
+        (9, 18, 12), -- Frutos y Rosi, Silvia
+        (9, 20, 9), -- Vero, Ino 
+        (9, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-05-20
+		(2, 13, 1), -- Iker, Adolfo
+        (2, 13, 2), -- Iker, Julio
+        (2, 13, 11), -- Iker, Ramona
+		(2, 23, 3), -- Vane, Carmen
+        (2, 23, 4), -- Vane, Enriqueta
+        (2, 19, 6), -- Luisi, Pepe y Bea
+        -- DOMINGO 2025-05-25
+        (11, 16, 11), -- Carceles, Ramona
+        (11, 17, 3), -- Conde, Carmen
+        (11, 17, 4), -- Conde, Enriqueta
+        (11, 14, 5), -- Paco, Pilar P.
+        (11, 14, 2), -- Paco, Julio
+		(11, 14, 1), -- Paco, Adolfo
+        (11, 18, 8), -- Frutos y Rosi, Nico
+        (11, 18, 12), -- Frutos y Rosi, Silvia
+        (11, 20, 9), -- Vero, Ino 
+        (11, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-05-27
+		(4, 13, 1), -- Iker, Adolfo
+        (4, 13, 2), -- Iker, Julio
+        (4, 13, 11), -- Iker, Ramona
+		(4, 23, 3), -- Vane, Carmen
+        (4, 23, 4), -- Vane, Enriqueta
+        (4, 19, 6), -- Luisi, Pepe y Bea
+        -- DOMINGO 2025-06-01
+        (23, 13, 1), -- Iker, Adolfo
+        (23, 13, 2), -- Iker, Julio
+        (23, 13, 11), -- Iker, Ramona
+        (23, 13, 8), -- Iker, Nico
+        (23, 23, 6), -- Vane, Pepe y Bea
+        (23, 21, 3), -- Abel, Carmen
+        (23, 21, 4), -- Abel, Enriqueta
+        (23, 20, 9), -- Vero, Ino 
+        (23, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-06-03
+        (16, 13, 6), -- Iker, Pepe y Bea
+        (16, 13, 11), -- Iker, Ramona
+		(16, 20, 3), -- Frutos y Rosi, Carmen
+        (16, 20, 4), -- Frutos y Rosi, Enriqueta
+        (16, 19, 1), -- Luisi, Adolfo
+        (16, 19, 2), -- Luisi, Julio
+        -- DOMINGO 2025-06-08
+        (22, 13, 1), -- Iker, Adolfo
+        (22, 13, 2), -- Iker, Julio
+        (22, 13, 11), -- Iker, Ramona
+        (22, 13, 8), -- Iker, Nico
+        (22, 23, 6), -- Vane, Pepe y Bea
+        (22, 21, 3), -- Abel, Carmen
+        (22, 21, 4), -- Abel, Enriqueta
+        (22, 20, 9), -- Vero, Ino 
+        (22, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-06-10
+        (15, 13, 6), -- Iker, Pepe y Bea
+        (15, 13, 11), -- Iker, Ramona
+		(15, 20, 3), -- Frutos y Rosi, Carmen
+        (15, 20, 4), -- Frutos y Rosi, Enriqueta
+        (15, 19, 1), -- Luisi, Adolfo
+        (15, 19, 2), -- Luisi, Julio
+        -- DOMINGO 2025-06-15
+        (24, 13, 1), -- Iker, Adolfo
+        (24, 13, 2), -- Iker, Julio
+        (24, 13, 11), -- Iker, Ramona
+        (24, 13, 8), -- Iker, Nico
+        (24, 23, 6), -- Vane, Pepe y Bea
+        (24, 21, 3), -- Abel, Carmen
+        (24, 21, 4), -- Abel, Enriqueta
+        (24, 20, 9), -- Vero, Ino 
+        (24, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-06-17
+        (17, 13, 6), -- Iker, Pepe y Bea
+        (17, 13, 11), -- Iker, Ramona
+		(17, 20, 3), -- Frutos y Rosi, Carmen
+        (17, 20, 4), -- Frutos y Rosi, Enriqueta
+        (17, 19, 1), -- Luisi, Adolfo
+        (17, 19, 2), -- Luisi, Julio
+        -- DOMINGO 2025-06-22
+        (26, 13, 1), -- Iker, Adolfo
+        (26, 13, 2), -- Iker, Julio
+        (26, 13, 11), -- Iker, Ramona
+        (26, 13, 8), -- Iker, Nico
+        (26, 23, 6), -- Vane, Pepe y Bea
+        (26, 21, 3), -- Abel, Carmen
+        (26, 21, 4), -- Abel, Enriqueta
+        (26, 20, 9), -- Vero, Ino 
+        (26, 20, 6), -- Vero, Pepe y Bea
+        -- MARTES 2025-06-24
+        (18, 13, 6), -- Iker, Pepe y Bea
+        (18, 13, 11), -- Iker, Ramona
+		(18, 20, 3), -- Frutos y Rosi, Carmen
+        (18, 20, 4), -- Frutos y Rosi, Enriqueta
+        (18, 19, 1), -- Luisi, Adolfo
+        (18, 19, 2), -- Luisi, Julio
+        -- DOMINGO 2025-06-29
+        (25, 13, 1), -- Iker, Adolfo
+        (25, 13, 2), -- Iker, Julio
+        (25, 13, 11), -- Iker, Ramona
+        (25, 13, 8), -- Iker, Nico
+        (25, 23, 6), -- Vane, Pepe y Bea
+        (25, 21, 3), -- Abel, Carmen
+        (25, 21, 4), -- Abel, Enriqueta
+        (25, 20, 9), -- Vero, Ino 
+        (25, 20, 6); -- Vero, Pepe y Bea
+
+SELECT 
+		ftpp.ID as id_fecha_transporte,
+		ftpp.FECHA_TRANSPORTE as fecha,
+        concat(viajero.nombre, ' ', viajero.apellidos) as viajero,
+        viajero.ID as id_viajero,
+        concat(conductor.nombre, ' ', conductor.apellidos) as conductor,
+        conductor.ID as id_conductor
+	FROM TRANSPORTE_POR_PLANTILLA tpp
+		INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+			ON tpp.COD_FECHA_TRANSPORTE = ftpp.ID
+		INNER JOIN INVOLUCRADO viajero
+			ON tpp.COD_VIAJERO = viajero.ID
+		INNER JOIN INVOLUCRADO conductor
+			ON tpp.COD_CONDUCTOR = conductor.ID
+	WHERE 
+		tpp.COD_CONDUCTOR = 13
+		AND ftpp.COD_PLANTILLA = 1;
+
+SELECT 
+		ftpp.ID as id_fecha_transporte,
+		ftpp.FECHA_TRANSPORTE as fecha,
+        concat(viajero.nombre, ' ', viajero.apellidos) as viajero,
+        viajero.ID as id_viajero,
+        concat(conductor.nombre, ' ', conductor.apellidos) as conductor,
+        conductor.ID as id_conductor
+	FROM TRANSPORTE_POR_PLANTILLA tpp
+		INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+			ON tpp.COD_FECHA_TRANSPORTE = ftpp.ID
+		INNER JOIN INVOLUCRADO viajero
+			ON tpp.COD_VIAJERO = viajero.ID
+		INNER JOIN INVOLUCRADO conductor
+			ON tpp.COD_CONDUCTOR = conductor.ID
+	WHERE 
+		tpp.COD_VIAJERO = 8
+		AND ftpp.COD_PLANTILLA = 1;
+
 
 DROP PROCEDURE IF EXISTS crud_viajeros;
 
@@ -577,584 +798,3 @@ END $$
 DELIMITER ;
 
 CALL crud_conductores('0, 1');
-
-/* INVOLUCRADOS */
--- UPDATE INVOLUCRADO SET ACTIVO = FALSE WHERE ID = 3; -- Operación de borrado para el usuario
--- SELECT * FROM INVOLUCRADO WHERE ID = 3;
-
--- UPDATE INVOLUCRADO SET NUMERO_PLAZAS = 4 WHERE ID = 5;
--- SELECT ID, NOMBRE, APELLIDOS, NUMERO_PLAZAS, ACTIVO FROM INVOLUCRADO WHERE ID = 5;
-
--- UPDATE DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL SET DISPONIBLE = TRUE WHERE COD_INVOLUCRADO = 1 AND COD_DIA_TRANSPORTE_SEMANAL = 2;
--- SELECT involucrado.ID, involucrado.NOMBRE, involucrado.APELLIDOS, disponibilidad.DISPONIBLE, dia_transporte.DESCRIPCION, involucrado.ACTIVO FROM DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL disponibilidad INNER JOIN INVOLUCRADO involucrado ON disponibilidad.COD_INVOLUCRADO = involucrado.ID INNER JOIN DIA_TRANSPORTE_SEMANAL dia_transporte ON disponibilidad.COD_DIA_TRANSPORTE_SEMANAL = dia_transporte.ID WHERE disponibilidad.COD_INVOLUCRADO = 2;
-
--- El DELETE es el UPDATE de activo.
-
--- INSERT INTO INVOLUCRADO (NOMBRE, APELLIDOS, ACTIVO) VALUES ('Luisi y Jacinto', '', TRUE);
--- SELECT * FROM INVOLUCRADO;
-
-
-/* TRANSPORTE */
--- Consulta para sacar el valor de cada transporte en el combo del viajero y la fecha correspondiente.
-SELECT involucrado.NOMBRE 
-	FROM TRANSPORTE transporte 
-		INNER JOIN INVOLUCRADO_POR_TRANSPORTE involucrado_por_transporte 
-			ON transporte.ID = involucrado_por_transporte.COD_TRANSPORTE 
-		INNER JOIN INVOLUCRADO involucrado 
-			ON involucrado_por_transporte.COD_INVOLUCRADO = involucrado.id 
-		INNER JOIN ROL_INVOLUCRADO rol 
-			ON involucrado.COD_ROL = rol.ID 
-	WHERE 
-    transporte.ID = 
-		(SELECT transporte.id 
-			FROM TRANSPORTE transporte 
-				INNER JOIN INVOLUCRADO_POR_TRANSPORTE involucrado_por_transporte 
-					ON transporte.ID = involucrado_por_transporte.COD_TRANSPORTE 
-			WHERE 
-				transporte.FECHA = '2025/06/08' 
-                AND involucrado_por_transporte.COD_INVOLUCRADO = 4
-		) 
-	AND rol.DESCRIPCION = 'Conductor';
-
-/**
-	FUMADON DE PROCEDIMIENTO PARA SACAR LA PLANTILLA DE CUALQUIER PLANTILLA
-delimiter $$
-CREATE PROCEDURE GenerarReporteTransporte(
-	IN id_plantilla TINYINT
-)
-BEGIN
-	DECLARE query_sql TEXT;
-    DECLARE columnas TEXT;
-	DECLARE mes TEXT;
-    DECLARE ano TEXT;
-    
-    SELECT * INTO id_plantilla, ano, mes
-		FROM PLANTILLA 
-			WHERE ID = id_plantilla;
-            
-    -- Paso 1: Generar dinámicamente las columnas con fechas
-    SELECT GROUP_CONCAT(
-		DISTINCT CONCAT(
-			"MAX(CASE WHEN transporte.FECHA = '", FECHA , "' THEN conductor.NOMBRE END) AS '", FECHA, "'"
-		)
-	) INTO columnas
-		FROM TRANSPORTE
-			WHERE
-				YEAR(FECHA) = ano
-                AND MONTH(FECHA) = mes;
-
-    -- Paso 2: Construir y ejecutar la consulta dinámica
-    SET @query_sql = CONCAT(
-        "SELECT viajero.nombre AS 'Viajero', "
-				, columnas, " ",	
-        "	FROM INVOLUCRADO_POR_TRANSPORTE involucrado_por_transporte ",
-        "		JOIN TRANSPORTE transporte 
-					ON involucrado_por_transporte.COD_TRANSPORTE = transporte.ID",
-        "		JOIN ROL_POR_INVOLUCRADO rol_por_involucrado 
-					ON involucrado_por_transporte.COD_INVOLUCRADO = rol_por_involucrado.COD_INVOLUCRADO",
-		"		JOIN ROL_INVOLUCRADO rol_involucrado 
-					ON rol_por_involucrado.COD_ROL = rol_involucrado.ID",
-        "		JOIN involucrado viajero 
-					ON involucrado_por_transporte.COD_INVOLUCRADO = viajero.ID
-						AND rol_involucrado.DESCRIPCION = 'Viajero' ",
-        "		JOIN involucrado_por_transporte involucrado_por_transporte_2 
-					ON transporte.ID = involucrado_por_transporte_2.COD_TRANSPORTE ",
-        "		JOIN rol_por_involucrado rol_por_involucrado_2 
-					ON involucrado_por_transporte_2.COD_INVOLUCRADO = rol_por_involucrado_2.COD_INVOLUCRADO ",
-		"		JOIN ROL_INVOLUCRADO rol_involucrado_2 
-					ON rol_por_involucrado_2.COD_ROL = rol_involucrado_2.ID",
-        "		JOIN involucrado conductor
-					ON involucrado_por_transporte_2.COD_INVOLUCRADO = conductor.ID
-						AND rol_involucrado_2.DESCRIPCION = 'Conductor' ",
-        "	GROUP BY viajero.NOMBRE;"
-    );
-
-	SELECT @query_sql;
-    
--- Ejecutar la consulta dinámica
-    PREPARE stmt FROM @query_sql;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END $$
-DELIMITER ;
-            
-SET group_concat_max_len = 15000;
-Call GenerarReporteTransporte(1);
-SET GLOBAL group_concat_max_len = 1024;
--- SELECT @@global.group_concat_max_len;
-*/
-
-/* SACAR LOS CONDUCTORES DE UNA PLANTILLA */
-SELECT conductor.nombre, conductor.id
-	FROM INVOLUCRADO_POR_PLANTILLA ipp 
-		INNER JOIN INVOLUCRADO conductor 
-			ON ipp.COD_INVOLUCRADO = conductor.ID 
-		INNER JOIN ROL_INVOLUCRADO rol_conductor
-			ON conductor.COD_ROL = rol_conductor.ID
-            AND rol_conductor.DESCRIPCION = 'Conductor'
-	WHERE 
-		ipp.COD_PLANTILLA = 1
-	ORDER BY conductor.nombre DESC;
-
-/* SACAR LOS CONDUCTORES DE UNA PLANTILLA DISPONIBLES PARA UN DIA DE LA SEMANA EN CONCRETO */
-SELECT conductor.nombre, conductor.id
-	FROM INVOLUCRADO_POR_PLANTILLA ipp 
-		INNER JOIN INVOLUCRADO conductor 
-			ON ipp.COD_INVOLUCRADO = conductor.ID 
-		INNER JOIN ROL_INVOLUCRADO rol_conductor
-			ON conductor.COD_ROL = rol_conductor.ID
-            AND rol_conductor.DESCRIPCION = 'Conductor'
-		INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL didts
-			ON didts.COD_INVOLUCRADO = conductor.ID
-            AND didts.DISPONIBLE = TRUE
-	WHERE 
-		ipp.COD_PLANTILLA = 1
-        AND didts.COD_DIA_TRANSPORTE_SEMANAL = 1 -- VIDA Y MINISTERIO
-	ORDER BY conductor.nombre DESC;
-    
--- SELECT * FROM DIA_TRANSPORTE_SEMANAL;
--- SELECT * FROM DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL WHERE COD_INVOLUCRADO = 23;
-
--- REVISAR
-/*
-INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_TRANSPORTE)
-VALUES 
-	(1, 1, TRUE),
-    (1, 2, TRUE),
-    (2, 1, TRUE),
-    (2, 2, TRUE),
-    (3, 1, TRUE),
-    (3, 2, TRUE),
-    (4, 1, TRUE),
-    (4, 2, TRUE),
-    (5, 1, FALSE),
-    (5, 2, TRUE),
-    (6, 1, TRUE),
-    (6, 2, TRUE),
-    (7, 1, FALSE),
-    (7, 2, FALSE),
-    (8, 1, FALSE),
-    (8, 2, TRUE),
-    (9, 1, FALSE),
-    (9, 2, TRUE),
-    (10, 1, TRUE),
-    (10, 2, FALSE),
-    (11, 1, TRUE),
-    (11, 2, TRUE),
-    (12, 1, FALSE),
-    (12, 2, TRUE),
-    (13, 1, TRUE),
-    (13, 2, TRUE),
-    (14, 1, FALSE),
-    (14, 2, TRUE),
-    (15, 1, FALSE),
-    (15, 2, FALSE),
-    (16, 1, FALSE),
-    (16, 2, TRUE),
-    (17, 1, TRUE),
-    (17, 2, TRUE),
-    (18, 1, TRUE),
-    (18, 2, TRUE),
-    (19, 1, TRUE),
-    (19, 2, TRUE),
-    (20, 1, FALSE),
-    (20, 2, TRUE),
-    (21, 1, FALSE),
-    (21, 2, TRUE),
-    (22, 1, TRUE),
-    (22, 2, TRUE),
-    (23, 1, FALSE),
-    (23, 2, TRUE);
--- SELECT * FROM DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL;
-*/
-
-INSERT INTO TRANSPORTE (FECHA, COD_PLANTILLA)
-	VALUES 
-		('2025/05/04', 1),
-        ('2025/05/04', 1),
-        ('2025/05/04', 1),
-        ('2025/05/04', 1),
-        ('2025/05/04', 1),
-        ('2025/05/06', 1),
-        ('2025/05/06', 1),
-        ('2025/05/06', 1),
-        ('2025/05/13', 1),
-        ('2025/05/13', 1),
-        ('2025/05/13', 1),
-        ('2025/05/17', 1),
-        ('2025/05/17', 1),
-        ('2025/05/17', 1),
-        ('2025/05/17', 1),
-        ('2025/05/17', 1),
-        ('2025/05/18', 1),
-        ('2025/05/18', 1),
-        ('2025/05/18', 1),
-        ('2025/05/18', 1),
-        ('2025/05/18', 1),
-        ('2025/05/20', 1),
-        ('2025/05/20', 1),
-        ('2025/05/20', 1),
-        ('2025/05/25', 1),
-        ('2025/05/25', 1),
-        ('2025/05/25', 1),
-        ('2025/05/25', 1),
-        ('2025/05/25', 1),
-        ('2025/05/30', 1),
-        ('2025/05/30', 1),
-        ('2025/05/30', 1),
-		('2025/06/01', 2),
-        ('2025/06/01', 2),
-        ('2025/06/01', 2),
-        ('2025/06/01', 2),
-        ('2025/06/03', 2),
-        ('2025/06/03', 2),
-        ('2025/06/03', 2),
-        ('2025/06/08', 2),
-        ('2025/06/08', 2),
-        ('2025/06/08', 2),
-        ('2025/06/08', 2),
-        ('2025/06/17', 2),
-        ('2025/06/17', 2),
-        ('2025/06/17', 2),
-        ('2025/06/22', 2),
-        ('2025/06/22', 2),
-        ('2025/06/22', 2),
-        ('2025/06/22', 2),
-        ('2025/06/24', 2),
-        ('2025/06/24', 2),
-        ('2025/06/24', 2),
-        ('2025/06/29', 2),
-        ('2025/06/29', 2),
-        ('2025/06/29', 2),
-        ('2025/06/29', 2);
--- SELECT * FROM TRANSPORTE;
-
-INSERT INTO INVOLUCRADO_POR_TRANSPORTE (COD_TRANSPORTE, COD_INVOLUCRADO)
-	VALUES 
-		(1, 11),
-        (1, 16),
-        (2, 3),
-        (2, 4),
-        (2, 17),
-        (3, 5),
-        (3, 1),
-        (3, 2),
-        (3, 14),
-        (4, 9),
-        (4, 12),
-        (4, 18),
-        (5, 9),
-        (5, 6),
-        (5, 20), -- 04/05 DOMINGO
-        (6, 1),
-        (6, 2),
-        (6, 11),
-        (6, 5),
-        (7, 3),
-        (7, 4),
-        (7, 23),
-        (8, 6),
-        (8, 19), -- 06/05 MARTES
-        (9, 1),
-        (9, 2),
-        (9, 11),
-        (9, 5),
-        (10, 3),
-        (10, 4),
-        (10, 23),
-        (11, 6),
-        (11, 19), -- 13/05 MARTES (El sabado 10 es la conme)
-        (12, 11),
-        (12, 16),
-        (13, 3),
-        (13, 4),
-        (13, 17),
-        (14, 5),
-        (14, 1),
-        (14, 2),
-        (14, 14),
-        (15, 9),
-        (15, 12),
-        (15, 18),	
-        (16, 9),
-        (16, 6),
-        (16, 20), -- 17/05 SABADO VISITA DELINGER
-        (17, 11),
-        (17, 16),
-        (18, 3),
-        (18, 4),
-        (18, 17),
-        (19, 5),
-        (19, 1),
-        (19, 2),
-        (19, 14),
-        (20, 9),
-        (20, 12),
-        (20, 18),	
-        (21, 9),
-        (21, 6),
-        (21, 20), -- 18/05 DOMINGO
-        (22, 1),
-        (22, 2),
-        (22, 11),
-        (22, 5),
-        (23, 3),
-        (23, 4),
-        (23, 23),
-        (24, 6),
-        (24, 19), -- 20/05 MARTES
-        (25, 11),
-        (25, 16),
-        (26, 3),
-        (26, 4),
-        (26, 17),
-        (27, 5),
-        (27, 1),
-        (27, 2),
-        (27, 14),
-        (28, 9),
-        (28, 12),
-        (28, 18),	
-        (29, 9),
-        (29, 6),
-        (29, 20), -- 25/05 DOMINGO
-        (30, 1),
-        (30, 2),
-        (30, 11),
-        (30, 10),
-        (30, 5),
-        (31, 3),
-        (31, 4),
-        (31, 23),
-        (32, 6),
-        (32, 19), -- 30/05 MARTES
-        (33, 1),
-        (33, 2),
-        (33, 11),
-        (33, 8),
-        (33, 5),
-        (34, 6),
-        (34, 23),
-        (35, 3),
-        (35, 4),
-        (35, 21),
-        (36, 9),
-        (36, 12),
-        (36, 5),
-        (36, 20), -- 01/06 DOMINGO
-        (37, 6),
-        (37, 11),
-        (37, 5),
-        (38, 3),
-        (38, 4),
-        (38, 18),
-        (39, 1),
-        (39, 2),
-        (39, 19), -- 03/06 MARTES
-        (40, 1),
-        (40, 2),
-        (40, 11),
-        (40, 13),
-        (41, 6),
-        (41, 23),
-        (42, 3),
-        (42, 4),
-        (42, 21),
-        (43, 9),
-        (43, 12),
-        (43, 5),
-        (43, 20), -- 08/06 DOMINGO
-        (44, 6),
-        (44, 11),
-        (44, 5),
-        (45, 3),
-        (45, 4),
-        (45, 18),
-        (46, 1),
-        (46, 2),
-        (46, 19), -- 17/06 MARTES
-        (47, 1),
-        (47, 2),
-        (47, 11),
-        (47, 8),
-        (47, 5),
-        (48, 6),
-        (48, 23),
-        (49, 3),
-        (49, 4),
-        (49, 21),
-        (49, 9),
-        (50, 12),
-        (50, 5),
-        (50, 20), -- 22/06 DOMINGO
-        (51, 6),
-        (51, 11),
-        (51, 5),
-        (52, 3),
-        (52, 4),
-        (52, 18),
-        (53, 1),
-        (53, 2),
-        (53, 19), -- 24/06 MARTES
-        (54, 1),
-        (54, 2),
-        (54, 11),
-        (54, 8),
-        (54, 5),
-        (55, 6),
-        (55, 23),
-        (56, 3),
-        (56, 4),
-        (56, 21),
-        (56, 9),
-        (57, 12),
-        (57, 5),
-        (57, 20); -- 29/06 DOMINGO
--- SELECT * FROM INVOLUCRADO_POR_TRANSPORTE;
-
-/*
--- REVISAR
-INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_DIA_TRANSPORTE_SEMANAL, COD_PLANTILLA)
-VALUES 
-	(1, 1, 1),
-    (1, 2, 1),
-    (2, 1, 1),
-    (2, 2, 1),
-    (3, 1, 1),
-    (3, 2, 1),
-    (4, 1, 1),
-    (4, 2, 1),
-    (5, 1, 1),
-    (5, 2, 1),
-    (6, 1, 1),
-    (6, 2, 1),
-    (7, 1, 1),
-    (7, 2, 1),
-    (8, 1, 1),
-    (8, 2, 1),
-    (9, 1, 1),
-    (9, 2, 1),
-    (10, 1, 1),
-    (10, 2, 1),
-    (11, 1, 1),
-    (11, 2, 1),
-    (12, 1, 1),
-    (12, 2, 1),
-    (13, 1, 1),
-    (13, 2, 1),
-    (14, 1, 1),
-    (14, 2, 1),
-    (15, 1, 1),
-    (15, 2, 1),
-    (16, 1, 1),
-    (16, 2, 1),
-    (17, 1, 1),
-    (17, 2, 1),
-    (18, 1, 1),
-    (18, 2, 1),
-    (19, 1, 1),
-    (19, 2, 1),
-    (20, 1, 1),
-    (20, 2, 1),
-    (21, 1, 1),
-    (21, 2, 1),
-    (22, 1, 1),
-    (22, 2, 1),
-    (23, 1, 1),
-    (23, 2, 1),
-    (1, 1, 2),
-    (1, 2, 2),
-    (2, 1, 2),
-    (2, 2, 2),
-    (3, 1, 2),
-    (3, 2, 2),
-    (4, 1, 2),
-    (4, 2, 2),
-    (5, 1, 2),
-    (5, 2, 2),
-    (6, 1, 2),
-    (6, 2, 2),
-    (7, 1, 2),
-    (7, 2, 2),
-    (8, 1, 2),
-    (8, 2, 2),
-    (9, 1, 2),
-    (9, 2, 2),
-    (10, 1, 2),
-    (10, 2, 2),
-    (11, 1, 2),
-    (11, 2, 2),
-    (12, 1, 2),
-    (12, 2, 2),
-    (13, 1, 2),
-    (13, 2, 2),
-    (14, 1, 2),
-    (14, 2, 2),
-    (15, 1, 2),
-    (15, 2, 2),
-    (16, 1, 2),
-    (16, 2, 2),
-    (17, 1, 2),
-    (17, 2, 2),
-    (18, 1, 2),
-    (18, 2, 2),
-    (19, 1, 2),
-    (19, 2, 2),
-    (20, 1, 2),
-    (20, 2, 2),
-    (21, 1, 2),
-    (21, 2, 2),
-    (22, 1, 2),
-    (22, 2, 2),
-    (23, 1, 2),
-    (23, 2, 2);
-    
-INSERT INTO INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO, COD_PLANTILLA, PLAZAS)
-	VALUES
-		(1, 1, 1),
-        (2, 1, 1),
-        (3, 1, 1),
-        (4, 1, 1),
-        (5, 1, 1),
-        (6, 1, 2),
-		(8, 1, 1),
-        (9, 1, 1),
-        (10, 1, 1),
-        (11, 1, 1),
-        (12, 1, 1),
-		(13, 1, 4),
-        (14, 1, 3),
-        (16, 1, 1),
-        (17, 1, 2),
-		(18, 1, 3),
-        (19, 1, 2),
-        (20, 1, 3),
-        (21, 1, 2),
-        (22, 1, 1),
-        (23, 1, 2),
-        (1, 2, 1),
-        (2, 2, 1),
-        (3, 2, 1),
-        (4, 2, 1),
-        (5, 2, 1),
-        (6, 2, 2),
-		(8, 2, 1),
-        (9, 2, 1),
-        (11, 2, 1),
-        (12, 2, 1),
-		(13, 2, 4),
-        (14, 2, 3),
-		(18, 2, 3),
-        (19, 2, 2),
-        (20, 2, 3),
-        (21, 2, 2),
-        (22, 2, 1),
-        (23, 2, 2);
-        
-INSERT INTO DIA_TRANSPORTE_SEMANAL_POR_PLANTILLA (COD_PLANTILLA, COD_DIA_TRANSPORTE_SEMANAL)
-	VALUES
-		(1, 1),
-        (1, 2),
-        (2, 1),
-        (2, 3);
-*/

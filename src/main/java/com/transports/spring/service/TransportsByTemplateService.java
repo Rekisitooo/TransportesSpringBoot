@@ -1,5 +1,6 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoTransport;
 import com.transports.spring.model.TransportByTemplate;
 import com.transports.spring.repository.ITransportsByTemplateRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class TransportsByTemplateService {
         return this.templateTransportDateRepository.findAllMonthDatesByTemplateId(templateId);
     }
 
-    public List<TransportByTemplate> findAllTransportsByInvolved(final int involvedId) {
-        return this.templateTransportDateRepository.findAllTransportsByInvolved(involvedId);
+    public List<DtoTransport> findAllTransportsByPassengerFromTemplate(final int passengerId, final int templateId) {
+        return this.templateTransportDateRepository.findAllTransportsByPassengerFromTemplate(passengerId, templateId);
     }
 }
