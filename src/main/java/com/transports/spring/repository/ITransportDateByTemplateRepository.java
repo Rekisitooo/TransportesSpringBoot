@@ -17,6 +17,7 @@ public interface ITransportDateByTemplateRepository extends JpaRepository<Transp
             "           INNER JOIN DayOfTheWeek ds" +
             "               ON ftpp.dayOfTheWeekCode = ds.id" +
             "       WHERE " +
-            "           ftpp.templateCode = :templateId")
+            "           ftpp.templateCode = :templateId" +
+            "       ORDER BY ftpp.transportDate ASC")
     List<TransportDateByTemplate> findAllMonthDatesByTemplateId(@Param("templateId") int templateId);
 }

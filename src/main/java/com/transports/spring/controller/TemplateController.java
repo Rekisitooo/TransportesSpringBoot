@@ -7,6 +7,7 @@ import com.transports.spring.service.TransportByTemplateService;
 import com.transports.spring.service.TemplateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,13 +30,19 @@ public final class TemplateController {
     }
 
     @GetMapping("/getById")
-    public String getById(@RequestParam (value = "id") final int templateId) {
+    public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
         final Template template = this.templateService.findById(templateId);
         final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
+        model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
         final List<Driver> driversFromTemplateList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
+        model.addAttribute("driversFromTemplateList", driversFromTemplateList);
         final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        model.addAttribute("templateDates", templateDates);
         final Map<Integer, Map<Integer, Integer>> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+        model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
         final Map<Integer, Map<Integer, List<Integer>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
+        model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
+
         return "templateCRUD";
         /*
         MAPA AUSENCIAS <PASAGERO, MAPA<FECHA, BOOLEAN>>
