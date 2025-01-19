@@ -1,11 +1,10 @@
 package com.transports.spring.comparable;
 
-public interface IPassengerDtoGetAllPassengersComparable {
+public interface IDriverDtoGetAllDriversComparable {
     int getId();
     String getName();
     String getSurname();
-    int getOccupiedSeats();
+    int getAvailableSeats();
     boolean isActive();
-
     boolean isShared();
 }

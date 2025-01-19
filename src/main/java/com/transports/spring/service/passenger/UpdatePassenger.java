@@ -28,7 +28,7 @@ public final class UpdatePassenger {
     public void updatePassenger(final DtoFormGetAllPassengers passengersCRUDform) throws TransportsException {
 
         for (final DtoGetAllPassengers passenger : passengersCRUDform.getPassengersList()) {
-            final Optional<AbstractInvolved> passengerToUpdate = this.retrievePassenger(passenger);
+            final Optional<Passenger> passengerToUpdate = this.retrievePassenger(passenger);
             final Passenger foundPassenger = (Passenger) passengerToUpdate.get();
             if (!foundPassenger.isEqual(passenger)) {
                 //check the weeklyTransportDaysValues
@@ -53,8 +53,8 @@ public final class UpdatePassenger {
         }
     }
 
-    private Optional<AbstractInvolved> retrievePassenger(DtoGetAllPassengers passenger) throws PassengerDoesNotExistException {
-        final Optional<AbstractInvolved> passengerToUpdate = this.passengerRepository.findById(passenger.getId());
+    private Optional<Passenger> retrievePassenger(DtoGetAllPassengers passenger) throws PassengerDoesNotExistException {
+        final Optional<Passenger> passengerToUpdate = this.passengerRepository.findById(passenger.getId());
         if (passengerToUpdate.isEmpty()) {
             throw new PassengerDoesNotExistException();
         }
@@ -66,7 +66,7 @@ public final class UpdatePassenger {
     }
 
     private void passengerIsUsers(final DtoGetAllPassengers passenger, final int userId) throws PassengerDoesNotBelongToUserException {
-        final Optional<AbstractInvolved> pass = this.passengerRepository.findById(passenger.getId());
+        final Optional<Passenger> pass = this.passengerRepository.findById(passenger.getId());
         if (pass.isEmpty() || pass.get().getUserCode() != userId) {
             throw new PassengerDoesNotBelongToUserException();
         }

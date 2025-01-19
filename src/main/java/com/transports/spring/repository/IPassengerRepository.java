@@ -1,6 +1,5 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.model.AbstractInvolved;
 import com.transports.spring.model.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

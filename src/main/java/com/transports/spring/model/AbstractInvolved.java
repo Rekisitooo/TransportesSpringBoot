@@ -16,24 +16,23 @@ public class AbstractInvolved {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    protected int id;
 
     @Column(name = "NOMBRE")
-    private String name;
+    protected String name;
 
     @Column(name = "APELLIDOS")
-    private String surname;
+    protected String surname;
 
     @Column(name = "ACTIVO")
-    private boolean isActive;
+    protected boolean isActive;
 
     @Column(name = "COD_ROL")
-    private int roleCode;
+    protected int roleCode;
 
     @Column(name = "COD_USUARIO_PROPIETARIO")
-    private int userCode;
+    protected int userCode;
 
     @Column(name = "COD_GRUPO_USUARIO")
-    private Integer userCodeGroup;
-
+    protected Integer userCodeGroup;
 }

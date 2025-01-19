@@ -1,7 +1,7 @@
 package com.transports.spring.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+import com.transports.spring.model.key.InvolvedByTemplateKey;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -9,14 +9,12 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 @Table(name = "INVOLUCRADO_POR_PLANTILLA")
 public final class InvolvedByTemplate {
 
-    @Column(name = "COD_INVOLUCRADO")
-    private int involvedCode;
-
-    @Column(name = "COD_PLANTILLA")
-    private int templateCode;
+    @EmbeddedId
+    private InvolvedByTemplateKey involvedByTemplateKey;
 
     @Column(name = "PLAZAS")
     private int seats;

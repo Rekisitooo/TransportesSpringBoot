@@ -1,41 +1,42 @@
 package com.transports.spring.controller;
 
-import com.transports.spring.model.Template;
-import com.transports.spring.model.TransportByTemplate;
+import com.transports.spring.model.*;
 import com.transports.spring.service.InvolvedByTemplateService;
-import com.transports.spring.service.InvolvedByTransportService;
-import com.transports.spring.service.TransportsByTemplateService;
+import com.transports.spring.service.TransportDateByTemplateService;
+import com.transports.spring.service.TransportByTemplateService;
 import com.transports.spring.service.TemplateService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/template")
 public final class TemplateController {
 
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
-    private final TransportsByTemplateService templateDateService;
-    private final InvolvedByTransportService involvedByTransportService;
+    private final TransportByTemplateService transportByTemplateService;
+    private final TransportDateByTemplateService transportDateByTemplateService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportsByTemplateService templateDaysService, InvolvedByTransportService involvedByTransportService) {
+    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportByTemplateService transportByTemplateService, TransportDateByTemplateService transportDateByTemplateService) {
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
-        this.templateDateService = templateDaysService;
-        this.involvedByTransportService = involvedByTransportService;
+        this.transportByTemplateService = transportByTemplateService;
+        this.transportDateByTemplateService = transportDateByTemplateService;
     }
 
     @GetMapping("/getById")
-    public String getById(@PathVariable (value = "id") final int templateId) {
+    public String getById(@RequestParam (value = "id") final int templateId) {
         final Template template = this.templateService.findById(templateId);
-        this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
-        this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
-        final List<TransportByTemplate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-        Map<date, Map<String(passengerName), String(driverName)>> map = this.involvedByTransportService.findAllPassengerTransports(templateId, templateDaysList);
-        Map<date, Map<String(driverName), List<String(passengerNames)>>> map = this.involvedByTransportService.findAllDriverTransports(templateId, templateDaysList);
-        return "templateCrud";
+        final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
+        final List<Driver> driversFromTemplateList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
+        final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        final Map<Integer, Map<Integer, Integer>> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+        final Map<Integer, Map<Integer, List<Integer>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
+        return "templateCRUD";
         /*
         MAPA AUSENCIAS <PASAGERO, MAPA<FECHA, BOOLEAN>>
                 ADOLFO	{01/01/2025, TRUE; 05/01/2025, FALSE; }

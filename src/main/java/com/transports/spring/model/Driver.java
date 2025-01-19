@@ -1,9 +1,13 @@
 package com.transports.spring.model;
 
+import com.transports.spring.comparable.IDriverDtoGetAllDriversComparable;
 import com.transports.spring.comparable.IPassengerDtoGetAllPassengersComparable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
@@ -12,12 +16,12 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
-public final class Passenger extends AbstractInvolved implements IPassengerDtoGetAllPassengersComparable {
+public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDriversComparable {
 
     @Column(name = "NUMERO_PLAZAS")
-    private String occupiedSeats;
+    private String availableSeats;
 
-    public Passenger(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, String occupiedSeats) {
+    public Driver(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, String availableSeats) {
         super();
         this.id = id;
         this.name = name;
@@ -26,20 +30,20 @@ public final class Passenger extends AbstractInvolved implements IPassengerDtoGe
         this.roleCode = roleCode;
         this.userCode = userCode;
         this.userCodeGroup = userCodeGroup;
-        this.occupiedSeats = occupiedSeats;
+        this.availableSeats = availableSeats;
     }
 
-    public boolean isEqual(final IPassengerDtoGetAllPassengersComparable entity) {
+    public boolean isEqual(final IDriverDtoGetAllDriversComparable entity) {
         return this.getName().equalsIgnoreCase(entity.getName()) &&
                 this.getSurname().equalsIgnoreCase(entity.getSurname()) &&
-                this.getOccupiedSeats() == entity.getOccupiedSeats() &&
+                this.getAvailableSeats() == entity.getAvailableSeats() &&
                 this.isActive() == entity.isActive() &&
                 this.isShared() == entity.isShared();
     }
 
     @Override
-    public int getOccupiedSeats() {
-        return Integer.parseInt(this.occupiedSeats);
+    public int getAvailableSeats() {
+        return Integer.parseInt(this.availableSeats);
     }
 
     @Override
