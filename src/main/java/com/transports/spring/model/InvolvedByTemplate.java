@@ -16,6 +16,12 @@ public final class InvolvedByTemplate {
     @EmbeddedId
     private InvolvedByTemplateKey involvedByTemplateKey;
 
+    @Column(name = "NOMBRE")
+    protected String name;
+
+    @Column(name = "APELLIDOS")
+    protected String surname;
+
     @Column(name = "PLAZAS")
     private int seats;
 

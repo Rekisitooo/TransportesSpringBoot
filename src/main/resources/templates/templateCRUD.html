@@ -49,13 +49,15 @@
                                         <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"></th>
                                     </tr>
                                     <tr>
-                                        <th th:each="date: ${templateDates}" th:text="${date.transportDate}"></th>
+                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
-                                        <td th:text="${date.transportDate}"></td>
                                         <td th:each="passengerTransports : ${allPassengerTransportsFromTemplate}">
+                                            <select name="driversForPassengerransport">
+
+                                            </select>
                                             <!-- <select with available drivers and the selected one -->
                                         </td>
                                     </tr>

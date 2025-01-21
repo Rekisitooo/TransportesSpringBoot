@@ -1,10 +1,7 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.model.*;
-import com.transports.spring.service.InvolvedByTemplateService;
-import com.transports.spring.service.TransportDateByTemplateService;
-import com.transports.spring.service.TransportByTemplateService;
-import com.transports.spring.service.TemplateService;
+import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +18,14 @@ public final class TemplateController {
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportByTemplateService transportByTemplateService;
     private final TransportDateByTemplateService transportDateByTemplateService;
+    private InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportByTemplateService transportByTemplateService, TransportDateByTemplateService transportDateByTemplateService) {
+    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportByTemplateService transportByTemplateService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportByTemplateService = transportByTemplateService;
         this.transportDateByTemplateService = transportDateByTemplateService;
+        this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
     }
 
     @GetMapping("/getById")
@@ -42,6 +41,10 @@ public final class TemplateController {
         model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
         final Map<Integer, Map<Integer, List<Integer>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
         model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
+        final Map<Integer, List<Integer>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableForDate(templateId);
+        model.addAttribute("driversAvailableForDate", driversAvailableForDate);
+        final Map<Integer, List<Integer>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAvailableForDate(templateId);
+        model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
 
         return "templateCRUD";
         /*
