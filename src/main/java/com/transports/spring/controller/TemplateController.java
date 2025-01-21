@@ -31,41 +31,29 @@ public final class TemplateController {
     @GetMapping("/getById")
     public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
         final Template template = this.templateService.findById(templateId);
+
         final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
+
         final List<Driver> driversFromTemplateList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
         model.addAttribute("driversFromTemplateList", driversFromTemplateList);
+
         final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
-        final Map<Integer, Map<Integer, Integer>> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+
+        final Map<Integer, TransportByTemplate> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
         model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
+
         final Map<Integer, Map<Integer, List<Integer>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
         model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
-        final Map<Integer, List<Integer>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableForDate(templateId);
+
+        final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableForDate(templateId);
         model.addAttribute("driversAvailableForDate", driversAvailableForDate);
-        final Map<Integer, List<Integer>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAvailableForDate(templateId);
+
+        final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAvailableForDate(templateId);
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
 
         return "templateCRUD";
-        /*
-        MAPA AUSENCIAS <PASAGERO, MAPA<FECHA, BOOLEAN>>
-                ADOLFO	{01/01/2025, TRUE; 05/01/2025, FALSE; }
-
-        cojo el pasajero
-        cojo el valor para la fecha
-        si es true pinto "AUSENTE"
-
-
-        MAPA DISPONIBILIDAD <PASAGERO, MAPA<FECHA, BOOLEAN>>
-                cojo el pasajero
-        cojo el valor para la fecha
-        si es true pinto "NO ASISTE"
-
-
-        MAPA TRANSPORTES <PASAGERO, MAPA<FECHA, CONDUCTOR>>
-                cojo el pasajero
-        cojo el valor para la fecha y si hay lo pinto
-        */
     }
 
     @GetMapping("/create")

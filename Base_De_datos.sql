@@ -103,9 +103,10 @@ VALUES
     ('Verónica', '', TRUE, 4, 2, 1, 1),
     ('Abel y Mariana', '', TRUE, 2, 2, 1, 1),
     ('Familia Cerezo', '', TRUE, 1, 2, 1, 1),
-    ('Vanessa', '', TRUE, 2, 2, 1, 1),
-    ('Ikeriano no compartido', '', TRUE, 1, 1, 1, NULL),
-    ('Fuencarral1 no compartido', '', TRUE, 1, 1, 2, NULL);
+    ('Vanessa', '', TRUE, 2, 2, 1, 1)
+    -- ('Ikeriano no compartido', '', TRUE, 1, 1, 1, NULL),
+    -- ('Fuencarral1 no compartido', '', TRUE, 1, 1, 2, NULL)
+    ;
 
 DROP TABLE IF EXISTS DIA_DE_LA_SEMANA;
 CREATE TABLE IF NOT EXISTS DIA_DE_LA_SEMANA (

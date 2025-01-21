@@ -35,4 +35,10 @@ public class AbstractInvolved {
 
     @Column(name = "COD_GRUPO_USUARIO")
     protected Integer userCodeGroup;
+
+    protected AbstractInvolved(int id, String completeName){
+        super();
+        this.id = id;
+        this.name = completeName;
+    }
 }

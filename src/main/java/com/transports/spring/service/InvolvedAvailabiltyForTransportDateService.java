@@ -1,8 +1,6 @@
 package com.transports.spring.service;
 
-import com.transports.spring.model.InvolvedAvailabiltyForTransportDate;
-import com.transports.spring.model.TransportByTemplate;
-import com.transports.spring.model.TransportDateByTemplate;
+import com.transports.spring.model.*;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
 import org.springframework.stereotype.Service;
@@ -23,38 +21,51 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<DateId, List<PassengerId>>
+     * @return Map<DateId, List<Passenger (id, completeName)>>
      */
-    public Map<Integer, List<Integer>> findAllPassengersAvailableForDate(final int templateId) {
+    public Map<Integer, List<Passenger>> findAllPassengersAvailableForDate(final int templateId) {
         final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengersAvailableForDate(templateId);
-        return findAllInvolvedsAvailableForDate(availablePassengersForDate);
-    }
+        final Map<Integer, List<Passenger>> availablePassengersForDateMap = new HashMap<>();
 
-    /**
-     * @param templateId
-     * @return Map<DateId, List<DriverId>>
-     */
-    public Map<Integer, List<Integer>> findAllDriversAvailableForDate(final int templateId) {
-        final List<InvolvedAvailabiltyForTransportDate> availableDriversForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAvailableForDate(templateId);
-        return findAllInvolvedsAvailableForDate(availableDriversForDate);
-    }
-
-    private Map<Integer, List<Integer>> findAllInvolvedsAvailableForDate(final List<InvolvedAvailabiltyForTransportDate> availableInvolvedsForDate) {
-        final Map<Integer, List<Integer>> availableInvolvedForDateMap = new HashMap<>();
-
-        for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availableInvolvedsForDate) {
+        for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
             final int transportDateId = transportByTemplate.getTransportDateCode();
-            List<Integer> availableInvolvedsForTransportDate = availableInvolvedForDateMap.get(transportDateId);
-            if (availableInvolvedsForTransportDate == null) {
-                availableInvolvedsForTransportDate = new ArrayList<>();
-                availableInvolvedsForTransportDate.add(transportByTemplate.getInvolvedCode());
-                availableInvolvedForDateMap.put(transportDateId,availableInvolvedsForTransportDate);
+            final Passenger driver = new Passenger(transportByTemplate.getInvolvedCode(), transportByTemplate.getInvolvedCompleteName());
+            List<Passenger> availablePassengersForTransportDate = availablePassengersForDateMap.get(transportDateId);
+            if (availablePassengersForTransportDate == null) {
+                availablePassengersForTransportDate = new ArrayList<>();
+                availablePassengersForTransportDate.add(driver);
+                availablePassengersForDateMap.put(transportDateId, availablePassengersForTransportDate);
             } else {
-                availableInvolvedsForTransportDate.add(transportByTemplate.getInvolvedCode());
+                availablePassengersForTransportDate.add(driver);
             }
 
         }
 
-        return availableInvolvedForDateMap;
+        return availablePassengersForDateMap;
+    }
+
+    /**
+     * @param templateId
+     * @return Map<DateId, Driver (id, completeName)>
+     */
+    public Map<Integer, List<Driver>> findAllDriversAvailableForDate(final int templateId) {
+        final List<InvolvedAvailabiltyForTransportDate> availableDriversForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAvailableForDate(templateId);
+        final Map<Integer, List<Driver>> availableDriversForDateMap = new HashMap<>();
+
+        for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availableDriversForDate) {
+            final int transportDateId = transportByTemplate.getTransportDateCode();
+            final Driver driver = new Driver(transportByTemplate.getInvolvedCode(), transportByTemplate.getInvolvedCompleteName());
+            List<Driver> availableDriversForTransportDate = availableDriversForDateMap.get(transportDateId);
+            if (availableDriversForTransportDate == null) {
+                availableDriversForTransportDate = new ArrayList<>();
+                availableDriversForTransportDate.add(driver);
+                availableDriversForDateMap.put(transportDateId, availableDriversForTransportDate);
+            } else {
+                availableDriversForTransportDate.add(driver);
+            }
+
+        }
+
+        return availableDriversForDateMap;
     }
 }

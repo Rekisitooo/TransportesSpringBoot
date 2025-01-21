@@ -23,9 +23,12 @@ public final class InvolvedAvailabiltyForTransportDate {
     @Column(name = "COD_FECHA_TRANSPORTE")
     private int transportDateCode;
 
-    public InvolvedAvailabiltyForTransportDate(int transportDateCode, int involvedCode) {
+    private String involvedCompleteName;
+
+    public InvolvedAvailabiltyForTransportDate(int transportDateCode, int involvedCode, String involvedCompleteName) {
         this.transportDateCode = transportDateCode;
         this.involvedCode = involvedCode;
+        this.involvedCompleteName = involvedCompleteName;
     }
 
 }

@@ -18,20 +18,17 @@ public class TransportByTemplateService {
     }
 
     /**
-     *
      * @param passengerList passengers available in the consulted template
      * @param templateId consulted template
-     * @return Map<transportDateId, Map<passengerId, driverId>>
+     * @return Map<transportDateId, Map<TransportByTemplate>>
      */
-    public Map<Integer, Map<Integer, Integer>> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
-        final Map<Integer, Map<Integer, Integer>> passengerTransportsMap = new HashMap<>();
+    public Map<Integer, TransportByTemplate> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
+        final Map<Integer, TransportByTemplate> passengerTransportsMap = new HashMap<>();
         for (final Passenger passenger : passengerList) {
             final List<TransportByTemplate> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
 
             for (final TransportByTemplate transport : allPassengerTransportsFromTemplate) {
-                final Map<Integer, Integer> transportPassengersMap = new HashMap<>();
-                transportPassengersMap.put(passenger.getId(), transport.getTransportByTemplateKey().getDriverId());
-                passengerTransportsMap.put(transport.getTransportByTemplateKey().getTransportDateId(), transportPassengersMap);
+                passengerTransportsMap.put(transport.getTransportByTemplateKey().getTransportDateId(), transport);
             }
         }
 

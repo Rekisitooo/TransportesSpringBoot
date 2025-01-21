@@ -29,6 +29,10 @@ public final class Passenger extends AbstractInvolved implements IPassengerDtoGe
         this.occupiedSeats = occupiedSeats;
     }
 
+    public Passenger(int id, String completeName){
+        super(id, completeName);
+    }
+
     public boolean isEqual(final IPassengerDtoGetAllPassengersComparable entity) {
         return this.getName().equalsIgnoreCase(entity.getName()) &&
                 this.getSurname().equalsIgnoreCase(entity.getSurname()) &&

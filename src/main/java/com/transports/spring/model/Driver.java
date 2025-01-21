@@ -33,6 +33,10 @@ public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDr
         this.availableSeats = availableSeats;
     }
 
+    public Driver(int id, String completeName){
+        super(id, completeName);
+    }
+
     public boolean isEqual(final IDriverDtoGetAllDriversComparable entity) {
         return this.getName().equalsIgnoreCase(entity.getName()) &&
                 this.getSurname().equalsIgnoreCase(entity.getSurname()) &&
