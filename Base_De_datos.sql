@@ -175,31 +175,6 @@ CREATE TABLE IF NOT EXISTS FECHA_TRANSPORTE_POR_PLANTILLA (
     CONSTRAINT FOREIGN KEY FK_COD_PLANTILLA(COD_PLANTILLA) REFERENCES PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TRIGGER IF EXISTS after_insert_fecha_transporte_por_plantilla;
-DELIMITER //
-CREATE TRIGGER after_insert_fecha_transporte_por_plantilla
-	AFTER INSERT ON FECHA_TRANSPORTE_POR_PLANTILLA
-FOR EACH ROW
-BEGIN
-
-	INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE 
-			(COD_INVOLUCRADO, COD_FECHA_TRANSPORTE)
-		SELECT ipp.COD_INVOLUCRADO, NEW.ID
-			FROM INVOLUCRADO_POR_PLANTILLA ipp
-				INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL dipdts
-					ON dipdts.COD_INVOLUCRADO = ipp.COD_INVOLUCRADO
-				LEFT JOIN AUSENCIA_POR_INVOLUCRADO api
-					ON ipp.COD_INVOLUCRADO = api.COD_INVOLUCRADO
-			WHERE 
-				dipdts.DISPONIBLE = TRUE
-				AND ipp.COD_PLANTILLA = NEW.COD_PLANTILLA
-				AND api.COD_INVOLUCRADO IS NULL;
-                        
-END //
-
-DELIMITER ;
-    
-                
 /* 
  * Tabla que sirve para el historico de plantillas. Por ejemplo, puede ser que ya no estén algunos conductores o viajeros que 
  * estaban antes. Si se quiere consultar una plantilla de hace un ano, esta tabla almacena los involucrados que habia para esa plantilla.
@@ -236,40 +211,6 @@ CREATE TABLE IF NOT EXISTS DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (
     CONSTRAINT FOREIGN KEY FK_COD_FECHA_TRANSPORTE(COD_FECHA_TRANSPORTE) REFERENCES FECHA_TRANSPORTE_POR_PLANTILLA (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TRIGGER IF EXISTS after_insert_disponibilidad_involucrado_por_fecha_transporte;
-DELIMITER //
-CREATE TRIGGER after_insert_disponibilidad_involucrado_por_fecha_transporte
-AFTER INSERT ON DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE
-FOR EACH ROW
-BEGIN
-
-	-- Si el involucrado que se ha insertado es un conductor, pon las plazas ocupadas
-	IF EXISTS (
-		SELECT * 
-			FROM INVOLUCRADO_POR_PLANTILLA ipp
-				INNER JOIN ROL_INVOLUCRADO roli
-					ON ipp.COD_ROL = roli.ID
-				INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
-					ON ftpp.COD_PLANTILLA = ipp.COD_PLANTILLA
-				WHERE
-					roli.DESCRIPCION = 'Conductor' 
-					AND ipp.COD_INVOLUCRADO = NEW.COD_INVOLUCRADO
-					AND ftpp.ID = NEW.COD_FECHA_TRANSPORTE
-    ) THEN
-    
-		INSERT INTO PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE 
-				(COD_CONDUCTOR, COD_FECHA_TRANSPORTE, PLAZAS_DISPONIBLES, PLAZAS_OCUPADAS)
-			SELECT NEW.COD_INVOLUCRADO, NEW.COD_FECHA_TRANSPORTE, ipp.PLAZAS, 0
-				FROM INVOLUCRADO_POR_PLANTILLA ipp
-					INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
-						ON ftpp.COD_PLANTILLA = ipp.COD_PLANTILLA
-				WHERE 
-					ipp.COD_INVOLUCRADO = NEW.COD_INVOLUCRADO
-                    AND ftpp.ID = NEW.COD_FECHA_TRANSPORTE;
-	END IF;
-    
-END //
-
 DELIMITER ;
                     
 -- Se rellena al crear la plantilla y se va cambiando según se va haciendo la plantilla
@@ -302,8 +243,9 @@ BEGIN
 			FROM DIA_TRANSPORTE_SEMANAL dts
 				WHERE dts.ACTIVO = 1;
 
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_ft_terminado = 1;
-
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_ft_terminado = 1;    
+	
+    
 	-- Inserta las fechas de transporte para la plantilla
     OPEN cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA;    
 		read_loop: LOOP
@@ -345,9 +287,120 @@ BEGIN
     SELECT inv.ID, NEW.ID, inv.NOMBRE, inv.APELLIDOS, inv.NUMERO_PLAZAS, inv.COD_ROL
 		FROM INVOLUCRADO inv
 			WHERE inv.ACTIVO = 1;
+            
+	CALL procedure_insert_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE(NEW.ID);
+	CALL procedure_insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE(NEW.ID);
     
 END //
 
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS procedure_insert_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
+DELIMITER $$
+CREATE PROCEDURE procedure_insert_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE(
+    IN id_plantilla INT
+)
+BEGIN
+    
+    -- Variables para el cursor de insertar la disponibilidad de cada involucrado por cada fecha de transporte de la plantilla
+    DECLARE cursor_dipft_terminado INT DEFAULT FALSE;
+    DECLARE cod_fecha_transporte INT;
+
+	DECLARE cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE CURSOR FOR
+        SELECT ftpp.ID
+			FROM FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+				WHERE ftpp.COD_PLANTILLA = id_plantilla;
+                
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_dipft_terminado = 1;
+
+	-- Inserta la dipsonibilidad de cada involucrado para cada fecha de transporte de la plantilla creada
+    OPEN cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
+		read_loop: LOOP
+			FETCH cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE INTO cod_fecha_transporte;
+
+			IF cursor_dipft_terminado THEN
+				LEAVE read_loop;
+			END IF;
+
+			INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_FECHA_TRANSPORTE)
+				SELECT DISTINCT ipp.COD_INVOLUCRADO, cod_fecha_transporte
+					FROM INVOLUCRADO_POR_PLANTILLA ipp
+						INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL dipdts
+							ON dipdts.COD_INVOLUCRADO = ipp.COD_INVOLUCRADO
+						LEFT JOIN AUSENCIA_POR_INVOLUCRADO api
+							ON ipp.COD_INVOLUCRADO = api.COD_INVOLUCRADO
+					WHERE 
+						dipdts.DISPONIBLE = TRUE
+						AND ipp.COD_PLANTILLA = id_plantilla
+						AND api.COD_INVOLUCRADO IS NULL;
+            
+		END LOOP;
+    CLOSE cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
+    
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS procedure_insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE;
+DELIMITER $$
+CREATE PROCEDURE procedure_insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE(
+	IN id_plantilla INT
+)
+BEGIN
+    
+    -- Variables para el cursor de insertar las plazas ocupadas de cada conductor por cada fecha de transporte de la plantilla
+    DECLARE cursor_pocpft_terminado INT DEFAULT FALSE;
+    DECLARE cod_fecha_transporte_pocpft INT;
+    DECLARE cod_involucrado INT;
+    
+	DECLARE cursor_insertar_en_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE CURSOR FOR
+        SELECT 
+			dipft.COD_INVOLUCRADO as cod_involucrado,
+            ftpp.ID as cod_fecha_transporte_pocpft
+			FROM DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE dipft
+				INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+					ON dipft.COD_FECHA_TRANSPORTE = ftpp.ID
+				WHERE ftpp.ID = id_plantilla;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET cursor_pocpft_terminado = 1;
+    
+    -- Inserta la dipsonibilidad de cada involucrado para cada fecha de transporte de la plantilla creada
+    OPEN cursor_insertar_en_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE;
+		read_loop: LOOP
+			FETCH cursor_insertar_en_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE INTO cod_involucrado, cod_fecha_transporte_pocpft;
+
+			IF cursor_pocpft_terminado THEN
+				LEAVE read_loop;
+			END IF;
+
+			-- Si el involucrado que se ha insertado es un conductor, inserta las plazas ocupadas
+			IF EXISTS (
+				SELECT * 
+					FROM INVOLUCRADO_POR_PLANTILLA ipp
+						INNER JOIN ROL_INVOLUCRADO roli
+							ON ipp.COD_ROL = roli.ID
+						INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+							ON ftpp.COD_PLANTILLA = ipp.COD_PLANTILLA
+						WHERE
+							roli.DESCRIPCION = 'Conductor' 
+							AND ipp.COD_INVOLUCRADO = cod_involucrado
+							AND ftpp.ID = cod_fecha_transporte_pocpft
+			) THEN
+			
+				INSERT INTO PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE 
+						(COD_CONDUCTOR, COD_FECHA_TRANSPORTE, PLAZAS_DISPONIBLES, PLAZAS_OCUPADAS)
+					SELECT cod_involucrado, cod_fecha_transporte_pocpft, ipp.PLAZAS, 0
+						FROM INVOLUCRADO_POR_PLANTILLA ipp
+							INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+								ON ftpp.COD_PLANTILLA = ipp.COD_PLANTILLA
+						WHERE 
+							ipp.COD_INVOLUCRADO = cod_involucrado
+							AND ftpp.ID = cod_fecha_transporte_pocpft;
+			END IF;
+            
+		END LOOP;
+    CLOSE cursor_insertar_en_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE;
+    
+END $$
 DELIMITER ;
 
 DROP TABLE IF EXISTS TRANSPORTE_POR_PLANTILLA;
@@ -362,9 +415,9 @@ CREATE TABLE IF NOT EXISTS TRANSPORTE_POR_PLANTILLA (
     CONSTRAINT FOREIGN KEY FK_COD_VIAJERO (COD_VIAJERO) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TRIGGER IF EXISTS insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE;
+DROP TRIGGER IF EXISTS after_insert_TRANSPORTE_POR_PLANTILLA;
 delimiter $$
-CREATE TRIGGER insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE 
+CREATE TRIGGER after_insert_TRANSPORTE_POR_PLANTILLA
 	AFTER INSERT ON TRANSPORTE_POR_PLANTILLA
 FOR EACH ROW
 BEGIN
@@ -498,36 +551,21 @@ INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL (COD_INVOLUCRA
 		FROM INVOLUCRADO i;
         
 /* TRANSPORTE */
-/* SACAR LOS CONDUCTORES DE UNA PLANTILLA
-SELECT conductor.nombre, conductor.id
+/* SACAR LOS CONDUCTORES DE UNA PLANTILLA DISPONIBLES PARA UN DIA DE LA SEMANA EN CONCRETO 
+SELECT ipp.nombre, ipp.id
 	FROM INVOLUCRADO_POR_PLANTILLA ipp 
-		INNER JOIN INVOLUCRADO conductor 
-			ON ipp.COD_INVOLUCRADO = conductor.ID 
 		INNER JOIN ROL_INVOLUCRADO rol_conductor
-			ON conductor.COD_ROL = rol_conductor.ID
+			ON ipp.COD_ROL = rol_conductor.ID
             AND rol_conductor.DESCRIPCION = 'Conductor'
+		INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE dipft
+			ON dipft.COD_INVOLUCRADO = ipp.ID
+            AND dipft.DISPONIBLE = TRUE
 	WHERE 
 		ipp.COD_PLANTILLA = 1
-	ORDER BY conductor.nombre DESC;
+        AND dipft.COD_FECHA_TRANSPORTE = 1 -- VIDA Y MINISTERIO
+	ORDER BY ipp.nombre DESC;
 */
 
-/* SACAR LOS CONDUCTORES DE UNA PLANTILLA DISPONIBLES PARA UN DIA DE LA SEMANA EN CONCRETO 
-SELECT conductor.nombre, conductor.id
-	FROM INVOLUCRADO_POR_PLANTILLA ipp 
-		INNER JOIN INVOLUCRADO conductor 
-			ON ipp.COD_INVOLUCRADO = conductor.ID 
-		INNER JOIN ROL_INVOLUCRADO rol_conductor
-			ON conductor.COD_ROL = rol_conductor.ID
-            AND rol_conductor.DESCRIPCION = 'Conductor'
-		INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL didts
-			ON didts.COD_INVOLUCRADO = conductor.ID
-            AND didts.DISPONIBLE = TRUE
-	WHERE 
-		ipp.COD_PLANTILLA = 1
-        AND didts.COD_DIA_TRANSPORTE_SEMANAL = 1 -- VIDA Y MINISTERIO
-	ORDER BY conductor.nombre DESC;
-*/
-    
 INSERT INTO PLANTILLA (NOMBRE, ANNO, MES, COD_USUARIO_PROPIETARIO, COD_GRUPO_USUARIO)
 	VALUES 
 		('mayo_2025', '2025', 5, 1, 1),
@@ -873,13 +911,13 @@ BEGIN
 		WHERE
 			dia_transporte_semanal.ACTIVO = TRUE;
 
-	SELECT disponibilidad_por_dia_transporte;
-    SELECT cod_usuario;
-    SELECT cod_grupo_usuario;
-    SELECT mostrar_viajeros_activos;
-    SELECT orden;
-    SELECT elemento_inicial;
-    SELECT tamano_pagina;
+	-- SELECT disponibilidad_por_dia_transporte;
+    -- SELECT cod_usuario;
+    -- SELECT cod_grupo_usuario;
+    -- SELECT mostrar_viajeros_activos;
+    -- SELECT orden;
+    -- SELECT elemento_inicial;
+    -- SELECT tamano_pagina;
     
     -- Paso 2: Construir la consulta SQL completa
     SET @query_sql = CONCAT(
@@ -952,7 +990,7 @@ BEGIN
 END $$
 DELIMITER ;
             
-CALL crud_viajeros(1, 1, 1, null, null, null);
+-- CALL crud_viajeros(1, 1, 1, null, null, null);
 
 DELIMITER $$
 CREATE PROCEDURE crud_conductores(
@@ -1001,4 +1039,4 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL crud_conductores('0, 1');
+-- CALL crud_conductores('0, 1');
