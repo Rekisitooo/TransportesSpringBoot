@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PassengerService {
@@ -39,5 +40,14 @@ public class PassengerService {
 
     public List<Passenger> getAll() {
         return this.passengerRepository.findAll();
+    }
+
+    public Passenger findById(final int passengerId){
+        final Optional<Passenger> passengerOpt = this.passengerRepository.findById(passengerId);
+        Passenger passenger = new Passenger();
+        if (passengerOpt.isPresent()) {
+            passenger = passengerOpt.get();
+        }
+        return passenger;
     }
 }

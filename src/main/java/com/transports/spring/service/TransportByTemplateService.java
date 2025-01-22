@@ -4,7 +4,6 @@ import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.TransportByTemplate;
 import com.transports.spring.repository.ITransportsByTemplateRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,9 +12,11 @@ import java.util.*;
 public class TransportByTemplateService {
 
     private final ITransportsByTemplateRepository transportByTemplateRepository;
+    private final PassengerService passengerService;
 
-    public TransportByTemplateService(final ITransportsByTemplateRepository transportByTemplateRepository) {
+    public TransportByTemplateService(final ITransportsByTemplateRepository transportByTemplateRepository, PassengerService passengerService) {
         this.transportByTemplateRepository = transportByTemplateRepository;
+        this.passengerService = passengerService;
     }
 
     /**
@@ -41,47 +42,31 @@ public class TransportByTemplateService {
     /**
      * @param driverList drivers available in the consulted template
      * @param templateId consulted template
-     * @return Map<transportDateId, Map<driverId, List<passengerIds>>>
+     * @return Map<driverId, Map<transportDateId, List<Passenger>>>
      */
-    public Map<Integer, Map<Integer, List<Integer>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) {
-        final Map<Integer, Map<Integer, List<Integer>>> driverTransportsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, List<Passenger>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) {
+        final Map<Integer, Map<Integer, List<Passenger>>> driverTransportsMap = new HashMap<>();
+
         for (final Driver driver : driverList) {
             final List<TransportByTemplate> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
-            final Integer transportDriverId = driver.getId();
+            Map<Integer, List<Passenger>> transportPassengersMap = new HashMap<>();
+            driverTransportsMap.put(driver.getId(), transportPassengersMap);
 
             for (final TransportByTemplate transport : allDriverTransportsFromTemplate) {
                 final Integer transportDateId = transport.getTransportByTemplateKey().getTransportDateId();
-                final Integer transportPassengerId = transport.getTransportByTemplateKey().getPassengerId();
-                Map<Integer, List<Integer>> transportPassengersMap = driverTransportsMap.get(transportDateId);
-                List<Integer> transportPassengerList;
+                final Passenger passenger = this.passengerService.findById(transport.getTransportByTemplateKey().getPassengerId());
 
-                if (isTransportDateInDriverTransportsMap(transportPassengersMap)) {
-                    transportPassengerList = transportPassengersMap.get(transportDriverId);
-                    if (isDriverInMap(transportPassengerList)) {
-                        transportPassengerList.add(transportPassengerId);
-                    } else {
-                        transportPassengerList = new ArrayList<>(Collections.singletonList(transportPassengerId));
-                        transportPassengersMap = new HashMap<>();
-                        transportPassengersMap.put(transportDriverId, transportPassengerList);
-                    }
+                List<Passenger> transportPassengerList = transportPassengersMap.get(transportDateId);
+                if (transportPassengerList == null) {
+                    transportPassengerList = new ArrayList<>(Collections.singletonList(passenger));
+                    transportPassengersMap.put(transportDateId, transportPassengerList);
                 } else {
-                    transportPassengerList = new ArrayList<>(Collections.singletonList(transportPassengerId));
-                    transportPassengersMap = new HashMap<>();
-                    transportPassengersMap.put(transportDriverId, transportPassengerList);
-                    driverTransportsMap.put(transportDateId, transportPassengersMap);
+                    transportPassengerList.add(passenger);
                 }
             }
         }
 
         return driverTransportsMap;
-    }
-
-    private static boolean isDriverInMap(List<Integer> transportPassengerList) {
-        return transportPassengerList != null;
-    }
-
-    private static boolean isTransportDateInDriverTransportsMap(final Map<Integer, List<Integer>> transportPassengersMap) {
-        return transportPassengersMap != null;
     }
 
     public List<TransportByTemplate> findAllPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
