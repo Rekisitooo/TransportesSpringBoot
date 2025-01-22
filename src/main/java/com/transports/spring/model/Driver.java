@@ -4,6 +4,7 @@ import com.transports.spring.comparable.IDriverDtoGetAllDriversComparable;
 import com.transports.spring.comparable.IPassengerDtoGetAllPassengersComparable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,9 @@ import lombok.experimental.SuperBuilder;
 public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDriversComparable {
 
     @Column(name = "NUMERO_PLAZAS")
-    private String availableSeats;
+    private int availableSeats;
 
-    public Driver(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, String availableSeats) {
+    public Driver(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int availableSeats) {
         super();
         this.id = id;
         this.name = name;
@@ -30,6 +31,15 @@ public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDr
         this.roleCode = roleCode;
         this.userCode = userCode;
         this.userCodeGroup = userCodeGroup;
+        this.availableSeats = availableSeats;
+    }
+
+    public Driver(int id, String name, String surname, int roleCode, int availableSeats) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.roleCode = roleCode;
         this.availableSeats = availableSeats;
     }
 
@@ -43,11 +53,6 @@ public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDr
                 this.getAvailableSeats() == entity.getAvailableSeats() &&
                 this.isActive() == entity.isActive() &&
                 this.isShared() == entity.isShared();
-    }
-
-    @Override
-    public int getAvailableSeats() {
-        return Integer.parseInt(this.availableSeats);
     }
 
     @Override

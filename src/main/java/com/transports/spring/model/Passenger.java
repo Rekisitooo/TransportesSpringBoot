@@ -3,6 +3,7 @@ package com.transports.spring.model;
 import com.transports.spring.comparable.IPassengerDtoGetAllPassengersComparable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -15,9 +16,9 @@ import lombok.experimental.SuperBuilder;
 public final class Passenger extends AbstractInvolved implements IPassengerDtoGetAllPassengersComparable {
 
     @Column(name = "NUMERO_PLAZAS")
-    private String occupiedSeats;
+    private int occupiedSeats;
 
-    public Passenger(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, String occupiedSeats) {
+    public Passenger(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int occupiedSeats) {
         super();
         this.id = id;
         this.name = name;
@@ -26,6 +27,15 @@ public final class Passenger extends AbstractInvolved implements IPassengerDtoGe
         this.roleCode = roleCode;
         this.userCode = userCode;
         this.userCodeGroup = userCodeGroup;
+        this.occupiedSeats = occupiedSeats;
+    }
+
+    public Passenger(int id, String name, String surname, int roleCode, int occupiedSeats) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.roleCode = roleCode;
         this.occupiedSeats = occupiedSeats;
     }
 
@@ -39,11 +49,6 @@ public final class Passenger extends AbstractInvolved implements IPassengerDtoGe
                 this.getOccupiedSeats() == entity.getOccupiedSeats() &&
                 this.isActive() == entity.isActive() &&
                 this.isShared() == entity.isShared();
-    }
-
-    @Override
-    public int getOccupiedSeats() {
-        return Integer.parseInt(this.occupiedSeats);
     }
 
     @Override

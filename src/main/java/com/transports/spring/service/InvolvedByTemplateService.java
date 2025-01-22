@@ -23,4 +23,8 @@ public final class InvolvedByTemplateService {
     public List<Driver> getAllDriversFromTemplate(int templateId) {
         return this.involvedByTemplateRepository.getAllDriversFromTemplate(templateId);
     }
+
+    public Passenger getByIdAndTemplate(final int involvedId, final int templateId){
+        return this.involvedByTemplateRepository.getByIdAndTemplate(involvedId, templateId);
+    }
 }

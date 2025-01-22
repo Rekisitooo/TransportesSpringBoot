@@ -11,6 +11,14 @@ import org.springframework.stereotype.Repository;
 public interface IPassengerRepository extends JpaRepository<Passenger, Integer> {
 
     @Modifying
-    @Query("UPDATE Passenger i SET i.name = :name, i.surname = :surname, i.isActive = :isActive, i.occupiedSeats = :occupiedSeats, i.userCodeGroup = :userGroupCode WHERE i.userCode = :ownerUserCode")
+    @Query("UPDATE Passenger i " +
+            "   SET " +
+            "       i.name = :name," +
+            "       i.surname = :surname," +
+            "       i.isActive = :isActive," +
+            "       i.occupiedSeats = :occupiedSeats," +
+            "       i.userCodeGroup = :userGroupCode " +
+            "   WHERE" +
+            "       i.userCode = :ownerUserCode")
     void updateUser(@Param("name") final String name, @Param("surname") final String surname, @Param("isActive") final Boolean isActive, @Param("occupiedSeats") final int occupiedSeats, @Param("userGroupCode") final Integer userGroupCode, @Param("ownerUserCode") final int ownerUserCode);
 }

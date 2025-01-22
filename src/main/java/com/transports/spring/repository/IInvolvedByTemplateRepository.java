@@ -14,27 +14,31 @@ import java.util.List;
 public interface IInvolvedByTemplateRepository extends JpaRepository<AbstractInvolved, Integer> {
 
     @Query("SELECT " +
-            "   new Passenger(i.id, i.name, i.surname, i.isActive, i.roleCode, i.userCode, i.userCodeGroup, i.occupiedSeats)" +
+            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
             "       FROM InvolvedByTemplate ipp" +
-            "           INNER JOIN AbstractInvolved i " +
-            "               ON i.id = ipp.involvedByTemplateKey.involvedCode " +
             "           INNER JOIN InvolvedRole rol " +
-            "               ON i.roleCode = rol.id" +
+            "               ON ipp.roleCode = rol.id" +
             "       WHERE " +
             "           rol.description = 'Viajero' " +
             "           AND ipp.involvedByTemplateKey.templateCode = :templateCode")
     List<Passenger> getAllPassengersFromTemplate(@Param("templateCode") final int templateId);
 
     @Query("SELECT " +
-            "   new Driver(i.id, i.name, i.surname, i.isActive, i.roleCode, i.userCode, i.userCodeGroup, i.availableSeats)" +
+            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
             "       FROM InvolvedByTemplate ipp" +
-            "           INNER JOIN AbstractInvolved i " +
-            "               ON i.id = ipp.involvedByTemplateKey.involvedCode " +
             "           INNER JOIN InvolvedRole rol " +
-            "               ON i.roleCode = rol.id" +
+            "               ON ipp.roleCode = rol.id" +
             "       WHERE " +
             "           rol.description = 'Conductor' " +
             "           AND ipp.involvedByTemplateKey.templateCode = :templateCode")
     List<Driver> getAllDriversFromTemplate(@Param("templateCode") final int templateId);
+
+    @Query("SELECT " +
+            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "       FROM InvolvedByTemplate ipp" +
+            "       WHERE" +
+            "           ipp.involvedByTemplateKey.templateCode = :templateCode" +
+            "           AND ipp.involvedByTemplateKey.involvedCode = :involvedCode")
+    Passenger getByIdAndTemplate(@Param("involvedCode") int involvedId, @Param("templateCode") final int templateId);
 }
 

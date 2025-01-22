@@ -41,13 +41,4 @@ public class PassengerService {
     public List<Passenger> getAll() {
         return this.passengerRepository.findAll();
     }
-
-    public Passenger findById(final int passengerId){
-        final Optional<Passenger> passengerOpt = this.passengerRepository.findById(passengerId);
-        Passenger passenger = new Passenger();
-        if (passengerOpt.isPresent()) {
-            passenger = passengerOpt.get();
-        }
-        return passenger;
-    }
 }

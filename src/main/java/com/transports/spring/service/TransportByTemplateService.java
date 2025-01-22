@@ -12,11 +12,11 @@ import java.util.*;
 public class TransportByTemplateService {
 
     private final ITransportsByTemplateRepository transportByTemplateRepository;
-    private final PassengerService passengerService;
+    private final InvolvedByTemplateService involvedByTemplateService;
 
-    public TransportByTemplateService(final ITransportsByTemplateRepository transportByTemplateRepository, PassengerService passengerService) {
+    public TransportByTemplateService(final ITransportsByTemplateRepository transportByTemplateRepository, InvolvedByTemplateService involvedByTemplateService) {
         this.transportByTemplateRepository = transportByTemplateRepository;
-        this.passengerService = passengerService;
+        this.involvedByTemplateService = involvedByTemplateService;
     }
 
     /**
@@ -54,7 +54,7 @@ public class TransportByTemplateService {
 
             for (final TransportByTemplate transport : allDriverTransportsFromTemplate) {
                 final Integer transportDateId = transport.getTransportByTemplateKey().getTransportDateId();
-                final Passenger passenger = this.passengerService.findById(transport.getTransportByTemplateKey().getPassengerId());
+                final Passenger passenger = this.involvedByTemplateService.getByIdAndTemplate(transport.getTransportByTemplateKey().getPassengerId(), templateId);
 
                 List<Passenger> transportPassengerList = transportPassengersMap.get(transportDateId);
                 if (transportPassengerList == null) {
