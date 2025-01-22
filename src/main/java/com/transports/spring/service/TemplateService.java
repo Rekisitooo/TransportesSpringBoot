@@ -27,12 +27,9 @@ public class TemplateService {
 
     @GetMapping("/getAllWithMonthNames")
     public List<Template> getAllWithMonthNames() {
-        final String[] months = {"", "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
         final List<Template> templateList = this.getAll();
         for (final Template template : templateList) {
-            final int monthInt = Integer.parseInt(template.getMonth());
-            final String month = months[monthInt];
-            template.setMonth(month);
+            template.setMonth(template.getMonthName());
         }
 
         return templateList;

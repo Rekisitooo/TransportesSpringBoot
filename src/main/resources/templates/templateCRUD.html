@@ -38,34 +38,43 @@
 
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mt-4">
-                            <h1 class="text-dark" th:text="#{templateCRUD.title}"></h1>
-                            <!-- TODO add month and year -->
-                            <!-- TODO add add button and delete button -->
+                            <h1 class="text-dark mb-3" th:text="#{templateCRUD.title} + ' ' + ${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
+                                <!-- TODO add add button and delete button -->
                         </div>
                         <div>
                             <table class="table table-striped table-bordered shadow-lg" id="passengerTransportsTable" width="100%" cellspacing="0">
                                 <thead class="bg-light">
                                     <tr>
+                                        <!-- empty for the passengers column -->
+                                        <th></th>
                                         <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"></th>
                                     </tr>
                                     <tr>
+                                        <!-- empty for the passengers column -->
+                                        <th></th>
                                         <th th:each="date : ${templateDates}" th:text="${date.transportDate}"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
-                                        <td th:text="${passenger.name} + ' ' + ${passenger.surname}"></td>
+                                        <th th:text="${passenger.name} + ' ' + ${passenger.surname}"></th>
                                         <td th:each="date : ${templateDates}">
                                             <span th:if="${passengersAvailableForDate.get(date.id) == null}" th:text="#{templateCRUD.holidays}"></span>
-                                            <select th:unless="${passengersAvailableForDate.get(date.id) == null}" name="a" th:aria-label="#{templateCRUD.driverFor} + ' ' + ${date.id}"->
-                                                <option
-                                                        th:each="driver : ${driversAvailableForDate.get(date.id)}"
-                                                        th:selected="${passenger.id == (allPassengerTransportsFromTemplate.get(date.id).transportByTemplateKey.passengerId)}"
-                                                        th:text="${driver.name}"
-                                                        th:value="${driver.id}"
-                                                        th:id="${driver.id}"
-                                                ></option>
-                                            </select>
+                                            <th:block th:unless="${passengersAvailableForDate.get(date.id) == null}">
+                                                <select name="a" th:aria-label="#{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
+                                                    <option th:text="#{templateCRUD.selectDriverForPassenger}" disabled="disabled"></option>
+                                                    <option
+                                                            th:each="driver : ${driversAvailableForDate.get(date.id)}"
+                                                            th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)
+                                                                            and (driver.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().driverId)
+                                                                            and (passenger.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().passengerId)}"
+                                                            th:text="${driver.name}"
+                                                            th:value="${driver.id}"
+                                                            th:id="${driver.id}"
+                                                    ></option>
+                                                    <!--+ ' idConductor: ' + ${driver.id} + ' idPasagero: ' + ${passenger.id} + ' idPasageroTransporte: ' + ${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().passengerId} + ' idConductorTransporte: ' + ${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().driverId}"-->
+                                                </select>
+                                            </th:block>
                                         </td>
                                     </tr>
                                 </tbody>

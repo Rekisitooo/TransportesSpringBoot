@@ -31,6 +31,8 @@ public final class TemplateController {
     @GetMapping("/getById")
     public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
         final Template template = this.templateService.findById(templateId);
+        model.addAttribute("templateMonth", template.getMonthName().toUpperCase());
+        model.addAttribute("templateYear", template.getYear());
 
         final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
@@ -41,7 +43,7 @@ public final class TemplateController {
         final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
-        final Map<Integer, TransportByTemplate> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+        final Map<Integer, Map<Integer, TransportByTemplate>> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
         model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
 
         final Map<Integer, Map<Integer, List<Integer>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);

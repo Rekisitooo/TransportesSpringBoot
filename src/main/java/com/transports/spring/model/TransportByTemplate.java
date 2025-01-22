@@ -17,7 +17,8 @@ public final class TransportByTemplate {
     private TransportByTemplateKey transportByTemplateKey;
 
     public TransportByTemplate(int passengerId, int driverId, int transportDateId) {
-        this.transportByTemplateKey = new TransportByTemplateKey(passengerId, driverId, transportDateId);
+        final TransportByTemplateKey.TransportByTemplateKeyBuilder builder = TransportByTemplateKey.builder();
+        this.transportByTemplateKey = builder.passengerId(passengerId).driverId(driverId).transportDateId(transportDateId).build();
     }
 
 }

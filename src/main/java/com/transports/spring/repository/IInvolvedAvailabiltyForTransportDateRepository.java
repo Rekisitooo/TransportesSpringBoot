@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepository<InvolvedAvailabiltyForTransportDate, Integer> {
 
-    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ipp.surname))" +
+    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_conductor" +
             "   ON ipp.roleCode = rol_conductor.id" +
@@ -25,7 +25,7 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
     List<InvolvedAvailabiltyForTransportDate> findAllDriversAvailableForDate(@Param("templateId") int templateId);
 
-    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ipp.surname))" +
+    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_viajero" +
             "   ON ipp.roleCode = rol_viajero.id" +

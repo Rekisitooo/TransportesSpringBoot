@@ -1,6 +1,5 @@
 package com.transports.spring;
 
-import com.transports.spring.controller.TemplateController;
 import com.transports.spring.model.Template;
 import com.transports.spring.service.TemplateService;
 import org.springframework.stereotype.Controller;

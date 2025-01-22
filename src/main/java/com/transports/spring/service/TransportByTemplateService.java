@@ -4,6 +4,7 @@ import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.TransportByTemplate;
 import com.transports.spring.repository.ITransportsByTemplateRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,16 +21,18 @@ public class TransportByTemplateService {
     /**
      * @param passengerList passengers available in the consulted template
      * @param templateId consulted template
-     * @return Map<transportDateId, Map<TransportByTemplate>>
+     * @return Map<passengerId, Map<transportDateId, TransportByTemplate>>
      */
-    public Map<Integer, TransportByTemplate> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
-        final Map<Integer, TransportByTemplate> passengerTransportsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, TransportByTemplate>> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
+        final Map<Integer, Map<Integer, TransportByTemplate>> passengerTransportsMap = new HashMap<>();
         for (final Passenger passenger : passengerList) {
-            final List<TransportByTemplate> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
 
-            for (final TransportByTemplate transport : allPassengerTransportsFromTemplate) {
-                passengerTransportsMap.put(transport.getTransportByTemplateKey().getTransportDateId(), transport);
+            Map<Integer, TransportByTemplate> transportsMap = new HashMap<>();
+            final List<TransportByTemplate> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
+            for (final TransportByTemplate transportByTemplate : allPassengerTransportsFromTemplate) {
+                transportsMap.put(transportByTemplate.getTransportByTemplateKey().getTransportDateId(), transportByTemplate);
             }
+            passengerTransportsMap.put(passenger.getId(), transportsMap);
         }
 
         return passengerTransportsMap;

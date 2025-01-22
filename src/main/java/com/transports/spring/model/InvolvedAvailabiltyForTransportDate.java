@@ -25,7 +25,7 @@ public final class InvolvedAvailabiltyForTransportDate {
 
     private String involvedCompleteName;
 
-    public InvolvedAvailabiltyForTransportDate(int transportDateCode, int involvedCode, String involvedCompleteName) {
+    public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode, String involvedCompleteName) {
         this.transportDateCode = transportDateCode;
         this.involvedCode = involvedCode;
         this.involvedCompleteName = involvedCompleteName;

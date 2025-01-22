@@ -56,6 +56,7 @@ public class InvolvedAvailabiltyForTransportDateService {
             final int transportDateId = transportByTemplate.getTransportDateCode();
             final Driver driver = new Driver(transportByTemplate.getInvolvedCode(), transportByTemplate.getInvolvedCompleteName());
             List<Driver> availableDriversForTransportDate = availableDriversForDateMap.get(transportDateId);
+
             if (availableDriversForTransportDate == null) {
                 availableDriversForTransportDate = new ArrayList<>();
                 availableDriversForTransportDate.add(driver);
