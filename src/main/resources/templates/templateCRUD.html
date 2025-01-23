@@ -62,7 +62,7 @@
                     url:'/transportByTemplate/deleteTransport?transportDateId=' +
                         transportDateId + '&driverId=' + driverId + '&passengerId=' + passengerId + '',
                     success: function(){
-                        const driverTransportsTablePassengerToDelete = '#p' passengerId + 'd' + driverId + 't' + transportDateId;
+                        const driverTransportsTablePassengerToDelete = '#p' + passengerId + 'd' + driverId + 't' + transportDateId;
                         $(driverTransportsTablePassengerToChange).remove();
                     }
                 })
@@ -129,7 +129,7 @@
                                                             th:value="${driver.id}"
                                                             th:data-transportDate-id="${date.id}"
                                                             th:data-passenenger-id="${passenger.id}"
-                                                            th:name="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null)? 'createTransportOption' : 'updateDriverInTransportOption'}"
+                                                            th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'createTransportOption' : 'updateDriverInTransportOption'"
                                                     ></option>
                                                 </select>
                                             </th:block>
