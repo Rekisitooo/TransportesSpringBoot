@@ -76,4 +76,11 @@ public class TransportByTemplateService {
     public List<TransportByTemplate> findAllDriverTransportsFromTemplate(final int passengerId, final int templateId) {
         return this.transportByTemplateRepository.findAllDriverTransportsFromTemplate(passengerId, templateId);
     }
+
+    public void updateDriverInTransport(final int transportDateId, final int driverId, final int passengerId) {
+        //TODO check driver has available seats
+        //TODO check ids
+        //TODO check if transport allready existed
+        this.transportByTemplateRepository.updateDriverInTransport(transportDateId, driverId, passengerId);
+    }
 }
