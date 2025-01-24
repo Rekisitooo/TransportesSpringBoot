@@ -23,7 +23,7 @@ public class TransportController {
         final int transportDateId = body.getTransportDateId();
         final int driverId = body.getDriverId();
         final int passengerId = body.getPassengerId();
-        this.transportService.updateDriverInTransport(body.getTransportDateId(), body.getDriverId(), body.getPassengerId());
+        this.transportService.updateDriverInTransport(transportDateId, driverId, passengerId);
         //final ServiceResponse<String> response = new ServiceResponse<>("success", "fulano");
         return new ResponseEntity<>("fulano", HttpStatus.OK);
     }
