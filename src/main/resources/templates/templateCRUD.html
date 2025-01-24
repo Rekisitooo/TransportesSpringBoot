@@ -16,62 +16,6 @@
         <noscript>
             <meta http-equiv="refresh" content="0; url=/enable_javascript">
         </noscript>
-        <script>
-
-            function updateDriverInTransportOption() {
-                const transportDateId = $(this).prop('data-transportDate-id');
-                const driverId = $(this).val();
-                const passengerId = $(this).prop('data-passenger-id');
-                $.ajax({
-                    type: 'POST',
-                    url:'/transportByTemplate/updateDriverInTransport?transportDateId=' +
-                        transportDateId + '&driverId=' + driverId + '&passengerId=' + passengerId + '',
-                    success: function(passengerCompleteName){
-                        const driverTransportsTablePassengerSpanToChange = '#' + 'p' + passengerId + 'd' + driverId + 't' + transportDateId;
-                        $(driverTransportsTablePassengerSpanToChange).html(passengerCompleteName);
-                    }
-                })
-            }
-
-            function createTransportOption() {
-                const transportDateId = $(this).prop('data-transportDate-id');
-                const driverId = $(this).val();
-                const passengerId = $(this).prop('data-passenger-id');
-                $.ajax({
-                    type: 'PUT',
-                    url:'/transportByTemplate/createTransport?transportDateId=' +
-                        transportDateId + '&driverId=' + driverId + '&passengerId=' + passengerId + '',
-                    success: function(passengerCompleteName){
-                        const driverTransportsTablePassengerTdToAddSpan = 'd' + driverId + 't' + transportDateId;
-                        const spanNode = document.createElement("span");
-                        const spanTextNode = document.createTextNode(passengerCompleteName);
-                        spanNode.appendChild(spanTextNode);
-                        spanNode.setAttribute('id', '#p' + passengerId + driverTransportsTablePassengerTdToAddSpan);3
-                        $('#' + driverTransportsTablePassengerToChange).append(spanNode);
-                        $('#' + driverTransportsTablePassengerToChange).append(document.createElement("br"));
-                    }
-                })
-            }
-
-            function deleteTransportOption() {
-                const transportDateId = $(this).prop('data-transportDate-id');
-                const driverId = $(this).val();
-                const passengerId = $(this).prop('data-passenger-id');
-                $.ajax({
-                    type: 'DELETE',
-                    url:'/transportByTemplate/deleteTransport?transportDateId=' +
-                        transportDateId + '&driverId=' + driverId + '&passengerId=' + passengerId + '',
-                    success: function(){
-                        const driverTransportsTablePassengerToDelete = '#p' + passengerId + 'd' + driverId + 't' + transportDateId;
-                        $(driverTransportsTablePassengerToChange).remove();
-                    }
-                })
-            }
-
-            $('option[name="updateDriverInTransportOption"]').each(updateDriverInTransportOption);
-            $('option[name="createTransportOption"]').each(createTransportOption);
-            $('option[name="deleteTransportOption"]').each(deleteTransportOption);
-        </script>
     </head>
 
     <body id="page-top">
@@ -119,17 +63,17 @@
                                             <span th:if="${passengersAvailableForDate.get(date.id) == null}" th:text="#{templateCRUD.holidays}"></span>
                                             <th:block th:unless="${passengersAvailableForDate.get(date.id) == null}">
                                                 <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
-                                                    <option selected="selected" name="deleteTransportOption"></option>
+                                                    <option selected="selected" name="d"></option>
                                                     <option
                                                             th:each="driver : ${driversAvailableForDate.get(date.id)}"
                                                             th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)
-                                                                            and (driver.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().driverId)
-                                                                            and (passenger.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportByTemplateKey().passengerId)}"
+                                                                            and (driver.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().driverId)
+                                                                            and (passenger.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().passengerId)}"
                                                             th:text="${driver.name}"
                                                             th:value="${driver.id}"
-                                                            th:data-transportDate-id="${date.id}"
-                                                            th:data-passenenger-id="${passenger.id}"
-                                                            th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'createTransportOption' : 'updateDriverInTransportOption'"
+                                                            th:data-d="${date.id}"
+                                                            th:data-t="${passenger.id}"
+                                                            th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'c' : 'u'"
                                                     ></option>
                                                 </select>
                                             </th:block>
@@ -155,19 +99,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="driver : ${driversFromTemplateList}">
-                                    <th th:text="${driver.name} + ' ' + ${driver.surname}"></th>
-                                    <td th:each="date : ${templateDates}" th:id="'d' + ${driver.id} + 't' + ${date.id}">
-                                        <th:block th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
-                                            <span
-                                                th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
-                                                            and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
-                                                th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                                th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
-                                            </span><br/>
-                                        </th:block>
-                                    </td>
-                                </tr>
+                                    <tr th:each="driver : ${driversFromTemplateList}">
+                                        <th th:text="${driver.name} + ' ' + ${driver.surname}"></th>
+                                        <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
+                                        <td th:each="date : ${templateDates}" th:id="'d' + ${driver.id} + 't' + ${date.id}">
+                                            <th:block th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
+                                                <span
+                                                    th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
+                                                                and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
+                                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                                    th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
+                                                    <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
+                                                </span><br/>
+                                            </th:block>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -207,6 +153,7 @@
         <script src="/js/demo/chart-area-demo.js"></script>
         <script src="/js/demo/chart-pie-demo.js"></script>
 
+        <script src="/js/own/templateCrudAjax.js"></script>
     </body>
 
 </html>

@@ -1,7 +1,6 @@
 package com.transports.spring.repository;
 
 import com.transports.spring.model.InvolvedAvailabiltyForTransportDate;
-import com.transports.spring.model.TransportByTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

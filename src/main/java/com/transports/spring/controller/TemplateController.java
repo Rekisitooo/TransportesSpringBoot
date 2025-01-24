@@ -16,14 +16,14 @@ public final class TemplateController {
 
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
-    private final TransportByTemplateService transportByTemplateService;
+    private final TransportService transportService;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportByTemplateService transportByTemplateService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
+    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
-        this.transportByTemplateService = transportByTemplateService;
+        this.transportService = transportService;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
     }
@@ -43,10 +43,10 @@ public final class TemplateController {
         final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
-        final Map<Integer, Map<Integer, TransportByTemplate>> allPassengerTransportsFromTemplate = this.transportByTemplateService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+        final Map<Integer, Map<Integer, Transport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
         model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
 
-        final Map<Integer, Map<Integer, List<Passenger>>> allDriverTransportsFromTemplate = this.transportByTemplateService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
+        final Map<Integer, Map<Integer, List<Passenger>>> allDriverTransportsFromTemplate = this.transportService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
         model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
 
         final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableForDate(templateId);
