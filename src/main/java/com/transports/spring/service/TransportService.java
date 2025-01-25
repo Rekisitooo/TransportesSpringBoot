@@ -3,6 +3,7 @@ package com.transports.spring.service;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
+import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.repository.ITransportRepository;
 import org.springframework.stereotype.Service;
 
@@ -81,10 +82,26 @@ public class TransportService {
         return this.transportByTemplateRepository.findTransportByPassenger(transportDateId, passengerId);
     }
 
-    public void updateDriverInTransport(final int transportDateId, final int driverId, final int passengerId) {
-        //TODO check driver has available seats
-        //TODO check ids
-        //TODO check if transport allready existed
-        this.transportByTemplateRepository.updateDriverInTransport(transportDateId, driverId, passengerId);
+    public void updateDriverInTransport(final TransportKey transportKey) {
+        //TODO Checks
+        this.transportByTemplateRepository.updateDriverInTransport(
+                transportKey.getTransportDateId(),
+                transportKey.getDriverId(),
+                transportKey.getPassengerId()
+        );
     }
+
+    public void createTransport(final TransportKey transportKey) {
+        //TODO Checks
+        this.transportByTemplateRepository.save(new Transport(transportKey));
+    }
+
+    public void deleteTransport(final TransportKey transportKey) {
+        //TODO Checks
+        this.transportByTemplateRepository.delete(new Transport(transportKey));
+    }
+
+    //TODO check driver has available seats
+    //TODO check input data
+    //TODO check if transport allready existed
 }
