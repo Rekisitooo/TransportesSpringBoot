@@ -73,6 +73,7 @@
                                                             th:value="${driver.id}"
                                                             th:data-d="${date.id}"
                                                             th:data-t="${passenger.id}"
+                                                            th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
                                                             th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'c' : 'u'"
                                                     ></option>
                                                 </select>
@@ -110,7 +111,8 @@
                                                     th:text="${passenger.name} + ' ' + ${passenger.surname}"
                                                     th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
                                                     <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
-                                                </span><br/>
+                                                </span>
+                                                <br th:id="'brp' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}"/>
                                             </th:block>
                                         </td>
                                     </tr>

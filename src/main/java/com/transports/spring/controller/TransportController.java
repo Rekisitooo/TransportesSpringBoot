@@ -1,7 +1,9 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.dto.DtoTransport;
+import com.transports.spring.model.Transport;
 import com.transports.spring.service.TransportService;
+import com.transports.spring.service.resposonse.ServiceResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,16 @@ public class TransportController {
 
     @Transactional
     @PostMapping("/updateDriver")
-    public ResponseEntity<String> updateDriverInTransport(@RequestBody DtoTransport body){
+    public ResponseEntity<Object> updateDriverInTransport(@RequestBody final DtoTransport body){
         final int transportDateId = body.getTransportDateId();
         final int driverId = body.getDriverId();
         final int passengerId = body.getPassengerId();
+        final Transport transport = this.transportService.findTransportByPassenger(transportDateId, passengerId);
         this.transportService.updateDriverInTransport(transportDateId, driverId, passengerId);
-        //final ServiceResponse<String> response = new ServiceResponse<>("success", "fulano");
-        return new ResponseEntity<>("fulano", HttpStatus.OK);
+        //TODO create if on wrong update and add something to explain that the id of the driver in charge before the update is needed to update the other table
+        body.setP(transport.getTransportKey().getDriverId());
+        final ServiceResponse<DtoTransport> response = new ServiceResponse<>("ok", body);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/create")

@@ -47,4 +47,14 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       t.transportKey.transportDateId = :transportDateId" +
             "       AND t.transportKey.passengerId = :passengerId")
     void updateDriverInTransport(@Param("transportDateId") int transportDateId, @Param("driverId") int driverId, @Param("passengerId") int passengerId);
+
+    @Query("SELECT " +
+            "   new Transport(t.transportKey.passengerId, conductor.id, t.transportKey.transportDateId)" +
+            "       FROM Transport t" +
+            "           INNER JOIN AbstractInvolved conductor" +
+            "               ON t.transportKey.driverId = conductor.id" +
+            "       WHERE " +
+            "           t.transportKey.passengerId = :passengerId" +
+            "           AND t.transportKey.transportDateId = :transportDateId")
+    Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
 }
