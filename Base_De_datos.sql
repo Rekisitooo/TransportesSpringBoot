@@ -293,7 +293,6 @@ BEGIN
 	CALL procedure_insert_PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE(NEW.ID);
     
 END //
-
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS procedure_insert_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
@@ -416,9 +415,81 @@ CREATE TABLE IF NOT EXISTS TRANSPORTE (
     CONSTRAINT FOREIGN KEY FK_COD_VIAJERO (COD_VIAJERO) REFERENCES INVOLUCRADO_POR_PLANTILLA (COD_INVOLUCRADO) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TRIGGER IF EXISTS after_insert_TRANSPORTE_POR_PLANTILLA;
+DROP TRIGGER IF EXISTS after_update_TRANSPORTE;
+DELIMITER //
+CREATE TRIGGER after_update_TRANSPORTE
+	AFTER UPDATE ON TRANSPORTE
+FOR EACH ROW
+BEGIN
+
+	DECLARE plazas_ocupadas_por_nuevo_viajero INT;
+
+	SELECT ipp.PLAZAS as plazas_ocupadas_por_nuevo_viajero
+		FROM INVOLUCRADO_POR_PLANTILLA ipp
+			INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+				ON ipp.COD_PLANTILLA = ftpp.COD_PLANTILLA
+		WHERE 
+			ipp.COD_INVOLUCRADO = NEW.COD_VIAJERO
+            AND ftpp.ID = NEW.COD_FECHA_TRANSPORTE
+				INTO plazas_ocupadas_por_nuevo_viajero;
+                
+	-- añade las plazas que se quedan libres al anterior conductor
+	UPDATE PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE pocpft
+		SET pocpft.PLAZAS_OCUPADAS = (pocpft.PLAZAS_OCUPADAS - plazas_ocupadas_por_nuevo_viajero)
+			WHERE 
+				pocpft.COD_CONDUCTOR = OLD.COD_CONDUCTOR
+                AND pocpft.COD_FECHA_TRANSPORTE = NEW.COD_FECHA_TRANSPORTE;
+                
+	-- quita las plazas que se ocupan al nuevo conductor
+	UPDATE PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE pocpft
+		SET pocpft.PLAZAS_OCUPADAS = (pocpft.PLAZAS_OCUPADAS + plazas_ocupadas_por_nuevo_viajero)
+			WHERE 
+				pocpft.COD_CONDUCTOR = NEW.COD_CONDUCTOR
+                AND pocpft.COD_FECHA_TRANSPORTE = NEW.COD_FECHA_TRANSPORTE;
+                
+END //
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS check_plazas_ocupadas_por_conductor_mayor_que_disponibles;
 delimiter $$
-CREATE TRIGGER after_insert_TRANSPORTE_POR_PLANTILLA
+CREATE TRIGGER check_plazas_ocupadas_por_conductor_mayor_que_disponibles BEFORE UPDATE ON TRANSPORTE
+FOR EACH ROW
+BEGIN
+	-- TODO check plazas in insert and update
+END; $$
+
+delimiter ;
+
+DROP TRIGGER IF EXISTS after_delete_TRANSPORTE;
+DELIMITER //
+CREATE TRIGGER after_delete_TRANSPORTE
+	AFTER DELETE ON TRANSPORTE
+FOR EACH ROW
+BEGIN
+
+	DECLARE plazas_ocupadas_por_viajero INT;
+	
+   SELECT ipp.PLAZAS as plazas_ocupadas_por_nuevo_viajero
+		FROM INVOLUCRADO_POR_PLANTILLA ipp
+			INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+				ON ipp.COD_PLANTILLA = ftpp.COD_PLANTILLA
+		WHERE 
+			ipp.COD_INVOLUCRADO = OLD.COD_VIAJERO
+            AND ftpp.ID = OLD.COD_FECHA_TRANSPORTE
+				INTO plazas_ocupadas_por_viajero;
+	
+    -- añade las plazas que se quedan libres del conductor
+	UPDATE PLAZAS_OCUPADAS_CONDUCTOR_POR_FECHA_TRANSPORTE pocpft
+		SET pocpft.PLAZAS_OCUPADAS = (pocpft.PLAZAS_OCUPADAS + plazas_ocupadas_por_viajero)
+			WHERE 
+				pocpft.COD_CONDUCTOR = OLD.COD_CONDUCTOR
+                AND pocpft.COD_FECHA_TRANSPORTE = OLD.COD_FECHA_TRANSPORTE;    
+END //
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS after_insert_TRANSPORTE;
+delimiter $$
+CREATE TRIGGER after_insert_TRANSPORTE
 	AFTER INSERT ON TRANSPORTE
 FOR EACH ROW
 BEGIN
@@ -1044,10 +1115,3 @@ END $$
 DELIMITER ;
 
 -- CALL crud_conductores('0, 1');
-
-select * from  Transporte t
-               WHERE
-					t.cod_conductor = 15
-                  AND cod_fecha_transporte = 8
-                   -- AND cod_viajero = 1
-                   ;
