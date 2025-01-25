@@ -13,7 +13,6 @@ function updateDriverInTransportOption(transportDateId, driverId, passengerId, p
         dataType: 'json',
         success : function(response) {
             if (response.status === 'ok') {
-                //TODO when UUIDs are implemented, change the id and remove the p, d, t...
                addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName);
                deletePassengerInDriverTransportsTable(transportDateId, passengerId, response);
             } else {
@@ -68,6 +67,7 @@ function deleteTransportOption(transportDateId, driverId, passengerId) {
 }
 
 function addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName) {
+    //TODO when UUIDs are implemented, change the id and remove the p, d, t...
     const driverTransportsTablePassengerTdToAddSpan = 'd' + driverId + 't' + transportDateId;
     const newPassengerSpanNode = document.createElement("span");
     const newPassengerSpanTextNode = document.createTextNode(passengerFullName);
@@ -78,6 +78,7 @@ function addPassengerInDriverTransportsTable(transportDateId, driverId, passenge
 }
 
 function deletePassengerInDriverTransportsTable(transportDateId, passengerId, response) {
+    //TODO when UUIDs are implemented, change the id and remove the p, d, t...
     const oldDriverId = response.data.p;
     const deleteId = 'p' + passengerId + 'd' + oldDriverId + 't' + transportDateId;
 
