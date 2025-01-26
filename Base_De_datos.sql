@@ -305,9 +305,10 @@ BEGIN
     -- Variables para el cursor de insertar la disponibilidad de cada involucrado por cada fecha de transporte de la plantilla
     DECLARE cursor_dipft_terminado INT DEFAULT FALSE;
     DECLARE cod_fecha_transporte INT;
+    DECLARE fecha_transporte TEXT;
 
 	DECLARE cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE CURSOR FOR
-        SELECT ftpp.ID
+        SELECT ftpp.ID, ftpp.FECHA_TRANSPORTE
 			FROM FECHA_TRANSPORTE_POR_PLANTILLA ftpp
 				WHERE ftpp.COD_PLANTILLA = id_plantilla;
                 
@@ -316,23 +317,26 @@ BEGIN
 	-- Inserta la dipsonibilidad de cada involucrado para cada fecha de transporte de la plantilla creada
     OPEN cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
 		read_loop: LOOP
-			FETCH cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE INTO cod_fecha_transporte;
+			FETCH cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE INTO cod_fecha_transporte, fecha_transporte;
 
 			IF cursor_dipft_terminado THEN
 				LEAVE read_loop;
 			END IF;
-
-			INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_FECHA_TRANSPORTE)
-				SELECT DISTINCT ipp.COD_INVOLUCRADO, cod_fecha_transporte
-					FROM INVOLUCRADO_POR_PLANTILLA ipp
-						INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL dipdts
-							ON dipdts.COD_INVOLUCRADO = ipp.COD_INVOLUCRADO
-						LEFT JOIN AUSENCIA_POR_INVOLUCRADO api
-							ON ipp.COD_INVOLUCRADO = api.COD_INVOLUCRADO
-					WHERE 
-						dipdts.DISPONIBLE = TRUE
-						AND ipp.COD_PLANTILLA = id_plantilla
-						AND api.COD_INVOLUCRADO IS NULL;
+          
+          INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_FECHA_TRANSPORTE)
+				SELECT DISTINCT 
+					ipp.COD_INVOLUCRADO, 
+					cod_fecha_transporte as COD_FECHA_TRANSPORTE
+						FROM INVOLUCRADO_POR_PLANTILLA ipp
+							INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL dipdts
+								ON dipdts.COD_INVOLUCRADO = ipp.COD_INVOLUCRADO
+							LEFT JOIN AUSENCIA_POR_INVOLUCRADO api
+								ON ipp.COD_INVOLUCRADO = api.COD_INVOLUCRADO
+								AND fecha_transporte BETWEEN api.FECHA_INICIO AND api.FECHA_FIN
+						WHERE 
+							dipdts.DISPONIBLE = TRUE
+							AND ipp.COD_PLANTILLA = id_plantilla
+							AND api.COD_INVOLUCRADO IS NULL;
             
 		END LOOP;
     CLOSE cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
@@ -572,9 +576,9 @@ CREATE TABLE IF NOT EXISTS AUSENCIA_POR_INVOLUCRADO (
 
 INSERT INTO AUSENCIA_POR_INVOLUCRADO (COD_INVOLUCRADO, FECHA_INICIO, FECHA_FIN)
 	VALUES 
-		(5, '2024/06/16', '2024/06/22'),
-        (6, '2024/06/22', '2024/06/27'),
-        (14, '2024/05/11', '2024/05/13');
+		(5, '2025/06/16', '2025/06/22'),
+        (6, '2025/06/22', '2025/06/27'),
+        (14, '2025/05/11', '2025/05/13');
 -- SELECT * FROM AUSENCIA_POR_INVOLUCRADO;
 
 DROP TRIGGER IF EXISTS CHECK_FECHAS_INSERT_AUSENCIA_POR_INVOLUCRADO;
