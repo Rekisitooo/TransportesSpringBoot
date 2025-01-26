@@ -31,6 +31,7 @@ function createTransportOption(data, passengerFullName, actualSelect) {
         success: function(response){
            addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName);
            actualSelect.children().attr("name", "u");
+           actualSelect.children(":first").attr("name", "d");
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
@@ -49,6 +50,7 @@ function deleteTransportOption(data, actualSelect) {
         success: function(response){
             deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
             actualSelect.children().attr("name", "c");
+            actualSelect.children(":first").attr("name", "d");
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
