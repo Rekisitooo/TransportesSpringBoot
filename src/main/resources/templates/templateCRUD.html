@@ -63,7 +63,7 @@
                                             <span th:if="${passengersAvailableForDate.get(date.id) == null}" th:text="#{templateCRUD.holidays}"></span>
                                             <th:block th:unless="${passengersAvailableForDate.get(date.id) == null}">
                                                 <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
-                                                    <option selected="selected" name="d"></option>
+                                                    <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
                                                     <option
                                                             th:each="driver : ${driversAvailableForDate.get(date.id)}"
                                                             th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)

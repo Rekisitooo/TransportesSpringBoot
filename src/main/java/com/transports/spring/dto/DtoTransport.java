@@ -36,4 +36,16 @@ public class DtoTransport {
     public int getPassengerId() {
         return t;
     }
+
+    public void setPassengerId(int passengerId) {
+        this.t = passengerId;
+    }
+
+    public void setDriverId(int driverId) {
+        this.p = driverId;
+    }
+
+    public void setTransportDateId(int transportDateId) {
+        this.d = transportDateId;
+    }
 }

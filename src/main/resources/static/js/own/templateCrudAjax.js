@@ -8,7 +8,7 @@ function updateDriverInTransportOption(data, passengerFullName) {
         success : function(response) {
             if (response.status === 'ok') {
                addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName);
-               deletePassengerInDriverTransportsTable(data.d, data.t, response);
+               deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
             } else {
                 //TODO configurar la alerta para que se muestre en un idioma u otro
                 window.alert("Ha ocurrido un error al actualizar el conductor.");
@@ -46,7 +46,7 @@ function deleteTransportOption(data) {
         data: JSON.stringify(data),
         dataType: 'json',
         success: function(response){
-            deletePassengerInDriverTransportsTable(data.d, data.t, response);
+            deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
@@ -66,9 +66,8 @@ function addPassengerInDriverTransportsTable(transportDateId, driverId, passenge
     $('#' + driverTransportsTablePassengerTdToAddSpan).append(newPassengerSpanNode);
 }
 
-function deletePassengerInDriverTransportsTable(transportDateId, passengerId, response) {
+function deletePassengerInDriverTransportsTable(transportDateId, passengerId, oldDriverId) {
     //TODO when UUIDs are implemented, change the id and remove the p, d, t...
-    const oldDriverId = response.data.p;
     const deleteId = 'p' + passengerId + 'd' + oldDriverId + 't' + transportDateId;
 
     const driverTransportsTablePassengerSpanToDelete = '#' + deleteId;

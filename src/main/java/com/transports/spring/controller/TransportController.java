@@ -41,8 +41,15 @@ public class TransportController {
     @DeleteMapping
     public ResponseEntity<Object> deleteDriverInTransport(@RequestBody DtoTransport body){
         final TransportKey transportKey = transformDtoTransportToTransportKey(body);
+
+        final Transport transport = this.transportService.findTransportByPassenger(transportKey.getTransportDateId(), transportKey.getPassengerId());
+        final int driverId = transport.getTransportKey().getDriverId();
+
+        transportKey.setDriverId(driverId);
         this.transportService.deleteTransport(transportKey);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ServiceResponse<>("ok", body));
+
+        body.setDriverId(driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", body));
     }
 
     private static TransportKey transformDtoTransportToTransportKey(DtoTransport body) {
