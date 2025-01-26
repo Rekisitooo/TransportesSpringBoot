@@ -21,7 +21,7 @@ function updateDriverInTransportOption(data, passengerFullName) {
     })
 }
 
-function createTransportOption(data, passengerFullName) {
+function createTransportOption(data, passengerFullName, actualSelect) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
@@ -30,6 +30,7 @@ function createTransportOption(data, passengerFullName) {
         dataType: 'json',
         success: function(response){
            addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName);
+           actualSelect.children().attr("name", "u");
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
@@ -38,7 +39,7 @@ function createTransportOption(data, passengerFullName) {
     })
 }
 
-function deleteTransportOption(data) {
+function deleteTransportOption(data, actualSelect) {
     $.ajax({
         type: 'DELETE',
         contentType: 'application/json',
@@ -47,6 +48,7 @@ function deleteTransportOption(data) {
         dataType: 'json',
         success: function(response){
             deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
+            actualSelect.children().attr("name", "c");
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
@@ -78,8 +80,9 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
 }
 
 function operate () {
-    const selectedOption = $(this).find('option:selected');
-    const driverId = $(this).val();
+    const actualSelect = $(this);
+    const selectedOption = actualSelect.find('option:selected');
+    const driverId = actualSelect.val();
     const passengerId = selectedOption.attr('data-t');
     const transportDateId = selectedOption.attr('data-d');
     const passengerFullName = selectedOption.attr('data-passenger-name');
@@ -90,9 +93,9 @@ function operate () {
         t : passengerId
     }
     const operations = {
-        d: deleteTransportOption.bind(undefined, data),
+        d: deleteTransportOption.bind(undefined, data, actualSelect),
         u: updateDriverInTransportOption.bind(undefined, data, passengerFullName),
-        c: createTransportOption.bind(undefined, data, passengerFullName)
+        c: createTransportOption.bind(undefined, data, passengerFullName, actualSelect)
     };
 
     const method = operations[methodName];
