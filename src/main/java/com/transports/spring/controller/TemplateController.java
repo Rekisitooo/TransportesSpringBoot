@@ -1,6 +1,8 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.model.*;
+import com.transports.spring.operation.GenerateTemplateFilesService;
+import com.transports.spring.operation.IGenerateTemplateFilesService;
 import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,14 +20,16 @@ public final class TemplateController {
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportService transportService;
     private final TransportDateByTemplateService transportDateByTemplateService;
-    private InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
+    private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
+    private final GenerateTemplateFilesService generateTemplateFilesService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
+    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, GenerateTemplateFilesService generateTemplateFilesService) {
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
+        this.generateTemplateFilesService = generateTemplateFilesService;
     }
 
     @GetMapping("/getById")
@@ -56,6 +60,11 @@ public final class TemplateController {
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
 
         return "templateCRUD";
+    }
+
+    @GetMapping("/generate")
+    public void generate(@RequestParam (value = "id") final int templateId) {
+        this.generateTemplateFilesService.generateFiles(templateId);
     }
 
     @GetMapping("/create")

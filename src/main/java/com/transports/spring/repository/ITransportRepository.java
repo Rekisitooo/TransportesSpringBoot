@@ -57,4 +57,13 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           t.transportKey.passengerId = :passengerId" +
             "           AND t.transportKey.transportDateId = :transportDateId")
     Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
+
+    @Query("SELECT " +
+            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, ftpp.id)" +
+            "       FROM Transport t" +
+            "           INNER JOIN TransportDateByTemplate ftpp" +
+            "               ON t.transportKey.transportDateId = ftpp.id" +
+            "       WHERE " +
+            "           AND ftpp.templateCode = :templateId")
+    List<Transport> findAllTemplateTransports(@Param("templateId") int templateId);
 }

@@ -41,4 +41,8 @@ public class AbstractInvolved {
         this.id = id;
         this.name = completeName;
     }
+
+    public String getFullName() {
+        return this.getName() + " " + this.getSurname();
+    }
 }

@@ -82,6 +82,10 @@ public class TransportService {
         return this.transportByTemplateRepository.findTransportByPassenger(transportDateId, passengerId);
     }
 
+    public List<Transport> findAllTemplateTransport(final int templateId) {
+        return this.transportByTemplateRepository.findAllTemplateTransports(templateId);
+    }
+
     public void updateDriverInTransport(final TransportKey transportKey) {
         //TODO Checks
         this.transportByTemplateRepository.updateDriverInTransport(
