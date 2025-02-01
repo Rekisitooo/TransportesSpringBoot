@@ -40,8 +40,8 @@
                         <div class="d-sm-flex align-items-center justify-content-between mt-4">
                             <h1 class="text-dark mb-3" th:text="${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
                             <!-- TODO add add button and delete button -->
-                            <a href="/passenger/createPassenger" class="mb-3 mr-2 btn btn-primary shadow-sm">
-                                <span th:text="#{passengerCRUD.createPassenger}"></span>
+                            <a href="/template/generate" class="mb-3 mr-2 btn btn-primary shadow-sm">
+                                <span th:text="#{templateCRUD.generate}"></span>
                             </a>
                         </div>
                         <div>

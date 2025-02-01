@@ -125,6 +125,29 @@ VALUES
     (6, 'Viernes'),
     (7, 'Sábado'),
     (1, 'Domingo');
+    
+DROP TABLE IF EXISTS MES;
+CREATE TABLE IF NOT EXISTS MES (
+	ID TINYINT UNSIGNED,
+    NOMBRE ENUM('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre') NOT NULL,
+    
+    CONSTRAINT PRIMARY KEY PK_ID_DIA_DE_LA_SEMANA (ID)
+);
+
+INSERT INTO MES (ID, NOMBRE)
+VALUES 
+	(1, 'enero'), 
+    (2, 'febrero'),
+    (3, 'marzo'),
+    (4, 'abril'),
+    (5, 'mayo'),
+    (6, 'junio'),
+    (7, 'julio'),
+    (8, 'agosto'),
+    (9, 'septiembre'),
+    (10, 'octubre'),
+    (11, 'noviembre'),
+    (12, 'diciembre');
 
 DROP TABLE IF EXISTS DIA_TRANSPORTE_SEMANAL;
 CREATE TABLE IF NOT EXISTS DIA_TRANSPORTE_SEMANAL (
@@ -160,7 +183,8 @@ CREATE TABLE IF NOT EXISTS PLANTILLA (
     
     CONSTRAINT PRIMARY KEY PK_ID (ID),
     CONSTRAINT FOREIGN KEY FK_COD_USUARIO_PROPIETARIO (COD_USUARIO_PROPIETARIO) REFERENCES USUARIO (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT FOREIGN KEY FK_COD_GRUPO_USUARIO (COD_GRUPO_USUARIO) REFERENCES GRUPO_USUARIO (ID) ON DELETE SET NULL ON UPDATE CASCADE
+	CONSTRAINT FOREIGN KEY FK_COD_GRUPO_USUARIO (COD_GRUPO_USUARIO) REFERENCES GRUPO_USUARIO (ID) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY FK_MES (MES) REFERENCES MES (ID) ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
 -- Se rellena al crear la plantilla y se va cambiando según se va haciendo la plantilla
@@ -170,6 +194,7 @@ CREATE TABLE IF NOT EXISTS FECHA_TRANSPORTE_POR_PLANTILLA (
     COD_PLANTILLA INT UNSIGNED NOT NULL,
     FECHA_TRANSPORTE VARCHAR(10) NOT NULL,
     COD_DIA_DE_LA_SEMANA ENUM('1', '2', '3', '4', '5', '6', '7') NOT NULL,
+    NOMBRE_EVENTO VARCHAR(200),
     
     CONSTRAINT PRIMARY KEY PK_FECHA_TRANSPORTE_POR_PLANTILLA (ID),
 	CONSTRAINT FOREIGN KEY FK_COD_DIA_DE_LA_SEMANA (COD_DIA_DE_LA_SEMANA) REFERENCES DIA_DE_LA_SEMANA (ID) ON DELETE NO ACTION ON UPDATE CASCADE,
@@ -256,8 +281,8 @@ BEGIN
 				LEAVE read_loop;
 			END IF;
 
-			INSERT INTO FECHA_TRANSPORTE_POR_PLANTILLA (FECHA_TRANSPORTE, COD_DIA_DE_LA_SEMANA, COD_PLANTILLA)
-			SELECT dias_del_mes.dia_de_la_semana, cod_dia_de_la_semana, NEW.ID
+			INSERT INTO FECHA_TRANSPORTE_POR_PLANTILLA (FECHA_TRANSPORTE, COD_DIA_DE_LA_SEMANA, COD_PLANTILLA, NOMBRE_EVENTO)
+			SELECT dias_del_mes.dia_de_la_semana, cod_dia_de_la_semana, NEW.ID, dts.DESCRIPCION
 				FROM (
 					SELECT 
 						DATE_FORMAT(fecha, '%Y-%m-%d') AS dia_de_la_semana
@@ -278,7 +303,9 @@ BEGIN
 								MONTH(fecha) = NEW.MES
 								AND YEAR(fecha) = NEW.ANNO
 								AND DAYOFWEEK(fecha) = cod_dia_de_la_semana
-				) dias_del_mes;
+				) dias_del_mes
+                INNER JOIN DIA_TRANSPORTE_SEMANAL dts
+					ON dts.ID = dias_del_mes.cod_dia_de_la_semana;
             
 		END LOOP;
     CLOSE cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA;

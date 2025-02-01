@@ -1,5 +1,8 @@
 package com.transports.spring.repository;
 
+import com.transports.spring.dto.DtoDriverTransport;
+import com.transports.spring.dto.DtoFullTransport;
+import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.model.Transport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -59,11 +62,30 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
 
     @Query("SELECT " +
-            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, ftpp.id)" +
+            "   new DtoFullTransport(viajero.id, conductor.id, ftpp.id, ftpp.transportDate, ftpp.eventName)" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN AbstractInvolved viajero" +
+            "               ON t.transportKey.passengerId = viajero.id" +
+            "           INNER JOIN AbstractInvolved conductor" +
+            "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
+            "           t.transportKey.driverId = :driverId" +
             "           AND ftpp.templateCode = :templateId")
-    List<Transport> findAllTemplateTransports(@Param("templateId") int templateId);
+    List<DtoDriverTransport> findDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
+
+    @Query("SELECT " +
+            "   new DtoFullTransport(conductor.name, ftpp.transportDate, ftpp.eventName)" +
+            "       FROM Transport t" +
+            "           INNER JOIN TransportDateByTemplate ftpp" +
+            "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN AbstractInvolved viajero" +
+            "               ON t.transportKey.passengerId = viajero.id" +
+            "           INNER JOIN AbstractInvolved conductor" +
+            "               ON t.transportKey.driverId = conductor.id" +
+            "       WHERE " +
+            "           t.transportKey.passengerId = :passengerId" +
+            "           AND ftpp.templateCode = :templateId")
+    List<DtoPassengerTransport> findPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
 }

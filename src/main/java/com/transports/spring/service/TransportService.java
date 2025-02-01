@@ -1,5 +1,8 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoDriverTransport;
+import com.transports.spring.dto.DtoFullTransport;
+import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
@@ -74,16 +77,12 @@ public class TransportService {
         return this.transportByTemplateRepository.findAllPassengerTransportsFromTemplate(passengerId, templateId);
     }
 
-    public List<Transport> findAllDriverTransportsFromTemplate(final int passengerId, final int templateId) {
-        return this.transportByTemplateRepository.findAllDriverTransportsFromTemplate(passengerId, templateId);
+    public List<Transport> findAllDriverTransportsFromTemplate(final int driverId, final int templateId) {
+        return this.transportByTemplateRepository.findAllDriverTransportsFromTemplate(driverId, templateId);
     }
 
     public Transport findTransportByPassenger(final int transportDateId, final int passengerId) {
         return this.transportByTemplateRepository.findTransportByPassenger(transportDateId, passengerId);
-    }
-
-    public List<Transport> findAllTemplateTransport(final int templateId) {
-        return this.transportByTemplateRepository.findAllTemplateTransports(templateId);
     }
 
     public void updateDriverInTransport(final TransportKey transportKey) {
@@ -103,6 +102,14 @@ public class TransportService {
     public void deleteTransport(final TransportKey transportKey) {
         //TODO Checks
         this.transportByTemplateRepository.delete(new Transport(transportKey));
+    }
+
+    public List<DtoDriverTransport> findDriverTransportsFromTemplate(final int driverId, final int templateId) {
+        return this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
+    }
+
+    public List<DtoPassengerTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
+        return this.transportByTemplateRepository.findPassengerTransportsFromTemplate(passengerId, templateId);
     }
 
     //TODO check driver has available seats

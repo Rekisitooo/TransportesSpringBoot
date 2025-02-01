@@ -24,5 +24,8 @@ public final class TransportDateByTemplate {
     @Column(name = "COD_DIA_DE_LA_SEMANA")
     private int dayOfTheWeekCode;
 
+    @Column(name = "NOMBRE_EVENTO")
+    private String eventName;
+
     private String dayOfTheWeekName;
 }

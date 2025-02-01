@@ -2,7 +2,6 @@ package com.transports.spring.controller;
 
 import com.transports.spring.model.*;
 import com.transports.spring.operation.GenerateTemplateFilesService;
-import com.transports.spring.operation.IGenerateTemplateFilesService;
 import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,7 @@ public final class TemplateController {
 
     @GetMapping("/generate")
     public void generate(@RequestParam (value = "id") final int templateId) {
-        this.generateTemplateFilesService.generateFiles(templateId);
+        //this.generateTemplateFilesService.generateFiles(templateId);
     }
 
     @GetMapping("/create")
