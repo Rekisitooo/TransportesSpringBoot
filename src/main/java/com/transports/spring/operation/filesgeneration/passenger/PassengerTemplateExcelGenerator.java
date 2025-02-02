@@ -21,11 +21,13 @@ public final class PassengerTemplateExcelGenerator extends AbstractExcelTemplate
 
     public Path generateExcel(final String passengerFullName, final String monthName, final int templateYear, final int templateMonth, final List<DtoPassengerTransport> allPassengerTransportsFromTemplate) throws IOException {
         super.generateSheet();
+        //TODO think about maybe creating a PassengerTemplateExcelHeader for the line below
         createHeaderCell(passengerFullName, monthName, templateYear, sheet);
+        //TODO think about maybe creating a PassengerTemplateExcelCalendar for the two lines below
         super.getCalendarOfTheMonth(templateYear, templateMonth);
-
         final int lastMonthDay = this.templateMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
+        //TODO think about maybe creating a PassengerTemplateExcelCalendarIterator for the lines below
         // write templateMonth days
         int currentRow = START_ROW_DAYS;
         int currentCol = getInitialDayOfTheMonthColumn(this.templateMonthCalendar, MONDAYS_COL);
