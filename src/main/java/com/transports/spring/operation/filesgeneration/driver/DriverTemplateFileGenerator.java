@@ -1,7 +1,8 @@
-package com.transports.spring.operation;
+package com.transports.spring.operation.filesgeneration.driver;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.exception.CreatingTemplateFileException;
+import com.transports.spring.operation.filesgeneration.common.AbstractTemplateFileGenerator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 
-public final class DriverTemplateFile extends AbstractTemplateFile {
+public final class DriverTemplateFileGenerator extends AbstractTemplateFileGenerator {
 
     public static void generate(final List<DtoDriverTransport> driverTransportsFromTemplate, final String monthName, final int templateYear, final int templateMonth, final String driverFullName) throws CreatingTemplateFileException, IOException {
         final File calendarFile = new File(CALENDAR_NAME_FILE + XSL_EXTENSION);

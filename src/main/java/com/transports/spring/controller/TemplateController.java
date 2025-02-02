@@ -1,7 +1,7 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.model.*;
-import com.transports.spring.operation.GenerateTemplateFilesService;
+import com.transports.spring.service.TemplateFileService;
 import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,9 +20,9 @@ public final class TemplateController {
     private final TransportService transportService;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
-    private final GenerateTemplateFilesService generateTemplateFilesService;
+    private final TemplateFileService generateTemplateFilesService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, GenerateTemplateFilesService generateTemplateFilesService) {
+    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService generateTemplateFilesService) {
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;

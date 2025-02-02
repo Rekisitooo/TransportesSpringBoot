@@ -1,4 +1,4 @@
-package com.transports.spring.service.resposonse;
+package com.transports.spring.service.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

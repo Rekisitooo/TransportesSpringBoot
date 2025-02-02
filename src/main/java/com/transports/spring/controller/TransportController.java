@@ -4,7 +4,7 @@ import com.transports.spring.dto.DtoTransport;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.service.TransportService;
-import com.transports.spring.service.resposonse.ServiceResponse;
+import com.transports.spring.service.response.ServiceResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
