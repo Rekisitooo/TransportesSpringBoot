@@ -13,14 +13,10 @@ import java.util.Calendar;
 
 public abstract class AbstractExcelTemplateFileGenerator {
 
-    protected static final int SUNDAYS_COL = 6;
     protected static final String CALENDAR_NAME_FILE = "calendar";
     protected static final String XSL_EXTENSION = ".xlxs";
-    protected static final int START_ROW_DAYS = 3;// Primera columna
-    protected static final String SEPARATION_CHARACTER = "_";
-    protected static final int OUT_OF_DAYS_COLUM_SCOPE = 7;
-    protected static final int MONDAYS_COL = 0;
     protected static final String ORIGINAL_CALENDAR_FILE = CALENDAR_NAME_FILE + XSL_EXTENSION;
+    protected static final String SEPARATION_CHARACTER = "_";
 
     protected Workbook newExcel;
     protected Sheet sheet;

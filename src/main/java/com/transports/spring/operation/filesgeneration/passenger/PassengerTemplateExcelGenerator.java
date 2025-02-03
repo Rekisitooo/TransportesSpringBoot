@@ -18,7 +18,6 @@ import java.util.List;
 
 public final class PassengerTemplateExcelGenerator extends AbstractExcelTemplateFileGenerator {
 
-
     public Path generateExcel(final String passengerFullName, final String monthName, final int templateYear, final int templateMonth, final List<DtoPassengerTransport> allPassengerTransportsFromTemplate) throws IOException {
         super.generateSheet();
         //TODO think about maybe creating a PassengerTemplateExcelHeader for the line below

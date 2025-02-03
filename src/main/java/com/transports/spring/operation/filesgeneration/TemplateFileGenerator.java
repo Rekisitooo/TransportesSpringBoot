@@ -2,6 +2,9 @@ package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.model.Driver;
+import com.transports.spring.model.Passenger;
+import com.transports.spring.model.templategeneration.PassengerTemplateFile;
 import com.transports.spring.operation.filesgeneration.driver.DriverTemplateFileGenerator;
 import com.transports.spring.operation.filesgeneration.passenger.PassengerTemplateFileGenerator;
 
@@ -14,26 +17,30 @@ import java.util.Map;
 public final class TemplateFileGenerator {
 
     private final Path temporalDirPath;
-    private final PassengerTemplateFileGenerator passengerTemplateFileGenerator;
-    private final DriverTemplateFileGenerator driverTemplateFile;
+    private final PassengerTemplateFile passengerTemplateFile;
+    private final DriverTemplateFile driverTemplateFile;
 
-    public TemplateFileGenerator(Path temporalDirPath, PassengerTemplateFileGenerator passengerTemplateFileGenerator, DriverTemplateFileGenerator driverTemplateFile) {
+    public TemplateFileGenerator(Path temporalDirPath) throws IOException {
         this.temporalDirPath = temporalDirPath;
-        this.passengerTemplateFileGenerator = passengerTemplateFileGenerator;
-        this.driverTemplateFile = driverTemplateFile;
+        this.passengerTemplateFile = new PassengerTemplateFile();
+        this.driverTemplateFile = new DriverTemplateFile();
     }
 
-    public void generateFiles(final Map<Integer, List<DtoPassengerTransport>> passengerTransports, final Map<Integer, List<DtoDriverTransport>> driverTransports) throws IOException {
+    public void generateFiles(final Map<Passenger, List<DtoPassengerTransport>> passengerTransports, final Map<Driver, List<DtoDriverTransport>> driverTransports, final String monthName, final int templateYear) throws IOException {
         final Path passengersTempDir = Files.createTempDirectory(this.temporalDirPath, "viajeros");
         generateFilesDirectories(passengersTempDir);
-        for (Map.Entry<Integer, List<DtoPassengerTransport>> entry : passengerTransports.entrySet()) {
-            this.passengerTemplateFileGenerator.generateFiles();
+        for (Map.Entry<Passenger, List<DtoPassengerTransport>> entry : passengerTransports.entrySet()) {
+            final Passenger passenger = entry.getKey();
+            final List<DtoPassengerTransport> dtoPassengerTransportList = entry.getValue();
+            this.passengerTemplateFile.generate(dtoPassengerTransportList, passenger.getFullName(), monthName, templateYear);
         }
 
         final Path driversTempDir = Files.createTempDirectory(this.temporalDirPath, "conductores");
         generateFilesDirectories(driversTempDir);
-        for (Map.Entry<Integer, List<DtoDriverTransport>> driverTransports : driverTransports.entrySet()) {
-            this.passengerTemplateFileGenerator.generateFiles();
+        for (Map.Entry<Driver, List<DtoDriverTransport>> entry : driverTransports.entrySet()) {
+            final Driver driver = entry.getKey();
+            final List<DtoDriverTransport> dtoDriverTransportList = entry.getValue();
+            this.driverTemplateFile.generate(dtoDriverTransportList, driver.getFullName(), monthName, templateYear);
         }
     }
 

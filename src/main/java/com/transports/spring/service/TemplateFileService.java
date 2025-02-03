@@ -32,19 +32,19 @@ public final class TemplateFileService {
         this.involvedByTemplateService = involvedByTemplateService;
     }
 
-    public void generateFiles(final int templateId) throws IOException, CreatingTemplateFileException {
+    public void generateFiles(final int templateId) throws IOException {
         synchronized (CONCURRENCY_LOCKER) {
             final Template template = this.templateService.findById(templateId);
             final int templateYear = getIntFromString(template.getYear());
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = getTemplateMonthName(templateMonth);
 
-            final Map<Integer, List<DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
-            final Map<Integer, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
+            final Map<Passenger, List<DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
+            final Map<Driver, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 
             final Path temporalDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
             final TemplateFileGenerator templateFile = new TemplateFileGenerator(temporalDirPath);
-            templateFile.generateFiles(passengerTransports, driverTransports);
+            templateFile.generateFiles(passengerTransports, driverTransports, monthName, templateYear);
         }
     }
 
@@ -57,26 +57,26 @@ public final class TemplateFileService {
         return Integer.parseInt(convetToString);
     }
 
-    private Map<Integer, List<DtoPassengerTransport>> getPassengerTransports(int templateId) {
-        final Map<Integer, List<DtoPassengerTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
+    private Map<Passenger, List<DtoPassengerTransport>> getPassengerTransports(int templateId) {
+        final Map<Passenger, List<DtoPassengerTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
         final List<Passenger> allPassengersFromTemplate = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : allPassengersFromTemplate) {
             final List<DtoPassengerTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
             if (!passengerTransportsFromTemplate.isEmpty()) {
-                passengerTransportsFromTemplateMap.put(passenger.getId(), passengerTransportsFromTemplate);
+                passengerTransportsFromTemplateMap.put(passenger, passengerTransportsFromTemplate);
             }
         }
 
         return passengerTransportsFromTemplateMap;
     }
 
-    private Map<Integer, List<DtoDriverTransport>> getDriverTransports(final int templateId) {
-        final Map<Integer, List<DtoDriverTransport>> driverTransportsFromTemplateMap = new HashMap<>();
+    private Map<Driver, List<DtoDriverTransport>> getDriverTransports(final int templateId) {
+        final Map<Driver, List<DtoDriverTransport>> driverTransportsFromTemplateMap = new HashMap<>();
         final List<Driver> allDriversFromTemplate = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
         for (final Driver driver : allDriversFromTemplate) {
             final List<DtoDriverTransport> driverTransportsFromTemplate = this.transportService.findDriverTransportsFromTemplate(driver.getId(), templateId);
             if (!driverTransportsFromTemplate.isEmpty()) {
-                driverTransportsFromTemplateMap.put(driver.getId(), driverTransportsFromTemplate);
+                driverTransportsFromTemplateMap.put(driver, driverTransportsFromTemplate);
             }
         }
 

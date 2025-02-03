@@ -7,8 +7,11 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public final class DtoPassengerTransport {
-    private String transportDate;
-    private String eventName;
+public final class DtoPassengerTransport extends DtoInvolvedTransport {
     private String driverFullName;
+
+    @Override
+    public String getNamesToWriteInTransportDateCell() {
+        return this.driverFullName;
+    }
 }
