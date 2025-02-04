@@ -17,7 +17,7 @@ import java.util.List;
 public final class DriverTemplateFileGenerator extends AbstractTemplateFileGenerator {
 
     public static void generate(final List<DtoDriverTransport> driverTransportsFromTemplate, final String monthName, final int templateYear, final int templateMonth, final String driverFullName) throws CreatingTemplateFileException, IOException {
-        final File calendarFile = new File(CALENDAR_NAME_FILE + XSL_EXTENSION);
+        /*final File calendarFile = new File("calendar.xlsx");
         final FileInputStream fileInputStream = new FileInputStream(calendarFile);
 
         try {
@@ -82,7 +82,7 @@ public final class DriverTemplateFileGenerator extends AbstractTemplateFileGener
         fileInputStream.close();
 
         System.out.println("Archivo de " + driverFullName + " guardado.");
-
+*/
     }
 
     private static String getPassengersString(final List<String> passengerNamesList) {

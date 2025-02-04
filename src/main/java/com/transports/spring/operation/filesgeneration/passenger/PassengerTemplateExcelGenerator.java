@@ -19,7 +19,7 @@ import java.util.List;
 public final class PassengerTemplateExcelGenerator extends AbstractExcelTemplateFileGenerator {
 
     public Path generateExcel(final String passengerFullName, final String monthName, final int templateYear, final int templateMonth, final List<DtoPassengerTransport> allPassengerTransportsFromTemplate) throws IOException {
-        super.generateSheet();
+        /*super.generateSheet();
         //TODO think about maybe creating a PassengerTemplateExcelHeader for the line below
         createHeaderCell(passengerFullName, monthName, templateYear, sheet);
         //TODO think about maybe creating a PassengerTemplateExcelCalendar for the two lines below
@@ -66,7 +66,8 @@ public final class PassengerTemplateExcelGenerator extends AbstractExcelTemplate
         final Path tempPassengerCalendar = createTempInvolvedExcelFromExisting(originalCalendarPath, passengerFullName);
         super.writeInExcel(tempPassengerCalendar);
 
-        return tempPassengerCalendar;
+        return tempPassengerCalendar;*/
+        return null;
     }
 
 }

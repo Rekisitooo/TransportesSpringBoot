@@ -1,8 +1,7 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.DtoFullTransport;
-import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.IDtoInvolvedTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
@@ -105,10 +104,26 @@ public class TransportService {
     }
 
     public List<DtoDriverTransport> findDriverTransportsFromTemplate(final int driverId, final int templateId) {
-        return this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
+        final List<DtoDriverTransport> dtoDriverTransportList = new ArrayList<>();
+        String previousTransportDate = "";
+        DtoDriverTransport newTransport = null;
+
+        final List<DtoDriverTransport> driverTransportsFromTemplate = this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
+        for (final DtoDriverTransport dtoDriverTransport : driverTransportsFromTemplate) {
+            if (previousTransportDate.isEmpty() || !previousTransportDate.equals(dtoDriverTransport.getTransportDate())) {
+                newTransport = dtoDriverTransport;
+                dtoDriverTransportList.add(newTransport);
+            } else {
+                newTransport.addPassengerName(dtoDriverTransport.getPassengerFullName());
+            }
+
+            previousTransportDate = newTransport.getTransportDate();
+        }
+
+        return dtoDriverTransportList;
     }
 
-    public List<DtoPassengerTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
+    public List<IDtoInvolvedTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
         return this.transportByTemplateRepository.findPassengerTransportsFromTemplate(passengerId, templateId);
     }
 

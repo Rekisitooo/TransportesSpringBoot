@@ -1148,3 +1148,31 @@ END $$
 DELIMITER ;
 
 -- CALL crud_conductores('0, 1');
+use transportesspringboot;
+
+SELECT 
+	ftpp.FECHA_TRANSPORTE, ftpp.NOMBRE_EVENTO, viajero.nombre
+		FROM Transporte t
+			INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+				ON t.COD_FECHA_TRANSPORTE = ftpp.ID
+			INNER JOIN INVOLUCRADO viajero
+				ON t.COD_VIAJERO = viajero.ID
+			INNER JOIN INVOLUCRADO conductor
+				ON t.COD_CONDUCTOR = conductor.ID
+		WHERE
+			t.COD_CONDUCTOR = 13
+			AND ftpp.COD_PLANTILLA = 1
+		ORDER BY FECHA_TRANSPORTE ASC;
+            
+            SELECT 
+	ftpp.FECHA_TRANSPORTE, ftpp.NOMBRE_EVENTO, conductor.nombre
+		FROM Transporte t
+			INNER JOIN FECHA_TRANSPORTE_POR_PLANTILLA ftpp
+				ON t.COD_FECHA_TRANSPORTE = ftpp.ID
+			INNER JOIN INVOLUCRADO viajero
+				ON t.COD_VIAJERO = viajero.ID
+			INNER JOIN INVOLUCRADO conductor
+				ON t.COD_CONDUCTOR = conductor.ID
+		WHERE
+			t.COD_VIAJERO = 1
+			AND ftpp.COD_PLANTILLA = 1;

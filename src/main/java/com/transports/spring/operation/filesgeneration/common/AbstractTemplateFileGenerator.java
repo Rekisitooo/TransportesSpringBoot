@@ -19,7 +19,7 @@ public abstract class AbstractTemplateFileGenerator {
     }
 
     protected static int getInitialDayOfTheMonthColumn(final Calendar templateMonthCalendar) {
-        return AbstractExcelTemplateFileGenerator.getInitialDayOfTheMonthColumn(templateMonthCalendar, MONDAYS_COL);
+        return AbstractExcelTemplateFileGenerator.getInitialDayOfTheMonthColumn(templateMonthCalendar, 1);
     }
 
     protected static void applyCustomStyleToHeaderCell(final Workbook newExcel, final Cell headerCell) {

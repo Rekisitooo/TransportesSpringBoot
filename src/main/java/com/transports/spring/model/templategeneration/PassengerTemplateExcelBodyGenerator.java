@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyGenerator {
 
-    protected PassengerTemplateExcelBodyGenerator(Calendar templateMonthCalendar, int currentRow) {
-        super(templateMonthCalendar, currentRow);
+    protected PassengerTemplateExcelBodyGenerator() {
+        super();
     }
 }

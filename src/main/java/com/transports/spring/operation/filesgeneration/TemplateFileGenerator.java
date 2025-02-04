@@ -2,6 +2,7 @@ package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.IDtoInvolvedTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.templategeneration.PassengerTemplateFile;
@@ -18,30 +19,30 @@ public final class TemplateFileGenerator {
 
     private final Path temporalDirPath;
     private final PassengerTemplateFile passengerTemplateFile;
-    private final DriverTemplateFile driverTemplateFile;
+    //private final DriverTemplateFile driverTemplateFile;
 
-    public TemplateFileGenerator(Path temporalDirPath) throws IOException {
+    public TemplateFileGenerator(Path temporalDirPath, int templateYear, int templateMonth) throws IOException {
         this.temporalDirPath = temporalDirPath;
-        this.passengerTemplateFile = new PassengerTemplateFile();
-        this.driverTemplateFile = new DriverTemplateFile();
+        this.passengerTemplateFile = new PassengerTemplateFile(templateYear, templateMonth);
+        //this.driverTemplateFile = new DriverTemplateFile();
     }
 
-    public void generateFiles(final Map<Passenger, List<DtoPassengerTransport>> passengerTransports, final Map<Driver, List<DtoDriverTransport>> driverTransports, final String monthName, final int templateYear) throws IOException {
+    public void generateFiles(final Map<Passenger, List<IDtoInvolvedTransport>> passengerTransports, final Map<Driver, List<DtoDriverTransport>> driverTransports, final String monthName, final int templateYear) throws IOException {
         final Path passengersTempDir = Files.createTempDirectory(this.temporalDirPath, "viajeros");
         generateFilesDirectories(passengersTempDir);
-        for (Map.Entry<Passenger, List<DtoPassengerTransport>> entry : passengerTransports.entrySet()) {
+        for (Map.Entry<Passenger, List<IDtoInvolvedTransport>> entry : passengerTransports.entrySet()) {
             final Passenger passenger = entry.getKey();
-            final List<DtoPassengerTransport> dtoPassengerTransportList = entry.getValue();
+            final List<IDtoInvolvedTransport> dtoPassengerTransportList = entry.getValue();
             this.passengerTemplateFile.generate(dtoPassengerTransportList, passenger.getFullName(), monthName, templateYear);
         }
 
-        final Path driversTempDir = Files.createTempDirectory(this.temporalDirPath, "conductores");
-        generateFilesDirectories(driversTempDir);
-        for (Map.Entry<Driver, List<DtoDriverTransport>> entry : driverTransports.entrySet()) {
-            final Driver driver = entry.getKey();
-            final List<DtoDriverTransport> dtoDriverTransportList = entry.getValue();
-            this.driverTemplateFile.generate(dtoDriverTransportList, driver.getFullName(), monthName, templateYear);
-        }
+        //final Path driversTempDir = Files.createTempDirectory(this.temporalDirPath, "conductores");
+        //generateFilesDirectories(driversTempDir);
+        //for (Map.Entry<Driver, List<DtoDriverTransport>> entry : driverTransports.entrySet()) {
+        //    final Driver driver = entry.getKey();
+        //    final List<DtoDriverTransport> dtoDriverTransportList = entry.getValue();
+        //    this.driverTemplateFile.generate(dtoDriverTransportList, driver.getFullName(), monthName, templateYear);
+        //}
     }
 
     private static void generateFilesDirectories(Path passengersTempDir) throws IOException {

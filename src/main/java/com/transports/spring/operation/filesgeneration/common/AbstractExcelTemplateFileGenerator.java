@@ -51,7 +51,7 @@ public abstract class AbstractExcelTemplateFileGenerator {
         int currentCol = templateMonthCalendar.get(Calendar.DAY_OF_WEEK) - 2; // Monday=0, Sunday=6
         if (currentCol < mondayCol) {
             // adjust to mondays as first column
-            currentCol = SUNDAYS_COL;
+            currentCol = 6;
         }
 
         return currentCol;
