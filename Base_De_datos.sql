@@ -280,12 +280,13 @@ BEGIN
 			IF cursor_ft_terminado THEN
 				LEAVE read_loop;
 			END IF;
-
+            
 			INSERT INTO FECHA_TRANSPORTE_POR_PLANTILLA (FECHA_TRANSPORTE, COD_DIA_DE_LA_SEMANA, COD_PLANTILLA, NOMBRE_EVENTO)
 			SELECT dias_del_mes.dia_de_la_semana, cod_dia_de_la_semana, NEW.ID, dts.DESCRIPCION
 				FROM (
 					SELECT 
-						DATE_FORMAT(fecha, '%Y-%m-%d') AS dia_de_la_semana
+						DATE_FORMAT(fecha, '%Y-%m-%d') AS dia_de_la_semana,
+                        cod_dia_de_la_semana
 						FROM (
 							SELECT CONCAT(NEW.ANNO, '-', NEW.MES, '-', 1) + INTERVAL (n.n + 10 * m.n) DAY AS fecha
 								FROM (
@@ -305,7 +306,7 @@ BEGIN
 								AND DAYOFWEEK(fecha) = cod_dia_de_la_semana
 				) dias_del_mes
                 INNER JOIN DIA_TRANSPORTE_SEMANAL dts
-					ON dts.ID = dias_del_mes.cod_dia_de_la_semana;
+					ON dts.COD_DIA_DE_LA_SEMANA = dias_del_mes.cod_dia_de_la_semana;
             
 		END LOOP;
     CLOSE cursor_insertar_en_FECHA_TRANSPORTE_POR_PLANTILLA;
@@ -977,6 +978,7 @@ INSERT INTO TRANSPORTE (COD_FECHA_TRANSPORTE, COD_CONDUCTOR, COD_VIAJERO)
 INSERT INTO TRANSPORTE (COD_FECHA_TRANSPORTE, COD_CONDUCTOR, COD_VIAJERO)
 	VALUES (25, 20, 6); -- Vero, Pepe y Bea
 
+SELECT * FROM TRANSPORTE;
 DROP PROCEDURE IF EXISTS crud_viajeros;
 
 DELIMITER $$
