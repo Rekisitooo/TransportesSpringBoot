@@ -22,7 +22,6 @@ public final class TemplateController {
     private final TransportService transportService;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
-    private final TemplateFileService generateTemplateFilesService;
     private final TemplateFileService templateFileService;
 
     public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService generateTemplateFilesService, TemplateFileService templateFileService) {
@@ -31,7 +30,6 @@ public final class TemplateController {
         this.transportService = transportService;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
-        this.generateTemplateFilesService = generateTemplateFilesService;
         this.templateFileService = templateFileService;
     }
 
@@ -40,6 +38,7 @@ public final class TemplateController {
         final Template template = this.templateService.findById(templateId);
         model.addAttribute("templateMonth", template.getMonthName().toUpperCase());
         model.addAttribute("templateYear", template.getYear());
+        model.addAttribute("templateId", template.getId());
 
         final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);

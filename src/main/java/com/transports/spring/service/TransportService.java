@@ -1,7 +1,7 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
+import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
@@ -108,13 +108,14 @@ public class TransportService {
         String previousTransportDate = "";
         DtoDriverTransport newTransport = null;
 
-        final List<DtoDriverTransport> driverTransportsFromTemplate = this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
-        for (final DtoDriverTransport dtoDriverTransport : driverTransportsFromTemplate) {
-            if (previousTransportDate.isEmpty() || !previousTransportDate.equals(dtoDriverTransport.getTransportDate())) {
-                newTransport = dtoDriverTransport;
+        final List<DtoInvolvedTransport> driverTransportsFromTemplate = this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
+        for (final DtoInvolvedTransport dtoInvolvedTransport : driverTransportsFromTemplate) {
+            if (previousTransportDate.isEmpty() || !previousTransportDate.equals(dtoInvolvedTransport.getTransportDate())) {
+                newTransport = new DtoDriverTransport(dtoInvolvedTransport);
                 dtoDriverTransportList.add(newTransport);
             } else {
-                newTransport.addPassengerName(dtoDriverTransport.getPassengerFullName());
+                final String passengerFullName = dtoInvolvedTransport.getName();
+                newTransport.addPassengerName(passengerFullName);
             }
 
             previousTransportDate = newTransport.getTransportDate();
@@ -123,7 +124,7 @@ public class TransportService {
         return dtoDriverTransportList;
     }
 
-    public List<IDtoInvolvedTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
+    public List<DtoInvolvedTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
         return this.transportByTemplateRepository.findPassengerTransportsFromTemplate(passengerId, templateId);
     }
 

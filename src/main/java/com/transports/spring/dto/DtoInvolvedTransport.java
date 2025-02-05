@@ -10,7 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class DtoInvolvedTransport implements IDtoInvolvedTransport {
-    protected String transportDate;
-    protected String eventName;
+public class DtoInvolvedTransport extends AbstractDtoInvolvedTransport {
+    private String name;
+
+    public DtoInvolvedTransport(String transportDate, String eventName, String name) {
+        super(transportDate, eventName);
+        this.name = name;
+    }
 }

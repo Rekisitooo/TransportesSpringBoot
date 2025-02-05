@@ -1,8 +1,6 @@
 package com.transports.spring.model.templategeneration;
 
 import com.transports.spring.dto.DtoInvolvedTransport;
-import com.transports.spring.dto.DtoPassengerTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.List;
@@ -14,7 +12,7 @@ public class PassengerTemplateExcelBody extends AbstractTemplateExcelBody {
     }
 
     @Override
-    public void generate(final Sheet excelSheet, final List<IDtoInvolvedTransport> allInvolvedTransportsFromTemplate) {
+    public void generate(final Sheet excelSheet, final List<DtoInvolvedTransport> allInvolvedTransportsFromTemplate) {
         super.generate(excelSheet, allInvolvedTransportsFromTemplate);
     }
 }

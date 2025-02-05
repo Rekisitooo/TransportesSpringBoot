@@ -1,7 +1,6 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
+import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.model.Transport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -61,7 +60,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
 
     @Query("SELECT " +
-            "   new DtoDriverTransport(ftpp.transportDate, ftpp.eventName, viajero.name)" +
+            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, viajero.name)" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
@@ -72,10 +71,10 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
             "           AND ftpp.templateCode = :templateId")
-    List<DtoDriverTransport> findDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
+    List<DtoInvolvedTransport> findDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
 
     @Query("SELECT " +
-            "   new DtoPassengerTransport(ftpp.transportDate, ftpp.eventName, conductor.name)" +
+            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, conductor.name)" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
@@ -87,5 +86,5 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           t.transportKey.passengerId = :passengerId" +
             "           AND ftpp.templateCode = :templateId" +
             "       ORDER BY ftpp.transportDate ASC")
-    List<IDtoInvolvedTransport> findPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
+    List<DtoInvolvedTransport> findPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
 }

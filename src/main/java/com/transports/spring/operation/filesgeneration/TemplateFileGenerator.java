@@ -1,13 +1,10 @@
 package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.DtoPassengerTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
+import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.templategeneration.PassengerTemplateFile;
-import com.transports.spring.operation.filesgeneration.driver.DriverTemplateFileGenerator;
-import com.transports.spring.operation.filesgeneration.passenger.PassengerTemplateFileGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,12 +24,12 @@ public final class TemplateFileGenerator {
         //this.driverTemplateFile = new DriverTemplateFile();
     }
 
-    public void generateFiles(final Map<Passenger, List<IDtoInvolvedTransport>> passengerTransports, final Map<Driver, List<DtoDriverTransport>> driverTransports, final String monthName, final int templateYear) throws IOException {
+    public void generateFiles(final Map<Passenger, List<DtoInvolvedTransport>> passengerTransports, final Map<Driver, List<DtoDriverTransport>> driverTransports, final String monthName, final int templateYear) throws IOException {
         final Path passengersTempDir = Files.createTempDirectory(this.temporalDirPath, "viajeros");
-        generateFilesDirectories(passengersTempDir);
-        for (Map.Entry<Passenger, List<IDtoInvolvedTransport>> entry : passengerTransports.entrySet()) {
+        generateFileTempDirectories(passengersTempDir);
+        for (final Map.Entry<Passenger, List<DtoInvolvedTransport>> entry : passengerTransports.entrySet()) {
             final Passenger passenger = entry.getKey();
-            final List<IDtoInvolvedTransport> dtoPassengerTransportList = entry.getValue();
+            final List<DtoInvolvedTransport> dtoPassengerTransportList = entry.getValue();
             this.passengerTemplateFile.generate(dtoPassengerTransportList, passenger.getFullName(), monthName, templateYear);
         }
 
@@ -45,9 +42,9 @@ public final class TemplateFileGenerator {
         //}
     }
 
-    private static void generateFilesDirectories(Path passengersTempDir) throws IOException {
-        Files.createTempDirectory(passengersTempDir, "excel");
-        Files.createTempDirectory(passengersTempDir, "jpg");
+    private static void generateFileTempDirectories(final Path pathToCreateDirs) throws IOException {
+        Files.createTempDirectory(pathToCreateDirs, "excel");
+        Files.createTempDirectory(pathToCreateDirs, "jpg");
     }
 
 }

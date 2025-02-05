@@ -1,7 +1,6 @@
 package com.transports.spring.model.templategeneration;
 
 import com.transports.spring.dto.DtoInvolvedTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
 import lombok.Setter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,14 +34,14 @@ public abstract class AbstractTemplateExcelBodyGenerator {
         this.lastMonthDay = templateMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-    public void generate(final Calendar templateMonthCalendar, final Sheet excelSheet, final List<IDtoInvolvedTransport> allInvolvedTransportsFromTemplate) {
+    public void generate(final Calendar templateMonthCalendar, final Sheet excelSheet, final List<DtoInvolvedTransport> allInvolvedTransportsFromTemplate) {
         buildInstance(templateMonthCalendar);
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
             final Cell dayCell = createNewDayCell(excelSheet, currentDayOfMonth);
 
             // verify if it has an extra day
-            for (final IDtoInvolvedTransport dtoInvolvedTransport : allInvolvedTransportsFromTemplate) {
+            for (final DtoInvolvedTransport dtoInvolvedTransport : allInvolvedTransportsFromTemplate) {
                 final String transportDateString = dtoInvolvedTransport.getTransportDate();
                 final LocalDate transportDate = LocalDate.parse(transportDateString);
 
@@ -50,7 +49,7 @@ public abstract class AbstractTemplateExcelBodyGenerator {
                     final String eventName = dtoInvolvedTransport.getEventName();
                     dayCell.setCellValue(currentDayOfMonth + " " + eventName);
 
-                    final String transportDayCellText = dtoInvolvedTransport.getNamesToWriteInTransportDateCell();
+                    final String transportDayCellText = dtoInvolvedTransport.getName();
                     PassengerTemplateExcelTransportDayCell transportDayCell = new PassengerTemplateExcelTransportDayCell(excelSheet, this.currentRow);
                     transportDayCell.generate(transportDayCellText);
                 }

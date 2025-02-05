@@ -6,12 +6,13 @@ public abstract class AbstractTemplateExcelHeader {
 
     protected static final int START_ROW_DAYS = 3;
 
-    protected final Row row;
-    protected final Cell cell;
-    protected final Font headerFont;
-    protected final CellStyle headerStyle;
+    protected Row row;
+    protected Cell cell;
+    protected Font headerFont;
+    protected CellStyle headerStyle;
 
-    //START_ROW_DAYS
+    protected AbstractTemplateExcelHeader() {}
+
     protected AbstractTemplateExcelHeader(final Sheet excelSheet, final int currentRow) {
         this.row = excelSheet.createRow(currentRow);
         this.cell = this.row.createCell(0);
@@ -42,5 +43,17 @@ public abstract class AbstractTemplateExcelHeader {
         this.headerStyle.setFont(this.headerFont);
         this.headerStyle.setAlignment(HorizontalAlignment.CENTER);
         this.headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+    }
+
+
+    protected AbstractTemplateExcelHeader init(final Sheet excelSheet, final int currentRow) {
+        this.row = excelSheet.createRow(currentRow);
+        this.cell = this.row.createCell(0);
+
+        final Workbook excel = excelSheet.getWorkbook();
+        this.headerFont = excel.createFont();
+        this.headerStyle = excel.createCellStyle();
+
+        return this;
     }
 }

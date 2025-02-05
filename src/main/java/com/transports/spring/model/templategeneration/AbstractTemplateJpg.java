@@ -1,5 +1,4 @@
-package com.transports.spring.operation.filesgeneration.common;
-
+package com.transports.spring.model.templategeneration;
 
 import com.aspose.cells.ImageOrPrintOptions;
 import com.aspose.cells.ImageType;
@@ -8,11 +7,11 @@ import com.aspose.cells.Worksheet;
 
 import java.nio.file.Path;
 
-public abstract class AbstractJpgTemplateFileGenerator {
+public abstract class AbstractTemplateJpg {
 
-    protected AbstractJpgTemplateFileGenerator(){}
+    protected AbstractTemplateJpg() {}
 
-    protected static void generateJPG(final Path involvedCalendarPath) {
+    protected void generate(final Path involvedCalendarPath) {
         try {
             final String involvedCalendarPathString = involvedCalendarPath.toString();
             final com.aspose.cells.Workbook calendar = new com.aspose.cells.Workbook(involvedCalendarPathString);

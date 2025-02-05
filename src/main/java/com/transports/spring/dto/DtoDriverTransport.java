@@ -7,15 +7,16 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DtoDriverTransport  extends DtoInvolvedTransport {
-    private String passengerFullName;
+public class DtoDriverTransport extends AbstractDtoInvolvedTransport {
+    private String passengerFullNames;
 
-    @Override
-    public String getNamesToWriteInTransportDateCell() {
-        return this.passengerFullName;
+    public DtoDriverTransport(final DtoInvolvedTransport dtoInvolvedTransport) {
+        this.transportDate = dtoInvolvedTransport.getTransportDate();
+        this.eventName = dtoInvolvedTransport.getEventName();
+        this.passengerFullNames = dtoInvolvedTransport.getName();
     }
 
     public void addPassengerName(final String passengerFullName) {
-        this.passengerFullName += ", " + passengerFullName;
+        this.passengerFullNames += ", " + passengerFullName;
     }
 }

@@ -1,9 +1,7 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.DtoPassengerTransport;
-import com.transports.spring.dto.IDtoInvolvedTransport;
-import com.transports.spring.exception.CreatingTemplateFileException;
+import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.model.*;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
 import org.springframework.stereotype.Service;
@@ -39,7 +37,7 @@ public final class TemplateFileService {
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = getTemplateMonthName(templateMonth);
 
-            final Map<Passenger, List<IDtoInvolvedTransport>> passengerTransports = this.getPassengerTransports(templateId);
+            final Map<Passenger, List<DtoInvolvedTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<Driver, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 
             final Path temporalDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
@@ -57,11 +55,11 @@ public final class TemplateFileService {
         return Integer.parseInt(convetToString);
     }
 
-    private Map<Passenger, List<IDtoInvolvedTransport>> getPassengerTransports(int templateId) {
-        final Map<Passenger, List<IDtoInvolvedTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
+    private Map<Passenger, List<DtoInvolvedTransport>> getPassengerTransports(int templateId) {
+        final Map<Passenger, List<DtoInvolvedTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
         final List<Passenger> allPassengersFromTemplate = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : allPassengersFromTemplate) {
-            final List<IDtoInvolvedTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
+            final List<DtoInvolvedTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
             if (!passengerTransportsFromTemplate.isEmpty()) {
                 passengerTransportsFromTemplateMap.put(passenger, passengerTransportsFromTemplate);
             }
