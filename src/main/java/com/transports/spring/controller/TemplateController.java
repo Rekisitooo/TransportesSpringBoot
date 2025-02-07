@@ -65,12 +65,14 @@ public final class TemplateController {
     }
 
     @GetMapping("/generate")
-    public void generate(@RequestParam (value = "id") final int templateId) {
+    public String generate(final Model model, @RequestParam(value = "id") final int templateId) {
         try {
             this.templateFileService.generateFiles(templateId);
         } catch (final IOException e) {
             //TODO print an error
         }
+
+        return this.getById(model, 1);
     }
 
     @GetMapping("/create")

@@ -14,7 +14,7 @@ import java.util.Calendar;
 public abstract class AbstractExcelTemplateFileGenerator {
 
     protected static final String CALENDAR_NAME_FILE = "calendar";
-    protected static final String XSL_EXTENSION = ".xlxs";
+    protected static final String XSL_EXTENSION = ".xlsx";
     protected static final String ORIGINAL_CALENDAR_FILE = CALENDAR_NAME_FILE + XSL_EXTENSION;
     protected static final String SEPARATION_CHARACTER = "_";
 

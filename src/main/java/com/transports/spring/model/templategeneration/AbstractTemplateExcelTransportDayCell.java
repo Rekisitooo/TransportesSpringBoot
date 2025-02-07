@@ -1,24 +1,21 @@
 package com.transports.spring.model.templategeneration;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 
 public abstract class AbstractTemplateExcelTransportDayCell {
 
-    protected static final int START_ROW_DAYS = 3;
-
-    protected final Row row;
-    protected final Cell cell;
-    protected final Font font;
-    protected final CellStyle cellStyle;
+    protected final XSSFRow row;
+    protected final XSSFCell cell;
+    protected final XSSFFont font;
+    protected final XSSFCellStyle cellStyle;
 
 
-    protected AbstractTemplateExcelTransportDayCell(final Sheet excelSheet, final int currentRow) {
-        this.row = excelSheet.createRow(currentRow);
-        this.cell = this.row.createCell(0);
-
-        final Workbook excel = excelSheet.getWorkbook();
-        this.font = excel.createFont();
-        this.cellStyle = excel.createCellStyle();
+    protected AbstractTemplateExcelTransportDayCell(final XSSFSheet excelSheet, final int currentRow, final int currentCol) {
+        this.row = excelSheet.getRow(currentRow);
+        this.cell = this.row.getCell(currentCol);
+        this.cellStyle = excelSheet.getWorkbook().createCellStyle();
+        this.font = this.cellStyle.getFont();
     }
 
     protected void generate(final String transportDayCellText) {
@@ -28,13 +25,18 @@ public abstract class AbstractTemplateExcelTransportDayCell {
 
     protected void createFont() {
         this.font.setColor(IndexedColors.DARK_BLUE.getIndex());
-        this.font.setBold(true);
+        this.font.setBold(false);
     }
 
     protected void addStylesToCell() {
         this.cellStyle.setFont(font);
-        this.cellStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+        this.cellStyle.setFillForegroundColor(TemplateExcelTransportDayCellStyler.LIGHT_BLUE_BACKGROUND_COLOR);
         this.cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        this.cellStyle.setIndention((short) 1);
+        this.cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
+        this.cellStyle.setBorderRight(BorderStyle.THIN);
+        this.cellStyle.setBorderLeft(BorderStyle.THIN);
+        this.cellStyle.setBorderBottom(BorderStyle.THIN);
     }
 
     protected void applyCustomStyleToTransportCell() {
@@ -42,4 +44,5 @@ public abstract class AbstractTemplateExcelTransportDayCell {
         addStylesToCell();
         this.cell.setCellStyle(this.cellStyle);
     }
+
 }

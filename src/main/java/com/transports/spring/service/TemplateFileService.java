@@ -3,15 +3,18 @@ package com.transports.spring.service;
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.model.*;
+import com.transports.spring.model.templategeneration.*;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public final class TemplateFileService {
@@ -20,14 +23,16 @@ public final class TemplateFileService {
     private final TemplateService templateService;
     private final TransportService transportService;
     private final InvolvedByTemplateService involvedByTemplateService;
+    private final TemplateFileGenerator templateFileGenerator;
 
     private static final Object CONCURRENCY_LOCKER = new Object();
 
-    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService) {
+    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator) {
         this.monthService = monthService;
         this.templateService = templateService;
         this.transportService = transportService;
         this.involvedByTemplateService = involvedByTemplateService;
+        this.templateFileGenerator = templateFileGenerator;
     }
 
     public void generateFiles(final int templateId) throws IOException {
@@ -40,9 +45,8 @@ public final class TemplateFileService {
             final Map<Passenger, List<DtoInvolvedTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<Driver, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 
-            final Path temporalDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
-            final TemplateFileGenerator templateFile = new TemplateFileGenerator(temporalDirPath, templateYear, templateMonth);
-            templateFile.generateFiles(passengerTransports, driverTransports, monthName, templateYear);
+            final Path monthTempDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
+            this.templateFileGenerator.generateFiles(passengerTransports, driverTransports, monthName, templateYear, templateMonth, monthTempDirPath);
         }
     }
 
@@ -81,4 +85,29 @@ public final class TemplateFileService {
         return driverTransportsFromTemplateMap;
     }
 
+    public void zip() throws IOException {
+        final String file1 = "src/main/resources/zipTest/test1.txt";
+        final String file2 = "src/main/resources/zipTest/test2.txt";
+        final List<String> srcFiles = Arrays.asList(file1, file2);
+
+        final FileOutputStream fos = new FileOutputStream(Paths.get(file1).getParent().toAbsolutePath() + "/compressed.zip");
+        final ZipOutputStream zipOut = new ZipOutputStream(fos);
+
+        for (final String srcFile : srcFiles) {
+            final File fileToZip = new File(srcFile);
+            final FileInputStream fis = new FileInputStream(fileToZip);
+            final ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+            zipOut.putNextEntry(zipEntry);
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+            fis.close();
+        }
+
+        zipOut.close();
+        fos.close();
+    }
 }

@@ -1,9 +1,8 @@
 package com.transports.spring.model.templategeneration;
 
 import com.transports.spring.dto.DtoInvolvedTransport;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,23 +17,23 @@ import java.util.List;
 public abstract class AbstractTemplateExcel {
 
     protected static final String CALENDAR_NAME_FILE = "calendar";
-    protected static final String XSL_EXTENSION = ".xlxs";
+    protected static final String XSL_EXTENSION = ".xlsx";
     protected static final String ORIGINAL_CALENDAR_FILE_STRING = CALENDAR_NAME_FILE + XSL_EXTENSION;
 
     public static final Path ORIGINAL_CALENDAR_PATH = Paths.get(ORIGINAL_CALENDAR_FILE_STRING);
     public static final File ORIGINAL_CALENDAR_FILE = ORIGINAL_CALENDAR_PATH.getFileName().toFile();
 
-    protected static final int START_ROW_DAYS = 3;// Primera columna
+    protected static final int START_ROW_DAYS = 1;
 
     protected final AbstractTemplateExcelBody templateExcelBody;
     protected final AbstractTemplateExcelHeader templateExcelHeader;
-    protected final Workbook newExcel;
+    protected final XSSFWorkbook newExcel;
     protected final FileInputStream fileInputStream;
-    protected final Sheet sheet;
+    protected final XSSFSheet sheet;
 
     protected AbstractTemplateExcel(AbstractTemplateExcelBody templateExcelBody, AbstractTemplateExcelHeader templateExcelHeader) throws IOException {
         this.fileInputStream = new FileInputStream(ORIGINAL_CALENDAR_FILE);
-        this.newExcel = new HSSFWorkbook(fileInputStream);
+        this.newExcel = new XSSFWorkbook(fileInputStream);
         this.sheet = this.newExcel.getSheetAt(0);
 
         this.templateExcelBody = templateExcelBody;
@@ -66,9 +65,10 @@ public abstract class AbstractTemplateExcel {
      * @return the path to the newly created temporary file
      * @throws IOException if an I/O error occurs
      */
-    protected static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
+    private static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
         final Path tempFile = Files.createTempFile(involvedFullName, ".xlsx");
         Files.copy(ORIGINAL_CALENDAR_PATH, tempFile, StandardCopyOption.REPLACE_EXISTING);
+        //Files.copy(tempFile, );
 
         return tempFile;
     }
