@@ -1,8 +1,7 @@
-package com.transports.spring.model.templategeneration;
+package com.transports.spring.model.templategeneration.common;
 
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.transports.spring.model.templategeneration.driver.*;
+import com.transports.spring.model.templategeneration.passenger.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -24,5 +23,15 @@ public class ExcelConfig {
         return new PassengerTemplateFile(passengerTemplateExcel, new PassengerTemplateJpg());
     }
 
+    @Bean
+    @Scope(value = "prototype")
+    public DriverTemplateFile getDriverTemplateFile(final Calendar calendar, final int templateYear, final int templateMonth) throws IOException {
+        calendar.set(templateYear, templateMonth - 1, 1);
+        final DriverTemplateExcelBodyGenerator driverTemplateExcelBodyGenerator = new DriverTemplateExcelBodyGenerator(calendar);
+        final DriverTemplateExcelBody driverTemplateExcelBody = new DriverTemplateExcelBody(driverTemplateExcelBodyGenerator);
+        final DriverTemplateExcel driverTemplateExcel = new DriverTemplateExcel(driverTemplateExcelBody);
+
+        return new DriverTemplateFile(driverTemplateExcel, new DriverTemplateJpg());
+    }
 
 }

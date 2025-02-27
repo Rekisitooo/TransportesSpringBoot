@@ -11,8 +11,8 @@ public class DtoDriverTransport extends AbstractDtoInvolvedTransport {
     private String passengerFullNames;
 
     public DtoDriverTransport(final DtoInvolvedTransport dtoInvolvedTransport) {
-        this.transportDate = dtoInvolvedTransport.getTransportDate();
-        this.eventName = dtoInvolvedTransport.getEventName();
+        super.transportDate = dtoInvolvedTransport.getTransportDate();
+        super.eventName = dtoInvolvedTransport.getEventName();
         this.passengerFullNames = dtoInvolvedTransport.getName();
     }
 

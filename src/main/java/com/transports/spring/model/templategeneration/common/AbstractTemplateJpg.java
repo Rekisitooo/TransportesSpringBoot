@@ -1,4 +1,4 @@
-package com.transports.spring.model.templategeneration;
+package com.transports.spring.model.templategeneration.common;
 
 import com.aspose.cells.ImageOrPrintOptions;
 import com.aspose.cells.ImageType;
@@ -11,7 +11,7 @@ public abstract class AbstractTemplateJpg {
 
     protected AbstractTemplateJpg() {}
 
-    protected void generate(final Path involvedCalendarPath) {
+    public void generate(final Path involvedCalendarPath) {
         try {
             final String involvedCalendarPathString = involvedCalendarPath.toString();
             final com.aspose.cells.Workbook calendar = new com.aspose.cells.Workbook(involvedCalendarPathString);

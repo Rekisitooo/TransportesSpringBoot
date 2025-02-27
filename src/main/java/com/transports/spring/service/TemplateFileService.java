@@ -1,11 +1,11 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.dto.DtoInvolvedTransport;
+import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.generatefiles.DtoGenerateFile;
+import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.model.*;
-import com.transports.spring.model.templategeneration.*;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -24,15 +24,17 @@ public final class TemplateFileService {
     private final TransportService transportService;
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TemplateFileGenerator templateFileGenerator;
+    private final TransportDateByTemplateService transportDateByTemplateService;
 
     private static final Object CONCURRENCY_LOCKER = new Object();
 
-    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator) {
+    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService) {
         this.monthService = monthService;
         this.templateService = templateService;
         this.transportService = transportService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.templateFileGenerator = templateFileGenerator;
+        this.transportDateByTemplateService = transportDateByTemplateService;
     }
 
     public void generateFiles(final int templateId) throws IOException {
@@ -42,11 +44,12 @@ public final class TemplateFileService {
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = getTemplateMonthName(templateMonth);
 
-            final Map<Passenger, List<DtoInvolvedTransport>> passengerTransports = this.getPassengerTransports(templateId);
+            final Map<Passenger, List<DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
+            final List<TransportDateByTemplate> templateMonthDateList = transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
             final Map<Driver, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
-
             final Path monthTempDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
-            this.templateFileGenerator.generateFiles(passengerTransports, driverTransports, monthName, templateYear, templateMonth, monthTempDirPath);
+
+            this.templateFileGenerator.generateFiles(new DtoGenerateFile(passengerTransports, driverTransports), new DtoTemplateExcelHeader(monthName, templateYear), templateMonth, monthTempDirPath, templateMonthDateList);
         }
     }
 
@@ -59,11 +62,12 @@ public final class TemplateFileService {
         return Integer.parseInt(convetToString);
     }
 
-    private Map<Passenger, List<DtoInvolvedTransport>> getPassengerTransports(int templateId) {
-        final Map<Passenger, List<DtoInvolvedTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
+    private Map<Passenger, List<DtoPassengerTransport>> getPassengerTransports(int templateId) {
+        final Map<Passenger, List<DtoPassengerTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
+
         final List<Passenger> allPassengersFromTemplate = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : allPassengersFromTemplate) {
-            final List<DtoInvolvedTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
+            final List<DtoPassengerTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
             if (!passengerTransportsFromTemplate.isEmpty()) {
                 passengerTransportsFromTemplateMap.put(passenger, passengerTransportsFromTemplate);
             }

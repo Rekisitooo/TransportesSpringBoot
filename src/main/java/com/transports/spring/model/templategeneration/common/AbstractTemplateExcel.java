@@ -1,6 +1,5 @@
-package com.transports.spring.model.templategeneration;
+package com.transports.spring.model.templategeneration.common;
 
-import com.transports.spring.dto.DtoInvolvedTransport;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -12,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 public abstract class AbstractTemplateExcel {
 
@@ -25,38 +23,26 @@ public abstract class AbstractTemplateExcel {
 
     protected static final int START_ROW_DAYS = 1;
 
-    protected final AbstractTemplateExcelBody templateExcelBody;
     protected final AbstractTemplateExcelHeader templateExcelHeader;
     protected final XSSFWorkbook newExcel;
-    protected final FileInputStream fileInputStream;
+    protected final FileInputStream fisOriginalCalendar;
     protected final XSSFSheet sheet;
 
-    protected AbstractTemplateExcel(AbstractTemplateExcelBody templateExcelBody, AbstractTemplateExcelHeader templateExcelHeader) throws IOException {
-        this.fileInputStream = new FileInputStream(ORIGINAL_CALENDAR_FILE);
-        this.newExcel = new XSSFWorkbook(fileInputStream);
+    protected AbstractTemplateExcel(AbstractTemplateExcelHeader templateExcelHeader) throws IOException {
+        this.fisOriginalCalendar = new FileInputStream(ORIGINAL_CALENDAR_FILE);
+        this.newExcel = new XSSFWorkbook(fisOriginalCalendar);
         this.sheet = this.newExcel.getSheetAt(0);
 
-        this.templateExcelBody = templateExcelBody;
         this.templateExcelHeader = templateExcelHeader.init(this.sheet, START_ROW_DAYS);
     }
 
-    protected Path generate(List<DtoInvolvedTransport> allInvolvedTransportsFromTemplate, String involvedFullName, String monthName, int templateYear) throws IOException {
-        this.templateExcelHeader.generate(involvedFullName, monthName, templateYear);
-        this.templateExcelBody.generate(this.sheet, allInvolvedTransportsFromTemplate);
-
-        final Path involvedExcelCalendar = createTempInvolvedExcelFromExisting(involvedFullName);
-        this.writeInExcel(involvedExcelCalendar);
-
-        return involvedExcelCalendar;
-    }
-
-    private void writeInExcel(final Path tempPassengerCalendar) throws IOException {
+    protected void writeInExcel(final Path tempPassengerCalendar) throws IOException {
         final File passengerCalendar = tempPassengerCalendar.getFileName().toFile();
         final FileOutputStream fileOutputStream = new FileOutputStream(passengerCalendar);
         this.newExcel.write(fileOutputStream);
         fileOutputStream.close();
         this.newExcel.close();
-        this.fileInputStream.close();
+        this.fisOriginalCalendar.close();
     }
 
     /**
@@ -65,7 +51,7 @@ public abstract class AbstractTemplateExcel {
      * @return the path to the newly created temporary file
      * @throws IOException if an I/O error occurs
      */
-    private static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
+    protected static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
         final Path tempFile = Files.createTempFile(involvedFullName, ".xlsx");
         Files.copy(ORIGINAL_CALENDAR_PATH, tempFile, StandardCopyOption.REPLACE_EXISTING);
         //Files.copy(tempFile, );

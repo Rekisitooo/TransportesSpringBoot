@@ -2,6 +2,7 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoInvolvedTransport;
+import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
@@ -124,8 +125,15 @@ public class TransportService {
         return dtoDriverTransportList;
     }
 
-    public List<DtoInvolvedTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
-        return this.transportByTemplateRepository.findPassengerTransportsFromTemplate(passengerId, templateId);
+    public List<DtoPassengerTransport> findPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
+        final List<DtoPassengerTransport> passengerTransports = new ArrayList<>();
+
+        final List<DtoInvolvedTransport> passengerTransportsFromTemplate = this.transportByTemplateRepository.findPassengerTransportsFromTemplate(passengerId, templateId);
+        for (final DtoInvolvedTransport transport : passengerTransportsFromTemplate) {
+            passengerTransports.add(new DtoPassengerTransport(transport));
+        }
+
+        return passengerTransports;
     }
 
     //TODO check driver has available seats
