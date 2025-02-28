@@ -12,7 +12,21 @@ public class NumberDayCellStyler {
 
     private NumberDayCellStyler() {}
 
-    public static XSSFFont getFont(final XSSFWorkbook excel) {
+    public static XSSFCellStyle getCustomCellStyle(final XSSFWorkbook excel) {
+        final XSSFCellStyle cellStyle = excel.createCellStyle();
+        final XSSFFont cellFont = getCustomFont(excel);
+        cellStyle.setFont(cellFont);
+        cellStyle.setFillForegroundColor(TransportDayCellStyler.LIGHT_BLUE_BACKGROUND_COLOR);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setIndention((short) 1);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+
+        return cellStyle;
+    }
+
+    private static XSSFFont getCustomFont(final XSSFWorkbook excel) {
         final XSSFFont cellFont = excel.createFont();
         cellFont.setColor(TransportDayCellStyler.BLUE_FONT_COLOR);
         cellFont.setBold(true);
@@ -21,22 +35,23 @@ public class NumberDayCellStyler {
         return cellFont;
     }
 
-    public static XSSFCellStyle getCustomCellStyle(final XSSFWorkbook excel) {
+    public static XSSFCellStyle getDefaultCellStyle(final XSSFWorkbook excel) {
         final XSSFCellStyle cellStyle = excel.createCellStyle();
-        final XSSFFont cellFont = getFont(excel);
+        final XSSFFont cellFont = getDefaultFontStyle(excel);
         cellStyle.setFont(cellFont);
-        cellStyle.setFillForegroundColor(TransportDayCellStyler.LIGHT_BLUE_BACKGROUND_COLOR);
-        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setIndention((short) 1);
         cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
 
         return cellStyle;
     }
 
-    public static XSSFCellStyle getDefaultCellStyle(final XSSFWorkbook excel) {
-        final XSSFCellStyle cellStyle = excel.createCellStyle();
-        cellStyle.setIndention((short) 1);
+    private static XSSFFont getDefaultFontStyle(final XSSFWorkbook excel) {
+        final XSSFFont cellFont = excel.createFont();
+        cellFont.setBold(false);
+        cellFont.setFontName(APTOS_NARROW_FONT);
 
-        return cellStyle;
+        return cellFont;
     }
 }
