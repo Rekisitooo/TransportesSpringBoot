@@ -22,7 +22,7 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON dipft.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
-    List<InvolvedAvailabiltyForTransportDate> findAllDriversAvailableForDate(@Param("templateId") int templateId);
+    List<InvolvedAvailabiltyForTransportDate> findAllDriversAvailableDatesForTemplate(@Param("templateId") int templateId);
 
     @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
             " FROM InvolvedByTemplate ipp " +
@@ -35,5 +35,19 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON dipft.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
-    List<InvolvedAvailabiltyForTransportDate> findAllPassengersAvailableForDate(@Param("templateId") int templateId);
+    List<InvolvedAvailabiltyForTransportDate> findAllPassengersAssistanceDatesForTemplate(@Param("templateId") int templateId);
+
+    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
+            " FROM InvolvedByTemplate ipp " +
+            "  INNER JOIN InvolvedRole rol_viajero" +
+            "   ON ipp.roleCode = rol_viajero.id" +
+            "            AND rol_viajero.description = 'Viajero'" +
+            "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
+            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "  INNER JOIN TransportDateByTemplate ftpp" +
+            "   ON dipft.transportDateCode = ftpp.id" +
+            " WHERE " +
+            "  ipp.involvedByTemplateKey.involvedCode = :passengerId" +
+            "  AND ipp.involvedByTemplateKey.templateCode = :templateId")
+    List<InvolvedAvailabiltyForTransportDate> findAllPassengerAssistanceDatesForTemplate(@Param("templateId") int templateId, @Param("passengerId") int passengerId);
 }

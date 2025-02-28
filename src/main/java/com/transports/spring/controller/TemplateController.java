@@ -1,7 +1,6 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.model.*;
-import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
 import com.transports.spring.service.TemplateFileService;
 import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
@@ -55,10 +54,10 @@ public final class TemplateController {
         final Map<Integer, Map<Integer, List<Passenger>>> allDriverTransportsFromTemplate = this.transportService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
         model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
 
-        final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableForDate(templateId);
+        final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableDatesForTemplate(templateId);
         model.addAttribute("driversAvailableForDate", driversAvailableForDate);
 
-        final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAvailableForDate(templateId);
+        final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesForTemplate(templateId);
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
 
         return "templateCRUD";

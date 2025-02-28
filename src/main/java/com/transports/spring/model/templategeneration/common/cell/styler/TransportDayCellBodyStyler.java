@@ -26,6 +26,7 @@ public class TransportDayCellBodyStyler {
         final XSSFCellStyle cellStyle = excel.createCellStyle();
         final XSSFFont cellFont = getFont(excel);
         cellStyle.setFont(cellFont);
+        cellStyle.setWrapText(true);
         cellStyle.setFillForegroundColor(TransportDayCellStyler.LIGHT_BLUE_BACKGROUND_COLOR);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setIndention((short) 1);

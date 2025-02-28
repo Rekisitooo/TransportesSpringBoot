@@ -1,16 +1,14 @@
 package com.transports.spring.dto.generatefiles;
 
-import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
-import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
+import com.transports.spring.model.TransportDateByTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.nio.file.Path;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +16,8 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DtoGenerateFile {
-    private Map<Passenger, List<DtoPassengerTransport>> passengerTransports;
-    private Map<Driver, List<DtoDriverTransport>> driverTransports;
-    private Path monthTempDirPath;
-    private Integer templateMonth;
-    private Calendar monthCalendar;
+public class DtoGeneratePassengerFile {
+    private Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports;
+    private Map<LocalDate, TransportDateByTemplate> monthTransportDatesList;
+    private Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap;
 }

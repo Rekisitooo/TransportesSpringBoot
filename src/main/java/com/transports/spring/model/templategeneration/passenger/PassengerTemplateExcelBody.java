@@ -11,7 +11,7 @@ public class PassengerTemplateExcelBody {
         this.passengerExcelBodyGenerator = bodyGenerator;
     }
 
-    protected void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody templateExcelPassengerBody) {
-        this.passengerExcelBodyGenerator.generate(excelSheet, templateExcelPassengerBody);
+    protected void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody dtotemplateExcelPassengerBody) {
+        this.passengerExcelBodyGenerator.generate(excelSheet, dtotemplateExcelPassengerBody);
     }
 }

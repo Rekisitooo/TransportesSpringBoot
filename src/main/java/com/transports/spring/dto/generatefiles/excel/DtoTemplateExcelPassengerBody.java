@@ -7,13 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class DtoTemplateExcelPassengerBody {
-    private List<TransportDateByTemplate> monthTransportDates;
-    private List<DtoPassengerTransport> allTemplateInvolvedTransports;
+    private List<LocalDate> passengerAssistanceDateList;
+    private Map<LocalDate, TransportDateByTemplate> monthTransportDateByDayMap;
+    private Map<LocalDate, DtoPassengerTransport> allTemplatePassengerTransportsByDayMap;
 }

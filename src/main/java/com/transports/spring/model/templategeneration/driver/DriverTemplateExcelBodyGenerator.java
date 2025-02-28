@@ -9,25 +9,23 @@ import org.apache.poi.xssf.usermodel.*;
 
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyGenerator {
 
-    public DriverTemplateExcelBodyGenerator(final Calendar templateMonthCalendar) {
-        super(templateMonthCalendar);
+    public DriverTemplateExcelBodyGenerator(final Calendar templateMonthCalendar, final LocalDate templateDate) {
+        super(templateMonthCalendar, templateDate);
     }
 
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelDriverBody dtoDriverBody) {
-        final Map<Integer, DtoDriverTransport> transportForDayMap = getTransportForDayMap(dtoDriverBody);
+        final Map<LocalDate, DtoDriverTransport> driverTransportForDayMap = dtoDriverBody.getDriverTransportForDayMap();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
             final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
 
-            final DtoDriverTransport driverTransport = transportForDayMap.get(currentDayOfMonth);
-            if (driverTransport == null) {
+            final DtoDriverTransport driverTransport = driverTransportForDayMap.get(super.templateDate);
+            if (isDriverInvolvedInTransportInActualDate(driverTransport)) {
                 final DefaultTemplateExcelDayCellGroup dayCellGroup = new DefaultTemplateExcelDayCellGroup();
                 dayCellGroup.generate(dtoTemplateExcelTransportCellGroup);
             } else {
@@ -41,19 +39,11 @@ public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyG
             }
 
             this.currentCol += 2;
+            super.templateDate = super.templateDate.plusDays(1);
         }
     }
 
-    private static Map<Integer, DtoDriverTransport> getTransportForDayMap(DtoTemplateExcelDriverBody templateExcelDriverBody) {
-        final Map<Integer, DtoDriverTransport> transportForDayMap = new HashMap<>();
-
-        final List<DtoDriverTransport> allTemplateDriverTransports = templateExcelDriverBody.getAllTemplateDriverTransports();
-        for (final DtoDriverTransport dtoDriverTransport : allTemplateDriverTransports) {
-            final String transportDateString = dtoDriverTransport.getTransportDate();
-            final LocalDate transportDate = LocalDate.parse(transportDateString);
-
-            transportForDayMap.put(transportDate.getDayOfMonth(), dtoDriverTransport);
-        }
-        return transportForDayMap;
+    private static boolean isDriverInvolvedInTransportInActualDate(DtoDriverTransport driverTransport) {
+        return driverTransport == null;
     }
 }

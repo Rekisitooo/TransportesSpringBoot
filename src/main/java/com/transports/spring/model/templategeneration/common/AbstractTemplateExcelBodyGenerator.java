@@ -3,6 +3,7 @@ package com.transports.spring.model.templategeneration.common;
 import lombok.Setter;
 import org.apache.poi.xssf.usermodel.*;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,13 +25,15 @@ public abstract class AbstractTemplateExcelBodyGenerator {
         { Calendar.SUNDAY, SUNDAY_COL_INDEX }
     }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
+    protected LocalDate templateDate;
     protected Calendar templateMonthCalendar;
     protected Integer currentCol;
     protected int currentRow;
     protected final Integer lastMonthDay;
 
-    protected AbstractTemplateExcelBodyGenerator(final Calendar templateMonthCalendar) {
+    protected AbstractTemplateExcelBodyGenerator(final Calendar templateMonthCalendar, final LocalDate templateDate) {
         this.templateMonthCalendar = templateMonthCalendar;
+        this.templateDate = templateDate;
         this.currentCol = COLUMN_INDEX_FOR_DAY_OF_WEEK.get(templateMonthCalendar.get(Calendar.DAY_OF_WEEK));
         if (this.currentCol < MONDAY_COL_INDEX) {
             this.currentCol = SUNDAY_COL_INDEX;

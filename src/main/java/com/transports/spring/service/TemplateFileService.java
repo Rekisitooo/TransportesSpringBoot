@@ -2,7 +2,9 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.generatefiles.DtoGenerateDriverFile;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
+import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.model.*;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
@@ -12,6 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -25,16 +28,18 @@ public final class TemplateFileService {
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TemplateFileGenerator templateFileGenerator;
     private final TransportDateByTemplateService transportDateByTemplateService;
+    private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
 
     private static final Object CONCURRENCY_LOCKER = new Object();
 
-    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService) {
+    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
         this.monthService = monthService;
         this.templateService = templateService;
         this.transportService = transportService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.templateFileGenerator = templateFileGenerator;
         this.transportDateByTemplateService = transportDateByTemplateService;
+        this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
     }
 
     public void generateFiles(final int templateId) throws IOException {
@@ -42,14 +47,20 @@ public final class TemplateFileService {
             final Template template = this.templateService.findById(templateId);
             final int templateYear = getIntFromString(template.getYear());
             final int templateMonth = getIntFromString(template.getMonth());
-            final String monthName = getTemplateMonthName(templateMonth);
-
-            final Map<Passenger, List<DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
-            final List<TransportDateByTemplate> templateMonthDateList = transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-            final Map<Driver, List<DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
+            final String monthName = this.getTemplateMonthName(templateMonth);
             final Path monthTempDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
 
-            this.templateFileGenerator.generateFiles(new DtoGenerateFile(passengerTransports, driverTransports), new DtoTemplateExcelHeader(monthName, templateYear), templateMonth, monthTempDirPath, templateMonthDateList);
+            final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
+            final Map<LocalDate, TransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
+            final Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
+
+            final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
+
+            final DtoGeneratePassengerFile dtoGeneratePassengerFile = new DtoGeneratePassengerFile(passengerTransports, templateMonthDateByDayMap, allPassengersAssistanceDatesMap);
+            final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports);
+            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, monthTempDirPath, templateMonth, Calendar.getInstance());
+            final DtoTemplateExcelHeader dtoHeader = new DtoTemplateExcelHeader(monthName, templateYear);
+            this.templateFileGenerator.generateFiles(dtoGenerateFile, dtoHeader);
         }
     }
 
@@ -62,28 +73,41 @@ public final class TemplateFileService {
         return Integer.parseInt(convetToString);
     }
 
-    private Map<Passenger, List<DtoPassengerTransport>> getPassengerTransports(int templateId) {
-        final Map<Passenger, List<DtoPassengerTransport>> passengerTransportsFromTemplateMap = new HashMap<>();
+    private Map<Passenger, Map<LocalDate, DtoPassengerTransport>> getPassengerTransports(final int templateId) {
+        final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransportsFromTemplateMap = new LinkedHashMap<>();
 
         final List<Passenger> allPassengersFromTemplate = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : allPassengersFromTemplate) {
             final List<DtoPassengerTransport> passengerTransportsFromTemplate = this.transportService.findPassengerTransportsFromTemplate(passenger.getId(), templateId);
             if (!passengerTransportsFromTemplate.isEmpty()) {
-                passengerTransportsFromTemplateMap.put(passenger, passengerTransportsFromTemplate);
+
+                final Map<LocalDate, DtoPassengerTransport> passengerTransportByDateMap = new LinkedHashMap<>();
+                for (final DtoPassengerTransport dtoPassengerTransport : passengerTransportsFromTemplate) {
+                    final LocalDate transportDate = LocalDate.parse(dtoPassengerTransport.getTransportDate());
+                    passengerTransportByDateMap.put(transportDate, dtoPassengerTransport);
+                }
+                passengerTransportsFromTemplateMap.put(passenger, passengerTransportByDateMap);
             }
         }
 
         return passengerTransportsFromTemplateMap;
     }
 
-    private Map<Driver, List<DtoDriverTransport>> getDriverTransports(final int templateId) {
-        final Map<Driver, List<DtoDriverTransport>> driverTransportsFromTemplateMap = new HashMap<>();
+    private Map<Driver, Map<LocalDate, DtoDriverTransport>> getDriverTransports(final int templateId) {
+        final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransportsFromTemplateMap = new LinkedHashMap<>();
         final List<Driver> allDriversFromTemplate = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
+
         for (final Driver driver : allDriversFromTemplate) {
+            final Map<LocalDate, DtoDriverTransport> driverTransportsByDateMap = new LinkedHashMap<>();
             final List<DtoDriverTransport> driverTransportsFromTemplate = this.transportService.findDriverTransportsFromTemplate(driver.getId(), templateId);
-            if (!driverTransportsFromTemplate.isEmpty()) {
-                driverTransportsFromTemplateMap.put(driver, driverTransportsFromTemplate);
+
+            for (final DtoDriverTransport dtoDriverTransport : driverTransportsFromTemplate) {
+                final String transportDate = dtoDriverTransport.getTransportDate();
+                final LocalDate transportLocalDate = LocalDate.parse(transportDate);
+                driverTransportsByDateMap.put(transportLocalDate, dtoDriverTransport);
             }
+
+            driverTransportsFromTemplateMap.put(driver, driverTransportsByDateMap);
         }
 
         return driverTransportsFromTemplateMap;

@@ -2,9 +2,10 @@ package com.transports.spring.service;
 
 import com.transports.spring.model.*;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
-import com.transports.spring.repository.ITransportDateByTemplateRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,17 +15,21 @@ import java.util.Map;
 public class InvolvedAvailabiltyForTransportDateService {
 
     private final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository;
+    private final TransportDateByTemplateService transportDateByTemplateService;
+    private final InvolvedByTemplateService involvedByTemplateService;
 
-    public InvolvedAvailabiltyForTransportDateService(final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository) {
+    public InvolvedAvailabiltyForTransportDateService(final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository, TransportDateByTemplateService transportDateByTemplateService, InvolvedByTemplateService involvedByTemplateService) {
         this.involvedAvailabiltyForTransportDateRepository = involvedAvailabiltyForTransportDateRepository;
+        this.transportDateByTemplateService = transportDateByTemplateService;
+        this.involvedByTemplateService = involvedByTemplateService;
     }
 
     /**
      * @param templateId
      * @return Map<DateId, List<Passenger (id, completeName)>>
      */
-    public Map<Integer, List<Passenger>> findAllPassengersAvailableForDate(final int templateId) {
-        final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengersAvailableForDate(templateId);
+    public Map<Integer, List<Passenger>> findAllPassengersAssistanceDatesForTemplate(final int templateId) {
+        final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengersAssistanceDatesForTemplate(templateId);
         final Map<Integer, List<Passenger>> availablePassengersForDateMap = new HashMap<>();
 
         for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
@@ -46,10 +51,36 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
+     * @return Map<PassengerId, List<Passenger (id, completeName)>>
+     */
+    public Map<Integer, List<LocalDate>> findAllPassengersAssistanceDates(final int templateId) {
+        final Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap = new HashMap<>();
+
+        final List<Passenger> passengerList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
+        for (final Passenger passenger : passengerList) {
+            final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
+            final List<LocalDate> passengersAssistanceDates = new ArrayList<>();
+
+            for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
+                final int transportDateId = transportByTemplate.getTransportDateCode();
+                final TransportDateByTemplate taransportDate = this.transportDateByTemplateService.findById(transportDateId);
+                final String transportDate = taransportDate.getTransportDate();
+                final LocalDate transportLocalDate = LocalDate.parse(transportDate);
+                passengersAssistanceDates.add(transportLocalDate);
+            }
+
+            allPassengersAssistanceDatesMap.put(passenger.getId(), passengersAssistanceDates);
+        }
+
+        return allPassengersAssistanceDatesMap;
+    }
+
+    /**
+     * @param templateId
      * @return Map<DateId, Driver (id, completeName)>
      */
-    public Map<Integer, List<Driver>> findAllDriversAvailableForDate(final int templateId) {
-        final List<InvolvedAvailabiltyForTransportDate> availableDriversForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAvailableForDate(templateId);
+    public Map<Integer, List<Driver>> findAllDriversAvailableDatesForTemplate(final int templateId) {
+        final List<InvolvedAvailabiltyForTransportDate> availableDriversForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAvailableDatesForTemplate(templateId);
         final Map<Integer, List<Driver>> availableDriversForDateMap = new HashMap<>();
 
         for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availableDriversForDate) {
