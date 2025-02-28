@@ -40,7 +40,7 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
                     dtoTemplateExcelTransportCellGroup.setBodyText("No hay conductores disponibles.");
                 } else {
                     dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + passengerTransport.getEventName());
-                    dtoTemplateExcelTransportCellGroup.setBodyText("Te lleva:");
+                    dtoTemplateExcelTransportCellGroup.setHeaderText("Te lleva:");
                     dtoTemplateExcelTransportCellGroup.setBodyText(passengerTransport.getDriverFullName());
                 }
 

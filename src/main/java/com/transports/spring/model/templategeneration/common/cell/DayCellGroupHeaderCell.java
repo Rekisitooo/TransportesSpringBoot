@@ -11,8 +11,8 @@ public class DayCellGroupHeaderCell extends AbstractDayCellGroupCell {
     }
 
     public void generate(final XSSFSheet excelSheet, final int currentRow, final int currentCol, final String currentDayOfMonth) {
-        final XSSFCellStyle defaultCellStyle = TransportDayCellHeaderStyler.getCellStyle(excelSheet.getWorkbook());
-        super.generate(excelSheet, currentRow, currentCol, currentDayOfMonth, defaultCellStyle);
+        final XSSFCellStyle cellStyle = TransportDayCellHeaderStyler.getCellStyle(excelSheet.getWorkbook());
+        super.generate(excelSheet, currentRow, currentCol, currentDayOfMonth, cellStyle);
     }
 
 }

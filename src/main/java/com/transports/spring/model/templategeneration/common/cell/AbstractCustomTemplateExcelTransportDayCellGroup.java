@@ -21,7 +21,7 @@ public abstract class AbstractCustomTemplateExcelTransportDayCellGroup {
         final Integer column = cellGroupDto.getExcelCol();
 
         this.dayCellGroupNumberCell.generate(excelSheet, row, column, cellGroupDto.getCellNumberText());
-        this.dayCellGroupHeaderCell.generate(excelSheet, row + 1, column, cellGroupDto.getCellNumberText());
+        this.dayCellGroupHeaderCell.generate(excelSheet, row + 1, column, cellGroupDto.getHeaderText());
         this.dayCellGroupBodyCell.generate(excelSheet, row + 2, column, cellGroupDto.getBodyText());
     }
 }

@@ -33,7 +33,7 @@ public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyG
             } else {
                 final String eventName = driverTransport.getEventName();
                 dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + eventName);
-                dtoTemplateExcelTransportCellGroup.setCellNumberText("Llevas a:");
+                dtoTemplateExcelTransportCellGroup.setHeaderText("Llevas a:");
                 dtoTemplateExcelTransportCellGroup.setBodyText(driverTransport.getPassengerFullNames());
 
                 final DriverCustomTemplateExcelTransportDayCellGroup transportDayCell = new DriverCustomTemplateExcelTransportDayCellGroup();

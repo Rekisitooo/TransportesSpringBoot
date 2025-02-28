@@ -15,6 +15,7 @@ public class DtoTemplateExcelTransportCellGroup {
     private Integer excelRow;
     private XSSFSheet excelSheet;
     private String cellNumberText;
+    private String headerText;
     private String bodyText;
 
     public DtoTemplateExcelTransportCellGroup(Integer excelCol, Integer excelRow, XSSFSheet excelSheet, String cellNumberText) {
