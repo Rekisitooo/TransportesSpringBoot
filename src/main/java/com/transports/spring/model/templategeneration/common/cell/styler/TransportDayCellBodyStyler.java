@@ -16,7 +16,6 @@ public class TransportDayCellBodyStyler {
 
     public static XSSFFont getFont(final XSSFWorkbook excel) {
         final XSSFFont cellFont = excel.createFont();
-        cellFont.setColor(IndexedColors.DARK_BLUE.getIndex());
         cellFont.setBold(false);
         cellFont.setFontName(APTOS_NARROW_FONT);
 
