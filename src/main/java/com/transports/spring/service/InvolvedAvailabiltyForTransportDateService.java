@@ -1,5 +1,6 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.model.*;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
 import org.springframework.cglib.core.Local;
@@ -51,22 +52,24 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<PassengerId, List<Passenger (id, completeName)>>
+     * @return Map<PassengerId, List<LocalDate>>
      */
-    public Map<Integer, List<LocalDate>> findAllPassengersAssistanceDates(final int templateId) {
-        final Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap = new HashMap<>();
+    public Map<Integer, List<DtoTemplateDay>> findAllPassengersAssistanceDates(final int templateId) {
+        final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = new HashMap<>();
 
         final List<Passenger> passengerList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : passengerList) {
             final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
-            final List<LocalDate> passengersAssistanceDates = new ArrayList<>();
+            final List<DtoTemplateDay> passengersAssistanceDates = new ArrayList<>();
 
             for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
                 final int transportDateId = transportByTemplate.getTransportDateCode();
                 final TransportDateByTemplate taransportDate = this.transportDateByTemplateService.findById(transportDateId);
                 final String transportDate = taransportDate.getTransportDate();
                 final LocalDate transportLocalDate = LocalDate.parse(transportDate);
-                passengersAssistanceDates.add(transportLocalDate);
+                final String eventName = taransportDate.getEventName();
+
+                passengersAssistanceDates.add(new DtoTemplateDay(transportLocalDate, eventName));
             }
 
             allPassengersAssistanceDatesMap.put(passenger.getId(), passengersAssistanceDates);

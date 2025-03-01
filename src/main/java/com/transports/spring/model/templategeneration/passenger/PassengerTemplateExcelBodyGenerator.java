@@ -1,6 +1,7 @@
 package com.transports.spring.model.templategeneration.passenger;
 
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
 import com.transports.spring.model.TransportDateByTemplate;
@@ -22,7 +23,7 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody dtoPassengerBody) {
         final Map<LocalDate, DtoPassengerTransport> passengerTransportDateMap = dtoPassengerBody.getAllTemplatePassengerTransportsByDayMap();
         final Map<LocalDate, TransportDateByTemplate> dateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
-        final List<LocalDate> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
+        final List<DtoTemplateDay> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
@@ -40,9 +41,11 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
                     generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup);
 
                 } else {
-                    if (isPassengerAssistingOnActualDate(passengerAssistanceDates)){
-                        dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + passengerTransport.getEventName());
+                    final String dateEventName = getAssistanceDateEventName(passengerAssistanceDates);
+                    if (isPassengerAssistingOnActualDate(dateEventName)){
+                        dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
                         dtoTemplateExcelTransportCellGroup.setBodyText("No hay conductores disponibles.");
+
                         generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup);
                     } else {
                         generateDefaultTemplateExcelDayGroup(dtoTemplateExcelTransportCellGroup);
@@ -57,30 +60,35 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
         }
     }
 
-    private static void generateCustomTemplateExcelTransportDayCellGroup(DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup) {
+    private static void generateCustomTemplateExcelTransportDayCellGroup(final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup) {
         final DriverCustomTemplateExcelTransportDayCellGroup transportDayCell = new DriverCustomTemplateExcelTransportDayCellGroup();
         transportDayCell.generate(dtoTemplateExcelTransportCellGroup);
     }
 
-    private static void generateDefaultTemplateExcelDayGroup(DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup) {
+    private static void generateDefaultTemplateExcelDayGroup(final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup) {
         final DefaultTemplateExcelDayCellGroup dayCellGroup = new DefaultTemplateExcelDayCellGroup();
         dayCellGroup.generate(dtoTemplateExcelTransportCellGroup);
     }
 
-    private boolean isPassengerAssistingOnActualDate(List<LocalDate> passengerAssistanceDates) {
-        boolean isPassengerAssistingOnActualDate = false;
-        for (final LocalDate passengerAssistanceDate : passengerAssistanceDates) {
-            if (passengerAssistanceDate.isEqual(super.templateDate)) {
-                isPassengerAssistingOnActualDate = true;
+    private String getAssistanceDateEventName(final List<DtoTemplateDay> passengerAssistanceDates) {
+        String eventName = "";
+        for (final DtoTemplateDay dtoPassengerAssistanceDate : passengerAssistanceDates) {
+            final LocalDate assistanceDateDate = dtoPassengerAssistanceDate.getDate();
+            if (assistanceDateDate.isEqual(super.templateDate)) {
+                eventName = dtoPassengerAssistanceDate.getEventName();
                 break;
             }
         }
 
-        return isPassengerAssistingOnActualDate;
+        return eventName;
     }
 
-    private static boolean isPassengerArrangedInTransportInActualDate(DtoPassengerTransport passengerTransport) {
+    private static boolean isPassengerArrangedInTransportInActualDate(final DtoPassengerTransport passengerTransport) {
         return passengerTransport != null;
+    }
+
+    private static boolean isPassengerAssistingOnActualDate(final String eventName) {
+        return !"".equals(eventName);
     }
 
     private static boolean isActualDateTransportDate(TransportDateByTemplate templateTransportDate) {

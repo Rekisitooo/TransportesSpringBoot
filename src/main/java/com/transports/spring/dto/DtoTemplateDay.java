@@ -17,4 +17,9 @@ public class DtoTemplateDay {
     private LocalDate date;
     private String eventName;
     private List<AbstractInvolved> involvedList;
+
+    public DtoTemplateDay(LocalDate date, String eventName) {
+        this.date = date;
+        this.eventName = eventName;
+    }
 }

@@ -2,6 +2,7 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.DtoGenerateDriverFile;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
@@ -52,7 +53,7 @@ public final class TemplateFileService {
 
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<LocalDate, TransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
-            final Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
+            final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
 
             final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 

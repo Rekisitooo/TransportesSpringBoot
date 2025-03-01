@@ -1,6 +1,7 @@
 package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
@@ -47,8 +48,8 @@ public final class PassengerTemplateFileGenerator {
     }
 
     private static DtoTemplateExcelPassengerBody getDtoTemplateExcelPassengerBody(DtoGeneratePassengerFile dtoGeneratePassengerFile, Passenger passenger, Map<LocalDate, DtoPassengerTransport> passengerTransportsByDayMap) {
-        final Map<Integer, List<LocalDate>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
-        final List<LocalDate> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
+        final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
+        final List<DtoTemplateDay> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
         final Map<LocalDate, TransportDateByTemplate> monthTransportDatesList = dtoGeneratePassengerFile.getMonthTransportDatesList();
 
         return new DtoTemplateExcelPassengerBody(passengerAssistanceDatesMap, monthTransportDatesList, passengerTransportsByDayMap);

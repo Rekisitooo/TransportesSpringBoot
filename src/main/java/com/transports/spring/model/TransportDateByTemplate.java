@@ -27,14 +27,10 @@ public final class TransportDateByTemplate {
     @Column(name = "NOMBRE_EVENTO")
     private String eventName;
 
-    private String dayOfTheWeekName;
-
-    public TransportDateByTemplate(int id, int templateCode, String transportDate, int dayOfTheWeekCode, String dayOfTheWeekName) {
+    public TransportDateByTemplate(int id, int templateCode, String transportDate, int dayOfTheWeekCode) {
         this.id = id;
         this.templateCode = templateCode;
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;
-        this.eventName = eventName;
-        this.dayOfTheWeekName = dayOfTheWeekName;
     }
 }
