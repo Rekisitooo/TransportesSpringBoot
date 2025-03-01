@@ -15,13 +15,13 @@ import java.nio.file.StandardCopyOption;
 public abstract class AbstractTemplateExcel {
 
     protected static final String CALENDAR_NAME_FILE = "calendar";
-    protected static final String XSL_EXTENSION = ".xlsx";
-    protected static final String ORIGINAL_CALENDAR_FILE_STRING = CALENDAR_NAME_FILE + XSL_EXTENSION;
+    protected static final String XSLX_EXTENSION = ".xlsx";
+    protected static final String ORIGINAL_CALENDAR_FILE_STRING = CALENDAR_NAME_FILE + XSLX_EXTENSION;
 
     public static final Path ORIGINAL_CALENDAR_PATH = Paths.get(ORIGINAL_CALENDAR_FILE_STRING);
     public static final File ORIGINAL_CALENDAR_FILE = ORIGINAL_CALENDAR_PATH.getFileName().toFile();
 
-    protected static final int START_ROW_DAYS = 1;
+    protected static final int START_ROW_DAYS = 0;
 
     protected final AbstractTemplateExcelHeader templateExcelHeader;
     protected final XSSFWorkbook newExcel;
@@ -52,7 +52,7 @@ public abstract class AbstractTemplateExcel {
      * @throws IOException if an I/O error occurs
      */
     protected static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
-        final Path tempFile = Files.createTempFile(involvedFullName, ".xlsx");
+        final Path tempFile = Files.createTempFile(involvedFullName, XSLX_EXTENSION);
         Files.copy(ORIGINAL_CALENDAR_PATH, tempFile, StandardCopyOption.REPLACE_EXISTING);
         //Files.copy(tempFile, );
 

@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.*;
 
 public abstract class AbstractTemplateExcelHeader {
 
+    public static final int HEADER_COL = 0;
     protected XSSFRow row;
     protected XSSFCell cell;
 
@@ -23,7 +24,7 @@ public abstract class AbstractTemplateExcelHeader {
 
     protected AbstractTemplateExcelHeader init(final XSSFSheet excelSheet, final int currentRow) {
         this.row = excelSheet.getRow(currentRow);
-        this.cell = this.row.getCell(2);
+        this.cell = this.row.getCell(HEADER_COL);
         return this;
     }
 }

@@ -12,16 +12,17 @@ import java.util.stream.Stream;
 @Setter
 public abstract class AbstractTemplateExcelBodyGenerator {
 
-    protected static final int SUNDAY_COL_INDEX = 14;
-    protected static final int MONDAY_COL_INDEX = 2;
-    protected static final int START_ROW_DAYS = 4;
+    protected static final int DAY_CELL_GROUP_LENGTH_COLS = 2;
+    protected static final int START_ROW_DAYS = 3;
+    protected static final int MONDAY_COL_INDEX = 0;
+    protected static final int SUNDAY_COL_INDEX = MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 6);
     protected static final Map<Integer, Integer> COLUMN_INDEX_FOR_DAY_OF_WEEK = Stream.of(new Integer[][] {
         { Calendar.MONDAY, MONDAY_COL_INDEX },
-        { Calendar.TUESDAY, 4 },
-        { Calendar.WEDNESDAY, 6 },
-        { Calendar.THURSDAY, 8 },
-        { Calendar.FRIDAY, 10 },
-        { Calendar.SATURDAY, 12 },
+        { Calendar.TUESDAY, (MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 1)) },
+        { Calendar.WEDNESDAY, (MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 2)) },
+        { Calendar.THURSDAY, (MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 3)) },
+        { Calendar.FRIDAY, (MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 4)) },
+        { Calendar.SATURDAY, (MONDAY_COL_INDEX + (DAY_CELL_GROUP_LENGTH_COLS * 5)) },
         { Calendar.SUNDAY, SUNDAY_COL_INDEX }
     }).collect(Collectors.toMap(data -> data[0], data -> data[1]));
 
