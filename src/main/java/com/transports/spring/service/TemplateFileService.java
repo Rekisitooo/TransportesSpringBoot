@@ -3,10 +3,13 @@ package com.transports.spring.service;
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.dto.generatefiles.DtoGenerateDriverFile;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
+import com.transports.spring.exception.GenerateJpgFromExcelException;
+import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.*;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
 import org.springframework.stereotype.Service;
@@ -43,7 +46,7 @@ public final class TemplateFileService {
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
     }
 
-    public void generateFiles(final int templateId) throws IOException {
+    public void generateFiles(final int templateId) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
         synchronized (CONCURRENCY_LOCKER) {
             final Template template = this.templateService.findById(templateId);
             final int templateYear = getIntFromString(template.getYear());
@@ -52,7 +55,7 @@ public final class TemplateFileService {
             final Path monthTempDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
 
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
-            final Map<LocalDate, TransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
+            final Map<LocalDate, DtoTransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
             final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
 
             final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);

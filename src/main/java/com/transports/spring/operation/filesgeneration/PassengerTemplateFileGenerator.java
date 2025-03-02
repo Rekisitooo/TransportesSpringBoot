@@ -2,12 +2,15 @@ package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
+import com.transports.spring.dto.generatefiles.DtoTemplateFileDir;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
+import com.transports.spring.exception.GenerateJpgFromExcelException;
+import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.Passenger;
-import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.model.templategeneration.passenger.PassengerTemplateFile;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
@@ -27,7 +30,7 @@ public final class PassengerTemplateFileGenerator {
         this.beanFactory = beanFactory;
     }
 
-    public void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader) throws IOException {
+    public void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
         final DtoGeneratePassengerFile dtoGeneratePassengerFile = dtoGenerateFile.getDtoGeneratePassengerFile();
         final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = dtoGeneratePassengerFile.getPassengerTransports();
 
@@ -43,14 +46,15 @@ public final class PassengerTemplateFileGenerator {
                     "getPassengerTemplateFile", monthCalendar, templateYear, templateMonth);
 
             final DtoTemplateExcelPassengerBody dtoTemplateExcelPassengerBody = getDtoTemplateExcelPassengerBody(dtoGeneratePassengerFile, passenger, passengerTransportsByDayMap);
-            passengerTemplateFile.generate(dtoTemplateExcelPassengerBody, dtoHeader);
+            final DtoTemplateFileDir dtoTemplateFileDir = dtoGenerateFile.getDtoTemplateFileDir();
+            passengerTemplateFile.generate(dtoTemplateExcelPassengerBody, dtoHeader, dtoTemplateFileDir);
         }
     }
 
     private static DtoTemplateExcelPassengerBody getDtoTemplateExcelPassengerBody(DtoGeneratePassengerFile dtoGeneratePassengerFile, Passenger passenger, Map<LocalDate, DtoPassengerTransport> passengerTransportsByDayMap) {
         final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
         final List<DtoTemplateDay> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
-        final Map<LocalDate, TransportDateByTemplate> monthTransportDatesList = dtoGeneratePassengerFile.getMonthTransportDatesList();
+        final Map<LocalDate, DtoTransportDateByTemplate> monthTransportDatesList = dtoGeneratePassengerFile.getMonthTransportDatesList();
 
         return new DtoTemplateExcelPassengerBody(passengerAssistanceDatesMap, monthTransportDatesList, passengerTransportsByDayMap);
     }

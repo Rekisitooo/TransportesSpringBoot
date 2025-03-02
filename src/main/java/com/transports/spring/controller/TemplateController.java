@@ -1,5 +1,8 @@
 package com.transports.spring.controller;
 
+import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.exception.GenerateJpgFromExcelException;
+import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.*;
 import com.transports.spring.service.TemplateFileService;
 import com.transports.spring.service.*;
@@ -45,7 +48,7 @@ public final class TemplateController {
         final List<Driver> driversFromTemplateList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
         model.addAttribute("driversFromTemplateList", driversFromTemplateList);
 
-        final List<TransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        final List<DtoTransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
         final Map<Integer, Map<Integer, Transport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
@@ -67,7 +70,7 @@ public final class TemplateController {
     public String generate(final Model model, @RequestParam(value = "id") final int templateId) {
         try {
             this.templateFileService.generateFiles(templateId);
-        } catch (final IOException e) {
+        } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
             //TODO print an error
         }
 

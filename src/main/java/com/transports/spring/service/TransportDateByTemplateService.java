@@ -1,5 +1,6 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
 import org.springframework.stereotype.Service;
@@ -16,19 +17,19 @@ public class TransportDateByTemplateService {
         this.transportDateByTemplateRepository = transportDateByTemplateRepository;
     }
 
-    public List<TransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
+    public List<DtoTransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
         return this.transportDateByTemplateRepository.findAllMonthDatesByTemplateId(templateId);
     }
 
-    public Map<LocalDate, TransportDateByTemplate> getTransportDateByDayMap(final int templateId) {
-        final List<TransportDateByTemplate> monthTransportDates = this.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-        final Map<LocalDate, TransportDateByTemplate> transportDateMap = new LinkedHashMap<>();
+    public Map<LocalDate, DtoTransportDateByTemplate> getTransportDateByDayMap(final int templateId) {
+        final List<DtoTransportDateByTemplate> monthTransportDates = this.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        final Map<LocalDate, DtoTransportDateByTemplate> transportDateMap = new LinkedHashMap<>();
 
-        for (final TransportDateByTemplate transportDateByTemplate : monthTransportDates) {
-            final String transportDateString = transportDateByTemplate.getTransportDate();
+        for (final DtoTransportDateByTemplate dtoTransportDateByTemplate : monthTransportDates) {
+            final String transportDateString = dtoTransportDateByTemplate.getTransportDate();
             final LocalDate transportDate = LocalDate.parse(transportDateString);
 
-            transportDateMap.put(transportDate, transportDateByTemplate);
+            transportDateMap.put(transportDate, dtoTransportDateByTemplate);
         }
         return transportDateMap;
     }

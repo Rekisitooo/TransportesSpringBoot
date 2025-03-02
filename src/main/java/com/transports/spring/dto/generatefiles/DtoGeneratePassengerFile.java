@@ -2,8 +2,8 @@ package com.transports.spring.dto.generatefiles;
 
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.model.Passenger;
-import com.transports.spring.model.TransportDateByTemplate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +19,6 @@ import java.util.Map;
 @Builder
 public class DtoGeneratePassengerFile {
     private Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports;
-    private Map<LocalDate, TransportDateByTemplate> monthTransportDatesList;
+    private Map<LocalDate, DtoTransportDateByTemplate> monthTransportDatesList;
     private Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap;
 }

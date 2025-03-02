@@ -36,8 +36,7 @@ public abstract class AbstractTemplateExcel {
         this.templateExcelHeader = templateExcelHeader.init(this.sheet, START_ROW_DAYS);
     }
 
-    protected void writeInExcel(final Path tempPassengerCalendar) throws IOException {
-        final File passengerCalendar = tempPassengerCalendar.getFileName().toFile();
+    protected void writeInExcel(final File passengerCalendar) throws IOException {
         final FileOutputStream fileOutputStream = new FileOutputStream(passengerCalendar);
         this.newExcel.write(fileOutputStream);
         fileOutputStream.close();
@@ -51,10 +50,9 @@ public abstract class AbstractTemplateExcel {
      * @return the path to the newly created temporary file
      * @throws IOException if an I/O error occurs
      */
-    protected static Path createTempInvolvedExcelFromExisting(final String involvedFullName) throws IOException {
+    protected static Path createTempInvolvedExcelFromExisting(final String involvedFullName, final Path excelPath) throws IOException {
         final Path tempFile = Files.createTempFile(involvedFullName, XSLX_EXTENSION);
-        Files.copy(ORIGINAL_CALENDAR_PATH, tempFile, StandardCopyOption.REPLACE_EXISTING);
-        //Files.copy(tempFile, );
+        Files.copy(excelPath, tempFile, StandardCopyOption.REPLACE_EXISTING);
 
         return tempFile;
     }

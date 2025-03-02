@@ -2,9 +2,9 @@ package com.transports.spring.model.templategeneration.passenger;
 
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
-import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.model.templategeneration.common.AbstractTemplateExcelBodyGenerator;
 import com.transports.spring.model.templategeneration.common.cell.DefaultTemplateExcelDayCellGroup;
 
@@ -22,15 +22,15 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
 
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody dtoPassengerBody) {
         final Map<LocalDate, DtoPassengerTransport> passengerTransportDateMap = dtoPassengerBody.getAllTemplatePassengerTransportsByDayMap();
-        final Map<LocalDate, TransportDateByTemplate> dateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
+        final Map<LocalDate, DtoTransportDateByTemplate> dateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
         final List<DtoTemplateDay> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
             final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
 
-            final TransportDateByTemplate templateTransportDate = dateMap.get(super.templateDate);
-            if (isActualDateTransportDate(templateTransportDate)) {
+            final DtoTransportDateByTemplate dtoTransportDateByTemplate = dateMap.get(super.templateDate);
+            if (isActualDateTransportDate(dtoTransportDateByTemplate)) {
 
                 final DtoPassengerTransport passengerTransport = passengerTransportDateMap.get(super.templateDate);
                 if (isPassengerArrangedInTransportInActualDate(passengerTransport)) {
@@ -91,7 +91,7 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
         return !"".equals(eventName);
     }
 
-    private static boolean isActualDateTransportDate(TransportDateByTemplate templateTransportDate) {
+    private static boolean isActualDateTransportDate(final DtoTransportDateByTemplate templateTransportDate) {
         return templateTransportDate != null;
     }
 }

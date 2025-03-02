@@ -39,7 +39,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 			<version>3.4.2</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -81,6 +80,12 @@
 			<artifactId>aspose-imaging</artifactId>
 			<version>24.12</version>
 		</dependency>
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-pdf</artifactId>
+			<version>25.1</version>
+		</dependency>
+
 	</dependencies>
     <repositories>
         <repository>

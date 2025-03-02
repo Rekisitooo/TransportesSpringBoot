@@ -22,7 +22,7 @@ public class ExcelConfig {
         final PassengerTemplateExcelBody passengerTemplateExcelBody = new PassengerTemplateExcelBody(passengerTemplateExcelBodyGenerator);
         final PassengerTemplateExcel passengerTemplateExcel = new PassengerTemplateExcel(passengerTemplateExcelBody);
 
-        return new PassengerTemplateFile(passengerTemplateExcel, new PassengerTemplateJpg());
+        return new PassengerTemplateFile(passengerTemplateExcel);
     }
 
     @Bean
@@ -34,7 +34,7 @@ public class ExcelConfig {
         final DriverTemplateExcelBody driverTemplateExcelBody = new DriverTemplateExcelBody(driverTemplateExcelBodyGenerator);
         final DriverTemplateExcel driverTemplateExcel = new DriverTemplateExcel(driverTemplateExcelBody);
 
-        return new DriverTemplateFile(driverTemplateExcel, new DriverTemplateJpg());
+        return new DriverTemplateFile(driverTemplateExcel);
     }
 
 }
