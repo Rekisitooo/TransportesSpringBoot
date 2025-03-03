@@ -52,7 +52,6 @@ public final class TemplateFileService {
             final int templateYear = getIntFromString(template.getYear());
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = this.getTemplateMonthName(templateMonth);
-            final Path monthTempDirPath = Files.createTempDirectory(templateYear + '_' + monthName + "_transports");
 
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<LocalDate, DtoTransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
@@ -62,7 +61,7 @@ public final class TemplateFileService {
 
             final DtoGeneratePassengerFile dtoGeneratePassengerFile = new DtoGeneratePassengerFile(passengerTransports, templateMonthDateByDayMap, allPassengersAssistanceDatesMap);
             final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports);
-            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, monthTempDirPath, templateMonth, Calendar.getInstance());
+            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance());
             final DtoTemplateExcelHeader dtoHeader = new DtoTemplateExcelHeader(monthName, templateYear);
             this.templateFileGenerator.generateFiles(dtoGenerateFile, dtoHeader);
         }

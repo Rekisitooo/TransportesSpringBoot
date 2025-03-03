@@ -16,6 +16,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +31,16 @@ public final class PassengerTemplateFileGenerator {
         this.beanFactory = beanFactory;
     }
 
-    public void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
+    public void generate(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader, final Path parentTempDir) throws IOException, GenerateJpgFromExcelException, GeneratePdfFromExcelException {
+        final DtoTemplateFileDir dtoTemplateFileDir = generateDirs(parentTempDir);
+        this.generateFiles(dtoGenerateFile, dtoHeader, dtoTemplateFileDir);
+    }
+
+    private static DtoTemplateFileDir generateDirs (final Path parentTempDir) throws IOException {
+        return DirectoryGenerator.generateTempDirectories(parentTempDir, "Viajeros");
+    }
+
+    private void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader, final DtoTemplateFileDir dtoTemplateFileDir) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
         final DtoGeneratePassengerFile dtoGeneratePassengerFile = dtoGenerateFile.getDtoGeneratePassengerFile();
         final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = dtoGeneratePassengerFile.getPassengerTransports();
 
@@ -42,11 +52,10 @@ public final class PassengerTemplateFileGenerator {
             final Integer templateYear = dtoHeader.getTemplateYear();
             final Calendar monthCalendar = dtoGenerateFile.getMonthCalendar();
             final Integer templateMonth = dtoGenerateFile.getTemplateMonth();
-            final PassengerTemplateFile passengerTemplateFile = (PassengerTemplateFile) beanFactory.getBean(
+            final PassengerTemplateFile passengerTemplateFile = (PassengerTemplateFile) this.beanFactory.getBean(
                     "getPassengerTemplateFile", monthCalendar, templateYear, templateMonth);
 
             final DtoTemplateExcelPassengerBody dtoTemplateExcelPassengerBody = getDtoTemplateExcelPassengerBody(dtoGeneratePassengerFile, passenger, passengerTransportsByDayMap);
-            final DtoTemplateFileDir dtoTemplateFileDir = dtoGenerateFile.getDtoTemplateFileDir();
             passengerTemplateFile.generate(dtoTemplateExcelPassengerBody, dtoHeader, dtoTemplateFileDir);
         }
     }

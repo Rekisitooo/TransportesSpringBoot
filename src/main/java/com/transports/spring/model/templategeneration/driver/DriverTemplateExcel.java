@@ -17,14 +17,12 @@ public class DriverTemplateExcel extends AbstractTemplateExcel {
         this.driverTemplateExcelBody = driverTemplateExcelBody;
     }
 
-    public Path generate(final DtoTemplateExcelDriverBody templateExcelDriverBody, final DtoTemplateExcelHeader dtoTemplateExcelHeader, final Path excelPath) throws IOException {
+    public void generate(final DtoTemplateExcelDriverBody templateExcelDriverBody, final DtoTemplateExcelHeader dtoTemplateExcelHeader, final Path excelPath) throws IOException {
         this.templateExcelHeader.generate(dtoTemplateExcelHeader);
         this.driverTemplateExcelBody.generate(this.sheet, templateExcelDriverBody);
 
-        final String driverFullName = dtoTemplateExcelHeader.getInvolvedFullName();
-        final File driverCalendar = new File(excelPath + "/" + driverFullName + ".xlsx");
-        super.writeInExcel(driverCalendar);
-
-        return driverCalendar.toPath();
+        final String fullExcelPath = excelPath.toString();
+        final File driverCalendar = new File(fullExcelPath);
+        super.writeInExcel(fullExcelPath);
     }
 }

@@ -1,5 +1,6 @@
 package com.transports.spring.model.templategeneration.common;
 
+import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -36,8 +37,8 @@ public abstract class AbstractTemplateExcel {
         this.templateExcelHeader = templateExcelHeader.init(this.sheet, START_ROW_DAYS);
     }
 
-    protected void writeInExcel(final File passengerCalendar) throws IOException {
-        final FileOutputStream fileOutputStream = new FileOutputStream(passengerCalendar);
+    protected void writeInExcel(final String fullExcelPath) throws IOException {
+        final FileOutputStream fileOutputStream = new FileOutputStream(fullExcelPath);
         this.newExcel.write(fileOutputStream);
         fileOutputStream.close();
         this.newExcel.close();

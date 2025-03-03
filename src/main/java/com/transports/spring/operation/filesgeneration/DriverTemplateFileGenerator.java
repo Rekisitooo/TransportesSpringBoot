@@ -14,6 +14,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Map;
@@ -27,7 +28,16 @@ public final class DriverTemplateFileGenerator {
         this.beanFactory = beanFactory;
     }
 
-    public void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader) throws IOException, GenerateJpgFromExcelException, GeneratePdfFromExcelException {
+    public void generate(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader, final Path parentTempDir) throws IOException, GenerateJpgFromExcelException, GeneratePdfFromExcelException {
+        final DtoTemplateFileDir dtoTemplateFileDir = generateDirs(parentTempDir);
+        this.generateFiles(dtoGenerateFile, dtoHeader, dtoTemplateFileDir);
+    }
+
+    private static DtoTemplateFileDir generateDirs (final Path parentTempDir) throws IOException {
+        return DirectoryGenerator.generateTempDirectories(parentTempDir, "Conductores");
+    }
+
+    private void generateFiles(final DtoGenerateFile dtoGenerateFile, final DtoTemplateExcelHeader dtoHeader, final DtoTemplateFileDir dtoTemplateFileDir) throws IOException, GenerateJpgFromExcelException, GeneratePdfFromExcelException {
         final DtoGenerateDriverFile dtoGenerateDriverFile = dtoGenerateFile.getDtoGenerateDriverFile();
 
         final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = dtoGenerateDriverFile.getDriverTransports();
@@ -39,9 +49,10 @@ public final class DriverTemplateFileGenerator {
             final Integer templateYear = dtoHeader.getTemplateYear();
             final Calendar monthCalendar = dtoGenerateFile.getMonthCalendar();
             final Integer templateMonth = dtoGenerateFile.getTemplateMonth();
-            final DriverTemplateFile driverTemplateFile = (DriverTemplateFile) beanFactory.getBean("getDriverTemplateFile", monthCalendar, templateYear, templateMonth);
+            final DriverTemplateFile driverTemplateFile = (DriverTemplateFile) this.beanFactory.getBean(
+                    "getDriverTemplateFile", monthCalendar, templateYear, templateMonth);
+
             final DtoTemplateExcelDriverBody templateExcelDriverBody = new DtoTemplateExcelDriverBody(dtoDriverTransportList);
-            final DtoTemplateFileDir dtoTemplateFileDir = dtoGenerateFile.getDtoTemplateFileDir();
             driverTemplateFile.generate(templateExcelDriverBody, dtoHeader, dtoTemplateFileDir);
         }
     }

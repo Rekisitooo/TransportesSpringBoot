@@ -23,9 +23,9 @@ public class PassengerTemplateExcel extends AbstractTemplateExcel {
         this.templateExcelHeader.generate(dtoTemplateExcelHeader);
         this.passengerTemplateExcelBody.generate(this.sheet, templateExcelPassengerBody);
 
-        final String passengerFullName = dtoTemplateExcelHeader.getInvolvedFullName();
-        final File passengerCalendar = new File(excelPath + "/" + passengerFullName + ".xlsx");
-        super.writeInExcel(passengerCalendar);
+        final String fullExcelPath = excelPath.toString();
+        final File passengerCalendar = new File(fullExcelPath);
+        super.writeInExcel(fullExcelPath);
 
         return passengerCalendar.toPath();
     }

@@ -5,6 +5,7 @@ import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
+import com.transports.spring.model.templategeneration.common.AbstractTemplateFile;
 import com.transports.spring.model.templategeneration.common.EnumTemplateFileDirectory;
 import com.transports.spring.model.templategeneration.common.TemplateJpg;
 import com.transports.spring.model.templategeneration.common.TemplatePdf;
@@ -12,7 +13,7 @@ import com.transports.spring.model.templategeneration.common.TemplatePdf;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class PassengerTemplateFile {
+public class PassengerTemplateFile extends AbstractTemplateFile {
 
     private final PassengerTemplateExcel passengerTemplateExcel;
 
@@ -22,15 +23,18 @@ public class PassengerTemplateFile {
     }
 
     public void generate(final DtoTemplateExcelPassengerBody templateExcelPassengerBody, final DtoTemplateExcelHeader dtoHeader, final DtoTemplateFileDir dtoTemplateFileDir) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
-        final String passengerFullName = dtoHeader.getInvolvedFullName();
+        final String fileName = getFileName(dtoHeader);
 
-        Path excelPath = dtoTemplateFileDir.get(EnumTemplateFileDirectory.EXCEL);
-        excelPath = this.passengerTemplateExcel.generate(templateExcelPassengerBody, dtoHeader, excelPath);
+        final Path excelDir = dtoTemplateFileDir.get(EnumTemplateFileDirectory.EXCEL);
+        final Path excelPath = Path.of(excelDir + "/" + fileName + ".xlsx");
+        this.passengerTemplateExcel.generate(templateExcelPassengerBody, dtoHeader, excelPath);
 
-        Path pdfPath = dtoTemplateFileDir.get(EnumTemplateFileDirectory.PDF);
-        pdfPath = TemplatePdf.generate(excelPath, pdfPath, passengerFullName);
+        final Path pdfDir = dtoTemplateFileDir.get(EnumTemplateFileDirectory.PDF);
+        final Path pdfPath = Path.of(pdfDir + "/" + fileName + ".pdf");
+        TemplatePdf.generate(excelPath, pdfPath);
 
-        final Path jpgPath = dtoTemplateFileDir.get(EnumTemplateFileDirectory.JPG);
-        TemplateJpg.generate(pdfPath, jpgPath, passengerFullName);
+        final Path jpgDir = dtoTemplateFileDir.get(EnumTemplateFileDirectory.JPG);
+        final Path jpgPath = Path.of(jpgDir + "/" + fileName + ".jpg");
+        TemplateJpg.generate(pdfPath, jpgPath);
     }
 }

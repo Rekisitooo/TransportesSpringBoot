@@ -9,14 +9,12 @@ public class TemplatePdf {
 
     protected TemplatePdf() {}
 
-    public static Path generate(final Path involvedExcelCalendarPath, final Path pdfPath, final String fileName) throws GeneratePdfFromExcelException {
+    public static void generate(final Path involvedExcelCalendarPath, final Path pdfPath) throws GeneratePdfFromExcelException {
         try {
             final String involvedCalendarPathString = involvedExcelCalendarPath.toString();
-            final String pdfStringPath = pdfPath + "/" + fileName + ".pdf";
+            final String pdfStringPath = pdfPath.toString();
             final Workbook excelCalendar = new Workbook(involvedCalendarPathString);
             excelCalendar.save(pdfStringPath);
-
-            return Path.of(pdfStringPath);
         } catch (final Exception e) {
             throw new GeneratePdfFromExcelException(e);
         }
