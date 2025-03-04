@@ -5,9 +5,9 @@ import com.transports.spring.model.templategeneration.common.cell.DayCellGroupBo
 import com.transports.spring.model.templategeneration.common.cell.DayCellGroupHeaderCell;
 import com.transports.spring.model.templategeneration.common.cell.DayCellGroupNumberCell;
 
-public class DriverCustomTemplateExcelTransportDayCellGroup extends AbstractCustomTemplateExcelTransportDayCellGroup {
+public class CustomTemplateExcelTransportDayCellGroup extends AbstractCustomTemplateExcelTransportDayCellGroup {
 
-    public DriverCustomTemplateExcelTransportDayCellGroup() {
-        super(new DayCellGroupNumberCell(), new DayCellGroupHeaderCell(), new DayCellGroupBodyCell());
+    public CustomTemplateExcelTransportDayCellGroup(DayCellGroupNumberCell dayCellGroupNumberCell, DayCellGroupHeaderCell dayCellGroupHeaderCell, DayCellGroupBodyCell dayCellGroupBodyCell) {
+        super(dayCellGroupNumberCell, dayCellGroupHeaderCell, dayCellGroupBodyCell);
     }
 }
