@@ -9,6 +9,7 @@ import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.Driver;
+import com.transports.spring.model.Event;
 import com.transports.spring.model.templategeneration.driver.DriverTemplateFile;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
@@ -52,7 +53,8 @@ public final class DriverTemplateFileGenerator {
             final DriverTemplateFile driverTemplateFile = (DriverTemplateFile) this.beanFactory.getBean(
                     "getDriverTemplateFile", monthCalendar, templateYear, templateMonth);
 
-            final DtoTemplateExcelDriverBody templateExcelDriverBody = new DtoTemplateExcelDriverBody(dtoDriverTransportList);
+            final Map<LocalDate, Event> dateEventMap = dtoGenerateFile.getDateEventMap();
+            final DtoTemplateExcelDriverBody templateExcelDriverBody = new DtoTemplateExcelDriverBody(dtoDriverTransportList, dateEventMap);
             driverTemplateFile.generate(templateExcelDriverBody, dtoHeader, dtoTemplateFileDir);
         }
     }

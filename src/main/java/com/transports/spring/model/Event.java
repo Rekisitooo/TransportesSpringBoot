@@ -1,7 +1,12 @@
 package com.transports.spring.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
+
+import java.sql.Date;
 
 @Builder
 @AllArgsConstructor
@@ -9,8 +14,8 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "FECHA_TRANSPORTE_POR_PLANTILLA")
-public final class TransportDateByTemplate {
+@Table(name = "EVENTO")
+public final class Event {
 
     @Id
     private int id;
@@ -18,19 +23,10 @@ public final class TransportDateByTemplate {
     @Column(name = "COD_PLANTILLA")
     private int templateCode;
 
-    @Column(name = "FECHA_TRANSPORTE")
-    private String transportDate;
-
-    @Column(name = "COD_DIA_DE_LA_SEMANA")
-    private int dayOfTheWeekCode;
+    @Column(name = "FECHA")
+    private Date date;
 
     @Column(name = "NOMBRE_EVENTO")
     private String eventName;
 
-    public TransportDateByTemplate(int id, int templateCode, String transportDate, int dayOfTheWeekCode) {
-        this.id = id;
-        this.templateCode = templateCode;
-        this.transportDate = transportDate;
-        this.dayOfTheWeekCode = dayOfTheWeekCode;
-    }
 }

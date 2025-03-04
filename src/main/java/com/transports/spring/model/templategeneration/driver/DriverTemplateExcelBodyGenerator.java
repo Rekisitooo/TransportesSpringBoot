@@ -3,8 +3,10 @@ package com.transports.spring.model.templategeneration.driver;
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelDriverBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
+import com.transports.spring.model.Event;
 import com.transports.spring.model.templategeneration.common.AbstractTemplateExcelBodyGenerator;
-import com.transports.spring.model.templategeneration.common.cell.DefaultTemplateExcelDayCellGroup;
+import com.transports.spring.model.templategeneration.common.cell.styler.DefaultDateCellStyler;
+import com.transports.spring.model.templategeneration.common.cell.styler.TransportDateCellStyler;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.time.LocalDate;
@@ -19,6 +21,7 @@ public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyG
 
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelDriverBody dtoDriverBody) {
         final Map<LocalDate, DtoDriverTransport> driverTransportForDayMap = dtoDriverBody.getDriverTransportForDayMap();
+        final Map<LocalDate, Event> dateEventMap = dtoDriverBody.getDateEventMap();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
@@ -26,17 +29,20 @@ public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyG
 
             final DtoDriverTransport driverTransport = driverTransportForDayMap.get(super.templateDate);
             if (isDriverInvolvedInTransportInActualDate(driverTransport)) {
-                final DefaultTemplateExcelDayCellGroup dayCellGroup = new DefaultTemplateExcelDayCellGroup();
-                dayCellGroup.generate(dtoTemplateExcelTransportCellGroup);
+                dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
             } else {
+                final Event event = dateEventMap.get(super.templateDate);
+                if (event == null) {
+                    dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
+                }
                 final String eventName = driverTransport.getEventName();
                 dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + eventName);
                 dtoTemplateExcelTransportCellGroup.setHeaderText("Llevas a:");
                 dtoTemplateExcelTransportCellGroup.setBodyText(driverTransport.getPassengerFullNames());
-
-                final DriverCustomTemplateExcelTransportDayCellGroup transportDayCell = new DriverCustomTemplateExcelTransportDayCellGroup();
-                transportDayCell.generate(dtoTemplateExcelTransportCellGroup);
+                dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
             }
+
+            generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
 
             this.currentCol += 2;
             super.templateDate = super.templateDate.plusDays(1);

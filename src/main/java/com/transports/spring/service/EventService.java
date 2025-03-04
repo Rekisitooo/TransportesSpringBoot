@@ -1,40 +1,33 @@
 package com.transports.spring.service;
 
-import com.transports.spring.dto.DtoTransportDateByTemplate;
-import com.transports.spring.model.TransportDateByTemplate;
-import com.transports.spring.repository.ITransportDateByTemplateRepository;
+import com.transports.spring.model.Event;
+import com.transports.spring.repository.IEventRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class TransportDateByTemplateService {
+public class EventService {
 
-    private final ITransportDateByTemplateRepository transportDateByTemplateRepository;
+    private final IEventRepository eventRepository;
 
-    public TransportDateByTemplateService(final ITransportDateByTemplateRepository transportDateByTemplateRepository) {
-        this.transportDateByTemplateRepository = transportDateByTemplateRepository;
+    public EventService(final IEventRepository eventRepository) {
+        this.eventRepository = eventRepository;
     }
 
-    public List<DtoTransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
-        return this.transportDateByTemplateRepository.findAllMonthDatesByTemplateId(templateId);
-    }
+    public Map<LocalDate, Event> findAllEventsByTemplateId(final int templateId) {
+        final Map<LocalDate, Event> eventMap = new LinkedHashMap<>();
 
-    public Map<LocalDate, DtoTransportDateByTemplate> getTransportDateByDayMap(final int templateId) {
-        final List<DtoTransportDateByTemplate> monthTransportDates = this.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-        final Map<LocalDate, DtoTransportDateByTemplate> transportDateMap = new LinkedHashMap<>();
-
-        for (final DtoTransportDateByTemplate dtoTransportDateByTemplate : monthTransportDates) {
-            final String transportDateString = dtoTransportDateByTemplate.getTransportDate();
-            final LocalDate transportDate = LocalDate.parse(transportDateString);
-
-            transportDateMap.put(transportDate, dtoTransportDateByTemplate);
+        final List<Event> allEventsByTemplateId = this.eventRepository.findAllEventsByTemplateId(templateId);
+        for (final Event event : allEventsByTemplateId) {
+            final Date date = event.getDate();
+            eventMap.put(date.toLocalDate(), event);
         }
-        return transportDateMap;
-    }
 
-    public TransportDateByTemplate findById(final int transportDateId) {
-        return this.transportDateByTemplateRepository.findById(transportDateId).orElseThrow();
+        return eventMap;
     }
 }

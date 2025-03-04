@@ -1,5 +1,6 @@
 package com.transports.spring.dto.generatefiles.excel;
 
+import com.transports.spring.model.templategeneration.common.cell.styler.AbstractDateCellGroupStyler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class DtoTemplateExcelTransportCellGroup {
     private String cellNumberText;
     private String headerText;
     private String bodyText;
+    private AbstractDateCellGroupStyler cellStyler;
 
     public DtoTemplateExcelTransportCellGroup(Integer excelCol, Integer excelRow, XSSFSheet excelSheet, String cellNumberText) {
         this.excelCol = excelCol;

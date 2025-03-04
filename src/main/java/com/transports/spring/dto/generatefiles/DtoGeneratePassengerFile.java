@@ -3,6 +3,7 @@ package com.transports.spring.dto.generatefiles;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.model.Event;
 import com.transports.spring.model.Passenger;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

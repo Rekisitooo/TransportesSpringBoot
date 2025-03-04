@@ -1,5 +1,10 @@
 package com.transports.spring.model.templategeneration.common;
 
+import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
+import com.transports.spring.model.templategeneration.common.cell.DayCellGroupBodyCell;
+import com.transports.spring.model.templategeneration.common.cell.DayCellGroupHeaderCell;
+import com.transports.spring.model.templategeneration.common.cell.DayCellGroupNumberCell;
+import com.transports.spring.model.templategeneration.driver.TemplateExcelTransportDayCellGroup;
 import lombok.Setter;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -60,5 +65,13 @@ public abstract class AbstractTemplateExcelBodyGenerator {
             this.currentCol = MONDAY_COL_INDEX;
             this.currentRow += 3;
         }
+    }
+
+    protected void generateCustomTemplateExcelTransportDayCellGroup(final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup, final XSSFSheet excelSheet) {
+        final DayCellGroupNumberCell dayCellGroupNumberCell = new DayCellGroupNumberCell(excelSheet, this.currentRow, this.currentCol);
+        final DayCellGroupHeaderCell dayCellGroupHeaderCell = new DayCellGroupHeaderCell(excelSheet, this.currentRow + 1, this.currentCol);
+        final DayCellGroupBodyCell dayCellGroupBodyCell = new DayCellGroupBodyCell(excelSheet, this.currentRow + 2, this.currentCol);
+        final TemplateExcelTransportDayCellGroup transportDayCell = new TemplateExcelTransportDayCellGroup(dayCellGroupNumberCell, dayCellGroupHeaderCell, dayCellGroupBodyCell);
+        transportDayCell.generate(dtoTemplateExcelTransportCellGroup);
     }
 }

@@ -1,21 +1,16 @@
 package com.transports.spring.model.templategeneration.common.cell;
 
-import com.transports.spring.model.templategeneration.common.cell.styler.NumberDayCellStyler;
+import com.transports.spring.model.templategeneration.common.cell.styler.AbstractDateCellGroupStyler;
 import org.apache.poi.xssf.usermodel.*;
 
 public class DayCellGroupNumberCell extends AbstractDayCellGroupCell {
 
-    public DayCellGroupNumberCell() {
-        super();
+    public DayCellGroupNumberCell(final XSSFSheet excelSheet, final int currentRow, final int currentCol) {
+        super(excelSheet, currentRow, currentCol);
     }
 
-    public void generate(final XSSFSheet excelSheet, final int currentRow, final int currentCol, final String currentDayOfMonth) {
-        final XSSFCellStyle defaultCellStyle = NumberDayCellStyler.getCustomCellStyle(excelSheet.getWorkbook());
-        super.generate(excelSheet, currentRow, currentCol, currentDayOfMonth, defaultCellStyle);
-    }
-
-    public void generateDefault(final XSSFSheet excelSheet, final int currentRow, final int currentCol, final String currentDayOfMonth) {
-        final XSSFCellStyle defaultCellStyle = NumberDayCellStyler.getDefaultCellStyle(excelSheet.getWorkbook());
-        super.generate(excelSheet, currentRow, currentCol, currentDayOfMonth, defaultCellStyle);
+    public void generate(final String currentDayOfMonth, final AbstractDateCellGroupStyler cellStyler) {
+        final XSSFCellStyle cellStyle = cellStyler.getNumberHeaderCellStyle(this.excelSheet.getWorkbook());
+        super.generateCellGroupBodyCell(this.excelSheet, this.currentRow, this.currentCol, currentDayOfMonth, cellStyle);
     }
 }

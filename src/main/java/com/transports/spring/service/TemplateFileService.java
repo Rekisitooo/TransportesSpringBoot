@@ -33,10 +33,11 @@ public final class TemplateFileService {
     private final TemplateFileGenerator templateFileGenerator;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
+    private final EventService eventService;
 
     private static final Object CONCURRENCY_LOCKER = new Object();
 
-    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
+    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, EventService eventService) {
         this.monthService = monthService;
         this.templateService = templateService;
         this.transportService = transportService;
@@ -44,6 +45,7 @@ public final class TemplateFileService {
         this.templateFileGenerator = templateFileGenerator;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
+        this.eventService = eventService;
     }
 
     public void generateFiles(final int templateId) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
@@ -53,6 +55,7 @@ public final class TemplateFileService {
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = this.getTemplateMonthName(templateMonth);
 
+            final Map<LocalDate, Event> dateEventMap = this.eventService.findAllEventsByTemplateId(templateId);
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<LocalDate, DtoTransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
             final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
@@ -61,7 +64,7 @@ public final class TemplateFileService {
 
             final DtoGeneratePassengerFile dtoGeneratePassengerFile = new DtoGeneratePassengerFile(passengerTransports, templateMonthDateByDayMap, allPassengersAssistanceDatesMap);
             final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports);
-            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance());
+            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance(), dateEventMap);
             final DtoTemplateExcelHeader dtoHeader = new DtoTemplateExcelHeader(monthName, templateYear);
             this.templateFileGenerator.generateFiles(dtoGenerateFile, dtoHeader);
         }

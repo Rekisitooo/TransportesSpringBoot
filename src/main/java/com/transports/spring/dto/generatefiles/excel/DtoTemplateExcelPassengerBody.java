@@ -3,6 +3,7 @@ package com.transports.spring.dto.generatefiles.excel;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.model.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,5 @@ public class DtoTemplateExcelPassengerBody {
     private List<DtoTemplateDay> passengerAssistanceDateList;
     private Map<LocalDate, DtoTransportDateByTemplate> monthTransportDateByDayMap;
     private Map<LocalDate, DtoPassengerTransport> allTemplatePassengerTransportsByDayMap;
+    private Map<LocalDate, Event> dateEventMap;
 }
