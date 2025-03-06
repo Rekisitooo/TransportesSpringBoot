@@ -104,8 +104,40 @@ function operate () {
     method();
 }
 
+function createDate(dateData) {
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: '/t/createDate',
+        data: JSON.stringify(dateData),
+        dataType: 'json',
+        success : function(response) {
+            if (response.status === 'ok') {
+               addColumnToPassengersTable(dateData);
+               addColumnToDriversTable(dateData);
+            } else {
+                //TODO configurar la alerta para que se muestre en un idioma u otro
+                window.alert("Ha ocurrido un error al crear la fecha.");
+            }
+        },
+        error : function(e) {
+            //TODO configurar la alerta para que se muestre en un idioma u otro
+                window.alert("Ha ocurrido un error al crear la fecha.");
+        }
+    })
+}
+
+function addColumnToPassengersTable(dateData) {
+
+}
+
+function addColumnToDriversTable(dateData) {
+
+}
+
 $(document).ready(
     function () {
         $('select[name="driverInTransportSelect"]').on('change', operate);
+        $('#btnCreateNewDate').on('click', createDate);
     }
 );
