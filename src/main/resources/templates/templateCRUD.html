@@ -31,41 +31,96 @@
                 <!-- Main Content -->
                 <div id="content">
 
+                    <!-- Add Date Modal -->
+                    <div class="modal fade" id="addDateModal" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="row w-100">
+                                        <div class="col-11">
+                                            <h4 class="modal-title text-primary" th:text="#{templateCRUD.addDateCardDateTittle}"></h4>
+                                        </div>
+                                        <div class="col-1 d-sm-flex align-items-center justify-content-end">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <label th:text="#{templateCRUD.addDateCardEventNameLabel}" for="addDateCardEventNameInput"></label>
+                                        </div>
+                                        <div class="col-5">
+                                            <label th:text="#{templateCRUD.addDateCardDateLabel}" for="addDateCardDateInput"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <!-- TODO validate that the width is not larger than 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii' in js and java -->
+                                            <input type="text" class="w-75" th:placeholder="#{templateCRUD.addDateCardEventNameInputPlaceholder}" name="addDateCardEventNameInput" id="addDateCardEventNameInput"/>
+                                        </div>
+                                        <div class="col-5">
+                                            <!-- TODO retrieve min and max for input date from server -->
+                                            <input type="date" min="" max="" name="addDateCardDateInput" id="addDateCardDateInput"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mt-4">
+                                            <input type="checkbox" name="addDateCardIsTransportDateCheckboxInput" id="addDateCardIsTransportDateCheckboxInput"/>
+                                            <label th:text="#{templateCRUD.addDateCardIsTransportDateCheckboxLabel}" for="addDateCardIsTransportDateCheckboxInput" ></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button th:text="#{templateCRUD.addDateCardButtonText}" id="btnCreateNewDate" type="button" class="btn btn-primary shadow-sm" data-dismiss="modal"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <th:block th:insert="~{components/topbar :: topbar}">  </th:block>
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
 
                         <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mt-4">
-                            <h1 class="text-dark mb-3" th:text="${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
-                            <!-- TODO add add button and delete button -->
-                            <a th:href="@{/template/generate?id={templateId} (templateId = ${templateId})}" class="mb-3 mr-2 btn btn-primary shadow-sm">
-                                <span th:text="#{templateCRUD.generate}"></span>
-                            </a>
-                            <a class="mb-3 mr-2 btn btn-success shadow-sm">
-                                <span th:text="#{templateCRUD.btnCreateNewDate}"></span>
-                            </a>
+                        <div class="container-fluid mt-4">
+                            <div class="row">
+                                <div class="col">
+                                    <h1 class="text-dark mb-3" th:text="${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
+                                </div>
+                                <div class="col">
+                                    <div class="d-sm-flex align-items-center justify-content-end">
+                                        <a th:href="@{/template/generate?id={templateId} (templateId = ${templateId})}" class="mb-3 mr-2 btn btn-primary shadow-sm">
+                                            <span th:text="#{templateCRUD.generate}"></span>
+                                        </a>
+                                        <a class="mb-3 mr-2 btn btn-success shadow-sm" data-toggle="modal" data-target="#addDateModal">
+                                            <span th:text="#{templateCRUD.btnCreateNewDate}"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <h2 th:text="#{templateCRUD.transportsForPassengerTableTitle}" class="mt-2 mb-2"></h2>
-                            <table class="table table-striped table-bordered shadow-lg" id="passengerTransportsTable" width="100%" cellspacing="0">
+                            <table class="table table-striped table-bordered shadow-lg w-100" id="passengerTransportsTable" cellspacing="0">
                                 <thead class="bg-light">
                                     <tr>
                                         <!-- empty for the passengers column -->
-                                        <th></th>
-                                        <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"></th>
+                                        <th data-date="00/00/1900"></th>
+                                        <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}" th:data-date="${date.transportDate}"></th>
                                     </tr>
                                     <tr>
                                         <!-- empty for the passengers column -->
-                                        <th></th>
-                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}"></th>
+                                        <th data-date="${date.transportDate}"></th>
+                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}" th:data-date="${date.transportDate}"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
-                                        <th th:text="${passenger.name} + ' ' + ${passenger.surname}"></th>
-                                        <td th:each="date : ${templateDates}">
+                                        <th th:text="${passenger.name} + ' ' + ${passenger.surname}" data-date="00/00/1900"></th>
+                                        <td th:each="date : ${templateDates}" th:data-date="date.transportDate">
                                             <span th:if="${passengersAvailableForDate.get(date.id) == null}" th:text="#{templateCRUD.holidays}"></span>
                                             <th:block th:unless="${passengersAvailableForDate.get(date.id) == null}">
                                                 <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
@@ -87,23 +142,23 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                        </table>
-                    </div>
+                            </table>
+                        </div>
 
                         <div>
                             <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-2"></h2>
-                            <table class="table table-striped table-bordered shadow-lg" id="passengerTransportsTable" width="100%" cellspacing="0">
+                            <table class="table table-striped table-bordered shadow-lg" id="driverTransportsTable" width="100%" cellspacing="0">
                                 <thead class="bg-light">
-                                <tr>
-                                    <!-- empty for the drivers column -->
-                                    <th></th>
-                                    <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"></th>
-                                </tr>
-                                <tr>
-                                    <!-- empty for the drivers column -->
-                                    <th></th>
-                                    <th th:each="date : ${templateDates}" th:text="${date.transportDate}"></th>
-                                </tr>
+                                    <tr>
+                                        <!-- empty for the drivers column -->
+                                        <th></th>
+                                        <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"></th>
+                                    </tr>
+                                    <tr>
+                                        <!-- empty for the drivers column -->
+                                        <th></th>
+                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}"></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="driver : ${driversFromTemplateList}">
@@ -125,8 +180,8 @@
                                 </tbody>
                             </table>
                         </div>
-                </div>
-                <!-- End Page Content -->
+                    </div>
+                    <!-- End Page Content -->
 
                 </div>
                 <!-- End of Main Content -->
