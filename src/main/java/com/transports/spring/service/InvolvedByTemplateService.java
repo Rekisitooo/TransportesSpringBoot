@@ -1,5 +1,7 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoDriverList;
+import com.transports.spring.dto.DtoPassengerList;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.repository.IInvolvedByTemplateRepository;
@@ -20,8 +22,28 @@ public final class InvolvedByTemplateService {
         return this.involvedByTemplateRepository.getAllPassengersFromTemplate(templateId);
     }
 
+    public DtoPassengerList getAllPassengersFromTemplateForTemplateView(final int templateId) {
+        final List<Passenger> passengerList = this.involvedByTemplateRepository.getAllPassengersFromTemplate(templateId);
+        int occupiedSeats = 0;
+        for (final Passenger passenger : passengerList) {
+            occupiedSeats += passenger.getOccupiedSeats();
+        }
+
+        return new DtoPassengerList(passengerList, occupiedSeats);
+    }
+
     public List<Driver> getAllDriversFromTemplate(int templateId) {
         return this.involvedByTemplateRepository.getAllDriversFromTemplate(templateId);
+    }
+
+    public DtoDriverList getAllDriversFromTemplateForTemplateView(final int templateId) {
+        final List<Driver> driverList = this.involvedByTemplateRepository.getAllDriversFromTemplate(templateId);
+        int occupiedSeats = 0;
+        for (final Driver driver: driverList) {
+            occupiedSeats += driver.getAvailableSeats();
+        }
+
+        return new DtoDriverList(driverList, occupiedSeats);
     }
 
     public Passenger getByIdAndTemplate(final int involvedId, final int templateId){

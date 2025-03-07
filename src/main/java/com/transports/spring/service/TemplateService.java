@@ -1,11 +1,13 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoTemplateData;
 import com.transports.spring.model.Template;
 import com.transports.spring.repository.ITemplateRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -15,6 +17,15 @@ public class TemplateService {
 
     public TemplateService(final ITemplateRepository templateRepository) {
         this.templateRepository = templateRepository;
+    }
+
+    public DtoTemplateData getTemplateDataById(final int templateId) {
+        final Template template = this.findById(templateId);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Integer.parseInt(template.getYear()), Integer.parseInt(template.getMonth()) - 1, 1);
+        final int lastMonthDate = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        return new DtoTemplateData(template, lastMonthDate);
     }
 
     public Template findById(final int templateId) {

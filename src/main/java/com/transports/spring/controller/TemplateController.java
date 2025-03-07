@@ -1,10 +1,15 @@
 package com.transports.spring.controller;
 
+import com.transports.spring.dto.DtoDriverList;
+import com.transports.spring.dto.DtoPassengerList;
+import com.transports.spring.dto.DtoTemplateData;
 import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
-import com.transports.spring.model.*;
-import com.transports.spring.service.TemplateFileService;
+import com.transports.spring.model.Driver;
+import com.transports.spring.model.Passenger;
+import com.transports.spring.model.Template;
+import com.transports.spring.model.Transport;
 import com.transports.spring.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -37,16 +43,22 @@ public final class TemplateController {
 
     @GetMapping("/getById")
     public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
-        final Template template = this.templateService.findById(templateId);
+        final DtoTemplateData template = this.templateService.getTemplateDataById(templateId);
+        model.addAttribute("lastMonthDay", template.getLastMonthDay());
+        model.addAttribute("monthNumber", template.getMonth());
         model.addAttribute("templateMonth", template.getMonthName().toUpperCase());
         model.addAttribute("templateYear", template.getYear());
         model.addAttribute("templateId", template.getId());
 
-        final List<Passenger> passengersFromTemplateList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
+        final DtoPassengerList dtoPassengerList = this.involvedByTemplateService.getAllPassengersFromTemplateForTemplateView(templateId);
+        final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
+        model.addAttribute("passengerSeatsAmount", dtoPassengerList.getTotalPassengerSeats());
 
-        final List<Driver> driversFromTemplateList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
+        final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
+        final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
         model.addAttribute("driversFromTemplateList", driversFromTemplateList);
+        model.addAttribute("availableDriverSeatsAmount", dtoDriverList.getTotalDriverAvailableSeats());
 
         final List<DtoTransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
