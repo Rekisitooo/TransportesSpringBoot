@@ -129,7 +129,7 @@ VALUES
     
 DROP TABLE IF EXISTS MES;
 CREATE TABLE IF NOT EXISTS MES (
-	ID TINYINT UNSIGNED,
+	ID ENUM('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'),
     NOMBRE ENUM('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre') NOT NULL,
     
     CONSTRAINT PRIMARY KEY PK_ID_DIA_DE_LA_SEMANA (ID)
@@ -137,18 +137,18 @@ CREATE TABLE IF NOT EXISTS MES (
 
 INSERT INTO MES (ID, NOMBRE)
 VALUES 
-	(1, 'enero'), 
-    (2, 'febrero'),
-    (3, 'marzo'),
-    (4, 'abril'),
-    (5, 'mayo'),
-    (6, 'junio'),
-    (7, 'julio'),
-    (8, 'agosto'),
-    (9, 'septiembre'),
-    (10, 'octubre'),
-    (11, 'noviembre'),
-    (12, 'diciembre');
+	('01', 'enero'), 
+    ('02', 'febrero'),
+    ('03', 'marzo'),
+    ('04', 'abril'),
+    ('05', 'mayo'),
+    ('06', 'junio'),
+    ('07', 'julio'),
+    ('08', 'agosto'),
+    ('09', 'septiembre'),
+    ('10', 'octubre'),
+    ('11', 'noviembre'),
+    ('12', 'diciembre');
 
 DROP TABLE IF EXISTS DIA_TRANSPORTE_SEMANAL;
 CREATE TABLE IF NOT EXISTS DIA_TRANSPORTE_SEMANAL (
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS PLANTILLA (
 	ID INT UNSIGNED AUTO_INCREMENT,
     NOMBRE	VARCHAR (200) NOT NULL,
     ANNO VARCHAR (4) NOT NULL,
-    MES ENUM('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12') NOT NULL,
+    MES ENUM('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12') NOT NULL,
     COD_USUARIO_PROPIETARIO INT UNSIGNED NOT NULL,
     COD_GRUPO_USUARIO INT UNSIGNED,
     
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS FECHA_TRANSPORTE_POR_PLANTILLA (
     COD_PLANTILLA INT UNSIGNED NOT NULL,
     FECHA_TRANSPORTE VARCHAR(10) NOT NULL,
     COD_DIA_DE_LA_SEMANA ENUM('1', '2', '3', '4', '5', '6', '7') NOT NULL,
-    NOMBRE_EVENO VARCHAR(200),
+    NOMBRE_EVENTO VARCHAR(200),
     MOTIVO_CANCELACION VARCHAR(200), 
     
     CONSTRAINT PRIMARY KEY PK_FECHA_TRANSPORTE_POR_PLANTILLA (ID),
@@ -689,8 +689,10 @@ SELECT
 
 INSERT INTO PLANTILLA (NOMBRE, ANNO, MES, COD_USUARIO_PROPIETARIO, COD_GRUPO_USUARIO)
 	VALUES 
-		('mayo_2025', '2025', 5, 1, 1),
-        ('junio_2025','2025', 6, 1, 1);
+		('mayo_2025', '2025', '05', 1, 1),
+        ('junio_2025','2025', '06', 1, 1),
+   		('marzo_2025', '2025', '03', 1, 1)
+;
 
 -- DOMINGO 2025-05-04
 INSERT INTO TRANSPORTE (COD_FECHA_TRANSPORTE, COD_CONDUCTOR, COD_VIAJERO)
