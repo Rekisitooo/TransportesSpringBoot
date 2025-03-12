@@ -46,131 +46,160 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="modal-body">
-                                    <!-- Event name and date labels -->
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <label th:text="#{templateCRUD.addDateCardEventNameLabel}" for="addDateCardEventNameInput"></label>
-                                        </div>
-                                        <div class="col-5">
-                                            <label th:text="#{templateCRUD.addDateCardDateLabel}" for="addDateCardDateInput"></label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Event name and date inputs -->
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <!-- TODO validate that the width is not larger than 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii' in js and java -->
-                                            <input type="text" class="w-75" th:placeholder="#{templateCRUD.addDateCardEventNameInputPlaceholder}" name="addDateCardEventNameInput" id="addDateCardEventNameInput"/>
-                                        </div>
-                                        <div class="col-5">
-                                            <input
-                                                    type="date"
-                                                    th:min="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
-                                                    th:max="${templateYear} + '-' + ${monthNumber} + '-' + ${lastMonthDay}"
-                                                    name="addDateCardDateInput"
-                                                    id="addDateCardDateInput"/>
-                                        </div>
-                                    </div>
-
-                                    <!-- Availability checkbox -->
-                                    <div class="row">
-                                        <div class="col mt-4">
-                                            <input type="checkbox" name="addDateCardIsTransportDateCheckboxInput" id="addDateCardIsTransportDateCheckboxInput"/>
-                                            <label th:text="#{templateCRUD.addDateCardIsTransportDateCheckboxLabel}" for="addDateCardIsTransportDateCheckboxInput" ></label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Passengers and Drivers Availability -->
-                                    <div class="row" id="addDateCardAvailability" style="display:none"><!-- style is for js to work-->
-                                        <div class="col mt-2">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <h5 th:text="#{templateCRUD.addDateCardAvailabilityTitle}"></h5>
-                                                </div>
+                                <form id="addDateCardDateForm" method="post" th:action="@{/template/newDate?id={templateId}(templateId=${template.id})}">
+                                    <div class="modal-body">
+                                        <!-- Event name and date labels -->
+                                        <div class="row">
+                                            <div class="col-7">
+                                                <label th:text="#{templateCRUD.addDateCardEventNameLabel}" for="addDateCardEventNameInput"></label>
                                             </div>
+                                            <div class="col-5">
+                                                <label th:text="#{templateCRUD.addDateCardDateLabel}" for="addDateCardDateInput"></label>
+                                            </div>
+                                        </div>
 
-                                            <!-- Drivers -->
-                                            <div class="row ml-1 mt-2">
+                                        <!-- Event name and date inputs -->
+                                        <div class="row">
+                                            <div class="col-7">
+                                                <input
+                                                        type="text"
+                                                        class="w-75"
+                                                        th:placeholder="#{templateCRUD.addDateCardEventNameInputPlaceholder}"
+                                                        name="addDateCardEventNameInput"
+                                                        id="addDateCardEventNameInput"
+                                                        required="required"/>
+                                            </div>
+                                            <div class="col-5">
+                                                <input
+                                                        type="date"
+                                                        th:min="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
+                                                        th:max="${templateYear} + '-' + ${monthNumber} + '-' + ${lastMonthDay}"
+                                                        name="addDateCardDateInput"
+                                                        id="addDateCardDateInput"
+                                                        required="required"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- Availability checkbox -->
+                                        <div class="row">
+                                            <div class="col mt-4">
+                                                <input type="checkbox" name="addDateCardIsTransportDateCheckboxInput" id="addDateCardIsTransportDateCheckboxInput"/>
+                                                <label th:text="#{templateCRUD.addDateCardIsTransportDateCheckboxLabel}" for="addDateCardIsTransportDateCheckboxInput" ></label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Passengers and Drivers Availability -->
+                                        <div class="row" id="addDateCardAvailability" style="display:none"><!-- style is for js to work-->
+                                            <div class="col mt-2">
                                                 <div class="row">
                                                     <div class="col">
-                                                        <h6 class="font-weight-bold">
-                                                            <span th:text="#{sidebar.manage.drivers}"></span>
-                                                            <span id="selectedDriverTotal" th:text="' (' + ${driversFromTemplateList.size()}"></span>
-                                                            <span th:text="'/ ' + ${driversFromTemplateList.size()} + ') '"></span>
-                                                            <span th:text="#{Seats} + ': '"></span>
-                                                            <span id="selectedDriverAvailableSeats" th:text="${availableDriverSeatsAmount}"></span>
-                                                            <span th:text="'/ ' + ${availableDriverSeatsAmount}"></span>
-                                                        </h6>
+                                                        <h5 th:text="#{templateCRUD.addDateCardAvailabilityTitle}"></h5>
                                                     </div>
                                                 </div>
 
-                                                <!-- Each Driver -->
-                                                <div class="row w-100" th:each="driver : ${driversFromTemplateList}">
-                                                    <div class="col-1">
-                                                        <input type="checkbox" th:id="${driver.id} + 'disAvailable'" name="addDateCardDriverAvailabilityCheck" th:data-seats="${driver.availableSeats}" checked="checked" th:aria-label="#{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel1} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel2}">
+                                                <!-- Drivers -->
+                                                <div class="row ml-1 mt-2">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="font-weight-bold">
+                                                                <span th:text="#{sidebar.manage.drivers}"></span>
+                                                                <span id="selectedDriverTotal" th:text="' (' + ${driversFromTemplateList.size()}"></span>
+                                                                <span th:text="'/ ' + ${driversFromTemplateList.size()} + ') '"></span>
+                                                                <span th:text="#{Seats} + ': '"></span>
+                                                                <span id="selectedDriverAvailableSeats" th:text="${availableDriverSeatsAmount}"></span>
+                                                                <span th:text="'/ ' + ${availableDriverSeatsAmount}"></span>
+                                                            </h6>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-5">
-                                                        <label th:text="${driver.name} + ' ' + ${driver.surname} + ' (' + ${driver.availableSeats} + ' ' + #{seatsAbbreviation} + ')'" th:for="${driver.id} + 'disAvailable'"></label>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input
-                                                                th:id="${driver.id} + 'disAvailableInput'"
-                                                                type="text"
-                                                                name="addDateCardDriverNotAvailableReason"
-                                                                th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${driver.name} + ' ' + ${driver.surname}"
-                                                                th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
-                                                                class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
-                                                                style="display:none"
-                                                        /><!-- style is for js to work-->
+
+                                                    <!-- Each Driver -->
+                                                    <div class="row w-100" th:each="driver : ${driversFromTemplateList}">
+                                                        <div class="col-1">
+                                                            <input type="checkbox"
+                                                                   th:id="${driver.id} + 'disAvailable'"
+                                                                   name="addDateCardDriverAvailabilityCheck"
+                                                                   checked="checked"
+                                                                   th:value="${driver.id}"
+                                                                   th:data-seats="${driver.availableSeats}"
+                                                                   th:aria-label="#{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel1} + ' ' + ${driver.name}
+                                                                                    + ' ' + ${driver.surname} + ' ' + #{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel2}"
+                                                            />
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label
+                                                                    th:text="${driver.name} + ' ' + ${driver.surname} + ' (' + ${driver.availableSeats} + ' ' + #{seatsAbbreviation} + ')'"
+                                                                    th:for="${driver.id} + 'disAvailable'">
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input
+                                                                    th:id="${driver.id} + 'disAvailableInput'"
+                                                                    type="text"
+                                                                    name="addDateCardDriverNotAvailableReason"
+                                                                    th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${driver.name} + ' ' + ${driver.surname}"
+                                                                    th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
+                                                                    class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
+                                                                    style="display:none"
+                                                            /><!-- style is for js to work-->
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Passengers -->
-                                            <div class="row ml-1 mt-2">
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <h6 class="font-weight-bold">
-                                                            <span th:text="#{sidebar.manage.passengers}"></span>
-                                                            <span id="selectedPassengerTotal" th:text="' (' + ${passengersFromTemplateList.size()}"></span>
-                                                            <span th:text="'/ ' + ${passengersFromTemplateList.size()} + ') '"></span>
-                                                            <span th:text="#{Seats} + ': '"></span>
-                                                            <span id="selectedPassengerAvailableSeats" th:text="${passengerSeatsAmount}"></span>
-                                                            <span th:text="'/ ' + ${passengerSeatsAmount}"></span>
-                                                        </h6>
+                                                <!-- Passengers -->
+                                                <div class="row ml-1 mt-2">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <h6 class="font-weight-bold">
+                                                                <span th:text="#{sidebar.manage.passengers}"></span>
+                                                                <span id="selectedPassengerTotal" th:text="' (' + ${passengersFromTemplateList.size()}"></span>
+                                                                <span th:text="'/ ' + ${passengersFromTemplateList.size()} + ') '"></span>
+                                                                <span th:text="#{Seats} + ': '"></span>
+                                                                <span id="selectedPassengerAvailableSeats" th:text="${passengerSeatsAmount}"></span>
+                                                                <span th:text="'/ ' + ${passengerSeatsAmount}"></span>
+                                                            </h6>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <!-- Each Passenger -->
-                                                <div class="row w-100" th:each="passenger : ${passengersFromTemplateList}">
-                                                    <div class="col-1">
-                                                        <input type="checkbox" th:id="${passenger.id} + 'pisAvailable'" name="addDateCardPassengerAvailabilityCheck" th:data-seats="${passenger.occupiedSeats}" checked="checked" th:aria-label="#{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel1} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel2}">
-                                                    </div>
-                                                    <div class="col-5">
-                                                        <label th:text="${passenger.name} + ' ' + ${passenger.surname} + ' (' + ${passenger.occupiedSeats} + ' ' + #{seatsAbbreviation} + ')'" th:for="${passenger.id} + 'pisAvailable'"></label>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input
-                                                                th:id="${passenger.id} + 'pisAvailableInput'"
-                                                                type="text"
-                                                                name="addDateCardPassengerNotAvailableReason"
-                                                                th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${passenger.name} + ' ' + ${passenger.surname}"
-                                                                th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
-                                                                class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
-                                                                style="display:none"
-                                                        /><!-- style is for js to work-->
+                                                    <!-- Each Passenger -->
+                                                    <div class="row w-100" th:each="passenger : ${passengersFromTemplateList}">
+                                                        <div class="col-1">
+                                                            <input
+                                                                    type="checkbox"
+                                                                    th:id="${passenger.id} + 'pisAvailable'"
+                                                                    name="addDateCardPassengerAvailabilityCheck"
+                                                                    checked="checked"
+                                                                    th:value="${passenger.id}"
+                                                                    th:data-seats="${passenger.occupiedSeats}"
+                                                                    th:aria-label="#{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel1} + ' ' + ${passenger.name}
+                                                                                        + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.addDateCardIsTransportDateCheckboxAriaLabel2}"
+                                                            />
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <label th:text="${passenger.name} + ' ' + ${passenger.surname} + ' (' + ${passenger.occupiedSeats} + ' ' + #{seatsAbbreviation} + ')'"
+                                                                   th:for="${passenger.id} + 'pisAvailable'"></label>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <input
+                                                                    th:id="${passenger.id} + 'pisAvailableInput'"
+                                                                    type="text"
+                                                                    name="addDateCardPassengerNotAvailableReason"
+                                                                    th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${passenger.name} + ' ' + ${passenger.surname}"
+                                                                    th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
+                                                                    class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
+                                                                    style="display:none"
+                                                            /><!-- style is for js to work-->
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <span id="creationDateDisabledReason" class="text-danger m-auto"></span>
-                                    <button th:text="#{templateCRUD.addDateCardButtonText}" id="btnCreateNewDate" type="button" class="btn btn-primary shadow-sm" data-dismiss="modal"></button>
-                                </div>
+                                    <div class="modal-footer">
+                                        <span id="creationDateDisabledReason" class="text-danger m-auto"></span>
+                                        <input type="submit" th:text="#{templateCRUD.addDateCardButtonText}" id="btnCreateNewDate" class="btn btn-primary shadow-sm" data-dismiss="modal"/>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -314,6 +343,8 @@
 
         <script src="/js/own/templateCrudUDC.js"></script>
         <script src="/js/own/templateCrudAddNewDate.js"></script>
+        <!-- Ajax plugin -->
+        <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
     </body>
 
 </html>

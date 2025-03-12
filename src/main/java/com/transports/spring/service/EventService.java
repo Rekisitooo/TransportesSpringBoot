@@ -1,5 +1,6 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.model.Event;
 import com.transports.spring.repository.IEventRepository;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,12 @@ public class EventService {
         }
 
         return eventMap;
+    }
+
+    public void addEvent(final DtoAddNewDateForm dtoAddNewDateForm, final int templateId) {
+        final Date addDateCardDateInput = dtoAddNewDateForm.getAddDateCardDateInput();
+        final String addDateCardEventNameInput = dtoAddNewDateForm.getAddDateCardEventNameInput();
+
+        this.eventRepository.save(new Event(templateId, addDateCardDateInput, addDateCardEventNameInput));
     }
 }

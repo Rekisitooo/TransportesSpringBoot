@@ -1,10 +1,13 @@
 package com.transports.spring.service;
 
+import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -36,5 +39,22 @@ public class TransportDateByTemplateService {
 
     public TransportDateByTemplate findById(final int transportDateId) {
         return this.transportDateByTemplateRepository.findById(transportDateId).orElseThrow();
+    }
+
+    /**
+     * adds a transport date in a template.
+     * @param body
+     * @param templateId
+     * @return createdDateId
+     */
+    public int addTransportDate(final DtoAddNewDateForm body, final int templateId) {
+        final Date addDateCardDateInput = body.getAddDateCardDateInput();
+        final LocalDate localDate = addDateCardDateInput.toLocalDate();
+        final DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+        final String string = localDate.toString();
+        final int ordinal = dayOfWeek.ordinal();
+
+        this.transportDateByTemplateRepository.save(new TransportDateByTemplate(templateId, string, ordinal));
+        return this.transportDateByTemplateRepository.findById();
     }
 }

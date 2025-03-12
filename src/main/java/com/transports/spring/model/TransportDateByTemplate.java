@@ -13,7 +13,7 @@ import lombok.*;
 public final class TransportDateByTemplate {
 
     @Id
-    private int id;
+    private Integer id;
 
     @Column(name = "COD_PLANTILLA")
     private int templateCode;
@@ -29,6 +29,13 @@ public final class TransportDateByTemplate {
 
     public TransportDateByTemplate(int id, int templateCode, String transportDate, int dayOfTheWeekCode) {
         this.id = id;
+        this.templateCode = templateCode;
+        this.transportDate = transportDate;
+        this.dayOfTheWeekCode = dayOfTheWeekCode;
+    }
+
+    public TransportDateByTemplate(int templateCode, String transportDate, int dayOfTheWeekCode) {
+        this.id = null;
         this.templateCode = templateCode;
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;

@@ -1,9 +1,6 @@
 package com.transports.spring.controller;
 
-import com.transports.spring.dto.DtoDriverList;
-import com.transports.spring.dto.DtoPassengerList;
-import com.transports.spring.dto.DtoTemplateData;
-import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.dto.*;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.Driver;
@@ -11,13 +8,14 @@ import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Template;
 import com.transports.spring.model.Transport;
 import com.transports.spring.service.*;
+import com.transports.spring.service.response.ServiceResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/template")
 public final class TemplateController {
 
+    private final EventService eventService;
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportService transportService;
@@ -32,7 +31,8 @@ public final class TemplateController {
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TemplateFileService templateFileService;
 
-    public TemplateController(TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService generateTemplateFilesService, TemplateFileService templateFileService) {
+    public TemplateController(EventService eventService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService generateTemplateFilesService, TemplateFileService templateFileService) {
+        this.eventService = eventService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
@@ -41,7 +41,7 @@ public final class TemplateController {
         this.templateFileService = templateFileService;
     }
 
-    @GetMapping("/getById")
+    @GetMapping("/openTemplate")
     public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
         final DtoTemplateData template = this.templateService.getTemplateDataById(templateId);
         model.addAttribute("lastMonthDay", template.getLastMonthDay());
@@ -97,5 +97,17 @@ public final class TemplateController {
     @GetMapping("/delete")
     public ResponseEntity<Template> delete(@PathVariable (value = "id") final int templateId) {
         return this.templateService.delete(templateId);
+    }
+
+    @PostMapping("/newDate")
+    public ResponseEntity<Object> newDate(@PathVariable (value = "id") final int templateId, @RequestBody final DtoAddNewDateForm body) {
+        if (body.isAddDateCardIsTransportDateCheckboxInput()) {
+            int newTemplateDateId = this.transportDateByTemplateService.addTransportDate(body, templateId);
+            this.involvedAvailabiltyForTransportDateService.addInvolvedAvailability(body, newTemplateDateId);
+        } else {
+            this.eventService.addEvent(body, templateId);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", body));
     }
 }

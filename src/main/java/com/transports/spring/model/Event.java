@@ -18,7 +18,7 @@ import java.sql.Date;
 public final class Event {
 
     @Id
-    private int id;
+    private Integer id;
 
     @Column(name = "COD_PLANTILLA")
     private int templateCode;
@@ -29,4 +29,10 @@ public final class Event {
     @Column(name = "NOMBRE_EVENTO")
     private String eventName;
 
+    public Event(final int templateCode, final Date date, final String eventName) {
+        this.id = null;
+        this.templateCode = templateCode;
+        this.date = date;
+        this.eventName = eventName;
+    }
 }

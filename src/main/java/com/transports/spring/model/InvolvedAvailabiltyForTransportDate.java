@@ -15,7 +15,7 @@ public final class InvolvedAvailabiltyForTransportDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "COD_INVOLUCRADO")
     private int involvedCode;
@@ -29,6 +29,11 @@ public final class InvolvedAvailabiltyForTransportDate {
         this.transportDateCode = transportDateCode;
         this.involvedCode = involvedCode;
         this.involvedCompleteName = involvedCompleteName;
+    }
+
+    public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
+        this.transportDateCode = transportDateCode;
+        this.involvedCode = involvedCode;
     }
 
 }
