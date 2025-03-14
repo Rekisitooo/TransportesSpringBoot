@@ -7,18 +7,41 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Template CRUD</title>
-        <!-- Custom fonts for this template-->
+        <!-- Custom fonts for       this template-->
         <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 
         <!-- Custom styles for this template-->
         <link href="/css/sb-admin-2.min.css" rel="stylesheet">
         <noscript>
             <meta http-equiv="refresh" content="0; url=/enable_javascript">
         </noscript>
+        <style>
+            .datepicker td,
+            th {
+              text-align: center;
+              padding:5px 12px;
+              font-size: 14px;
+            }
+        </style>
     </head>
 
     <body id="page-top">
+
+        <div class="alert alert-success" role="alert" th:if="${success} != null">
+            <h4 class="alert-heading" th:text="#{'templateCRUD.' + ${success} + 'Title'}"></h4>
+            <p th:text="#{'templateCRUD.' + ${success} + 'Body'}"></p>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error} != null">
+            <strong th:text="#{'templateCRUD.' + ${error} + 'Title'}"></strong>
+            <span th:text="#{'templateCRUD.' + ${error} + 'Body'}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
         <!-- Page Wrapper -->
         <div id="wrapper">
@@ -46,13 +69,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form id="addDateCardDateForm" method="post" th:action="@{/template/newDate?id={templateId}(templateId=${template.id})}">
+                                <form id="addDateCardDateForm" method="post" th:action="@{/template/newDate/{templateId}(templateId=${templateId})}" th:object="${DtoAddNewDateForm}" enctype="application/json">
                                     <div class="modal-body">
                                         <!-- Event name and date labels -->
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-6">
                                                 <label th:text="#{templateCRUD.addDateCardEventNameLabel}" for="addDateCardEventNameInput"></label>
                                             </div>
+                                            <div class="col-1"></div>
                                             <div class="col-5">
                                                 <label th:text="#{templateCRUD.addDateCardDateLabel}" for="addDateCardDateInput"></label>
                                             </div>
@@ -60,15 +84,17 @@
 
                                         <!-- Event name and date inputs -->
                                         <div class="row">
-                                            <div class="col-7">
+                                            <div class="col-6">
                                                 <input
                                                         type="text"
-                                                        class="w-75"
+                                                        class="w-100 form-control"
                                                         th:placeholder="#{templateCRUD.addDateCardEventNameInputPlaceholder}"
                                                         name="addDateCardEventNameInput"
                                                         id="addDateCardEventNameInput"
-                                                        required="required"/>
+                                                        required="required"
+                                                />
                                             </div>
+                                            <div class="col-1"></div>
                                             <div class="col-5">
                                                 <input
                                                         type="date"
@@ -77,6 +103,7 @@
                                                         name="addDateCardDateInput"
                                                         id="addDateCardDateInput"
                                                         required="required"
+                                                        class="form-control"
                                                 />
                                             </div>
                                         </div>
@@ -197,7 +224,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <span id="creationDateDisabledReason" class="text-danger m-auto"></span>
-                                        <input type="submit" th:text="#{templateCRUD.addDateCardButtonText}" id="btnCreateNewDate" class="btn btn-primary shadow-sm" data-dismiss="modal"/>
+                                        <input type="submit" th:value="#{templateCRUD.addDateCardButtonText}" id="btnCreateNewDate" class="btn btn-primary shadow-sm"/>
                                     </div>
                                 </form>
                             </div>
@@ -239,7 +266,7 @@
                                     <tr>
                                         <!-- empty for the passengers column -->
                                         <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"></th>
-                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}" th:data-date="${date.transportDate}"></th>
+                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}" th:data-date="${date.transportDate}" name="monthDate"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -341,8 +368,12 @@
         <script src="/js/demo/chart-area-demo.js"></script>
         <script src="/js/demo/chart-pie-demo.js"></script>
 
-        <script src="/js/own/templateCrudUDC.js"></script>
-        <script src="/js/own/templateCrudAddNewDate.js"></script>
+        <!-- addDate modal datepicker -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+        <script src="/js/own/TemplateCrudUDC.js"></script>
+        <script src="/js/own/TemplateCrudAddNewDate.js"></script>
+
         <!-- Ajax plugin -->
         <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
     </body>

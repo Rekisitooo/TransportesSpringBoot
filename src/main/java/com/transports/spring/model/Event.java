@@ -1,9 +1,6 @@
 package com.transports.spring.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
@@ -18,6 +15,7 @@ import java.sql.Date;
 public final class Event {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "COD_PLANTILLA")

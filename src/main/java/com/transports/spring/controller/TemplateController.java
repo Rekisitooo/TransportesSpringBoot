@@ -3,17 +3,14 @@ package com.transports.spring.controller;
 import com.transports.spring.dto.*;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
-import com.transports.spring.model.Driver;
-import com.transports.spring.model.Passenger;
-import com.transports.spring.model.Template;
-import com.transports.spring.model.Transport;
+import com.transports.spring.model.*;
 import com.transports.spring.service.*;
-import com.transports.spring.service.response.ServiceResponse;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +19,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/template")
 public final class TemplateController {
+
+    private static final String SUCCESS_ALERT_FLASH_ATTR_KEY = "success";
+    private static final String ERROR_ALERT_FLASH_ATTR_KEY = "error";
 
     private final EventService eventService;
     private final TemplateService templateService;
@@ -43,6 +43,55 @@ public final class TemplateController {
 
     @GetMapping("/openTemplate")
     public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
+        this.addDataToTemplateCrud(model, templateId);
+
+        return "templateCRUD";
+    }
+
+    @GetMapping("/generate")
+    public String generate(final RedirectAttributes rm, final Model model, @RequestParam(value = "id") final int templateId) {
+        try {
+            this.templateFileService.generateFiles(templateId);
+        } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
+            rm.addFlashAttribute(ERROR_ALERT_FLASH_ATTR_KEY, "generateTemplatesError");
+        }
+
+        this.addDataToTemplateCrud(model, templateId);
+
+        return "redirect:/templateCRUD";
+    }
+
+    @GetMapping("/create")
+    public Template create(@RequestBody final Template template) {
+        return this.templateService.create(template);
+    }
+
+    @GetMapping("/delete")
+    public ResponseEntity<Template> delete(@PathVariable (value = "id") final int templateId) {
+        return this.templateService.delete(templateId);
+    }
+
+    @PostMapping(path = "/newDate/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String newDate(final Model model, final RedirectAttributes rm, @PathVariable (value = "id") final int templateId, final DtoAddNewDateForm body) {
+        //TODO check the date is not already added in the template
+        //TODO check if the date is valid (from the current month and year)
+        //TODO check body info
+        //TODO check involvedd exist before the insert
+        if (body.isAddDateCardIsTransportDateCheckboxInput()) {
+            final TransportDateByTemplate newTemplateDate = this.transportDateByTemplateService.addTransportDate(body, templateId);
+            this.involvedAvailabiltyForTransportDateService.addInvolvedAvailability(body, newTemplateDate.getId());
+            rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "newDateAddedCorrectly");
+        } else {
+            this.eventService.addEvent(body, templateId);
+            rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "eventAddedCorrectly");
+        }
+
+        this.addDataToTemplateCrud(model, templateId);
+
+        return "redirect:/templateCRUD";
+    }
+
+    private void addDataToTemplateCrud(final Model model, final int templateId) {
         final DtoTemplateData template = this.templateService.getTemplateDataById(templateId);
         model.addAttribute("lastMonthDay", template.getLastMonthDay());
         model.addAttribute("monthNumber", template.getMonth());
@@ -74,40 +123,5 @@ public final class TemplateController {
 
         final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesForTemplate(templateId);
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
-
-        return "templateCRUD";
-    }
-
-    @GetMapping("/generate")
-    public String generate(final Model model, @RequestParam(value = "id") final int templateId) {
-        try {
-            this.templateFileService.generateFiles(templateId);
-        } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
-            //TODO print an error
-        }
-
-        return this.getById(model, 1);
-    }
-
-    @GetMapping("/create")
-    public Template create(@RequestBody final Template template) {
-        return this.templateService.create(template);
-    }
-
-    @GetMapping("/delete")
-    public ResponseEntity<Template> delete(@PathVariable (value = "id") final int templateId) {
-        return this.templateService.delete(templateId);
-    }
-
-    @PostMapping("/newDate")
-    public ResponseEntity<Object> newDate(@PathVariable (value = "id") final int templateId, @RequestBody final DtoAddNewDateForm body) {
-        if (body.isAddDateCardIsTransportDateCheckboxInput()) {
-            int newTemplateDateId = this.transportDateByTemplateService.addTransportDate(body, templateId);
-            this.involvedAvailabiltyForTransportDateService.addInvolvedAvailability(body, newTemplateDateId);
-        } else {
-            this.eventService.addEvent(body, templateId);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", body));
     }
 }

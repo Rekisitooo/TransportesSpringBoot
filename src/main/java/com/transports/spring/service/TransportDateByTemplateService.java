@@ -47,14 +47,13 @@ public class TransportDateByTemplateService {
      * @param templateId
      * @return createdDateId
      */
-    public int addTransportDate(final DtoAddNewDateForm body, final int templateId) {
+    public TransportDateByTemplate addTransportDate(final DtoAddNewDateForm body, final int templateId) {
         final Date addDateCardDateInput = body.getAddDateCardDateInput();
         final LocalDate localDate = addDateCardDateInput.toLocalDate();
         final DayOfWeek dayOfWeek = localDate.getDayOfWeek();
         final String string = localDate.toString();
         final int ordinal = dayOfWeek.ordinal();
 
-        this.transportDateByTemplateRepository.save(new TransportDateByTemplate(templateId, string, ordinal));
-        return this.transportDateByTemplateRepository.findById();
+        return this.transportDateByTemplateRepository.save(new TransportDateByTemplate(templateId, string, ordinal));
     }
 }

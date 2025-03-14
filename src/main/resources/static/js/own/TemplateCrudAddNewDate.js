@@ -1,9 +1,11 @@
-function addColumnToPassengersTable(dateData) {
+function getDatesToDisable() {
+    const datesToDisable = [];
+    $('th[name=monthDate]').each(function() {
+        const date = $(this).attr('data-date');
+        datesToDisable.push(date);
+    });
 
-}
-
-function addColumnToDriversTable(dateData) {
-
+    return datesToDisable;
 }
 
 function showResponse(responseText, statusText, xhr, $form) {
@@ -15,11 +17,12 @@ function showError(exception) {
     alert("The operation failed.")
 }
 
-function validateFormFields(formData, jqForm, options) {
+function validateFormFields(event) {
     let returnValue = true;
+    const evenNameInput = event.target[0];
 
-    if (!isValidEventName(form.addDateCardEventNameInput.value)) {
-        returnValue = false;
+    if (!isValidEventName(evenNameInput.value)) {
+        event.preventDefault();
         alert("El nombre del evento es demasiado largo");
     }
 
@@ -27,16 +30,20 @@ function validateFormFields(formData, jqForm, options) {
 }
 
 function isValidEventName(eventName) {
+    const body = document.querySelector('body');
     const span = document.createElement("span");
+    body.appendChild(span);
     span.style.visibility = "hidden";
     span.style.position = "absolute";
-    span.style.font = "11px Aptos Narrow";
+    span.style.fontSize = "11px";
+    span.style.fontFamily = "Aptos Narrow";
     span.textContent = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
 
     const maximumLarge = span.offsetWidth;
     span.textContent = eventName;
     const eventNameWidth = span.offsetWidth;
 
+    span.style.visibility = "hidden";
     if (eventNameWidth > maximumLarge) {
         return false;
     } else {
@@ -133,13 +140,20 @@ $(document).ready(
           $(this).on('click', enableDisableCreateDateButton);
         });
 
-        $('#addDateCardDateForm').ajaxForm({
-               target:        '#addDateCardDateForm',
-               beforeSubmit:  validateFormFields,
-               success:       showResponse,
-               type:          post,
-               dataType:      json,
-               error:         showError
+        $('#addDateCardDateForm').submit(validateFormFields);
+
+        const datepickerElement = $("#addDateCardDateInput");
+        const datesToDisable = getDatesToDisable();
+        const date = new Date(datesToDisable[0]);
+        const firstDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        datepickerElement.datepicker({
+            startDate: firstDayOfTheMonthDate,
+            endDate: lastDayOfTheMonthDate,
+            format: "yyyy-mm-dd",
+            datesDisabled: datesToDisable
         });
+        datepickerElement.on('click', function(){event.preventDefault()});
+        //disableNotAvailableDatesDatePicker($("#addDateCardDateInput"));
     }
 );
