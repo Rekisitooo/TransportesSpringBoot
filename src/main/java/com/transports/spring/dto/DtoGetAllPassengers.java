@@ -13,7 +13,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public final class DtoGetAllPassengers implements IPassengerDtoGetAllPassengersComparable {
-    private int id;
+    private Integer id;
     private String name;
     private String surname;
     private int occupiedSeats;

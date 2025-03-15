@@ -3,6 +3,7 @@ package com.transports.spring.service;
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
@@ -48,7 +49,7 @@ public class TransportService {
      * @param templateId consulted template
      * @return Map<driverId, Map<transportDateId, List<Passenger>>>
      */
-    public Map<Integer, Map<Integer, List<Passenger>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) {
+    public Map<Integer, Map<Integer, List<Passenger>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) throws InvolvedDoesNotExistException {
         final Map<Integer, Map<Integer, List<Passenger>>> driverTransportsMap = new HashMap<>();
 
         for (final Driver driver : driverList) {
@@ -58,7 +59,7 @@ public class TransportService {
 
             for (final Transport transport : allDriverTransportsFromTemplate) {
                 final Integer transportDateId = transport.getTransportKey().getTransportDateId();
-                final Passenger passenger = this.involvedByTemplateService.getByIdAndTemplate(transport.getTransportKey().getPassengerId(), templateId);
+                final Passenger passenger = this.involvedByTemplateService.getPassengerByIdAndTemplate(transport.getTransportKey().getPassengerId(), templateId);
 
                 List<Passenger> transportPassengerList = transportPassengersMap.get(transportDateId);
                 if (transportPassengerList == null) {

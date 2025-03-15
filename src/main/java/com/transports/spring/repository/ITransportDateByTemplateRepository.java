@@ -21,4 +21,11 @@ public interface ITransportDateByTemplateRepository extends JpaRepository<Transp
             "           ftpp.templateCode = :templateId" +
             "       ORDER BY ftpp.transportDate ASC")
     List<DtoTransportDateByTemplate> findAllMonthDatesByTemplateId(@Param("templateId") int templateId);
+
+    @Query("SELECT " +
+            "   new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
+            "       FROM TransportDateByTemplate ftpp" +
+            "       WHERE " +
+            "           ftpp.transportDate = :transportDate")
+    TransportDateByTemplate findByTransportDate(@Param("transportDate") String transportDate);
 }

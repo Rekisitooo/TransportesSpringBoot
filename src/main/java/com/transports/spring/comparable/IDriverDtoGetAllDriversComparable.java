@@ -1,7 +1,7 @@
 package com.transports.spring.comparable;
 
 public interface IDriverDtoGetAllDriversComparable {
-    int getId();
+    Integer getId();
     String getName();
     String getSurname();
     int getAvailableSeats();

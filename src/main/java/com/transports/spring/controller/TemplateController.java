@@ -1,8 +1,11 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.dto.*;
+import com.transports.spring.enumerationclasses.DateTypeEnum;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
+import com.transports.spring.exception.InvolvedDoesNotExistException;
+import com.transports.spring.exception.TransportsException;
 import com.transports.spring.model.*;
 import com.transports.spring.service.*;
 import org.springframework.http.MediaType;
@@ -23,7 +26,7 @@ public final class TemplateController {
     private static final String SUCCESS_ALERT_FLASH_ATTR_KEY = "success";
     private static final String ERROR_ALERT_FLASH_ATTR_KEY = "error";
 
-    private final EventService eventService;
+    private final AddNewDateToTemplateService addNewDateToTemplateService;
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportService transportService;
@@ -31,8 +34,8 @@ public final class TemplateController {
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TemplateFileService templateFileService;
 
-    public TemplateController(EventService eventService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService generateTemplateFilesService, TemplateFileService templateFileService) {
-        this.eventService = eventService;
+    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService,  TemplateFileService templateFileService) {
+        this.addNewDateToTemplateService = addNewDateToTemplateService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
@@ -42,14 +45,14 @@ public final class TemplateController {
     }
 
     @GetMapping("/openTemplate")
-    public String getById(final Model model, @RequestParam (value = "id") final int templateId) {
+    public String getById(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
         this.addDataToTemplateCrud(model, templateId);
 
         return "templateCRUD";
     }
 
     @GetMapping("/generate")
-    public String generate(final RedirectAttributes rm, final Model model, @RequestParam(value = "id") final int templateId) {
+    public String generate(final RedirectAttributes rm, final Model model, @RequestParam(value = "id") final int templateId) throws InvolvedDoesNotExistException {
         try {
             this.templateFileService.generateFiles(templateId);
         } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
@@ -58,7 +61,7 @@ public final class TemplateController {
 
         this.addDataToTemplateCrud(model, templateId);
 
-        return "redirect:/templateCRUD";
+        return "redirect:/template/openTemplate?id=" + templateId;
     }
 
     @GetMapping("/create")
@@ -72,26 +75,24 @@ public final class TemplateController {
     }
 
     @PostMapping(path = "/newDate/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String newDate(final Model model, final RedirectAttributes rm, @PathVariable (value = "id") final int templateId, final DtoAddNewDateForm body) {
-        //TODO check the date is not already added in the template
-        //TODO check if the date is valid (from the current month and year)
-        //TODO check body info
-        //TODO check involvedd exist before the insert
-        if (body.isAddDateCardIsTransportDateCheckboxInput()) {
-            final TransportDateByTemplate newTemplateDate = this.transportDateByTemplateService.addTransportDate(body, templateId);
-            this.involvedAvailabiltyForTransportDateService.addInvolvedAvailability(body, newTemplateDate.getId());
+    public String newDate(final Model model, final RedirectAttributes rm, @PathVariable (value = "id") final int templateId, final DtoAddNewDateForm body) throws InvolvedDoesNotExistException {
+        DateTypeEnum dateTypeEnum = null;
+        try {
+            dateTypeEnum = this.addNewDateToTemplateService.newDate(templateId, body);
+        } catch (final TransportsException e) {
+            rm.addFlashAttribute(ERROR_ALERT_FLASH_ATTR_KEY, "addDateInputDataError");
+        }
+        if (dateTypeEnum == DateTypeEnum.TRANSPORT_DATE) {
             rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "newDateAddedCorrectly");
-        } else {
-            this.eventService.addEvent(body, templateId);
+        } else if (dateTypeEnum == DateTypeEnum.EVENT) {
             rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "eventAddedCorrectly");
         }
 
         this.addDataToTemplateCrud(model, templateId);
-
-        return "redirect:/templateCRUD";
+        return "redirect:/template/openTemplate?id=" + templateId;
     }
 
-    private void addDataToTemplateCrud(final Model model, final int templateId) {
+    private void addDataToTemplateCrud(final Model model, final int templateId) throws InvolvedDoesNotExistException {
         final DtoTemplateData template = this.templateService.getTemplateDataById(templateId);
         model.addAttribute("lastMonthDay", template.getLastMonthDay());
         model.addAttribute("monthNumber", template.getMonth());

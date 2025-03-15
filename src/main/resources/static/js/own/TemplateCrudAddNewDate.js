@@ -23,7 +23,11 @@ function validateFormFields(event) {
 
     if (!isValidEventName(evenNameInput.value)) {
         event.preventDefault();
-        alert("El nombre del evento es demasiado largo");
+        Swal.fire({
+          icon: "error",
+          title: "No se puede crear la fecha",
+          text: "El nombre del evento es demasiado largo.",
+        });
     }
 
     return returnValue;
@@ -128,7 +132,6 @@ function enableDisableCreateDateButton() {
 $(document).ready(
     function () {
         $('#addDateCardIsTransportDateCheckboxInput').on('click', addInvolvedAvailabilityToAddDateCard);
-        $('#btnCreateNewDate').on('click', createDate);
 
         $("input[type='checkbox'][name='addDateCardDriverAvailabilityCheck']").each(function() {
           $(this).on('click', enableDisableAvailabilityReason);
@@ -153,7 +156,11 @@ $(document).ready(
             format: "yyyy-mm-dd",
             datesDisabled: datesToDisable
         });
+
+        //Avoid showing default datepick
         datepickerElement.on('click', function(){event.preventDefault()});
-        //disableNotAvailableDatesDatePicker($("#addDateCardDateInput"));
+
+        //Hide the datepicker when choosing date
+        datepickerElement.on('change', function(){$(this).datepicker('hide');});
     }
 );

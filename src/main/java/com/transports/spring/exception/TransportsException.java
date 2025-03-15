@@ -6,6 +6,10 @@ public class TransportsException extends Exception {
         super(cause);
     }
 
+    protected TransportsException(final String errorMessage){
+        super(errorMessage);
+    }
+
     protected TransportsException(){
         super();
     }

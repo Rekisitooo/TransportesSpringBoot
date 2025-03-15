@@ -81,29 +81,6 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
     $(driverTransportsTablePassengerBrToDelete).remove();
 }
 
-function createDate(dateData) {
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json',
-        url: '/t/createDate',
-        data: JSON.stringify(dateData),
-        dataType: 'json',
-        success : function(response) {
-            if (response.status === 'ok') {
-               addColumnToPassengersTable(dateData);
-               addColumnToDriversTable(dateData);
-            } else {
-                //TODO configurar la alerta para que se muestre en un idioma u otro
-                window.alert("Ha ocurrido un error al crear la fecha.");
-            }
-        },
-        error : function(e) {
-            //TODO configurar la alerta para que se muestre en un idioma u otro
-                window.alert("Ha ocurrido un error al crear la fecha.");
-        }
-    })
-}
-
 function operate () {
     const actualSelect = $(this);
     const selectedOption = actualSelect.find('option:selected');

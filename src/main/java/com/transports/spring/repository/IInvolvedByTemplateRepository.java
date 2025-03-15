@@ -36,9 +36,23 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<AbstractInv
     @Query("SELECT " +
             "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
             "       FROM InvolvedByTemplate ipp" +
+            "           INNER JOIN InvolvedRole rol " +
+            "               ON ipp.roleCode = rol.id" +
             "       WHERE" +
-            "           ipp.involvedByTemplateKey.templateCode = :templateCode" +
-            "           AND ipp.involvedByTemplateKey.involvedCode = :involvedCode")
-    Passenger getByIdAndTemplate(@Param("involvedCode") int involvedId, @Param("templateCode") final int templateId);
+            "           rol.description = 'Viajero' " +
+            "           AND ipp.involvedByTemplateKey.templateCode = :templateCode" +
+            "           AND ipp.involvedByTemplateKey.involvedCode = :passengerId")
+    Passenger getPassengerByIdAndTemplate(@Param("passengerId") int passengerId, @Param("templateCode") final int templateId);
+
+    @Query("SELECT " +
+            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "       FROM InvolvedByTemplate ipp" +
+            "           INNER JOIN InvolvedRole rol " +
+            "               ON ipp.roleCode = rol.id" +
+            "       WHERE" +
+            "           rol.description = 'Conductor' " +
+            "           AND ipp.involvedByTemplateKey.templateCode = :templateCode" +
+            "           AND ipp.involvedByTemplateKey.involvedCode = :driverId")
+    Driver getDriverByIdAndTemplate(@Param("driverId") int driverId, @Param("templateCode") final int templateId);
 }
 

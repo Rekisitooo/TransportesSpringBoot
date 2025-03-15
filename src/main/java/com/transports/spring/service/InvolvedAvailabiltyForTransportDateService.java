@@ -2,13 +2,11 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.model.*;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,17 +105,23 @@ public class InvolvedAvailabiltyForTransportDateService {
         return availableDriversForDateMap;
     }
 
-    public void addInvolvedAvailability(final DtoAddNewDateForm body, final int newTransportDateId) {
+    public void addInvolvedAvailabilityForDate(final DtoAddNewDateForm body, final int newTransportDateId, final int templateId) throws InvolvedDoesNotExistException {
         final List<String> addDateCardDriverAvailabilityCheck = body.getAddDateCardDriverAvailabilityCheck();
         for (final String driverIdString : addDateCardDriverAvailabilityCheck) {
             final int driverId = Integer.parseInt(driverIdString);
-            this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId));
+            this.involvedByTemplateService.getDriverByIdAndTemplate(driverId, templateId);
+
+            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId);
+            this.involvedAvailabiltyForTransportDateRepository.save(entity);
         }
 
         final List<String> addDateCardPassegerAvailabilityCheck = body.getAddDateCardPassegerAvailabilityCheck();
         for (final String passengerIdString : addDateCardPassegerAvailabilityCheck) {
             final int passengerId = Integer.parseInt(passengerIdString);
-            this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(passengerId, newTransportDateId));
+            this.involvedByTemplateService.getPassengerByIdAndTemplate(passengerId, templateId);
+
+            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(passengerId, newTransportDateId);
+            this.involvedAvailabiltyForTransportDateRepository.save(entity);
         }
     }
 }

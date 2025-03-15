@@ -16,7 +16,7 @@ public class AbstractInvolved {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int id;
+    protected Integer id;
 
     @Column(name = "NOMBRE")
     protected String name;

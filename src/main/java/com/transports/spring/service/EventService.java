@@ -36,6 +36,7 @@ public class EventService {
         final Date addDateCardDateInput = dtoAddNewDateForm.getAddDateCardDateInput();
         final String addDateCardEventNameInput = dtoAddNewDateForm.getAddDateCardEventNameInput();
 
-        this.eventRepository.save(new Event(templateId, addDateCardDateInput, addDateCardEventNameInput));
+        final Event entity = new Event(templateId, addDateCardDateInput, addDateCardEventNameInput);
+        this.eventRepository.save(entity);
     }
 }

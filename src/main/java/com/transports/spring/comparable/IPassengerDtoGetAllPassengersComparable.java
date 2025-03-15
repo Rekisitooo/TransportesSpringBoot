@@ -1,7 +1,7 @@
 package com.transports.spring.comparable;
 
 public interface IPassengerDtoGetAllPassengersComparable {
-    int getId();
+    Integer getId();
     String getName();
     String getSurname();
     int getOccupiedSeats();

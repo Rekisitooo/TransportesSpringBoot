@@ -1,13 +1,15 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoAddNewDateForm;
+import com.transports.spring.dto.DtoTemplateData;
 import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.exception.transportdate.TransportDateCreationException;
 import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
+import com.transports.spring.service.transportdatebytemplate.TransportDateByTemplateCreator;
+import com.transports.spring.service.transportdatebytemplate.TransportDateCreationValidator;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -15,9 +17,11 @@ import java.util.*;
 public class TransportDateByTemplateService {
 
     private final ITransportDateByTemplateRepository transportDateByTemplateRepository;
+    private final TransportDateByTemplateCreator transportDateByTemplateCreator;
 
-    public TransportDateByTemplateService(final ITransportDateByTemplateRepository transportDateByTemplateRepository) {
+    public TransportDateByTemplateService(TransportDateCreationValidator transportDateCreationValidator, final ITransportDateByTemplateRepository transportDateByTemplateRepository, TransportDateByTemplateCreator transportDateByTemplateCreator) {
         this.transportDateByTemplateRepository = transportDateByTemplateRepository;
+        this.transportDateByTemplateCreator = transportDateByTemplateCreator;
     }
 
     public List<DtoTransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
@@ -44,16 +48,12 @@ public class TransportDateByTemplateService {
     /**
      * adds a transport date in a template.
      * @param body
-     * @param templateId
+     * @param template
      * @return createdDateId
      */
-    public TransportDateByTemplate addTransportDate(final DtoAddNewDateForm body, final int templateId) {
-        final Date addDateCardDateInput = body.getAddDateCardDateInput();
-        final LocalDate localDate = addDateCardDateInput.toLocalDate();
-        final DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-        final String string = localDate.toString();
-        final int ordinal = dayOfWeek.ordinal();
-
-        return this.transportDateByTemplateRepository.save(new TransportDateByTemplate(templateId, string, ordinal));
+    public TransportDateByTemplate addTransportDate(final DtoAddNewDateForm body, final DtoTemplateData template) throws TransportDateCreationException {
+        return this.transportDateByTemplateCreator.addTransportDate(body, template);
     }
+
+
 }

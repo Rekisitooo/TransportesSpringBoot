@@ -3,9 +3,8 @@ package com.transports.spring.service.passenger;
 import com.transports.spring.dto.DtoFormGetAllPassengers;
 import com.transports.spring.dto.DtoGetAllPassengers;
 import com.transports.spring.exception.PassengerDoesNotBelongToUserException;
-import com.transports.spring.exception.PassengerDoesNotExistException;
+import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.exception.TransportsException;
-import com.transports.spring.model.AbstractInvolved;
 import com.transports.spring.model.AppUser;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.repository.IPassengerRepository;
@@ -53,10 +52,10 @@ public final class UpdatePassenger {
         }
     }
 
-    private Optional<Passenger> retrievePassenger(DtoGetAllPassengers passenger) throws PassengerDoesNotExistException {
+    private Optional<Passenger> retrievePassenger(DtoGetAllPassengers passenger) throws InvolvedDoesNotExistException {
         final Optional<Passenger> passengerToUpdate = this.passengerRepository.findById(passenger.getId());
         if (passengerToUpdate.isEmpty()) {
-            throw new PassengerDoesNotExistException();
+            throw new InvolvedDoesNotExistException();
         }
         return passengerToUpdate;
     }

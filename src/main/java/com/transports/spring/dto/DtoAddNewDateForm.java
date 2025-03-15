@@ -15,7 +15,7 @@ import java.util.List;
 public class DtoAddNewDateForm {
     private String addDateCardEventNameInput;
     private Date addDateCardDateInput;
-    private boolean addDateCardIsTransportDateCheckboxInput;
+    private Boolean addDateCardIsTransportDateCheckboxInput;
     private List<String> addDateCardDriverAvailabilityCheck;
     private List<String> addDateCardPassegerAvailabilityCheck;
 }
