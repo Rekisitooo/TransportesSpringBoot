@@ -107,12 +107,12 @@ public class TransportService {
 
     public List<DtoDriverTransport> findDriverTransportsFromTemplate(final int driverId, final int templateId) {
         final List<DtoDriverTransport> dtoDriverTransportList = new ArrayList<>();
-        String previousTransportDate = "";
+        java.sql.Date previousTransportDate = null;
         DtoDriverTransport newTransport = null;
 
         final List<DtoInvolvedTransport> driverTransportsFromTemplate = this.transportByTemplateRepository.findDriverTransportsFromTemplate(driverId, templateId);
         for (final DtoInvolvedTransport dtoInvolvedTransport : driverTransportsFromTemplate) {
-            if (previousTransportDate.isEmpty() || !previousTransportDate.equals(dtoInvolvedTransport.getTransportDate())) {
+            if (previousTransportDate == null || !previousTransportDate.equals(dtoInvolvedTransport.getTransportDate())) {
                 newTransport = new DtoDriverTransport(dtoInvolvedTransport);
                 dtoDriverTransportList.add(newTransport);
             } else {

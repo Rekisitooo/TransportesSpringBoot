@@ -7,6 +7,7 @@ import com.transports.spring.model.*;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,8 +67,8 @@ public class InvolvedAvailabiltyForTransportDateService {
             for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
                 final int transportDateId = transportByTemplate.getTransportDateCode();
                 final TransportDateByTemplate taransportDate = this.transportDateByTemplateService.findById(transportDateId);
-                final String transportDate = taransportDate.getTransportDate();
-                final LocalDate transportLocalDate = LocalDate.parse(transportDate);
+                final Date transportDate = taransportDate.getTransportDate();
+                final LocalDate transportLocalDate = transportDate.toLocalDate();
                 final String eventName = taransportDate.getEventName();
 
                 passengersAssistanceDates.add(new DtoTemplateDay(transportLocalDate, eventName));

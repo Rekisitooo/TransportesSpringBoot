@@ -10,6 +10,7 @@ import com.transports.spring.service.transportdatebytemplate.TransportDateByTemp
 import com.transports.spring.service.transportdatebytemplate.TransportDateCreationValidator;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,13 +20,16 @@ public class TransportDateByTemplateService {
     private final ITransportDateByTemplateRepository transportDateByTemplateRepository;
     private final TransportDateByTemplateCreator transportDateByTemplateCreator;
 
-    public TransportDateByTemplateService(TransportDateCreationValidator transportDateCreationValidator, final ITransportDateByTemplateRepository transportDateByTemplateRepository, TransportDateByTemplateCreator transportDateByTemplateCreator) {
+    public TransportDateByTemplateService(final ITransportDateByTemplateRepository transportDateByTemplateRepository, TransportDateByTemplateCreator transportDateByTemplateCreator) {
         this.transportDateByTemplateRepository = transportDateByTemplateRepository;
         this.transportDateByTemplateCreator = transportDateByTemplateCreator;
     }
 
     public List<DtoTransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
-        return this.transportDateByTemplateRepository.findAllMonthDatesByTemplateId(templateId);
+        final List<DtoTransportDateByTemplate> allMonthDatesByTemplateId = this.transportDateByTemplateRepository.findAllMonthDatesByTemplateId(templateId);
+        allMonthDatesByTemplateId.sort(Comparator.comparing(DtoTransportDateByTemplate::getTransportDate));
+
+        return allMonthDatesByTemplateId;
     }
 
     public Map<LocalDate, DtoTransportDateByTemplate> getTransportDateByDayMap(final int templateId) {
@@ -33,8 +37,8 @@ public class TransportDateByTemplateService {
         final Map<LocalDate, DtoTransportDateByTemplate> transportDateMap = new LinkedHashMap<>();
 
         for (final DtoTransportDateByTemplate dtoTransportDateByTemplate : monthTransportDates) {
-            final String transportDateString = dtoTransportDateByTemplate.getTransportDate();
-            final LocalDate transportDate = LocalDate.parse(transportDateString);
+            final Date transportDateDate = dtoTransportDateByTemplate.getTransportDate();
+            final LocalDate transportDate = transportDateDate.toLocalDate();
 
             transportDateMap.put(transportDate, dtoTransportDateByTemplate);
         }

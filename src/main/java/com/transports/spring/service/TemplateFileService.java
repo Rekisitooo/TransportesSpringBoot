@@ -89,7 +89,7 @@ public final class TemplateFileService {
 
                 final Map<LocalDate, DtoPassengerTransport> passengerTransportByDateMap = new LinkedHashMap<>();
                 for (final DtoPassengerTransport dtoPassengerTransport : passengerTransportsFromTemplate) {
-                    final LocalDate transportDate = LocalDate.parse(dtoPassengerTransport.getTransportDate());
+                    final LocalDate transportDate = dtoPassengerTransport.getTransportDate().toLocalDate();
                     passengerTransportByDateMap.put(transportDate, dtoPassengerTransport);
                 }
                 passengerTransportsFromTemplateMap.put(passenger, passengerTransportByDateMap);
@@ -108,8 +108,8 @@ public final class TemplateFileService {
             final List<DtoDriverTransport> driverTransportsFromTemplate = this.transportService.findDriverTransportsFromTemplate(driver.getId(), templateId);
 
             for (final DtoDriverTransport dtoDriverTransport : driverTransportsFromTemplate) {
-                final String transportDate = dtoDriverTransport.getTransportDate();
-                final LocalDate transportLocalDate = LocalDate.parse(transportDate);
+                final java.sql.Date transportDate = dtoDriverTransport.getTransportDate();
+                final LocalDate transportLocalDate = transportDate.toLocalDate();
                 driverTransportsByDateMap.put(transportLocalDate, dtoDriverTransport);
             }
 

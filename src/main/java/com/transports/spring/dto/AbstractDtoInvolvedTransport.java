@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.sql.Date;
+
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public abstract class AbstractDtoInvolvedTransport {
-    protected String transportDate;
+    protected Date transportDate;
     protected String eventName;
 }
