@@ -43,6 +43,28 @@ public class EventDateCellStyler extends AbstractDateCellGroupStyler {
     }
 
     @Override
+    public XSSFCellStyle getHeaderCellStyle(final XSSFWorkbook excel) {
+        final XSSFCellStyle cellStyle = excel.createCellStyle();
+        final XSSFFont cellFont = getHeaderFont(excel);
+        cellStyle.setFont(cellFont);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setFillForegroundColor(PURPLE_BACKGROUND_COLOR);
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        return cellStyle;
+    }
+
+    @Override
+    public XSSFFont getHeaderFont(final XSSFWorkbook excel) {
+        final XSSFFont cellFont = excel.createFont();
+        cellFont.setBold(true);
+        cellFont.setFontName(APTOS_NARROW_FONT);
+
+        return cellFont;
+    }
+
+    @Override
     public XSSFCellStyle getBodyCellStyle(final XSSFWorkbook excel) {
         final XSSFCellStyle cellStyle = excel.createCellStyle();
         final XSSFFont cellFont = getBodyFont(excel);

@@ -2,7 +2,6 @@ package com.transports.spring.templatecrudview;
 
 import com.microsoft.playwright.*;
 import com.transports.spring.TestConstants;
-import org.glassfish.jaxb.core.v2.TODO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 public class AddDateModalTests {
@@ -65,7 +65,7 @@ public class AddDateModalTests {
     void transportDatesCannotBeSelectedTest() {
         final List<String> monthTransportDays = new ArrayList<>();
         //selector takes first column (days of the week) and ignores the first col, that is empty and has date 01-mm-yyyy
-        final List<ElementHandle> passengerTableHeadingDateThElements = this.page.querySelectorAll("#passengerTransportsTable thead tr:nth-child(1) th:nth-child(n+2)");
+        final List<ElementHandle> passengerTableHeadingDateThElements = this.page.querySelectorAll("#passengerTransportsTable thead tr:nth-child(2) th:nth-child(n+2)");
         for (final ElementHandle tableHeadingElement : passengerTableHeadingDateThElements) {
             final String monthDate = tableHeadingElement.getAttribute("data-date");
             final String monthDay = monthDate.substring(8);

@@ -234,7 +234,7 @@
                     </div>
 
                     <!-- Begin Page Content -->
-                    <div class="container-fluid">
+                    <div class="container-fluid overflow-auto">
 
                         <!-- Page Heading -->
                         <div class="container-fluid mt-4">
@@ -270,27 +270,19 @@
                                         <!-- empty for the passengers column -->
                                         <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
                                         <th th:each="date: ${templateDates}"
-                                            th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}"
+                                            th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
                                             th:data-date="${date.transportDate}"
                                             class="text-nowrap"></th>
                                     </tr>
 
-                                    <!-- Dates row -->
-                                    <tr>
-                                        <!-- empty for the passengers column -->
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <th th:each="date : ${templateDates}"
-                                            th:text="${date.transportDate}"
-                                            th:data-date="${date.transportDate}"
-                                            name="monthDate"
-                                            class="text-nowrap"></th>
-                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
                                         <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}" class="text-nowrap">
+                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
+                                            class="text-nowrap text-left"
+                                        ></th>
+                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}">
                                             <span th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)}" th:text="#{templateCRUD.holidays}"></span>
                                             <th:block th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) != null)}">
                                                 <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
@@ -330,21 +322,22 @@
                                     <tr>
                                         <!-- empty for the drivers column -->
                                         <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <th th:each="date: ${templateDates}" th:text="${#messages.msgOrNull(date.dayOfTheWeekName)}" class="text-nowrap"></th>
+                                        <th th:each="date: ${templateDates}"
+                                            th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
+                                            class="text-nowrap"
+                                        ></th>
                                     </tr>
 
-                                    <!-- Dates row -->
-                                    <tr>
-                                        <!-- empty for the drivers column -->
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <th th:each="date : ${templateDates}" th:text="${date.transportDate}" class="text-nowrap"></th>
-                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="driver : ${driversFromTemplateList}">
-                                        <th th:text="${driver.name} + ' ' + ${driver.surname}" th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"></th>
+                                        <th th:text="${driver.name} + ' ' + ${driver.surname}"
+                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
+                                            class="text-nowrap text-left"
+                                        ></th>
                                         <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
-                                        <td th:each="date : ${templateDates}" th:id="'d' + ${driver.id} + 't' + ${date.id}" th:data-date="${date.transportDate}">
+                                        <td th:each="date : ${templateDates}"
+                                            th:id="'d' + ${driver.id} + 't' + ${date.id}" th:data-date="${date.transportDate}" class="text-nowrap">
                                             <th:block th:unless="${'event' == date.dateType}" th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
                                                 <span
                                                     th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)

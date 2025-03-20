@@ -35,8 +35,7 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
             final DtoTemplateDate dtoTemplateDate = dateMap.get(super.templateDate);
             if (dtoTemplateDate != null) {
                 if (dtoTemplateDate.getDateType().equals("event")) {
-                    final String dateEventName = getAssistanceDateEventName(passengerAssistanceDates);
-                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
+                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dtoTemplateDate.getEventName());
                     dtoTemplateExcelTransportCellGroup.setBodyText("No hay arreglos.");
                     dtoTemplateExcelTransportCellGroup.setCellStyler(new EventDateCellStyler());
 
@@ -61,6 +60,8 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
                 } else {
                     dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
                 }
+            } else {
+                dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
             }
 
             super.generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
