@@ -72,6 +72,7 @@ public abstract class AbstractTemplateExcelBodyGenerator {
         final DayCellGroupHeaderCell dayCellGroupHeaderCell = new DayCellGroupHeaderCell(excelSheet, this.currentRow + 1, this.currentCol);
         final DayCellGroupBodyCell dayCellGroupBodyCell = new DayCellGroupBodyCell(excelSheet, this.currentRow + 2, this.currentCol);
         final TemplateExcelTransportDayCellGroup transportDayCell = new TemplateExcelTransportDayCellGroup(dayCellGroupNumberCell, dayCellGroupHeaderCell, dayCellGroupBodyCell);
+
         transportDayCell.generate(dtoTemplateExcelTransportCellGroup);
     }
 }

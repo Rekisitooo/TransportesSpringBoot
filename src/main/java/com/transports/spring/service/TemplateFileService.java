@@ -2,8 +2,8 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.DtoTemplateDate;
 import com.transports.spring.dto.DtoTemplateDay;
-import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.dto.generatefiles.DtoGenerateDriverFile;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
@@ -15,8 +15,6 @@ import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
@@ -55,16 +53,15 @@ public final class TemplateFileService {
             final int templateMonth = getIntFromString(template.getMonth());
             final String monthName = this.getTemplateMonthName(templateMonth);
 
-            final Map<LocalDate, Event> dateEventMap = this.eventService.findAllEventsByTemplateId(templateId);
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
-            final Map<LocalDate, DtoTransportDateByTemplate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
+            final Map<LocalDate, DtoTemplateDate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
             final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
 
             final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 
             final DtoGeneratePassengerFile dtoGeneratePassengerFile = new DtoGeneratePassengerFile(passengerTransports, templateMonthDateByDayMap, allPassengersAssistanceDatesMap);
             final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports);
-            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance(), dateEventMap);
+            final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance());
             final DtoTemplateExcelHeader dtoHeader = new DtoTemplateExcelHeader(monthName, templateYear);
             this.templateFileGenerator.generateFiles(dtoGenerateFile, dtoHeader);
         }

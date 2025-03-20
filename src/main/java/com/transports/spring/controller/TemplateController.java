@@ -30,16 +30,16 @@ public final class TemplateController {
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportService transportService;
-    private final TransportDateByTemplateService transportDateByTemplateService;
+    private final TemplateDateService templateDateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TemplateFileService templateFileService;
 
-    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService,  TemplateFileService templateFileService) {
+    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService) {
         this.addNewDateToTemplateService = addNewDateToTemplateService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
-        this.transportDateByTemplateService = transportDateByTemplateService;
+        this.templateDateService = templateDateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
         this.templateFileService = templateFileService;
     }
@@ -110,7 +110,7 @@ public final class TemplateController {
         model.addAttribute("driversFromTemplateList", driversFromTemplateList);
         model.addAttribute("availableDriverSeatsAmount", dtoDriverList.getTotalDriverAvailableSeats());
 
-        final List<DtoTransportDateByTemplate> templateDates = this.transportDateByTemplateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
         final Map<Integer, Map<Integer, Transport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);

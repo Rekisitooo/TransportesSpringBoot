@@ -2,12 +2,11 @@ package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.dto.DtoTemplateData;
-import com.transports.spring.dto.DtoTransportDateByTemplate;
+import com.transports.spring.dto.DtoTemplateDate;
 import com.transports.spring.exception.transportdate.TransportDateCreationException;
 import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
 import com.transports.spring.service.transportdatebytemplate.TransportDateByTemplateCreator;
-import com.transports.spring.service.transportdatebytemplate.TransportDateCreationValidator;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -18,29 +17,24 @@ import java.util.*;
 public class TransportDateByTemplateService {
 
     private final ITransportDateByTemplateRepository transportDateByTemplateRepository;
+    private final TemplateDateService templateDateService;
     private final TransportDateByTemplateCreator transportDateByTemplateCreator;
 
-    public TransportDateByTemplateService(final ITransportDateByTemplateRepository transportDateByTemplateRepository, TransportDateByTemplateCreator transportDateByTemplateCreator) {
+    public TransportDateByTemplateService(final ITransportDateByTemplateRepository transportDateByTemplateRepository, TemplateDateService templateDateService, TransportDateByTemplateCreator transportDateByTemplateCreator) {
         this.transportDateByTemplateRepository = transportDateByTemplateRepository;
+        this.templateDateService = templateDateService;
         this.transportDateByTemplateCreator = transportDateByTemplateCreator;
     }
 
-    public List<DtoTransportDateByTemplate> findAllMonthDatesWithNameDayOfTheWeekByTemplateId(final int templateId) {
-        final List<DtoTransportDateByTemplate> allMonthDatesByTemplateId = this.transportDateByTemplateRepository.findAllMonthDatesByTemplateId(templateId);
-        allMonthDatesByTemplateId.sort(Comparator.comparing(DtoTransportDateByTemplate::getTransportDate));
+    public Map<LocalDate, DtoTemplateDate> getTransportDateByDayMap(final int templateId) {
+        final List<DtoTemplateDate> monthTransportDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        final Map<LocalDate, DtoTemplateDate> transportDateMap = new LinkedHashMap<>();
 
-        return allMonthDatesByTemplateId;
-    }
-
-    public Map<LocalDate, DtoTransportDateByTemplate> getTransportDateByDayMap(final int templateId) {
-        final List<DtoTransportDateByTemplate> monthTransportDates = this.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-        final Map<LocalDate, DtoTransportDateByTemplate> transportDateMap = new LinkedHashMap<>();
-
-        for (final DtoTransportDateByTemplate dtoTransportDateByTemplate : monthTransportDates) {
-            final Date transportDateDate = dtoTransportDateByTemplate.getTransportDate();
+        for (final DtoTemplateDate dtoTemplateDate : monthTransportDates) {
+            final Date transportDateDate = dtoTemplateDate.getTransportDate();
             final LocalDate transportDate = transportDateDate.toLocalDate();
 
-            transportDateMap.put(transportDate, dtoTransportDateByTemplate);
+            transportDateMap.put(transportDate, dtoTemplateDate);
         }
         return transportDateMap;
     }

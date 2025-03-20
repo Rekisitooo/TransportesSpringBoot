@@ -1,7 +1,6 @@
 package com.transports.spring.dto.generatefiles.excel;
 
 import com.transports.spring.dto.DtoDriverTransport;
-import com.transports.spring.model.Event;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +15,4 @@ import java.util.Map;
 @Builder
 public class DtoTemplateExcelDriverBody {
     private Map<LocalDate, DtoDriverTransport> driverTransportForDayMap;
-    private Map<LocalDate, Event> dateEventMap;
 }

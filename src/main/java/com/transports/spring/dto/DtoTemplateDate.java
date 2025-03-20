@@ -9,7 +9,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public final class DtoTransportDateByTemplate {
+public final class DtoTemplateDate {
 
     private int id;
     private int templateCode;
@@ -17,12 +17,15 @@ public final class DtoTransportDateByTemplate {
     private int dayOfTheWeekCode;
     private String eventName;
     private String dayOfTheWeekName;
+    private String dateType;
 
-    public DtoTransportDateByTemplate(int id, int templateCode, Date transportDate, int dayOfTheWeekCode, String name) {
+    public DtoTemplateDate(int id, int templateCode, Date transportDate, int dayOfTheWeekCode, String name, String dateType) {
         this.id = id;
         this.templateCode = templateCode;
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;
         this.dayOfTheWeekName = name;
+        this.dateType = dateType;
     }
+
 }

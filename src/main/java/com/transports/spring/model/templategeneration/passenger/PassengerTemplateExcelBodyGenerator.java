@@ -1,20 +1,20 @@
 package com.transports.spring.model.templategeneration.passenger;
 
 import com.transports.spring.dto.DtoPassengerTransport;
+import com.transports.spring.dto.DtoTemplateDate;
 import com.transports.spring.dto.DtoTemplateDay;
-import com.transports.spring.dto.DtoTransportDateByTemplate;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
-import com.transports.spring.model.Event;
 import com.transports.spring.model.templategeneration.common.AbstractTemplateExcelBodyGenerator;
-
 import com.transports.spring.model.templategeneration.common.cell.styler.DefaultDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.EventDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.TransportDateCellStyler;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyGenerator {
 
@@ -24,46 +24,46 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
 
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody dtoPassengerBody) {
         final Map<LocalDate, DtoPassengerTransport> passengerTransportDateMap = dtoPassengerBody.getAllTemplatePassengerTransportsByDayMap();
-        final Map<LocalDate, DtoTransportDateByTemplate> dateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
+        final Map<LocalDate, DtoTemplateDate> dateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
         final List<DtoTemplateDay> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
-        final Map<LocalDate, Event> dateEventMap = dtoPassengerBody.getDateEventMap();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
             final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup =
                     new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
 
-            final DtoTransportDateByTemplate dtoTransportDateByTemplate = dateMap.get(super.templateDate);
-            if (isActualDateTransportDate(dtoTransportDateByTemplate)) {
-
-                final DtoPassengerTransport passengerTransport = passengerTransportDateMap.get(super.templateDate);
-                if (isPassengerArrangedInTransportInActualDate(passengerTransport)) {
-                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + passengerTransport.getEventName());
-                    dtoTemplateExcelTransportCellGroup.setHeaderText("Te lleva:");
-                    dtoTemplateExcelTransportCellGroup.setBodyText(passengerTransport.getDriverFullName());
-                    dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
-                } else {
+            final DtoTemplateDate dtoTemplateDate = dateMap.get(super.templateDate);
+            if (dtoTemplateDate != null) {
+                if (dtoTemplateDate.getDateType().equals("event")) {
                     final String dateEventName = getAssistanceDateEventName(passengerAssistanceDates);
-                    if (isPassengerAssistingOnActualDate(dateEventName)) {
-                        dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
-                        dtoTemplateExcelTransportCellGroup.setBodyText("No hay conductores disponibles.");
-                        dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
-                    } else {
-                        dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
-                    }
-                }
-            } else {
-                final Event event = dateEventMap.get(super.templateDate);
-                if (event == null) {
-                    dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
-                } else {
-                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + event.getEventName());
+                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
                     dtoTemplateExcelTransportCellGroup.setBodyText("No hay arreglos.");
                     dtoTemplateExcelTransportCellGroup.setCellStyler(new EventDateCellStyler());
+
+                } else if (dtoTemplateDate.getDateType().equals("transportDate")) {
+                    final DtoPassengerTransport passengerTransport = passengerTransportDateMap.get(super.templateDate);
+
+                    if (isPassengerArrangedInTransportInActualDate(passengerTransport)) {
+                        dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + passengerTransport.getEventName());
+                        dtoTemplateExcelTransportCellGroup.setHeaderText("Te lleva:");
+                        dtoTemplateExcelTransportCellGroup.setBodyText(passengerTransport.getDriverFullName());
+                        dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
+                    } else {
+                        final String dateEventName = this.getAssistanceDateEventName(passengerAssistanceDates);
+                        if (isPassengerAssistingOnActualDate(dateEventName)) {
+                            dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
+                            dtoTemplateExcelTransportCellGroup.setBodyText("No hay conductores disponibles.");
+                            dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
+                        } else {
+                            dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
+                        }
+                    }
+                } else {
+                    dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
                 }
             }
 
-            generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
+            super.generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
 
             this.currentCol += 2;
             super.templateDate = super.templateDate.plusDays(1);
@@ -91,7 +91,4 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
         return !"".equals(eventName);
     }
 
-    private static boolean isActualDateTransportDate(final DtoTransportDateByTemplate templateTransportDate) {
-        return templateTransportDate != null;
-    }
 }
