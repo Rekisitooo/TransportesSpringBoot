@@ -279,10 +279,10 @@
                                         >
                                             <span th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"></span>
                                             <th:block th:if="${(date.dateType == 'transportDate')}">
-                                                <i class="bi bi-trash text-danger cursor-pointer" id="delete-icon" th:data-a="${date.id}"></i>
+                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon" th:data-a="${date.id}"></i>
                                             </th:block>
                                             <th:block th:if="${(date.dateType == 'event')}">
-                                                <i class="bi bi-trash text-danger cursor-pointer" id="delete-icon" th:data-b="${date.id}"></i>
+                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon" th:data-b="${date.id}"></i>
                                             </th:block>
                                         </th>
                                     </tr>
@@ -404,9 +404,9 @@
         <!-- addDate modal datepicker -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-        <script src="/js/own/TemplateCrudUDC.js"></script>
-        <script src="/js/own/TemplateCrudAddNewDate.js"></script>
-        <script src="/js/own/TemplateCrudEvent.js"></script>
+        <script src="/js/own/TemplateCrudTransportCRUD.js"></script>
+        <script src="/js/own/TemplateCrudAddNewDateModal.js"></script>
+        <script src="/js/own/TemplateCrudDateCRUD.js"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
