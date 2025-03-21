@@ -7,11 +7,14 @@ import com.transports.spring.exception.transportdate.TransportDateCreationExcept
 import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.repository.ITransportDateByTemplateRepository;
 import com.transports.spring.service.transportdatebytemplate.TransportDateByTemplateCreator;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransportDateByTemplateService {
@@ -54,4 +57,9 @@ public class TransportDateByTemplateService {
     }
 
 
+    public ResponseEntity<TransportDateByTemplate> delete(final int transportDateId) {
+        final TransportDateByTemplate existingTransportDate = this.transportDateByTemplateRepository.findById(transportDateId).orElseThrow();
+        this.transportDateByTemplateRepository.delete(existingTransportDate);
+        return ResponseEntity.ok().build();
+    }
 }

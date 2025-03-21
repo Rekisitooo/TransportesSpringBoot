@@ -3,6 +3,7 @@ package com.transports.spring.service;
 import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.model.Event;
 import com.transports.spring.repository.IEventRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -38,5 +39,11 @@ public class EventService {
 
         final Event entity = new Event(templateId, addDateCardDateInput, addDateCardEventNameInput);
         this.eventRepository.save(entity);
+    }
+
+    public ResponseEntity<Event> delete(final int eventId) {
+        final Event existingEvent = this.eventRepository.findById(eventId).orElseThrow();
+        this.eventRepository.delete(existingEvent);
+        return ResponseEntity.ok().build();
     }
 }
