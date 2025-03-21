@@ -272,6 +272,7 @@
                                         <th th:each="date: ${templateDates}"
                                             th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
                                             th:data-date="${date.transportDate}"
+                                            name="monthDate"
                                             class="text-nowrap"></th>
                                     </tr>
 
