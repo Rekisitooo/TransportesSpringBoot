@@ -278,12 +278,10 @@
                                             class="text-nowrap"
                                         >
                                             <span th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"></span>
-                                            <th:block th:if="${(date.dateType == 'transportDate')}">
-                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon" th:data-a="${date.id}"></i>
-                                            </th:block>
-                                            <th:block th:if="${(date.dateType == 'event')}">
-                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon" th:data-b="${date.id}"></i>
-                                            </th:block>
+                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon"
+                                                   th:data-a="${(date.dateType == 'transportDate') ? date.id : ''}"
+                                                   th:data-b="${(date.dateType == 'event') ? date.id : ''}"
+                                                ></i>
                                         </th>
                                     </tr>
 
@@ -294,8 +292,9 @@
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
                                             class="text-nowrap text-left"
                                         ></th>
-                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}">
+                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}" th:class="${(date.dateType == 'event') ? 'text-center' : ''}">
                                             <span th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)}" th:text="#{templateCRUD.holidays}"></span>
+                                            <span th:if="${(date.dateType == 'event')}">--------</span>
                                             <th:block th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) != null)}">
                                                 <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
                                                     <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
