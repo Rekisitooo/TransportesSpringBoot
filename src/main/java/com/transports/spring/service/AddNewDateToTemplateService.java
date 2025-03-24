@@ -31,10 +31,12 @@ public class AddNewDateToTemplateService {
         }
 
         if (body.getAddDateCardIsTransportDateCheckboxInput() != null && body.getAddDateCardIsTransportDateCheckboxInput()) {
+            //TODO check if transport date already exists
             final TransportDateByTemplate newTemplateDate = this.transportDateByTemplateService.addTransportDate(body, template);
             this.involvedAvailabiltyForTransportDateService.addInvolvedAvailabilityForDate(body, newTemplateDate.getId(), templateId);
             dateType = DateTypeEnum.TRANSPORT_DATE;
         } else {
+            //TODO check if event already exists
             this.eventService.addEvent(body, templateId);
             dateType = DateTypeEnum.EVENT;
         }

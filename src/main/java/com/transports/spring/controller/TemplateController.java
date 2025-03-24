@@ -23,9 +23,7 @@ import java.util.Map;
 @RequestMapping("/template")
 public final class TemplateController {
 
-    private static final String SUCCESS_ALERT_FLASH_ATTR_KEY = "success";
-    private static final String ERROR_ALERT_FLASH_ATTR_KEY = "error";
-
+    public static final String GENERIC_ERROR_FLASH_ATTR = "genericError";
     private final AddNewDateToTemplateService addNewDateToTemplateService;
     private final TemplateService templateService;
     private final InvolvedByTemplateService involvedByTemplateService;
@@ -56,7 +54,7 @@ public final class TemplateController {
         try {
             this.templateFileService.generateFiles(templateId);
         } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
-            rm.addFlashAttribute(ERROR_ALERT_FLASH_ATTR_KEY, "generateTemplatesError");
+            rm.addFlashAttribute(GENERIC_ERROR_FLASH_ATTR, GENERIC_ERROR_FLASH_ATTR);
         }
 
         this.addDataToTemplateCrud(model, templateId);
@@ -80,12 +78,12 @@ public final class TemplateController {
         try {
             dateTypeEnum = this.addNewDateToTemplateService.newDate(templateId, body);
         } catch (final TransportsException e) {
-            rm.addFlashAttribute(ERROR_ALERT_FLASH_ATTR_KEY, "addDateInputDataError");
+            rm.addFlashAttribute(GENERIC_ERROR_FLASH_ATTR, GENERIC_ERROR_FLASH_ATTR);
         }
         if (dateTypeEnum == DateTypeEnum.TRANSPORT_DATE) {
-            rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "newDateAddedCorrectly");
+            rm.addFlashAttribute("transportDateCreated", "newDateAddedCorrectly");
         } else if (dateTypeEnum == DateTypeEnum.EVENT) {
-            rm.addFlashAttribute(SUCCESS_ALERT_FLASH_ATTR_KEY, "eventAddedCorrectly");
+            rm.addFlashAttribute("eventCreated", "eventAddedCorrectly");
         }
 
         this.addDataToTemplateCrud(model, templateId);

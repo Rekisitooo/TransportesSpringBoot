@@ -223,19 +223,6 @@
 
                     <th:block th:insert="~{components/topbar :: topbar}">  </th:block>
 
-                    <div class="alert alert-success" role="alert" th:if="${success} != null">
-                        <h4 class="alert-heading" th:text="#{'templateCRUD.' + ${success} + 'Title'}"></h4>
-                        <p th:text="#{'templateCRUD.' + ${success} + 'Body'}"></p>
-                    </div>
-
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error} != null">
-                        <strong th:text="#{'templateCRUD.' + ${error} + 'Title'}"></strong>
-                        <span th:text="#{'templateCRUD.' + ${error} + 'Body'}"></span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
                     <!-- Begin Page Content -->
                     <div class="container-fluid overflow-auto">
 
@@ -408,10 +395,20 @@
         <script src="/js/own/TemplateCrudDateCRUD.js"></script>
 
         <!-- Custom alerts -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></scri    pt>
 
         <!-- Ajax plugin -->
         <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+
+        <th:block th:if="${genericError} != null">
+            <script src="/js/own/GenericErrorAlert.js"></script>
+        </th:block>
+        <th:block th:if="${transportDateCreated} != null">
+            <script src="/js/own/TransportDateCreatedAlert.js"></script>
+        </th:block>
+        <th:block th:if="${eventCreated} != null">
+            <script src="/js/own/EventCreatedAlert.js"></script>
+        </th:block>
     </body>
 
 </html>
