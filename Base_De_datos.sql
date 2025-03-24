@@ -104,7 +104,8 @@ VALUES
     ('Abel y Mariana', '', TRUE, 2, 2, 1, 1),
     ('Familia', 'Cerezo', TRUE, 1, 2, 1, 1),
     ('Vanessa', 'Aparicio', TRUE, 2, 2, 1, 1),
-    ('Isabel', 'Laso', TRUE, 1, 1, 1, 1)
+    ('Isabel', 'Laso', TRUE, 1, 1, 1, 1),
+    ('Carmen', 'Robles', TRUE, 1, 1, 1, 1)
     -- ('Ikeriano no compartido', '', TRUE, 1, 1, 1, NULL),
     -- ('Fuencarral1 no compartido', '', TRUE, 1, 1, 2, NULL)
     ;
