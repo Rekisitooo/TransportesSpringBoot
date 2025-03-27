@@ -60,7 +60,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
 
     @Query("SELECT " +
-            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, viajero.name)" +
+            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, CONCAT(viajero.name, ' ', viajero.surname))" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
@@ -74,7 +74,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     List<DtoInvolvedTransport> findDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
 
     @Query("SELECT " +
-            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, conductor.name)" +
+            "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, CONCAT(conductor.name, ' ', conductor.surname))" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
