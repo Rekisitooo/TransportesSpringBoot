@@ -149,17 +149,6 @@
                                                                     th:for="${driver.id} + 'disAvailable'">
                                                             </label>
                                                         </div>
-                                                        <div class="col-6">
-                                                            <input
-                                                                    th:id="${driver.id} + 'disAvailableInput'"
-                                                                    type="text"
-                                                                    name="addDateCardDriverNotAvailableReason"
-                                                                    th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${driver.name} + ' ' + ${driver.surname}"
-                                                                    th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
-                                                                    class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
-                                                                    style="display:none"
-                                                            /><!-- style is for js to work-->
-                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -195,17 +184,6 @@
                                                         <div class="col-5">
                                                             <label th:text="${passenger.name} + ' ' + ${passenger.surname} + ' (' + ${passenger.occupiedSeats} + ' ' + #{seatsAbbreviation} + ')'"
                                                                    th:for="${passenger.id} + 'pisAvailable'"></label>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <input
-                                                                    th:id="${passenger.id} + 'pisAvailableInput'"
-                                                                    type="text"
-                                                                    name="addDateCardPassengerNotAvailableReason"
-                                                                    th:aria-label="#{templateCRUD.addDateCardNotAvailableReason} + ' ' + ${passenger.name} + ' ' + ${passenger.surname}"
-                                                                    th:placeholder="#{templateCRUD.addDateCardNotAvailableReason}"
-                                                                    class="bg-transparent border border-top-0 border-right-0 border-left-0 w-100"
-                                                                    style="display:none"
-                                                            /><!-- style is for js to work-->
                                                         </div>
                                                     </div>
                                                 </div>

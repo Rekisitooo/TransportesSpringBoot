@@ -67,15 +67,6 @@ function addInvolvedAvailabilityToAddDateCard() {
     }
 }
 
-function enableDisableAvailabilityReason() {
-    const availabilityReasonInputId = $(this).attr('id');
-    if (this.checked) {
-        $('#' + availabilityReasonInputId + 'Input').hide();
-    } else {
-        $('#' + availabilityReasonInputId + 'Input').show();
-    }
-}
-
 function enableDisableCreateDateButton() {
     const passengerNodes = $("input[type='checkbox'][name='addDateCardPassengerAvailabilityCheck']");
     let selectedPassengerArray = [];
@@ -134,12 +125,10 @@ $(document).ready(
         $('#addDateCardIsTransportDateCheckboxInput').on('click', addInvolvedAvailabilityToAddDateCard);
 
         $("input[type='checkbox'][name='addDateCardDriverAvailabilityCheck']").each(function() {
-          $(this).on('click', enableDisableAvailabilityReason);
           $(this).on('click', enableDisableCreateDateButton);
         });
 
         $("input[type='checkbox'][name='addDateCardPassengerAvailabilityCheck']").each(function() {
-          $(this).on('click', enableDisableAvailabilityReason);
           $(this).on('click', enableDisableCreateDateButton);
         });
 
