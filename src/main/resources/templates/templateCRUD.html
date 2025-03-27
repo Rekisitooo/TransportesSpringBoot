@@ -257,7 +257,7 @@
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                         ></th>
-                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}" th:class="${(date.dateType == 'event') ? 'text-center' : ''}">
+                                        <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}" th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)) ? 'text-center' : ''}">
                                             <span th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)}" th:text="#{templateCRUD.holidays}"></span>
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
                                             <th:block th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) != null)}">
@@ -314,7 +314,8 @@
                                         ></th>
                                         <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
                                         <td th:each="date : ${templateDates}"
-                                            th:id="'d' + ${driver.id} + 't' + ${date.id}" th:data-date="${date.transportDate}" class="text-nowrap">
+                                            th:id="'d' + ${driver.id} + 't' + ${date.id}" th:data-date="${date.transportDate}" th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)) ? 'text-nowrap text-center' : 'text-nowrap'}">
+                                            <span th:if="${(date.dateType == 'event')}">--------</span>
                                             <th:block th:unless="${'event' == date.dateType}" th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
                                                 <span
                                                     th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
