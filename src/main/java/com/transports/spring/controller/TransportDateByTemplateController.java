@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/transportDate")
@@ -19,8 +19,9 @@ public final class TransportDateByTemplateController {
         this.transportDateService = transportDateService;
     }
 
-    @DeleteMapping
-    public ResponseEntity<TransportDateByTemplate> getById(final Model model, @RequestParam (value = "eventId") final int transportDateId) {
-        return this.transportDateService.delete(transportDateId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TransportDateByTemplate> delete(final Model model, @PathVariable final int id) {
+        //TODO disable date instead of erasing
+        return this.transportDateService.delete(id);
     }
 }

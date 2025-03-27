@@ -8,15 +8,6 @@ function getDatesToDisable() {
     return datesToDisable;
 }
 
-function showResponse(responseText, statusText, xhr, $form) {
-    alert("New date added correctly");
-    //TODO add promise and close modal
-}
-
-function showError(exception) {
-    alert("The operation failed.")
-}
-
 function validateFormFields(event) {
     let returnValue = true;
     const evenNameInput = event.target[0];
@@ -120,6 +111,37 @@ function enableDisableCreateDateButton() {
     $('#selectedDriverTotal').text(' (' + selectedDriverArray.length);
 }
 
+export function loadDatePicker() {
+    const datepickerElement = $("#addDateCardDateInput");
+    const datesToDisable = getDatesToDisable();
+    const date = new Date(datesToDisable[0]);
+    const firstDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    datepickerElement.datepicker('destroy');
+
+    datepickerElement.datepicker({
+        startDate: firstDayOfTheMonthDate,
+        endDate: lastDayOfTheMonthDate,
+        format: "yyyy-mm-dd",
+        datesDisabled: datesToDisable
+    });
+
+    //Avoid showing default datepick
+    datepickerElement.on('click',
+        function(){
+            event.preventDefault();
+        }
+    );
+
+    //Hide the datepicker when choosing date
+    datepickerElement.on('change',
+        function(){
+            $(this).datepicker('hide');
+        }
+    );
+}
+
 $(document).ready(
     function () {
         $('#addDateCardIsTransportDateCheckboxInput').on('click', addInvolvedAvailabilityToAddDateCard);
@@ -134,22 +156,6 @@ $(document).ready(
 
         $('#addDateCardDateForm').submit(validateFormFields);
 
-        const datepickerElement = $("#addDateCardDateInput");
-        const datesToDisable = getDatesToDisable();
-        const date = new Date(datesToDisable[0]);
-        const firstDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth(), 1);
-        const lastDayOfTheMonthDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        datepickerElement.datepicker({
-            startDate: firstDayOfTheMonthDate,
-            endDate: lastDayOfTheMonthDate,
-            format: "yyyy-mm-dd",
-            datesDisabled: datesToDisable
-        });
-
-        //Avoid showing default datepick
-        datepickerElement.on('click', function(){event.preventDefault()});
-
-        //Hide the datepicker when choosing date
-        datepickerElement.on('change', function(){$(this).datepicker('hide');});
+        loadDatePicker();
     }
 );

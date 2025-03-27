@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/event")
@@ -19,8 +19,8 @@ public final class EventController {
         this.eventService = eventService;
     }
 
-    @DeleteMapping
-    public ResponseEntity<Event> getById(final Model model, @RequestParam (value = "eventId") final int eventId) {
-        return this.eventService.delete(eventId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Event> delete(final Model model, @PathVariable final int id) {
+        return this.eventService.delete(id);
     }
 }

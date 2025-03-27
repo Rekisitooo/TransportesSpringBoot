@@ -229,21 +229,21 @@
 
                                     <!-- Event Name row -->
                                     <tr>
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <th th:each="date: ${templateDates}" th:text="${date.eventName}" class="text-nowrap"></th>
+                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+                                        <th th:each="date: ${templateDates}" th:data-date="${date.transportDate}" th:text="${date.eventName}" class="text-nowrap"></th>
                                     </tr>
 
                                     <!-- Days of the week row -->
                                     <tr>
                                         <!-- empty for the passengers column -->
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
+                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
                                         <th th:each="date: ${templateDates}"
                                             th:data-date="${date.transportDate}"
                                             name="monthDate"
                                             class="text-nowrap"
                                         >
                                             <span th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"></span>
-                                                <i class="bi bi-trash text-danger" role="button" id="delete-icon"
+                                                <i class="bi bi-trash text-danger" role="button" data-name="date-delete-icon"
                                                    th:data-a="${(date.dateType == 'transportDate') ? date.id : ''}"
                                                    th:data-b="${(date.dateType == 'event') ? date.id : ''}"
                                                 ></i>
@@ -254,7 +254,7 @@
                                 <tbody>
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
                                         <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
+                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                         ></th>
                                         <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}" th:class="${(date.dateType == 'event') ? 'text-center' : ''}">
@@ -290,15 +290,16 @@
 
                                     <!-- Event Name row -->
                                     <tr>
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
-                                        <th th:each="date: ${templateDates}" th:text="${date.eventName}" class="text-nowrap"></th>
+                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+                                        <th th:each="date: ${templateDates}" th:data-date="${date.transportDate}" th:text="${date.eventName}" class="text-nowrap"></th>
                                     </tr>
 
                                     <!-- Days of the week row -->
                                     <tr>
                                         <!-- empty for the drivers column -->
-                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'" class="text-nowrap"></th>
+                                        <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
                                         <th th:each="date: ${templateDates}"
+                                            th:data-date="${date.transportDate}"
                                             th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
                                             class="text-nowrap"
                                         ></th>
@@ -308,7 +309,7 @@
                                 <tbody>
                                     <tr th:each="driver : ${driversFromTemplateList}">
                                         <th th:text="${driver.name} + ' ' + ${driver.surname}"
-                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '01'"
+                                            th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                         ></th>
                                         <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
@@ -368,9 +369,9 @@
         <!-- addDate modal datepicker -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-        <script src="/js/own/TemplateCrudTransportCRUD.js"></script>
-        <script src="/js/own/TemplateCrudAddNewDateModal.js"></script>
-        <script src="/js/own/TemplateCrudDateCRUD.js"></script>
+        <script src="/js/own/templatecrud/TemplateCrudTransportCRUD.js"></script>
+        <script src="/js/own/templatecrud/TemplateCrudAddNewDateModal.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudDateCRUD.js" type="module"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -379,13 +380,13 @@
         <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
 
         <th:block th:if="${genericError} != null">
-            <script src="/js/own/GenericErrorAlert.js"></script>
+            <script src="/js/own/templatecrud/alert/GenericErrorAlert.js"></script>
         </th:block>
         <th:block th:if="${transportDateCreated} != null">
-            <script src="/js/own/TransportDateCreatedAlert.js"></script>
+            <script src="/js/own/templatecrud/alert/TransportDateCreatedAlert.js"></script>
         </th:block>
         <th:block th:if="${eventCreated} != null">
-            <script src="/js/own/EventCreatedAlert.js"></script>
+            <script src="/js/own/templatecrud/alert/EventCreatedAlert.js"></script>
         </th:block>
     </body>
 
