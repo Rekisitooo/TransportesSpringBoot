@@ -15,6 +15,7 @@ import java.sql.Date;
 public final class TransportDateByTemplate {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "COD_PLANTILLA")
@@ -34,6 +35,13 @@ public final class TransportDateByTemplate {
         this.templateCode = templateCode;
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;
+    }
+
+    public TransportDateByTemplate(int templateCode, Date transportDate, int dayOfTheWeekCode, String eventName) {
+        this.templateCode = templateCode;
+        this.transportDate = transportDate;
+        this.dayOfTheWeekCode = dayOfTheWeekCode;
+        this.eventName = eventName;
     }
 
     public TransportDateByTemplate(int templateCode, Date transportDate, int dayOfTheWeekCode) {

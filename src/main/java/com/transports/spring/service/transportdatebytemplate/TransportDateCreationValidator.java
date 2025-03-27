@@ -36,6 +36,6 @@ public class TransportDateCreationValidator {
     }
 
     private boolean isTranportDateAlreadyAddedToTemplate(final TransportDateByTemplate transportDate) {
-        return (transportDate != null) && (transportDate.getId() != null);
+        return !((transportDate != null) && (transportDate.getId() != null));
     }
 }
