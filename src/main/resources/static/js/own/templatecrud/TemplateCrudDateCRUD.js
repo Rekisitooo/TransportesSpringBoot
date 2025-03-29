@@ -26,7 +26,7 @@ function deleteAjaxRequest(dayType, id, element) {
         type: 'DELETE',
         url: '/' + dayType + "/" + id,
         success: function(response) {
-            deleteSuccess(response, element, dayType);
+            deleteSuccess(response, element);
         },
         error: function(xhr, status, error) {
             deleteError(xhr, status, error);
@@ -34,17 +34,13 @@ function deleteAjaxRequest(dayType, id, element) {
     });
 }
 
-function deleteSuccess(response, element, dayType) {
-    if (dayType == EVENT_DAY_TYPE) {
-        deleteDateColumns(element);
-    } else if (dayType == TRANSPORT_DATE_DAY_TYPE) {
-        //T0DO disable inputs on passengers table
-    }
-
+function deleteSuccess(response, element) {
+    deleteDateColumns(element);
     loadDatePicker();
 
     Swal.fire({
-      title: "¡Operación realizada con éxito!",
+      title: "¡Fecha borrada con éxito!",
+      timer: 200,
       icon: "success",
       draggable: false
     });
