@@ -1,6 +1,5 @@
 package com.transports.spring.model;
 
-import com.transports.spring.model.key.InvolvedByTemplateKey;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,14 +21,6 @@ public final class InvolvedAvailabiltyForTransportDate {
 
     @Column(name = "COD_FECHA_TRANSPORTE")
     private int transportDateCode;
-
-    private String involvedCompleteName;
-
-    public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode, String involvedCompleteName) {
-        this.transportDateCode = transportDateCode;
-        this.involvedCode = involvedCode;
-        this.involvedCompleteName = involvedCompleteName;
-    }
 
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
         this.transportDateCode = transportDateCode;

@@ -1,5 +1,6 @@
 package com.transports.spring.repository;
 
+import com.transports.spring.dto.DtoInvolvedAvailabiltyForTransportDate;
 import com.transports.spring.model.InvolvedAvailabiltyForTransportDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,13 @@ import java.util.List;
 @Repository
 public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepository<InvolvedAvailabiltyForTransportDate, Integer> {
 
-    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
+    @Query("SELECT new com.transports.spring.dto.DtoInvolvedAvailabiltyForTransportDate(" +
+            "           new InvolvedAvailabiltyForTransportDate(" +
+            "               ipp.involvedByTemplateKey.involvedCode," +
+            "               ftpp.id" +
+            "           )," +
+            "            concat(ipp.name, ' ',ipp.surname)" +
+            "       )" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_conductor" +
             "   ON ipp.roleCode = rol_conductor.id" +
@@ -22,9 +29,15 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON dipft.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
-    List<InvolvedAvailabiltyForTransportDate> findAllDriversAvailableDatesForTemplate(@Param("templateId") int templateId);
+    List<DtoInvolvedAvailabiltyForTransportDate> findAllDriversAvailableDatesForTemplate(@Param("templateId") int templateId);
 
-    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
+    @Query("SELECT new com.transports.spring.dto.DtoInvolvedAvailabiltyForTransportDate(" +
+            "           new InvolvedAvailabiltyForTransportDate(" +
+            "               ipp.involvedByTemplateKey.involvedCode," +
+            "               ftpp.id" +
+            "           )," +
+            "            concat(ipp.name, ' ',ipp.surname)" +
+            "       )" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_viajero" +
             "   ON ipp.roleCode = rol_viajero.id" +
@@ -35,9 +48,9 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON dipft.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
-    List<InvolvedAvailabiltyForTransportDate> findAllPassengersAssistanceDatesForTemplate(@Param("templateId") int templateId);
+    List<DtoInvolvedAvailabiltyForTransportDate> findAllPassengersAssistanceDatesForTemplate(@Param("templateId") int templateId);
 
-    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, concat(ipp.name, ' ',ipp.surname))" +
+    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id)" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_viajero" +
             "   ON ipp.roleCode = rol_viajero.id" +
