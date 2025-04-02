@@ -36,13 +36,6 @@ function deleteAjaxRequest(dayType, id, element) {
 function deleteSuccess(response, element) {
     deleteDateColumns(element);
     loadDatePicker();
-
-    Swal.fire({
-      title: "¡Fecha borrada con éxito!",
-      timer: 2000,
-      icon: "success",
-      draggable: false
-    });
 }
 
 function deleteDateColumns(element) {
