@@ -1,6 +1,7 @@
 package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoDriverTransport;
+import com.transports.spring.dto.DtoTemplateDate;
 import com.transports.spring.dto.generatefiles.DtoGenerateDriverFile;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoTemplateFileDir;
@@ -52,7 +53,8 @@ public final class DriverTemplateFileGenerator {
             final DriverTemplateFile driverTemplateFile = (DriverTemplateFile) this.beanFactory.getBean(
                     "getDriverTemplateFile", monthCalendar, templateYear, templateMonth);
 
-            final DtoTemplateExcelDriverBody templateExcelDriverBody = new DtoTemplateExcelDriverBody(dtoDriverTransportList);
+            final Map<LocalDate, DtoTemplateDate> monthTransportDatesList = dtoGenerateDriverFile.getMonthTransportDatesList();
+            final DtoTemplateExcelDriverBody templateExcelDriverBody = new DtoTemplateExcelDriverBody(dtoDriverTransportList, monthTransportDatesList);
             driverTemplateFile.generate(templateExcelDriverBody, dtoHeader, dtoTemplateFileDir);
         }
     }

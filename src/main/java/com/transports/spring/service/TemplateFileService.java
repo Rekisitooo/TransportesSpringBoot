@@ -10,16 +10,19 @@ import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
-import com.transports.spring.model.*;
+import com.transports.spring.model.Driver;
+import com.transports.spring.model.Month;
+import com.transports.spring.model.Passenger;
+import com.transports.spring.model.Template;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public final class TemplateFileService {
@@ -31,11 +34,10 @@ public final class TemplateFileService {
     private final TemplateFileGenerator templateFileGenerator;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
-    private final EventService eventService;
 
     private static final Object CONCURRENCY_LOCKER = new Object();
 
-    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, EventService eventService) {
+    public TemplateFileService(MonthService monthService, TemplateService templateService, TransportService transportService, InvolvedByTemplateService involvedByTemplateService, TemplateFileGenerator templateFileGenerator, TransportDateByTemplateService transportDateByTemplateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService) {
         this.monthService = monthService;
         this.templateService = templateService;
         this.transportService = transportService;
@@ -43,7 +45,6 @@ public final class TemplateFileService {
         this.templateFileGenerator = templateFileGenerator;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
-        this.eventService = eventService;
     }
 
     public void generateFiles(final int templateId) throws IOException, GeneratePdfFromExcelException, GenerateJpgFromExcelException {
@@ -60,7 +61,7 @@ public final class TemplateFileService {
             final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 
             final DtoGeneratePassengerFile dtoGeneratePassengerFile = new DtoGeneratePassengerFile(passengerTransports, templateMonthDateByDayMap, allPassengersAssistanceDatesMap);
-            final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports);
+            final DtoGenerateDriverFile dtoGenerateDriverFile = new DtoGenerateDriverFile(driverTransports, templateMonthDateByDayMap);
             final DtoGenerateFile dtoGenerateFile = new DtoGenerateFile(dtoGeneratePassengerFile, dtoGenerateDriverFile, templateMonth, Calendar.getInstance());
             final DtoTemplateExcelHeader dtoHeader = new DtoTemplateExcelHeader(monthName, templateYear);
             this.templateFileGenerator.generateFiles(dtoGenerateFile, dtoHeader);
@@ -116,29 +117,4 @@ public final class TemplateFileService {
         return driverTransportsFromTemplateMap;
     }
 
-    public void zip() throws IOException {
-        final String file1 = "src/main/resources/zipTest/test1.txt";
-        final String file2 = "src/main/resources/zipTest/test2.txt";
-        final List<String> srcFiles = Arrays.asList(file1, file2);
-
-        final FileOutputStream fos = new FileOutputStream(Paths.get(file1).getParent().toAbsolutePath() + "/compressed.zip");
-        final ZipOutputStream zipOut = new ZipOutputStream(fos);
-
-        for (final String srcFile : srcFiles) {
-            final File fileToZip = new File(srcFile);
-            final FileInputStream fis = new FileInputStream(fileToZip);
-            final ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-            zipOut.putNextEntry(zipEntry);
-
-            byte[] bytes = new byte[1024];
-            int length;
-            while((length = fis.read(bytes)) >= 0) {
-                zipOut.write(bytes, 0, length);
-            }
-            fis.close();
-        }
-
-        zipOut.close();
-        fos.close();
-    }
 }

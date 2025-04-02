@@ -1,7 +1,6 @@
 package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
-import com.transports.spring.dto.generatefiles.DtoTemplateFileDir;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
