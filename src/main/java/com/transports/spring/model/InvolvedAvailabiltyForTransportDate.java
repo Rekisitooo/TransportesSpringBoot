@@ -22,9 +22,17 @@ public final class InvolvedAvailabiltyForTransportDate {
     @Column(name = "COD_FECHA_TRANSPORTE")
     private int transportDateCode;
 
+    @Column(name = "NECESITA_TRANSPORTE")
+    private int needsTransport;
+
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
         this.transportDateCode = transportDateCode;
         this.involvedCode = involvedCode;
     }
 
+    public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode, int needsTransport) {
+        this.involvedCode = involvedCode;
+        this.transportDateCode = transportDateCode;
+        this.needsTransport = needsTransport;
+    }
 }

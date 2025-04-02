@@ -17,5 +17,5 @@ public class DtoAddNewDateForm {
     private Date addDateCardDateInput;
     private Boolean addDateCardIsTransportDateCheckboxInput;
     private List<String> addDateCardDriverAvailabilityCheck;
-    private List<String> addDateCardPassegerAvailabilityCheck;
+    private List<String> addDateCardPassengerAvailabilityCheck;
 }

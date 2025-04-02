@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -63,8 +62,8 @@ public final class PassengerTemplateFileGenerator {
     private static DtoTemplateExcelPassengerBody getDtoTemplateExcelPassengerBody(final DtoGeneratePassengerFile dtoGeneratePassengerFile,
               final Passenger passenger, final Map<LocalDate, DtoPassengerTransport> passengerTransportsByDayMap) {
 
-        final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
-        final List<DtoTemplateDay> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
+        final Map<LocalDate, DtoTemplateDay> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
         final Map<LocalDate, DtoTemplateDate> monthTransportDatesList = dtoGeneratePassengerFile.getMonthTransportDatesList();
 
         return new DtoTemplateExcelPassengerBody(passengerAssistanceDatesMap, monthTransportDatesList, passengerTransportsByDayMap);

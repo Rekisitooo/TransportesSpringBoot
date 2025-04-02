@@ -3,13 +3,14 @@ package com.transports.spring.service;
 import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.dto.DtoInvolvedAvailabiltyForTransportDate;
 import com.transports.spring.dto.DtoTemplateDay;
+import com.transports.spring.dto.requestbody.DtoUpdateNeedForTransport;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
-import com.transports.spring.model.Driver;
-import com.transports.spring.model.InvolvedAvailabiltyForTransportDate;
-import com.transports.spring.model.Passenger;
-import com.transports.spring.model.TransportDateByTemplate;
+import com.transports.spring.model.*;
+import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -24,11 +25,13 @@ public class InvolvedAvailabiltyForTransportDateService {
     private final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository;
     private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedByTemplateService involvedByTemplateService;
+    private final TransportService transportService;
 
-    public InvolvedAvailabiltyForTransportDateService(final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository, TransportDateByTemplateService transportDateByTemplateService, InvolvedByTemplateService involvedByTemplateService) {
+    public InvolvedAvailabiltyForTransportDateService(final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository, TransportDateByTemplateService transportDateByTemplateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService) {
         this.involvedAvailabiltyForTransportDateRepository = involvedAvailabiltyForTransportDateRepository;
         this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedByTemplateService = involvedByTemplateService;
+        this.transportService = transportService;
     }
 
     /**
@@ -59,24 +62,25 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<PassengerId, List<DtoTemplateDay>>
+     * @return Map<PassengerId, Map<LocalDate, DtoTemplateDay>>
      */
-    public Map<Integer, List<DtoTemplateDay>> findAllPassengersAssistanceDates(final int templateId) {
-        final Map<Integer, List<DtoTemplateDay>> allPassengersAssistanceDatesMap = new HashMap<>();
+    public Map<Integer, Map<LocalDate, DtoTemplateDay>> findAllPassengersAssistanceDates(final int templateId) {
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> allPassengersAssistanceDatesMap = new HashMap<>();
 
         final List<Passenger> passengerList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : passengerList) {
             final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
-            final List<DtoTemplateDay> passengersAssistanceDates = new ArrayList<>();
+            final Map<LocalDate, DtoTemplateDay> passengersAssistanceDates = new HashMap<>();
 
             for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
                 final int transportDateId = transportByTemplate.getTransportDateCode();
-                final TransportDateByTemplate taransportDate = this.transportDateByTemplateService.findById(transportDateId);
-                final Date transportDate = taransportDate.getTransportDate();
-                final LocalDate transportLocalDate = transportDate.toLocalDate();
-                final String eventName = taransportDate.getEventName();
+                final TransportDateByTemplate transportDate = this.transportDateByTemplateService.findById(transportDateId);
+                final Date transportDateObj = transportDate.getTransportDate();
+                final LocalDate transportLocalDate = transportDateObj.toLocalDate();
+                final String eventName = transportDate.getEventName();
+                final int needsTransport = transportByTemplate.getNeedsTransport();
 
-                passengersAssistanceDates.add(new DtoTemplateDay(transportLocalDate, eventName));
+                passengersAssistanceDates.put(transportLocalDate, new DtoTemplateDay(transportLocalDate, eventName, needsTransport));
             }
 
             allPassengersAssistanceDatesMap.put(passenger.getId(), passengersAssistanceDates);
@@ -118,11 +122,11 @@ public class InvolvedAvailabiltyForTransportDateService {
             final int driverId = Integer.parseInt(driverIdString);
             this.involvedByTemplateService.getDriverByIdAndTemplate(driverId, templateId);
 
-            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId);
+            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId, 1);
             this.involvedAvailabiltyForTransportDateRepository.save(entity);
         }
 
-        final List<String> addDateCardPassegerAvailabilityCheck = body.getAddDateCardPassegerAvailabilityCheck();
+        final List<String> addDateCardPassegerAvailabilityCheck = body.getAddDateCardPassengerAvailabilityCheck();
         for (final String passengerIdString : addDateCardPassegerAvailabilityCheck) {
             final int passengerId = Integer.parseInt(passengerIdString);
             this.involvedByTemplateService.getPassengerByIdAndTemplate(passengerId, templateId);
@@ -130,5 +134,20 @@ public class InvolvedAvailabiltyForTransportDateService {
             final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(passengerId, newTransportDateId);
             this.involvedAvailabiltyForTransportDateRepository.save(entity);
         }
+    }
+
+    @Transactional
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> updateInvolvedNeedForTransport(final DtoUpdateNeedForTransport body, final Integer passengerId) {
+        final Integer transportDateId = body.getTransportDateId();
+        final Integer needsTransport = body.getPassengerNeedsTransport();
+        final Integer driverId = body.getDriverId();
+        if (driverId != null) {
+            final Transport transportByPassenger = this.transportService.findTransportByPassenger(transportDateId, passengerId);
+            if (transportByPassenger != null) {
+                this.transportService.deleteTransport(new TransportKey(passengerId, driverId, transportDateId));
+            }
+        }
+        this.involvedAvailabiltyForTransportDateRepository.updateInvolvedNeedForTransport(needsTransport, passengerId, transportDateId);
+        return ResponseEntity.ok().build();
     }
 }

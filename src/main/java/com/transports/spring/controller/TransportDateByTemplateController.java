@@ -21,7 +21,6 @@ public final class TransportDateByTemplateController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<TransportDateByTemplate> delete(final Model model, @PathVariable final int id) {
-        //TODO disable date instead of erasing
         return this.transportDateService.delete(id);
     }
 }

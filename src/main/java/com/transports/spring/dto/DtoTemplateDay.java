@@ -16,10 +16,12 @@ import java.util.List;
 public class DtoTemplateDay {
     private LocalDate date;
     private String eventName;
+    private int needsTransport;
     private List<AbstractInvolved> involvedList;
 
-    public DtoTemplateDay(LocalDate date, String eventName) {
+    public DtoTemplateDay(LocalDate date, String eventName, int needsTransport) {
         this.date = date;
         this.eventName = eventName;
+        this.needsTransport = needsTransport;
     }
 }

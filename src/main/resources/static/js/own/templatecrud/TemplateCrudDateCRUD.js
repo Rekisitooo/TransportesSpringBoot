@@ -3,7 +3,6 @@ import { loadDatePicker } from './TemplateCrudAddNewDateModal.js';
 const EVENT_DAY_TYPE = 'event';
 const TRANSPORT_DATE_DAY_TYPE = 'transportDate';
 
-
 function deleteDate() {
     const eventId = $(this).attr("data-b");
     const transportDateId = $(this).attr("data-a");
@@ -40,7 +39,7 @@ function deleteSuccess(response, element) {
 
     Swal.fire({
       title: "¡Fecha borrada con éxito!",
-      timer: 200,
+      timer: 2000,
       icon: "success",
       draggable: false
     });

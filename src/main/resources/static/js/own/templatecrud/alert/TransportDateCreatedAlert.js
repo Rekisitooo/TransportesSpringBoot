@@ -3,6 +3,7 @@ $(document).ready(
         Swal.fire({
           title: "¡Fecha de transporte creada con éxito!",
           icon: "success",
+          timer: 2000,
           draggable: false
         });
     }

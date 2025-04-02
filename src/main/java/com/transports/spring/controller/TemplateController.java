@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -122,5 +123,9 @@ public final class TemplateController {
 
         final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesForTemplate(templateId);
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
+
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> passengersAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
+        model.addAttribute("passengersAssistanceDates", passengersAssistanceDates);
+
     }
 }

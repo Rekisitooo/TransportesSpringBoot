@@ -10,7 +10,7 @@
         <!-- Custom fonts for this template-->
         <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <!-- Custom styles for this template-->
@@ -261,21 +261,45 @@
                                             <span th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)}" th:text="#{templateCRUD.holidays}"></span>
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
                                             <th:block th:if="${(date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) != null)}">
-                                                <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
-                                                    <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
-                                                    <option
-                                                            th:each="driver : ${driversAvailableForDate.get(date.id)}"
-                                                            th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)
-                                                                            and (driver.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().driverId)
-                                                                            and (passenger.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().passengerId)}"
-                                                            th:text="${driver.name}"
-                                                            th:value="${driver.id}"
-                                                            th:data-d="${date.id}"
-                                                            th:data-t="${passenger.id}"
-                                                            th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
-                                                            th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'c' : 'u'"
-                                                    ></option>
-                                                </select>
+                                                <div class="row" th:if="${(passengersAssistanceDates.get(passenger.id) != null) and (passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()) != null)}">
+                                                    <div class="col">
+                                                        <i th:data-t="${passenger.id}"
+                                                           th:data-y="${date.id}"
+                                                           th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
+                                                           th:data-needs-transport="${(passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()).needsTransport == 0) ? 1 : 0}"
+                                                           th:class="${(passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()).needsTransport == 0) ?
+                                                                'position-relative fas fa-car text-primary' : 'position-relative fas fa-car text-muted'}"
+                                                           th:title="#{${(passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()).needsTransport == 0) ?
+                                                                'templateCRUD.descriptionCarIconActivateNeedsTransportForDate' : 'templateCRUD.descriptionCarIconDeactivateNeedsTransportForDate'}}"
+                                                           role="button"
+                                                           style="top: 0; left: 0font-size: 1.5em;"
+                                                        ></i>
+                                                    </div>
+                                                </div>
+                                                <div th:class="${((passengersAssistanceDates.get(passenger.id) != null)
+                                                                            and (passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()) != null)
+                                                                            and (passengersAssistanceDates.get(passenger.id).get(date.transportDate.toLocalDate()).needsTransport == 1)) ?
+                                                                           'd-table-cell row' : 'd-none row'}"
+                                                     th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
+                                                >
+                                                    <div class="col">
+                                                        <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}" class="bg-transparent border border-0 w-100">
+                                                            <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
+                                                            <option
+                                                                    th:each="driver : ${driversAvailableForDate.get(date.id)}"
+                                                                    th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)
+                                                                                    and (driver.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().driverId)
+                                                                                    and (passenger.id == allPassengerTransportsFromTemplate.get(passenger.id).get(date.id).getTransportKey().passengerId)}"
+                                                                    th:text="${driver.name}"
+                                                                    th:value="${driver.id}"
+                                                                    th:data-d="${date.id}"
+                                                                    th:data-t="${passenger.id}"
+                                                                    th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
+                                                                    th:name="${allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null}? 'c' : 'u'"
+                                                            ></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </th:block>
                                         </td>
                                     </tr>
@@ -373,6 +397,7 @@
         <script src="/js/own/templatecrud/TemplateCrudTransportCRUD.js"></script>
         <script src="/js/own/templatecrud/TemplateCrudAddNewDateModal.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudDateCRUD.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudNeedsTransport.js" type="module"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

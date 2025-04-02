@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -17,7 +16,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class DtoTemplateExcelPassengerBody {
-    private List<DtoTemplateDay> passengerAssistanceDateList;
+    private Map<LocalDate, DtoTemplateDay> passengerAssistanceDateList;
     private Map<LocalDate, DtoTemplateDate> monthTransportDateByDayMap;
     private Map<LocalDate, DtoPassengerTransport> allTemplatePassengerTransportsByDayMap;
 }
