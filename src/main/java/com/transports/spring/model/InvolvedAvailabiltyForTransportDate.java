@@ -23,7 +23,7 @@ public final class InvolvedAvailabiltyForTransportDate {
     private int transportDateCode;
 
     @Column(name = "NECESITA_TRANSPORTE")
-    private int needsTransport;
+    private int needsTransport = 1;
 
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
         this.transportDateCode = transportDateCode;

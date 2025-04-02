@@ -122,7 +122,7 @@ public class InvolvedAvailabiltyForTransportDateService {
             final int driverId = Integer.parseInt(driverIdString);
             this.involvedByTemplateService.getDriverByIdAndTemplate(driverId, templateId);
 
-            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId, 1);
+            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId);
             this.involvedAvailabiltyForTransportDateRepository.save(entity);
         }
 
