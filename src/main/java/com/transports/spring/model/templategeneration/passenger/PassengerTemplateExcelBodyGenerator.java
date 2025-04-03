@@ -9,6 +9,7 @@ import com.transports.spring.model.templategeneration.common.AbstractTemplateExc
 import com.transports.spring.model.templategeneration.common.cell.styler.DefaultDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.EventDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.TransportDateCellStyler;
+import com.transports.spring.model.templategeneration.common.cell.styler.passenger.NoDriversAvailableForTransportDateCellStyler;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.time.LocalDate;
@@ -52,8 +53,8 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
                         final String dateEventName = dtoPassengerAssistance.getEventName();
                         if (isPassengerAssistingOnActualDate(dateEventName)) {
                             dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
-                            dtoTemplateExcelTransportCellGroup.setBodyText("No hay conductores disponibles.");
-                            dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
+                            dtoTemplateExcelTransportCellGroup.setBodyText("No hay suficientes conductores disponibles en el arreglo.");
+                            dtoTemplateExcelTransportCellGroup.setCellStyler(new NoDriversAvailableForTransportDateCellStyler());
                         } else {
                             dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
                         }

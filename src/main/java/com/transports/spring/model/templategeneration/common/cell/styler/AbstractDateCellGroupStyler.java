@@ -29,7 +29,7 @@ public abstract class AbstractDateCellGroupStyler {
 
     public XSSFCellStyle getHeaderCellStyle(final XSSFWorkbook excel) {
         final XSSFCellStyle cellStyle = excel.createCellStyle();
-        final XSSFFont cellFont = getNumberHeaderFont(excel);
+        final XSSFFont cellFont = getHeaderFont(excel);
         cellStyle.setFont(cellFont);
         cellStyle.setIndention((short) 1);
         cellStyle.setBorderLeft(BorderStyle.THIN);
@@ -44,7 +44,7 @@ public abstract class AbstractDateCellGroupStyler {
 
     public XSSFCellStyle getBodyCellStyle(final XSSFWorkbook excel) {
         final XSSFCellStyle cellStyle = excel.createCellStyle();
-        final XSSFFont cellFont = getNumberHeaderFont(excel);
+        final XSSFFont cellFont = getBodyFont(excel);
         cellStyle.setFont(cellFont);
         cellStyle.setIndention((short) 1);
         cellStyle.setWrapText(true);
