@@ -65,7 +65,8 @@ function addPassengerInDriverTransportsTable(transportDateId, driverId, passenge
     const newPassengerSpanNode = document.createElement("span");
     const newPassengerSpanTextNode = document.createTextNode(passengerFullName);
     newPassengerSpanNode.appendChild(newPassengerSpanTextNode);
-    newPassengerSpanNode.setAttribute('id', 'p' + passengerId + driverTransportsTablePassengerTdToAddSpan);3
+    newPassengerSpanNode.setAttribute('id', 'p' + passengerId + driverTransportsTablePassengerTdToAddSpan);
+    newPassengerSpanNode.setAttribute('data-span-id', driverId);
 
     $('#' + driverTransportsTablePassengerTdToAddSpan).append(newPassengerSpanNode);
 }

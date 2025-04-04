@@ -150,4 +150,26 @@ public class InvolvedAvailabiltyForTransportDateService {
         this.involvedAvailabiltyForTransportDateRepository.updateInvolvedNeedForTransport(needsTransport, passengerId, transportDateId);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Transports associated are erased in a trigger
+     * @param passengerId passenger id to delete in db
+     * @param dateId date id to delete in db
+     * @return ok response
+     */
+    @Transactional
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> delete(final Integer passengerId, final Integer dateId) {
+        final InvolvedAvailabiltyForTransportDate involvedAvailabiltyForTransportDate = new InvolvedAvailabiltyForTransportDate(passengerId, dateId);
+        this.involvedAvailabiltyForTransportDateRepository.delete(involvedAvailabiltyForTransportDate);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> saveAvailability(final Integer passengerId, final Integer dateId) {
+        final InvolvedAvailabiltyForTransportDate involvedAvailabiltyForTransportDate = new InvolvedAvailabiltyForTransportDate(passengerId, dateId);
+        this.involvedAvailabiltyForTransportDateRepository.save(involvedAvailabiltyForTransportDate);
+
+        return ResponseEntity.ok().build();
+    }
 }

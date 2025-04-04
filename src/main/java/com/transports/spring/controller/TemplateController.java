@@ -1,12 +1,14 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.dto.*;
-import com.transports.spring.enumerationclasses.DateTypeEnum;
 import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.exception.TransportsException;
-import com.transports.spring.model.*;
+import com.transports.spring.model.Driver;
+import com.transports.spring.model.Passenger;
+import com.transports.spring.model.Template;
+import com.transports.spring.model.Transport;
 import com.transports.spring.service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -75,16 +77,10 @@ public final class TemplateController {
 
     @PostMapping(path = "/newDate/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String newDate(final Model model, final RedirectAttributes rm, @PathVariable (value = "id") final int templateId, final DtoAddNewDateForm body) throws InvolvedDoesNotExistException {
-        DateTypeEnum dateTypeEnum = null;
         try {
-            dateTypeEnum = this.addNewDateToTemplateService.newDate(templateId, body);
+            this.addNewDateToTemplateService.newDate(templateId, body);
         } catch (final TransportsException e) {
             rm.addFlashAttribute(GENERIC_ERROR_FLASH_ATTR, GENERIC_ERROR_FLASH_ATTR);
-        }
-        if (dateTypeEnum == DateTypeEnum.TRANSPORT_DATE) {
-            rm.addFlashAttribute("transportDateCreated", "newDateAddedCorrectly");
-        } else if (dateTypeEnum == DateTypeEnum.EVENT) {
-            rm.addFlashAttribute("eventCreated", "eventAddedCorrectly");
         }
 
         this.addDataToTemplateCrud(model, templateId);
