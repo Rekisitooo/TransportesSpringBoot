@@ -77,4 +77,12 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             @Param("involvedCode") final Integer involvedCode,
             @Param("transportDateCode") final Integer transportDateCode
     );
+
+
+    @Modifying
+    @Query("DELETE FROM InvolvedAvailabiltyForTransportDate dipft" +
+            " WHERE " +
+            "  dipft.involvedCode = :involvedCode" +
+            "  AND dipft.transportDateCode = :dateCode")
+    void deleteInvolvedAssistanceForDate(@Param("involvedCode") int involvedCode, @Param("dateCode") int dateCode);
 }

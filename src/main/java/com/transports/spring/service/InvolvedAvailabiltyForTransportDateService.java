@@ -158,18 +158,14 @@ public class InvolvedAvailabiltyForTransportDateService {
      * @return ok response
      */
     @Transactional
-    public ResponseEntity<InvolvedAvailabiltyForTransportDate> delete(final Integer passengerId, final Integer dateId) {
-        final InvolvedAvailabiltyForTransportDate involvedAvailabiltyForTransportDate = new InvolvedAvailabiltyForTransportDate(passengerId, dateId);
-        this.involvedAvailabiltyForTransportDateRepository.delete(involvedAvailabiltyForTransportDate);
-
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Integer passengerId, final Integer dateId) {
+        this.involvedAvailabiltyForTransportDateRepository.deleteInvolvedAssistanceForDate(passengerId, dateId);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
     public ResponseEntity<InvolvedAvailabiltyForTransportDate> saveAvailability(final Integer passengerId, final Integer dateId) {
-        final InvolvedAvailabiltyForTransportDate involvedAvailabiltyForTransportDate = new InvolvedAvailabiltyForTransportDate(passengerId, dateId);
-        this.involvedAvailabiltyForTransportDateRepository.save(involvedAvailabiltyForTransportDate);
-
+        this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(passengerId, dateId));
         return ResponseEntity.ok().build();
     }
 }

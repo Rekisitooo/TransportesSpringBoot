@@ -6,4 +6,4 @@ export function genericErrorAlert() {
     });
 }
 
-$(document).ready(genericErrorAlert);
+//$(document).ready(genericErrorAlert);

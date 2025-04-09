@@ -1,14 +1,15 @@
 import { genericErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementDisplayNone } from './TemplateCrudCommons.js';
+import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
 
 function removeDriverPassengersInDriverTable(driverId) {
-    const passengerSpans = $('span[data-span-id=' + driverId + ']');
-    passengerSpans.remove();
+    if (driverId != null && driverId !== "") {
+        const passengerSpans = $('span[data-span-id=' + driverId + ']');
+        passengerSpans.remove();
+    }
 }
 
-function deletePassengerAssistance(data, currentElement, passengerCellContentElementSelector) {
-    const driverForPassengerSelectElement = $(passengerCellContentElementSelector + ' select');
-    const driverId = driverForPassengerSelectElement.val();
+function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger) {
+    const driverId = driverSelectForPassenger.val();
 
     $.ajax({
         url: '/involvedAvailability',
@@ -17,11 +18,9 @@ function deletePassengerAssistance(data, currentElement, passengerCellContentEle
         data: JSON.stringify(data),
         success: function(response) {
             removeDriverPassengersInDriverTable(driverId);
-            const driverForPassengerSelectRowElement = $(passengerCellContentElementSelector);
-            let elementClass = changeElementDisplayNone(driverForPassengerSelectRowElement);
-            driverForPassengerSelectRowElement.attr('class', elementClass);
-            currentElement.attr('data-passenger-assist', 0);
-            currentElement.attr('class', 'fas fa-calendar-check text-muted');
+            changeDriverSelectForPassenger(driverSelectForPassenger);
+            driverSelectForPassenger.val('');
+            changeAssistanceIcon(0, assistanceIcon, 'text-primary', 'text-muted');
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -29,18 +28,15 @@ function deletePassengerAssistance(data, currentElement, passengerCellContentEle
     });
 }
 
-function createPassengerAssistance(data, currentElement, passengerCellContentElementSelector) {
+function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger) {
     $.ajax({
         url: '/involvedAvailability',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function(response) {
-            const driverForPassengerSelectRowElement = $(passengerCellContentElementSelector);
-            let elementClass = changeElementDisplayNone(driverForPassengerSelectRowElement);
-            driverForPassengerSelectRowElement.attr('class', elementClass);
-            currentElement.attr('data-passenger-assist', 1);
-            currentElement.attr('class', 'fas fa-calendar-check text-primary');
+            changeDriverSelectForPassenger(driverSelectForPassenger);
+            changeAssistanceIcon(1, assistanceIcon, 'text-muted', 'text-primary');
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -48,21 +44,33 @@ function createPassengerAssistance(data, currentElement, passengerCellContentEle
     });
 }
 
+function changeDriverSelectForPassenger(driverSelectForPassenger) {
+    let cellContentClass = changeElementDisplayNone(driverSelectForPassenger);
+    driverSelectForPassenger.attr('class', cellContentClass);
+}
+
+function changeAssistanceIcon(dataPassengerAssist, assistanceIcon, classReplace, classToBeReplaced) {
+    let assistanceIconClass = changeElementClass(assistanceIcon, classToBeReplaced, classReplace);
+    assistanceIcon.attr('data-passenger-assist', dataPassengerAssist);
+    assistanceIcon.attr('class', assistanceIconClass);
+}
+
 function changePassengerAssistance() {
-    const currentElement = $(this);
-    const passengerId = currentElement.attr('data-t');
-    const dateId = currentElement.attr('data-y');
+    const assistanceIcon = $(this);
+    const passengerId = assistanceIcon.attr('data-t');
+    const dateId = assistanceIcon.attr('data-y');
     const data = {
         transportDateId : dateId,
         passengerId : passengerId,
     }
-    const passengerCellContentElementSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId;
+    const driverSelectForPassengerSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select';
+    const driverSelectForPassenger = $(driverSelectForPassengerSelector);
 
-    const passengerAssistance = currentElement.attr('data-passenger-assist');
-    if (passengerAssistance == 1) {
-        deletePassengerAssistance(data, currentElement, passengerCellContentElementSelector);
-    } else if (passengerAssistance == 0) {
-       createPassengerAssistance(data, currentElement, passengerCellContentElementSelector);
+    const passengerAssistance = assistanceIcon.attr('data-passenger-assist');
+    if (passengerAssistance === "1") {
+        deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger);
+    } else if (passengerAssistance === "0") {
+       createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger);
     }
 }
 

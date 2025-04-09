@@ -10,11 +10,11 @@ export function changeElementDisplayNone(element) {
     return elementClass;
 }
 
-export function changeElementClass(element, needle, haystack) {
+export function changeElementClass(element, replace, toBeReplaced) {
     let elementClass = element.attr('class');
 
-    if (elementClass.includes(needle)) {
-        elementClass = elementClass.replace(needle, haystack);
+    if (elementClass.includes(toBeReplaced)) {
+        elementClass = elementClass.replace(toBeReplaced, replace);
     }
 
     return elementClass;
