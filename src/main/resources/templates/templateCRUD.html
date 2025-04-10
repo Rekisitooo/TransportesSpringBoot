@@ -270,21 +270,24 @@
 
                                                 <div class="d-flex flex-column h-100">
                                                     <div class="row h-25">
-                                                        <div th:class="${(
+                                                        <div
+                                                            th:id="${'needsTransportIcon_' + passenger.id + '_' + date.id}"
+                                                            th:class="${(
                                                             (passengerAssistance != null)
                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ? 'col-2 d-none' : 'col-2'}">
 
-                                                            <i th:data-t="${passenger.id}"
-                                                               th:data-y="${date.id}"
-                                                               th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
-                                                               th:data-needs-transport="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
-                                                                                passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ? 0 : 1}"
-                                                               th:class="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
-                                                                                passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ?
-                                                                'position-relative fas fa-car text-primary' : 'position-relative fas fa-car text-muted'}"
-                                                               th:title="#{templateCRUD.titleCarIconNeedsTransportForDate}"
-                                                               role="button"
-                                                               style="top: 0; left: 0font-size: 1.5em;"
+                                                            <i
+                                                                th:data-t="${passenger.id}"
+                                                                th:data-y="${date.id}"
+                                                                th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
+                                                                th:data-needs-transport="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
+                                                                        passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ? 0 : 1}"
+                                                                th:class="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
+                                                                        passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ?
+                                                                        'position-relative fas fa-car text-primary' : 'position-relative fas fa-car text-muted'}"
+                                                                th:title="#{templateCRUD.titleCarIconNeedsTransportForDate}"
+                                                                role="button"
+                                                                style="top: 0; left: 0font-size: 1.5em;"
                                                             ></i>
                                                         </div>
                                                         <div class="col-2">
@@ -330,14 +333,14 @@
                                                                     th:class="${((passengerAssistance != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)) ?
-                                                                            '' : 'd-none'}"
+                                                                            ' ' : 'd-none'}"
                                                                   th:text="#{templateCRUD.doesNotNeedTransporte}"></span>
 
                                                             <!-- show if passenger does not assist on this date -->
                                                             <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_doesNotAssistSpan'}"
                                                                     th:class="${((passengerAssistance != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) == null))?
-                                                                            '' : 'd-none'}"
+                                                                            ' ' : 'd-none'}"
                                                                   th:text="#{templateCRUD.doesNotAssist}"></span>
                                                         </div>
                                                     </div>
@@ -443,7 +446,6 @@
         <script src="/js/own/templatecrud/TemplateCrudNeedsTransport.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudInvolvedAvailabilityForDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
-        <script src="/js/own/templatecrud/animation/MovePassengerRows.js" type="module"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

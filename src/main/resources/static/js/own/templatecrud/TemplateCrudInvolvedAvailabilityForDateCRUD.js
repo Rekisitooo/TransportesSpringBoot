@@ -1,14 +1,7 @@
 import { genericErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
 
-function removeDriverPassengersInDriverTable(driverId) {
-    if (driverId != null && driverId !== "") {
-        const passengerSpans = $('span[data-span-id=' + driverId + ']');
-        passengerSpans.remove();
-    }
-}
-
-function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger) {
+function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotNeedTransportSpan, doesNotAssistSpan) {
     const driverId = driverSelectForPassenger.val();
 
     $.ajax({
@@ -17,10 +10,34 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function(response) {
-            removeDriverPassengersInDriverTable(driverId);
-            changeDriverSelectForPassenger(driverSelectForPassenger);
-            driverSelectForPassenger.val('');
+            //Quitar pasajeros de la tabla de conductores
+            removePassengerInDriverTable(driverId, data.passengerId, data.transportDateId);
+
+            //poner 'no asiste'
+            changeElementDisplay(doesNotAssistSpan);
+
+            //quitar columna icono necesita transporte
+            const needsTransportIcon = needsTransportIconCol.find('i[class*=fa-car]');
+            needsTransportIcon.attr('data-needs-transport', 0);
+            let needsTransportIconClass = changeElementClass(needsTransportIcon, 'text-primary', 'text-muted');
+            needsTransportIcon.attr('class', needsTransportIconClass);
+
+            let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
+            needsTransportIconCol.attr('class', needsTransportIconColClass);
+
+            //cambia el icono de asistencia
             changeAssistanceIcon(0, assistanceIcon, 'text-primary', 'text-muted');
+
+            //si está el combo de conductores, lo quitas
+            if (!driverSelectForPassenger.attr('class').includes('d-none')) {
+                 changeElementDisplay(driverSelectForPassenger);
+                 driverSelectForPassenger.val('');
+            }
+
+            //si está el 'no necesita transporte' se lo quitas
+            if (!doesNotNeedTransportSpan.attr('class').includes('d-none')) {
+                changeElementDisplay(doesNotNeedTransportSpan);
+            }
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -28,15 +45,25 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
     });
 }
 
-function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger) {
+function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotAssistSpan) {
     $.ajax({
         url: '/involvedAvailability',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function(response) {
-            changeDriverSelectForPassenger(driverSelectForPassenger);
+            //poner el combo de conductores
+            changeElementDisplay(driverSelectForPassenger);
+
+            //cambiar el iconito de asistencia
             changeAssistanceIcon(1, assistanceIcon, 'text-muted', 'text-primary');
+
+            //mostrar el icono de necesita transporte
+            let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
+            needsTransportIconCol.attr('class', needsTransportIconColClass);
+
+            //pone el texto 'no asiste'
+            changeElementDisplay(doesNotAssistSpan);
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -44,15 +71,26 @@ function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenge
     });
 }
 
-function changeDriverSelectForPassenger(driverSelectForPassenger) {
-    let cellContentClass = changeElementDisplayNone(driverSelectForPassenger);
-    driverSelectForPassenger.attr('class', cellContentClass);
+function removePassengerInDriverTable(driverId, passengerId, dateId) {
+    if (driverId != null && driverId !== "") {
+        const passengerSpan = $('span[id=p' + passengerId + 'd' + driverId + 't' + dateId + ']');
+        passengerSpan.remove();
+
+        const passengerSpanBr = $('br[id=brp' + passengerId + 'd' + driverId + 't' + dateId + ']');
+        passengerSpanBr.remove();
+    }
+}
+
+function changeElementDisplay(element) {
+    let elementClass = changeElementDisplayNone(element);
+    element.attr('class', elementClass);
 }
 
 function changeAssistanceIcon(dataPassengerAssist, assistanceIcon, classReplace, classToBeReplaced) {
     let assistanceIconClass = changeElementClass(assistanceIcon, classToBeReplaced, classReplace);
-    assistanceIcon.attr('data-passenger-assist', dataPassengerAssist);
     assistanceIcon.attr('class', assistanceIconClass);
+
+    assistanceIcon.attr('data-passenger-assist', dataPassengerAssist);
 }
 
 function changePassengerAssistance() {
@@ -63,14 +101,17 @@ function changePassengerAssistance() {
         transportDateId : dateId,
         passengerId : passengerId,
     }
-    const driverSelectForPassengerSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select';
-    const driverSelectForPassenger = $(driverSelectForPassengerSelector);
-
+    
+    const driverSelectForPassenger = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select');
+    const needsTransportIconCol = $('#needsTransportIcon_' + passengerId + '_' + dateId);
+    const doesNotNeedTransportSpan = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotNeedTransportSpan');
+    const doesNotAssistSpan = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotAssistSpan');
+    
     const passengerAssistance = assistanceIcon.attr('data-passenger-assist');
     if (passengerAssistance === "1") {
-        deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger);
+        deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotNeedTransportSpan, doesNotAssistSpan);
     } else if (passengerAssistance === "0") {
-       createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger);
+       createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotAssistSpan);
     }
 }
 

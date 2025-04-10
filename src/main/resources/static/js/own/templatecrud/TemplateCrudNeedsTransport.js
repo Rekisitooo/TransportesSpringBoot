@@ -28,7 +28,7 @@ function changePassengerNeedForTransport() {
 
             if (passengerNeedsTransport == 1) {
                 passengerNeedsTransport = 0;
-                needTransportIconClass = changeElementClass(needTransportIcon, 'text-muted', 'text-primary');
+                needTransportIconClass = changeElementClass(needTransportIcon, 'text-primary', 'text-muted');
             } else if (passengerNeedsTransport == 0) {
                 passengerNeedsTransport = 1;
                 const driverForPassengerSelectOptionElements = $(passengerCellContentSelectSelector + ' option');
@@ -38,7 +38,7 @@ function changePassengerNeedForTransport() {
                     }
                 );
 
-                needTransportIconClass = changeElementClass(needTransportIcon, 'text-primary', 'text-muted');
+                needTransportIconClass = changeElementClass(needTransportIcon, 'text-muted', 'text-primary');
                 passengerCellContentSelect.val('');
             }
             needTransportIcon.attr('class', needTransportIconClass);
