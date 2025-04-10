@@ -26,7 +26,7 @@ public final class InvolvedAvailabiltyForTransportDateController {
     }
 
     @DeleteMapping
-    public ResponseEntity<InvolvedAvailabiltyForTransportDate> updateInvolvedNeedForTransport(final Model model, @RequestBody DtoUpdateInvolvedAvailability body) {
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Model model, @RequestBody DtoUpdateInvolvedAvailability body) {
         return this.involvedAvailabiltyForTransportDateService.deleteInvolvedAssistanceForDate(body.getPassengerId(), body.getTransportDateId());
     }
 
