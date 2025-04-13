@@ -262,6 +262,9 @@
                                             th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate')
                                                 and (passengersAvailableForDate.get(date.id) == null)) ? 'text-center' : ''}"
                                             style="height:100px"
+                                            th:id="'p' + ${passenger.id} + 't' + ${date.id}"
+                                            th:data-t="${passenger.id}"
+                                            th:data-y="'t' + ${date.id}"
                                         >
 
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
@@ -391,6 +394,7 @@
                                                                 and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
                                                     th:text="${passenger.name} + ' ' + ${passenger.surname}"
                                                     th:data-span-id="${driver.id}"
+                                                    th:data-p-span-id="${passenger.id}"
                                                     th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
                                                     <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
                                                 </span>
