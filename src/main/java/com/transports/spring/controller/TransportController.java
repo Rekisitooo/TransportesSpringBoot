@@ -26,7 +26,7 @@ public class TransportController {
         final TransportKey transportKey = transformDtoTransportToTransportKey(body);
         final Transport transport = this.transportService.findTransportByPassenger(transportKey.getTransportDateId(), transportKey.getPassengerId());
         this.transportService.updateDriverInTransport(transportKey);
-        //TODO create if on wrong update and add something to explain that the id of the driver in charge before the update is needed to update the other table
+
         body.setP(transport.getTransportKey().getDriverId());
         return new ResponseEntity<>(new ServiceResponse<>("ok", body), HttpStatus.OK);
     }

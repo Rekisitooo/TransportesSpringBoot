@@ -1,6 +1,10 @@
 package com.transports.spring.model;
 
-import jakarta.persistence.*;
+import com.transports.spring.model.key.InvolvedAvailabilityForTransportDateKey;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Builder
@@ -12,27 +16,34 @@ import lombok.*;
 @Table(name = "DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE")
 public final class InvolvedAvailabiltyForTransportDate {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(name = "COD_INVOLUCRADO")
-    private int involvedCode;
-
-    @Column(name = "COD_FECHA_TRANSPORTE")
-    private int transportDateCode;
+    @EmbeddedId
+    private InvolvedAvailabilityForTransportDateKey involvedAvailabilityForTransportDateKey;
 
     @Column(name = "NECESITA_TRANSPORTE")
     private int needsTransport = 1;
 
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
-        this.transportDateCode = transportDateCode;
-        this.involvedCode = involvedCode;
+        this.involvedAvailabilityForTransportDateKey = new InvolvedAvailabilityForTransportDateKey(involvedCode, transportDateCode);
     }
 
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode, int needsTransport) {
-        this.involvedCode = involvedCode;
-        this.transportDateCode = transportDateCode;
+        this.involvedAvailabilityForTransportDateKey = new InvolvedAvailabilityForTransportDateKey(involvedCode, transportDateCode);
         this.needsTransport = needsTransport;
+    }
+
+    public int getInvolvedCode() {
+        return this.involvedAvailabilityForTransportDateKey.getInvolvedCode();
+    }
+
+    public void setInvolvedCode(int involvedCode) {
+        this.involvedAvailabilityForTransportDateKey.setInvolvedCode(involvedCode);
+    }
+
+    public int getTransportDateCode() {
+        return this.involvedAvailabilityForTransportDateKey.getTransportDateCode();
+    }
+
+    public void setTransportDateCode(int transportDateCode) {
+        this.involvedAvailabilityForTransportDateKey.setTransportDateCode(transportDateCode);
     }
 }

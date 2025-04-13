@@ -25,9 +25,9 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON ipp.roleCode = rol_conductor.id" +
             "            AND rol_conductor.description = 'Conductor'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
     List<DtoInvolvedAvailabiltyForTransportDate> findAllDriversAvailableDatesForTemplate(@Param("templateId") int templateId);
@@ -44,9 +44,9 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON ipp.roleCode = rol_viajero.id" +
             "            AND rol_viajero.description = 'Viajero'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
     List<DtoInvolvedAvailabiltyForTransportDate> findAllPassengersAssistanceDatesForTemplate(@Param("templateId") int templateId);
@@ -57,9 +57,9 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON ipp.roleCode = rol_viajero.id" +
             "            AND rol_viajero.description = 'Viajero'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.involvedCode = :passengerId" +
             "  AND ipp.involvedByTemplateKey.templateCode = :templateId")
@@ -70,8 +70,8 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   SET " +
             "       diftp.needsTransport = :needsTransport" +
             "   WHERE" +
-            "       diftp.involvedCode = :involvedCode" +
-            "       AND diftp.transportDateCode = :transportDateCode")
+            "       diftp.involvedAvailabilityForTransportDateKey.involvedCode = :involvedCode" +
+            "       AND diftp.involvedAvailabilityForTransportDateKey.transportDateCode = :transportDateCode")
     void updateInvolvedNeedForTransport(
             @Param("needsTransport") final Integer needsTransport,
             @Param("involvedCode") final Integer involvedCode,
@@ -82,7 +82,7 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
     @Modifying
     @Query("DELETE FROM InvolvedAvailabiltyForTransportDate dipft" +
             " WHERE " +
-            "  dipft.involvedCode = :involvedCode" +
-            "  AND dipft.transportDateCode = :dateCode")
+            "  dipft.involvedAvailabilityForTransportDateKey.involvedCode = :involvedCode" +
+            "  AND dipft.involvedAvailabilityForTransportDateKey.transportDateCode = :dateCode")
     void deleteInvolvedAssistanceForDate(@Param("involvedCode") int involvedCode, @Param("dateCode") int dateCode);
 }
