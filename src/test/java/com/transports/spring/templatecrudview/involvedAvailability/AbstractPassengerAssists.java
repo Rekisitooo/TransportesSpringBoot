@@ -3,6 +3,8 @@ package com.transports.spring.templatecrudview.involvedAvailability;
 import com.microsoft.playwright.ElementHandle;
 import com.transports.spring.TestConstants;
 
+import java.util.List;
+
 abstract class AbstractPassengerAssists extends TestConstants {
 
     protected static final String DRIVER_SELECT_SELECTOR = " select";
@@ -20,44 +22,77 @@ abstract class AbstractPassengerAssists extends TestConstants {
     /**
      * Checks that:
      *  <ul>
-     *      <li>Driver's select is hidden.</li>
+     *      <li>Driver's select is showing.</li>
      *      <li>Assistance icon is unavailable</li>
      *      <li>Needs transport span is hidden</li>
      *      <li>Does not assist span is showing</li>
      *       <li>Does not assist span is showing</li>
      *  </ul>
      */
-    protected boolean isEverythingOkWhenPassengerAssists() {
-        final boolean isAssistanceIconStillShowingActiveColor = this.assistanceIconElement.getAttribute("class").contains("text-primary");
-        final boolean isAssistanceIconStillIndicatingDelete = this.assistanceIconElement.getAttribute("data-passenger-assist").equals("1");
-        final boolean isAssistanceIconNotChanging = isAssistanceIconStillShowingActiveColor || isAssistanceIconStillIndicatingDelete;
-        final boolean isDriverSelectNotHiding = !this.driverSelectElement.getAttribute("class").contains("d-none");
-        final boolean isTransportSpanNotHiding = !this.needsTransportSpanElement.getAttribute("class").contains("d-none");
-        final boolean isDoesNotAssistSpanNotShowing = this.assistanceSpanElement.getAttribute("class").contains("d-none");
+    protected boolean isEverythingOkWhenPassengerAssistsAndNeedsTransport() {
+        final boolean isAssistanceIconShowingActiveColor = this.assistanceIconElement.getAttribute("class").contains("text-primary");
+        final boolean isAssistanceIconIndicatingDelete = this.assistanceIconElement.getAttribute("data-passenger-assist").equals("1");
+        final boolean isAssistanceIconOk = isAssistanceIconIndicatingDelete || isAssistanceIconShowingActiveColor;
+        final boolean isDriverSelectShowing = !this.driverSelectElement.getAttribute("class").contains("d-none");
+        final boolean isNeedsTransportSpanHidden = this.needsTransportSpanElement.getAttribute("class").contains("d-none");
+        final boolean isDoesNotAssistSpanHidden = this.assistanceSpanElement.getAttribute("class").contains("d-none");
+        final boolean isDriverOptionElementsActionCorrect = isDriverOptionElementsActionCorrect(this.driverSelectElement);
 
-        return isDriverSelectNotHiding || isTransportSpanNotHiding || isDoesNotAssistSpanNotShowing || isAssistanceIconNotChanging;
+        return isDriverSelectShowing && isNeedsTransportSpanHidden && isDoesNotAssistSpanHidden && isAssistanceIconOk && isDriverOptionElementsActionCorrect;
+    }
+
+    /**
+     * Checks that driver options perform the right action when selected
+     * @param driversSelect <select>
+     * @return boolean
+     */
+    private static boolean isDriverOptionElementsActionCorrect(final ElementHandle driversSelect) {
+        final List<ElementHandle> driverOptions = driversSelect.querySelectorAll("option");
+
+        for (int i = 0; i < driverOptions.size(); i++) {
+            final ElementHandle driverOption = driverOptions.get(i);
+            if (isFirstDriverOptionNotIndicatingDelete(driverOption, i) || isDriverOptionNotIndicatingCreate(driverOption, i)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean isDriverOptionNotIndicatingCreate(ElementHandle driverOption, int i) {
+        final boolean isDriverOptionNotCreatingWhenSelected = !driverOption.getAttribute("name").equalsIgnoreCase("c");
+        final boolean isNotFirstOption = (i > 0);
+
+        return isDriverOptionNotCreatingWhenSelected && isNotFirstOption;
+    }
+
+    private static boolean isFirstDriverOptionNotIndicatingDelete(ElementHandle driverOption, int i) {
+        final boolean isDriverOptionNotDeletingWhenSelected = !driverOption.getAttribute("d").equalsIgnoreCase("c");
+        final boolean isFirstOption = (i == 0);
+
+        return isDriverOptionNotDeletingWhenSelected && isFirstOption;
     }
 
     /**
      * Checks that:
      *  <ul>
-     *      <li>Driver's select is shown.</li>
-     *      <li>Assistance icon is available</li>
+     *      <li>Driver's select is hidden.</li>
+     *      <li>Assistance icon is unavailable</li>
      *      <li>Needs transport span is hidden</li>
-     *      <li>Does not assist span is hidden</li>
+     *      <li>Does not assist span is shown</li>
      *  </ul>
      */
     protected boolean isEverythingOkWhenPassengerDoesNotAssist(final String passengerTdSelector) {
         final boolean isAssistanceIconShowingDisabledColor = this.assistanceIconElement.getAttribute("class").contains("text-muted");
         final boolean isAssistanceIconIndicatingCreateAssistance = this.assistanceIconElement.getAttribute("data-passenger-assist").equals("0");
-        final boolean isAssistanceIconNotOk = isAssistanceIconShowingDisabledColor || isAssistanceIconIndicatingCreateAssistance;
-        final boolean isDriverSelectUnavailable = this.driverSelectElement.getAttribute("class").contains("d-none");
-        final boolean isTransportSpanShowing = !this.needsTransportSpanElement.getAttribute("class").contains("d-none");
+        final boolean isAssistanceIconOk = isAssistanceIconShowingDisabledColor || isAssistanceIconIndicatingCreateAssistance;
+        final boolean isDriverSelectHidden = this.driverSelectElement.getAttribute("class").contains("d-none");
+        final boolean isNeedsTransportSpanHidden = this.needsTransportSpanElement.getAttribute("class").contains("d-none");
         final boolean isDoesNotAssistSpanShowing = !this.assistanceSpanElement.getAttribute("class").contains("d-none");
         final boolean isAssistanceIconHidden = this.needsTransportIconDivElement.getAttribute("class").contains("d-none");
         final boolean isPassengerEliminatedFromDriversTd = isPassengerEliminatedFromDriversTd(passengerTdSelector);
 
-        return ( (isDriverSelectUnavailable || isTransportSpanShowing || isDoesNotAssistSpanShowing || isAssistanceIconHidden || isAssistanceIconNotOk) && isPassengerEliminatedFromDriversTd);
+        return isDriverSelectHidden && isNeedsTransportSpanHidden && isDoesNotAssistSpanShowing && isAssistanceIconHidden && isAssistanceIconOk && isPassengerEliminatedFromDriversTd;
     }
 
     /**

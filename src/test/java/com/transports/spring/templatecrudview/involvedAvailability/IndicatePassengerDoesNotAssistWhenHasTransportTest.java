@@ -2,6 +2,7 @@ package com.transports.spring.templatecrudview.involvedAvailability;
 
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.SelectOption;
 import com.transports.spring.TestConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
-class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
+class IndicatePassengerDoesNotAssistWhenHasTransportTest extends AbstractPassengerAssists {
 
     @BeforeEach
     public void setUp() {
@@ -38,35 +39,42 @@ class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
     }
 
     /**
-     * Context: It has to be a <td> with in which the passenger does not assist.
+     * It has to be a passenger 'td' in which it:
+     * <ul>
+     *     <li>Assists.</li>
+     *     <li>Needs transport.</li>
+     *     <li>Has a transport.</li>
+     * </ul>
      */
     @Test
-    void indicatePassengerAssists() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(3)";
+    void indicatePassengerDoesNotAssistWhenHasTransport() {
+        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(2)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
+        final String driverSelectSelector = passengerTdSelector + DRIVER_SELECT_SELECTOR;
 
         this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
-        this.driverSelectElement = this.page.querySelector(passengerTdSelector + DRIVER_SELECT_SELECTOR);
+        this.driverSelectElement = this.page.querySelector(driverSelectSelector);
         this.assistanceSpanElement = this.page.querySelector(passengerTdSelector + ASSISTANCE_SPAN_SELECTOR);
         this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
         this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
 
-        if (!super.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector)) {
+        if (!super.isEverythingOkWhenPassengerAssistsAndNeedsTransport()) {
             fail();
         }
 
         this.page.click(assistanceIconSelector);
 
-        if (super.isEverythingOkWhenPassengerAssistsAndNeedsTransport()) {
-            this.resetContext(assistanceIconSelector);
+        if (super.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector)) {
+            this.resetContextWhenHasTransport(assistanceIconSelector, driverSelectSelector);
             assertTrue(true);
         } else {
-            this.resetContext(assistanceIconSelector);
+            this.resetContextWhenHasTransport(assistanceIconSelector, driverSelectSelector);
             fail();
         }
     }
 
-    private void resetContext(final String assistanceIconSelector) {
+    private void resetContextWhenHasTransport(final String assistanceIconSelector, final String driverSelectSelector) {
         this.page.click(assistanceIconSelector);
+        this.page.selectOption(driverSelectSelector, new SelectOption().setIndex(1));
     }
 }

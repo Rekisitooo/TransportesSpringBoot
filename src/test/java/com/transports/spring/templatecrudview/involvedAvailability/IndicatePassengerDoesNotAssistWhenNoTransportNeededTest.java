@@ -2,7 +2,6 @@ package com.transports.spring.templatecrudview.involvedAvailability;
 
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.SelectOption;
 import com.transports.spring.TestConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
-class IndicatePassengerDoesNotAssistTest extends AbstractPassengerAssists {
+class IndicatePassengerDoesNotAssistWhenNoTransportNeededTest extends AbstractPassengerAssists {
 
     @BeforeEach
     public void setUp() {
@@ -39,11 +38,15 @@ class IndicatePassengerDoesNotAssistTest extends AbstractPassengerAssists {
     }
 
     /**
-     * Context: It has to be a <td> with in which the passenger assists, needs transport and a driver selected (optional).
+     * It has to be a passenger 'td' in which it:
+     * <ul>
+     *     <li>Assists.</li>
+     *     <li>Does not need transport.</li>
+     * </ul>
      */
     @Test
-    void test() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(2)";
+    void indicatePassengerDoesNotAssistWhenNoTransportNeeded() {
+        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(4)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
         final String driverSelectSelector = passengerTdSelector + DRIVER_SELECT_SELECTOR;
 
@@ -53,22 +56,43 @@ class IndicatePassengerDoesNotAssistTest extends AbstractPassengerAssists {
         this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
         this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
 
-        if (!super.isEverythingOkWhenPassengerAssists()) {
+        if (!isContextWhenNoTransportNeededOk()) {
             fail();
         }
 
         this.page.click(assistanceIconSelector);
 
         if (super.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector)) {
-            this.resetContext(assistanceIconSelector, driverSelectSelector);
+            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, driverSelectSelector);
             assertTrue(true);
         } else {
+            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, driverSelectSelector);
             fail();
         }
     }
 
-    private void resetContext(final String assistanceIconSelector, final String driverSelectSelector) {
+    /**
+     * Checks that:
+     *  <ul>
+     *      <li>Driver's select is hidden.</li>
+     *      <li>Assistance icon is available</li>
+     *      <li>Needs transport span is showing</li>
+     *      <li>Does not assist span is hidden</li>
+     *  </ul>
+     */
+    private boolean isContextWhenNoTransportNeededOk() {
+        final boolean isAssistanceIconShowingActiveColor = this.assistanceIconElement.getAttribute("class").contains("text-primary");
+        final boolean isAssistanceIconIndicatingDeleteAssistance = this.assistanceIconElement.getAttribute("data-passenger-assist").equals("1");
+        final boolean isAssistanceIconOk = isAssistanceIconShowingActiveColor || isAssistanceIconIndicatingDeleteAssistance;
+        final boolean isDriverSelectHidden = this.driverSelectElement.getAttribute("class").contains("d-none");
+        final boolean isNeedsTransportSpanShowing = !this.needsTransportSpanElement.getAttribute("class").contains("d-none");
+        final boolean isDoesNotAssistSpanHidden = this.assistanceSpanElement.getAttribute("class").contains("d-none");
+
+        return isAssistanceIconOk && isDriverSelectHidden && isNeedsTransportSpanShowing && isDoesNotAssistSpanHidden;
+    }
+
+    private void resetContextWhenNoTransportNeeded(final String assistanceIconSelector, final String needsTransportIconSelector) {
         this.page.click(assistanceIconSelector);
-        page.selectOption(driverSelectSelector, new SelectOption().setIndex(1));
+        this.page.click(needsTransportIconSelector);
     }
 }

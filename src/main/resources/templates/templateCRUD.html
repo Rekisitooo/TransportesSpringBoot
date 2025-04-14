@@ -252,12 +252,13 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr style="cursor:move"
+                                    <tr
                                         draggable="true"
                                             th:each="passenger : ${passengersFromTemplateList}">
                                         <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
+                                            style="cursor:move"
                                         ></th>
                                         <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}"
                                             th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate')
@@ -380,13 +381,14 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr style="cursor:move"
+                                    <tr
                                         draggable="true"
                                         th:each="driver : ${driversFromTemplateList}">
 
                                         <th th:text="${driver.name} + ' ' + ${driver.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
+                                            style="cursor:move"
                                         ></th>
                                         <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
                                         <td th:each="date : ${templateDates}"
@@ -452,12 +454,9 @@
         <script src="/js/own/templatecrud/TemplateCrudAddNewDateModal.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudNeedsTransport.js" type="module"></script>
-<<<<<<< HEAD
         <script src="/js/own/templatecrud/TemplateCrudInvolvedAvailabilityForDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
-=======
         <script src="/js/own/templatecrud/animation/MoveTableRows.js" type="module"></script>
->>>>>>> origin/develop
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
