@@ -252,7 +252,8 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr
+                                    <tr style="cursor:move"
+                                        draggable="true"
                                             th:each="passenger : ${passengersFromTemplateList}">
                                         <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
@@ -379,7 +380,10 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr th:each="driver : ${driversFromTemplateList}">
+                                    <tr style="cursor:move"
+                                        draggable="true"
+                                        th:each="driver : ${driversFromTemplateList}">
+
                                         <th th:text="${driver.name} + ' ' + ${driver.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
@@ -448,8 +452,12 @@
         <script src="/js/own/templatecrud/TemplateCrudAddNewDateModal.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudNeedsTransport.js" type="module"></script>
+<<<<<<< HEAD
         <script src="/js/own/templatecrud/TemplateCrudInvolvedAvailabilityForDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
+=======
+        <script src="/js/own/templatecrud/animation/MoveTableRows.js" type="module"></script>
+>>>>>>> origin/develop
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
