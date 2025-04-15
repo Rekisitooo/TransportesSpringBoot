@@ -54,7 +54,8 @@ function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenge
         success: function(response) {
             //poner el combo de conductores
             changeElementDisplay(driverSelectForPassenger);
-            driverSelectForPassenger.children().attr("name", "c");
+            driverSelectForPassenger.first().attr("name", "d");
+            driverSelectForPassenger.not(':first').attr("name", "c");
 
             //cambiar el iconito de asistencia
             changeAssistanceIcon(1, assistanceIcon, 'text-muted', 'text-primary');
