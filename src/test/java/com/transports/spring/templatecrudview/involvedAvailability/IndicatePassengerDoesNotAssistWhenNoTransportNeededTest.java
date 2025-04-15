@@ -46,12 +46,11 @@ class IndicatePassengerDoesNotAssistWhenNoTransportNeededTest extends AbstractPa
      */
     @Test
     void indicatePassengerDoesNotAssistWhenNoTransportNeeded() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(4)";
+        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr:nth-child(1) td:nth-child(4)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
-        final String driverSelectSelector = passengerTdSelector + DRIVER_SELECT_SELECTOR;
 
         this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
-        this.driverSelectElement = this.page.querySelector(driverSelectSelector);
+        this.driverSelectElement = this.page.querySelector(passengerTdSelector + DRIVER_SELECT_SELECTOR);
         this.assistanceSpanElement = this.page.querySelector(passengerTdSelector + ASSISTANCE_SPAN_SELECTOR);
         this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
         this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
@@ -60,13 +59,21 @@ class IndicatePassengerDoesNotAssistWhenNoTransportNeededTest extends AbstractPa
             fail();
         }
 
+        //mark passenger does not assist
         this.page.click(assistanceIconSelector);
 
+        this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
+        this.driverSelectElement = this.page.querySelector(passengerTdSelector + DRIVER_SELECT_SELECTOR);
+        this.assistanceSpanElement = this.page.querySelector(passengerTdSelector + ASSISTANCE_SPAN_SELECTOR);
+        this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
+        this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
+
+        final String needsTransportIconSelector = passengerTdSelector + NEEDS_TRANSPORT_ICON_SELECTOR;
         if (super.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector)) {
-            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, driverSelectSelector);
+            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, needsTransportIconSelector);
             assertTrue(true);
         } else {
-            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, driverSelectSelector);
+            this.resetContextWhenNoTransportNeeded(assistanceIconSelector, needsTransportIconSelector);
             fail();
         }
     }

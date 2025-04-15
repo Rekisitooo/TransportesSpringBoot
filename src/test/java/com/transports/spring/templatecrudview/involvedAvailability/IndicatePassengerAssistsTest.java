@@ -42,7 +42,7 @@ class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
      */
     @Test
     void indicatePassengerAssists() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(3)";
+        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr:nth-child(1) td:nth-child(3)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
 
         this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
@@ -55,9 +55,16 @@ class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
             fail();
         }
 
+        //mark passenger assists
         this.page.click(assistanceIconSelector);
 
-        if (super.isEverythingOkWhenPassengerAssistsAndNeedsTransport()) {
+        this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
+        this.driverSelectElement = this.page.querySelector(passengerTdSelector + DRIVER_SELECT_SELECTOR);
+        this.assistanceSpanElement = this.page.querySelector(passengerTdSelector + ASSISTANCE_SPAN_SELECTOR);
+        this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
+        this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
+
+        if (super.isEverythingOkWhenPassengerAssistsAndNeedsTransport(passengerTdSelector)) {
             this.resetContext(assistanceIconSelector);
             assertTrue(true);
         } else {

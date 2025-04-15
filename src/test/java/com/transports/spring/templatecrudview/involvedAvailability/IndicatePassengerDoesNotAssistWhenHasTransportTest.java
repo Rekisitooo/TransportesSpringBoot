@@ -48,7 +48,7 @@ class IndicatePassengerDoesNotAssistWhenHasTransportTest extends AbstractPasseng
      */
     @Test
     void indicatePassengerDoesNotAssistWhenHasTransport() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr td:nth-child(2)";
+        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr:nth-child(1) td:nth-child(2)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
         final String driverSelectSelector = passengerTdSelector + DRIVER_SELECT_SELECTOR;
 
@@ -58,11 +58,18 @@ class IndicatePassengerDoesNotAssistWhenHasTransportTest extends AbstractPasseng
         this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
         this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
 
-        if (!super.isEverythingOkWhenPassengerAssistsAndNeedsTransport()) {
+        if (!super.isEverythingOkWhenPassengerAssistsAndNeedsTransport(passengerTdSelector)) {
             fail();
         }
 
+        //mark passenger does not assist
         this.page.click(assistanceIconSelector);
+
+        this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);
+        this.driverSelectElement = this.page.querySelector(driverSelectSelector);
+        this.assistanceSpanElement = this.page.querySelector(passengerTdSelector + ASSISTANCE_SPAN_SELECTOR);
+        this.needsTransportSpanElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_SPAN_SELECTOR);
+        this.needsTransportIconDivElement = this.page.querySelector(passengerTdSelector + NEEDS_TRANSPORT_ICON_DIV_SELECTOR);
 
         if (super.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector)) {
             this.resetContextWhenHasTransport(assistanceIconSelector, driverSelectSelector);
