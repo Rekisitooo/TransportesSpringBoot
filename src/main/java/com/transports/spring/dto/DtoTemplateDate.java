@@ -19,12 +19,17 @@ public final class DtoTemplateDate {
     private String dayOfTheWeekName;
     private String dateType;
 
-    public DtoTemplateDate(int id, int templateCode, Date transportDate, int dayOfTheWeekCode, String name, String dateType) {
+    public DtoTemplateDate(int id, int templateCode, Date transportDate, int dayOfTheWeekCode, String dayOfTheWeekName, String dateType) {
         this.id = id;
         this.templateCode = templateCode;
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;
-        this.dayOfTheWeekName = name;
+        this.dayOfTheWeekName = dayOfTheWeekName;
+        this.dateType = dateType;
+    }
+
+    public DtoTemplateDate(final String eventName, final String dateType) {
+        this.eventName = eventName;
         this.dateType = dateType;
     }
 

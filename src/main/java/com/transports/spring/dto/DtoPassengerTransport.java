@@ -15,4 +15,9 @@ public final class DtoPassengerTransport extends AbstractDtoInvolvedTransport {
         super.eventName = dtoInvolvedTransport.getEventName();
         this.driverFullName = dtoInvolvedTransport.getName();
     }
+
+    public DtoPassengerTransport(final String eventName, final String driverFullName) {
+        super.eventName = eventName;
+        this.driverFullName = driverFullName;
+    }
 }
