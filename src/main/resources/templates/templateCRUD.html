@@ -222,6 +222,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Passengers Table-->
                         <div>
                             <h2 th:text="#{templateCRUD.transportsForPassengerTableTitle}" class="mt-2 mb-2"></h2>
                             <table class="table table-striped table-bordered shadow-lg w-100" id="passengerTransportsTable" cellspacing="0">
@@ -252,14 +254,18 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr
-                                            th:each="passenger : ${passengersFromTemplateList}">
+                                    <tr th:each="passenger : ${passengersFromTemplateList}">
+
+                                        <!-- Passenger name -->
                                         <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                             style="cursor:move"
-                                            draggable="true"                                            data-draggable="involvedTable"
+                                            draggable="true"
+                                            data-draggable="involvedTable"
                                         ></th>
+
+                                        <!-- Assistance for date -->
                                         <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}"
                                             th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate')
                                                 and (passengersAvailableForDate.get(date.id) == null)) ? 'text-center' : ''}"
@@ -268,34 +274,47 @@
                                             th:data-t="${passenger.id}"
                                             th:data-y="'t' + ${date.id}"
                                         >
-
+                                            <!-- Event display -->
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
+                                            <!-- Event display -->
+
+                                            <!-- Transport Date display -->
                                             <th:block th:if="${(date.dateType == 'transportDate')}"
                                                       th:with="passengerAssistance=${passengersAssistanceDates.get(passenger.id)}">
 
                                                 <div class="d-flex flex-column h-100">
+
+                                                    <!-- Div for buttons to change passenger status on current date -->
                                                     <div class="row h-25">
+
+                                                        <!-- Needs Transport div -->
+                                                        <!-- Show if passenger assists -->
                                                         <div
                                                             th:id="${'needsTransportIcon_' + passenger.id + '_' + date.id}"
                                                             th:class="${(
                                                             (passengerAssistance != null)
                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ? 'col-2 d-none' : 'col-2'}">
 
+                                                            <!-- Needs Transport icon -->
                                                             <i
                                                                 th:data-t="${passenger.id}"
                                                                 th:data-y="${date.id}"
                                                                 th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
                                                                 th:data-needs-transport="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
                                                                         passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ? 0 : 1}"
-                                                                th:class="${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
+                                                                th:class="'position-relative fas fa-car ' + ${(passengerAssistance.get(date.transportDate.toLocalDate()) == null or
                                                                         passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1) ?
-                                                                        'position-relative fas fa-car text-primary' : 'position-relative fas fa-car text-muted'}"
+                                                                        'text-primary' : 'text-muted'}"
                                                                 th:title="#{templateCRUD.titleCarIconNeedsTransportForDate}"
                                                                 role="button"
                                                                 style="top: 0; left: 0font-size: 1.5em;"
                                                             ></i>
                                                         </div>
+
+                                                        <!-- Assistance div -->
                                                         <div class="col-2">
+
+                                                            <!-- Assistance icon -->
                                                             <i class="fas fa-calendar-check"
                                                                th:data-t="${passenger.id}"
                                                                th:data-y="${date.id}"
@@ -308,8 +327,12 @@
                                                             ></i>
                                                         </div>
                                                     </div>
+                                                    <!-- Div for buttons to change passenger status on current date -->
+
+                                                    <!-- Div for transport info -->
                                                     <div class="d-table-cell row h-75 mt-2 d-flex justify-content-center align-items-center">
                                                         <div class="col">
+                                                            <!-- Drivers select -->
                                                             <!-- show only if passenger needs transport -->
                                                             <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}"
                                                                     class="bg-transparent border border-0 w-100"
@@ -318,7 +341,11 @@
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 1)) ?
                                                                                 'bg-transparent border border-0 w-100' : 'bg-transparent border border-0 w-100 d-none'}">
+
+                                                                <!-- option for deleting the transport -->
                                                                 <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
+
+                                                                <!-- driver options-->
                                                                 <option
                                                                         th:each="driver : ${driversAvailableForDate.get(date.id)}"
                                                                         th:selected="${(allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) != null)
@@ -333,7 +360,8 @@
                                                                 ></option>
                                                             </select>
 
-                                                            <!-- show if passenger does not need transport -->
+                                                            <!-- 'Does not need transport' Span -->
+                                                            <!-- If passenger does not need transport -->
                                                             <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_doesNotNeedTransportSpan'}"
                                                                     th:class="${((passengerAssistance != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) != null)
@@ -341,22 +369,28 @@
                                                                             ' ' : 'd-none'}"
                                                                   th:text="#{templateCRUD.doesNotNeedTransporte}"></span>
 
-                                                            <!-- show if passenger does not assist on this date -->
+                                                            <!-- 'Does not asist' Span -->
+                                                            <!-- If passenger does not assist on this date -->
                                                             <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_doesNotAssistSpan'}"
                                                                     th:class="${((passengerAssistance != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) == null))?
                                                                             ' ' : 'd-none'}"
                                                                   th:text="#{templateCRUD.doesNotAssist}"></span>
                                                         </div>
+
                                                     </div>
+                                                    <!-- Div for transport info -->
+
                                                 </div>
                                             </th:block>
+                                            <!-- Transport Date display -->
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
+                        <!-- Drivers table -->
                         <div>
                             <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-2"></h2>
                             <table class="table table-striped table-bordered shadow-lg" id="driverTransportsTable" width="100%" cellspacing="0">
@@ -381,9 +415,9 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr
-                                        th:each="driver : ${driversFromTemplateList}">
+                                    <tr th:each="driver : ${driversFromTemplateList}">
 
+                                        <!-- Driver Name -->
                                         <th th:text="${driver.name} + ' ' + ${driver.surname}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
@@ -391,22 +425,66 @@
                                             draggable="true"
                                             data-draggable="involvedTable"
                                         ></th>
+
+                                        <!-- Driver Data -->
                                         <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
                                         <td th:each="date : ${templateDates}"
                                             th:id="'d' + ${driver.id} + 't' + ${date.id}" th:data-date="${date.transportDate}" th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null)) ? 'text-nowrap text-center' : 'text-nowrap'}">
+
+                                            <!-- Event display -->
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
-                                            <th:block th:unless="${'event' == date.dateType}" th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
-                                                <span
-                                                    th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
-                                                                and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
-                                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                                    th:data-span-id="${driver.id}"
-                                                    th:data-p-span-id="${passenger.id}"
-                                                    th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
-                                                    <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
-                                                </span>
-                                                <br th:id="'brp' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}"/>
-                                            </th:block>
+                                            <!-- Event display -->
+
+                                            <!-- Transport Date display -->
+                                            <div th:unless="${'event' == date.dateType}" class="d-flex flex-column h-100">
+
+                                                <!-- Div for buttons to change driver status on current date -->
+                                                <div class="row h-25">
+
+                                                    <!-- Assistance div -->
+                                                    <div class="col-2">
+
+                                                        <!-- Assistance icon -->
+                                                        <i class="fas fa-calendar-check"
+                                                           th:data-t="${driver.id}"
+                                                           th:data-y="${date.id}"
+                                                           th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
+                                                           th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
+                                                           role="button"
+                                                           th:class="'fas fa-calendar-check ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
+                                                                    'text-primary' : 'text-muted'}"
+                                                        ></i>
+                                                        <!-- Assistance icon -->
+
+                                                    </div>
+                                                    <!-- Assistance div -->
+
+                                                </div>
+                                                <!-- Div for buttons to change driver status on current date -->
+
+                                                <!-- Div to show passengers assigned to transport on current date -->
+                                                <div class="row h-25">
+                                                    <th:block th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
+                                                        <div class="col">
+                                                            <div class="row">
+                                                            <!-- Passenger name -->
+                                                            <span
+                                                                    th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
+                                                                        and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
+                                                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                                                    th:data-span-id="${driver.id}"
+                                                                    th:data-p-span-id="${passenger.id}"
+                                                                    th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
+                                                                <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                    </th:block>
+                                                </div>
+                                                <!-- Div to show passengers assigned to transport on current date -->
+
+                                            </div>
+                                            <!-- Transport Date display -->
                                         </td>
                                     </tr>
                                 </tbody>

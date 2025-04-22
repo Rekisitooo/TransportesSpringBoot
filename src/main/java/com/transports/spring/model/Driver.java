@@ -1,10 +1,8 @@
 package com.transports.spring.model;
 
 import com.transports.spring.comparable.IDriverDtoGetAllDriversComparable;
-import com.transports.spring.comparable.IPassengerDtoGetAllPassengersComparable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
-public final class Driver extends AbstractInvolved implements IDriverDtoGetAllDriversComparable {
+public final class Driver extends Involved implements IDriverDtoGetAllDriversComparable {
 
     @Column(name = "NUMERO_PLAZAS")
     private int availableSeats;

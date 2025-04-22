@@ -120,8 +120,11 @@ public final class TemplateController {
         final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesForTemplate(templateId);
         model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
 
-        final Map<Integer, Map<LocalDate, DtoTemplateDay>> passengersAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
-        model.addAttribute("passengersAssistanceDates", passengersAssistanceDates);
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> passengerAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
+        model.addAttribute("passengersAssistanceDates", passengerAssistanceDates);
+
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
+        model.addAttribute("driverAssistanceDates", driverAssistanceDates);
 
     }
 }

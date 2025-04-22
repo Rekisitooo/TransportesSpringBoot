@@ -1,6 +1,6 @@
 package com.transports.spring.dto;
 
-import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.Involved;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class DtoTemplateDay {
     private LocalDate date;
     private String eventName;
     private int needsTransport;
-    private List<AbstractInvolved> involvedList;
+    private List<Involved> involvedList;
 
     public DtoTemplateDay(LocalDate date, String eventName, int needsTransport) {
         this.date = date;

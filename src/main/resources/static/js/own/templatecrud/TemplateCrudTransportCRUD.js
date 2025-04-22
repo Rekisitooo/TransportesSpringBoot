@@ -68,10 +68,6 @@ function addPassengerInDriverTransportsTable(transportDateId, driverId, passenge
     newPassengerSpanNode.setAttribute('id', 'p' + passengerId + driverTransportsTablePassengerTdToAddSpan);
     newPassengerSpanNode.setAttribute('data-span-id', driverId);
     $('#' + driverTransportsTablePassengerTdToAddSpan).append(newPassengerSpanNode);
-
-    const newBrNode = document.createElement("br");
-    newBrNode.setAttribute('id', 'brp' + passengerId + driverTransportsTablePassengerTdToAddSpan);
-    $('#' + driverTransportsTablePassengerTdToAddSpan).append(newBrNode);
 }
 
 function deletePassengerInDriverTransportsTable(transportDateId, passengerId, oldDriverId) {
@@ -80,9 +76,6 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
 
     const driverTransportsTablePassengerSpanToDelete = '#' + deleteId;
     $(driverTransportsTablePassengerSpanToDelete).remove();
-
-    const driverTransportsTablePassengerBrToDelete = '#br' + deleteId;
-    $(driverTransportsTablePassengerBrToDelete).remove();
 }
 
 function operate () {

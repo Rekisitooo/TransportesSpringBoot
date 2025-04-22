@@ -18,9 +18,9 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN AbstractInvolved viajero" +
+            "           INNER JOIN Involved viajero" +
             "               ON t.transportKey.passengerId = viajero.id" +
-            "           INNER JOIN AbstractInvolved conductor" +
+            "           INNER JOIN Involved conductor" +
             "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +
@@ -32,9 +32,9 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN AbstractInvolved viajero" +
+            "           INNER JOIN Involved viajero" +
             "               ON t.transportKey.passengerId = viajero.id" +
-            "           INNER JOIN AbstractInvolved conductor" +
+            "           INNER JOIN Involved conductor" +
             "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
@@ -52,7 +52,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     @Query("SELECT " +
             "   new Transport(t.transportKey.passengerId, conductor.id, t.transportKey.transportDateId)" +
             "       FROM Transport t" +
-            "           INNER JOIN AbstractInvolved conductor" +
+            "           INNER JOIN Involved conductor" +
             "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +
@@ -64,9 +64,9 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN AbstractInvolved viajero" +
+            "           INNER JOIN Involved viajero" +
             "               ON t.transportKey.passengerId = viajero.id" +
-            "           INNER JOIN AbstractInvolved conductor" +
+            "           INNER JOIN Involved conductor" +
             "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
@@ -78,9 +78,9 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN AbstractInvolved viajero" +
+            "           INNER JOIN Involved viajero" +
             "               ON t.transportKey.passengerId = viajero.id" +
-            "           INNER JOIN AbstractInvolved conductor" +
+            "           INNER JOIN Involved conductor" +
             "               ON t.transportKey.driverId = conductor.id" +
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +

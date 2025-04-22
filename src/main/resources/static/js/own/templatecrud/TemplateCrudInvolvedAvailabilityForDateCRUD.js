@@ -77,9 +77,6 @@ function removePassengerInDriverTable(driverId, passengerId, dateId) {
     if (driverId != null && driverId !== "") {
         const passengerSpan = $('span[id=p' + passengerId + 'd' + driverId + 't' + dateId + ']');
         passengerSpan.remove();
-
-        const passengerSpanBr = $('br[id=brp' + passengerId + 'd' + driverId + 't' + dateId + ']');
-        passengerSpanBr.remove();
     }
 }
 

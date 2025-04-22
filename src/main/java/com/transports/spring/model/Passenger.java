@@ -3,7 +3,6 @@ package com.transports.spring.model;
 import com.transports.spring.comparable.IPassengerDtoGetAllPassengersComparable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
-public final class Passenger extends AbstractInvolved implements IPassengerDtoGetAllPassengersComparable {
+public final class Passenger extends Involved implements IPassengerDtoGetAllPassengersComparable {
 
     @Column(name = "NUMERO_PLAZAS")
     private int occupiedSeats;

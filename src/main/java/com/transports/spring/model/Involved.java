@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "INVOLUCRADO")
-public class AbstractInvolved {
+public class Involved {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +36,16 @@ public class AbstractInvolved {
     @Column(name = "COD_GRUPO_USUARIO")
     protected Integer userCodeGroup;
 
-    protected AbstractInvolved(int id, String completeName){
+    public Involved(Integer id, String name, String surname, int roleCode, int userCode, Integer userCodeGroup) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.roleCode = roleCode;
+        this.userCode = userCode;
+        this.userCodeGroup = userCodeGroup;
+    }
+
+    protected Involved(int id, String completeName){
         super();
         this.id = id;
         this.name = completeName;

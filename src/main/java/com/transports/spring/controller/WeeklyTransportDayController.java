@@ -41,7 +41,7 @@ public final class WeeklyTransportDayController {
     /**
      * Does not delete, it mantains it for the history and statistics.
      * @param weeklyTransportDayId
-     * @return AbstractInvolved
+     * @return Involved
      */
     @GetMapping("/deleteWeeklyTransportDays")
     public WeeklyTransportDay deletePassenger(@PathVariable(value = "id") final int weeklyTransportDayId) {

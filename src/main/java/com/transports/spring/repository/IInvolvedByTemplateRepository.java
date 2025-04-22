@@ -1,6 +1,6 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.Involved;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IInvolvedByTemplateRepository extends JpaRepository<AbstractInvolved, Integer> {
+public interface IInvolvedByTemplateRepository extends JpaRepository<Involved, Integer> {
 
     @Query("SELECT " +
             "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
