@@ -42,8 +42,8 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
     }
 
     public DtoTemplateExcelTransportCellGroup getDtoTemplateExcelTransportCellGroup(
-            XSSFSheet excelSheet,
-            int currentDayOfMonth,
+            final XSSFSheet excelSheet,
+            final int currentDayOfMonth,
             final DtoTemplateDate dtoTemplateTransportDate,
             final DtoTemplateDay dtoPassengerAssistance,
             final DtoPassengerTransport passengerTransport

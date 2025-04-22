@@ -16,6 +16,11 @@ public class DtoDriverTransport extends AbstractDtoInvolvedTransport {
         this.passengerFullNames = dtoInvolvedTransport.getName();
     }
 
+    public DtoDriverTransport(final String passengerFullName, final String eventName) {
+        this.passengerFullNames = passengerFullName;
+        this.eventName = eventName;
+    }
+
     public void addPassengerName(final String passengerFullName) {
         this.passengerFullNames += ", " + passengerFullName;
     }

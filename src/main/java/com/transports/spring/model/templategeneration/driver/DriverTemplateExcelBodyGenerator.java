@@ -26,36 +26,47 @@ public class DriverTemplateExcelBodyGenerator extends AbstractTemplateExcelBodyG
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
-            final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
             final DtoTemplateDate dtoTemplateTransportDate = transportDateMap.get(super.templateDate);
             final DtoDriverTransport driverTransport = driverTransportForDayMap.get(super.templateDate);
-            if (dtoTemplateTransportDate != null) {
-                if (dtoTemplateTransportDate.getDateType().equals("event")) {
-                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dtoTemplateTransportDate.getEventName());
-                    dtoTemplateExcelTransportCellGroup.setBodyText("No hay arreglos.");
-                    dtoTemplateExcelTransportCellGroup.setCellStyler(new EventDateCellStyler());
-
-                } else if (dtoTemplateTransportDate.getDateType().equals("transportDate")) {
-                    if (isDriverInvolvedInTransportInActualDate(driverTransport)) {
-                        final String eventName = driverTransport.getEventName();
-                        dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + eventName);
-                        dtoTemplateExcelTransportCellGroup.setHeaderText("Llevas a:");
-                        dtoTemplateExcelTransportCellGroup.setBodyText(driverTransport.getPassengerFullNames());
-                        dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
-                    } else {
-                        dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
-                    }
-                }
-
-            } else {
-                dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
-            }
+            final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = getDtoTemplateExcelTransportCellGroup(excelSheet, currentDayOfMonth, dtoTemplateTransportDate, driverTransport);
 
             super.generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
 
             this.currentCol += 2;
             super.templateDate = super.templateDate.plusDays(1);
         }
+    }
+
+    public DtoTemplateExcelTransportCellGroup getDtoTemplateExcelTransportCellGroup(
+            final XSSFSheet excelSheet,
+            final int currentDayOfMonth,
+            final DtoTemplateDate dtoTemplateTransportDate,
+            final DtoDriverTransport driverTransport
+    ) {
+        final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
+
+        if (dtoTemplateTransportDate != null) {
+            if (dtoTemplateTransportDate.getDateType().equals("event")) {
+                dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dtoTemplateTransportDate.getEventName());
+                dtoTemplateExcelTransportCellGroup.setBodyText("No hay arreglos.");
+                dtoTemplateExcelTransportCellGroup.setCellStyler(new EventDateCellStyler());
+
+            } else if (dtoTemplateTransportDate.getDateType().equals("transportDate")) {
+                if (isDriverInvolvedInTransportInActualDate(driverTransport)) {
+                    final String eventName = driverTransport.getEventName();
+                    dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + eventName);
+                    dtoTemplateExcelTransportCellGroup.setHeaderText("Llevas a:");
+                    dtoTemplateExcelTransportCellGroup.setBodyText(driverTransport.getPassengerFullNames());
+                    dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
+                } else {
+                    dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
+                }
+            }
+        } else {
+            dtoTemplateExcelTransportCellGroup.setCellStyler(new DefaultDateCellStyler());
+        }
+
+        return dtoTemplateExcelTransportCellGroup;
     }
 
     private static boolean isDriverInvolvedInTransportInActualDate(DtoDriverTransport driverTransport) {
