@@ -27,11 +27,11 @@ public final class InvolvedAvailabiltyForTransportDateController {
 
     @DeleteMapping
     public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Model model, @RequestBody DtoUpdateInvolvedAvailability body) {
-        return this.involvedAvailabiltyForTransportDateService.deleteInvolvedAssistanceForDate(body.getPassengerId(), body.getTransportDateId());
+        return this.involvedAvailabiltyForTransportDateService.deleteInvolvedAssistanceForDate(body.getInvolvedId(), body.getTransportDateId());
     }
 
     @PostMapping
     public ResponseEntity<InvolvedAvailabiltyForTransportDate> createDriverInTransport(@RequestBody DtoUpdateInvolvedAvailability body){
-        return this.involvedAvailabiltyForTransportDateService.saveAvailability(body.getPassengerId(), body.getTransportDateId());
+        return this.involvedAvailabiltyForTransportDateService.saveAvailability(body.getInvolvedId(), body.getTransportDateId());
     }
 }

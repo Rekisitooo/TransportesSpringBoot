@@ -419,6 +419,7 @@
 
                                         <!-- Driver Name -->
                                         <th th:text="${driver.name} + ' ' + ${driver.surname}"
+                                            th:id="${driver.id} + '_th'"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                             style="cursor:move"
@@ -451,7 +452,7 @@
                                                            th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
                                                            th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
                                                            role="button"
-                                                           th:class="'fas fa-calendar-check ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
+                                                           th:class="'fas fa-car ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
                                                                     'text-primary' : 'text-muted'}"
                                                         ></i>
                                                         <!-- Assistance icon -->
@@ -465,17 +466,20 @@
                                                 <!-- Div to show passengers assigned to transport on current date -->
                                                 <div class="row h-75 mt-1 ml-0">
                                                     <div class="col">
-                                                        <div class="row" th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
-                                                        <!-- Passenger name -->
-                                                        <span
-                                                                th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
+                                                        <div class="row"
+                                                             th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}"
+                                                             th:id="'driverPassengersOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
+                                                             th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
                                                                     and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
-                                                                th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                                                th:data-span-id="${driver.id}"
-                                                                th:data-p-span-id="${passenger.id}"
-                                                                th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
-                                                            <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
-                                                        </span>
+                                                        >
+                                                            <!-- Passenger name -->
+                                                            <span
+                                                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                                                    th:data-span-id="${driver.id}"
+                                                                    th:data-p-span-id="${passenger.id}"
+                                                                    th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
+                                                                <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -531,7 +535,8 @@
         <script src="/js/own/templatecrud/TemplateCrudAddNewDateModal.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudNeedsTransport.js" type="module"></script>
-        <script src="/js/own/templatecrud/TemplateCrudInvolvedAvailabilityForDateCRUD.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
         <script src="/js/own/templatecrud/animation/MoveTableRows.js" type="module"></script>
 

@@ -99,8 +99,9 @@ public class InvolvedAvailabiltyForTransportDateService {
 
         final List<Driver> driverList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
         for (final Driver driver : driverList) {
+            final int id = driver.getId();
             final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate =
-                    this.involvedAvailabiltyForTransportDateRepository.findAllDriversAssistanceDatesForTemplate(templateId, driver.getId());
+                    this.involvedAvailabiltyForTransportDateRepository.findAllDriversAssistanceDatesForTemplate(templateId, id);
 
             final Map<LocalDate, DtoTemplateDay> driversAssistanceDates = new HashMap<>();
             for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
@@ -114,7 +115,7 @@ public class InvolvedAvailabiltyForTransportDateService {
                 driversAssistanceDates.put(transportLocalDate, new DtoTemplateDay(transportLocalDate, eventName, needsTransport));
             }
 
-            allDriversAssistanceDatesMap.put(driver.getId(), driversAssistanceDates);
+            allDriversAssistanceDatesMap.put(id, driversAssistanceDates);
         }
 
         return allDriversAssistanceDatesMap;
@@ -184,19 +185,19 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * Transports associated are erased in a trigger
-     * @param passengerId passenger id to delete in db
+     * @param involvedId passenger id to delete in db
      * @param dateId date id to delete in db
      * @return ok response
      */
     @Transactional
-    public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Integer passengerId, final Integer dateId) {
-        this.involvedAvailabiltyForTransportDateRepository.deleteInvolvedAssistanceForDate(passengerId, dateId);
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Integer involvedId, final Integer dateId) {
+        this.involvedAvailabiltyForTransportDateRepository.deleteInvolvedAssistanceForDate(involvedId, dateId);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
-    public ResponseEntity<InvolvedAvailabiltyForTransportDate> saveAvailability(final Integer passengerId, final Integer dateId) {
-        this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(passengerId, dateId));
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> saveAvailability(final Integer involvedId, final Integer dateId) {
+        this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(involvedId, dateId));
         return ResponseEntity.ok().build();
     }
 }

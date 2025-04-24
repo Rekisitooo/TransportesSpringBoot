@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DtoUpdateInvolvedAvailability {
     private Integer transportDateId;
-    private Integer passengerId;
+    private Integer involvedId;
 }

@@ -60,7 +60,7 @@ function changePassengerNeedForTransport() {
 
 $(document).ready(
     function () {
-        $('i[class*="fas fa-car"]').each(
+        $('#passengerTransportsTable i[class*=car]').each(
             function () {
                 $(this).on('click', changePassengerNeedForTransport);
             }

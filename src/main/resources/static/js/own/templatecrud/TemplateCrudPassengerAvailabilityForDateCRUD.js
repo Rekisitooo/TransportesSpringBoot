@@ -11,7 +11,7 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
         data: JSON.stringify(data),
         success: function(response) {
             //Quitar pasajeros de la tabla de conductores
-            removePassengerInDriverTable(driverId, data.passengerId, data.transportDateId);
+            removePassengerInDriverTable(driverId, data.involvedId, data.transportDateId);
 
             //poner 'no asiste'
             changeElementDisplay(doesNotAssistSpan);
@@ -98,7 +98,7 @@ function changePassengerAssistance() {
     const dateId = assistanceIcon.attr('data-y');
     const data = {
         transportDateId : dateId,
-        passengerId : passengerId,
+        involvedId : passengerId,
     }
     
     const driverSelectForPassenger = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select');
@@ -115,7 +115,7 @@ function changePassengerAssistance() {
 }
 
 $(document).ready(function() {
-    $('i[class*="fas fa-calendar"]').each(
+    $('#passengerTransportsTable i[class*="fas fa-calendar"]').each(
         function () {
             $(this).on('click', changePassengerAssistance);
         }
