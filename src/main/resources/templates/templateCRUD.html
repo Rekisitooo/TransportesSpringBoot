@@ -463,23 +463,21 @@
                                                 <!-- Div for buttons to change driver status on current date -->
 
                                                 <!-- Div to show passengers assigned to transport on current date -->
-                                                <div class="row h-25">
-                                                    <th:block th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
-                                                        <div class="col">
-                                                            <div class="row">
-                                                            <!-- Passenger name -->
-                                                            <span
-                                                                    th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
-                                                                        and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
-                                                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
-                                                                    th:data-span-id="${driver.id}"
-                                                                    th:data-p-span-id="${passenger.id}"
-                                                                    th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
-                                                                <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
-                                                            </span>
-                                                            </div>
+                                                <div class="row h-75 mt-1 ml-0">
+                                                    <div class="col">
+                                                        <div class="row" th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}">
+                                                        <!-- Passenger name -->
+                                                        <span
+                                                                th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
+                                                                    and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
+                                                                th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                                                th:data-span-id="${driver.id}"
+                                                                th:data-p-span-id="${passenger.id}"
+                                                                th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
+                                                            <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
+                                                        </span>
                                                         </div>
-                                                    </th:block>
+                                                    </div>
                                                 </div>
                                                 <!-- Div to show passengers assigned to transport on current date -->
 
