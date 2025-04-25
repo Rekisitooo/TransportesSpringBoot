@@ -12,6 +12,9 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
             //Quitar conductor de la tabla de viajeros
             removeDriverInPassengerTableSelects(passengerSelectsSelector, driverId);
 
+            //eliminar nombres de pasageros si los tiene
+            driverPassengersDivId.remove();
+
             //cambia el icono de ofrece transporte
             changeTransportOfferingIcon(0, offersTransportIcon, 'text-primary', 'text-muted');
         },
@@ -21,7 +24,7 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
     });
 }
 
-function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId) {
+function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon) {
     const newDriverOption = $('<option>',
         {
             value: data.involvedId,
@@ -79,14 +82,13 @@ function changeTransportOfferingIcon(dataDriverAssist, offersTransportIcon, clas
 function changeDriverAssistance() {
     const offersTransportIcon = $(this);
     const driverId = offersTransportIcon.attr('data-t');
-    const passengerId = offersTransportIcon.attr('data-d');
     const dateId = offersTransportIcon.attr('data-y');
     const data = {
         transportDateId : dateId,
         involvedId : driverId,
     }
     
-    const driverPassengersDivId = $('#driverPassengersOnDate_' + driverId + '_' + dateId + '_' + passengerId);
+    const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + driverId + '_' + dateId + ']');
     const driverFullName = $('#' + driverId + '_th').text();
     const passengerSelectsSelector = 'select[name=driverInTransportSelect][id*=' + data.transportDateId + '_select]';
 
@@ -94,7 +96,7 @@ function changeDriverAssistance() {
     if (driverTransportOffer === "1") {
         deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId);
     } else if (driverTransportOffer === "0") {
-       createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId);
+       createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon);
     }
 }
 
