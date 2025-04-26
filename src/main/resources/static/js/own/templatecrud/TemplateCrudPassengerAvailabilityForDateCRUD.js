@@ -75,8 +75,8 @@ function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenge
 
 function removePassengerInDriverTable(driverId, passengerId, dateId) {
     if (driverId != null && driverId !== "") {
-        const passengerSpan = $('span[id=p' + passengerId + 'd' + driverId + 't' + dateId + ']');
-        passengerSpan.remove();
+        const passengerNameDiv = $('div[id=driverPassengersOnDate_' + driverId + '_' + dateId + '_' + passengerId + ']');
+        passengerNameDiv.remove();
     }
 }
 

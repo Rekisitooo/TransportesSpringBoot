@@ -257,7 +257,9 @@
                                     <tr th:each="passenger : ${passengersFromTemplateList}">
 
                                         <!-- Passenger name -->
-                                        <th th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                        <th th:id="'passengerNameCell_' + ${passenger.id}"
+                                            th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                            th:data-t="${passenger.id}"
                                             th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                                             class="text-nowrap text-left"
                                             style="cursor:move"
@@ -336,6 +338,7 @@
                                                             <!-- show only if passenger needs transport -->
                                                             <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}"
                                                                     class="bg-transparent border border-0 w-100"
+                                                                    th:data-t="${passenger.id}"
                                                                     th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                                                     th:class="${((passengerAssistance != null)
                                                                             and (passengerAssistance.get(date.transportDate.toLocalDate()) != null)
@@ -446,8 +449,8 @@
                                                     <div class="col-2">
 
                                                         <!-- Assistance icon -->
-                                                        <i class="fas fa-calendar-check"
-                                                           th:data-t="${driver.id}"
+                                                        <i
+                                                           th:data-d="${driver.id}"
                                                            th:data-y="${date.id}"
                                                            th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
                                                            th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
@@ -465,7 +468,7 @@
 
                                                 <!-- Div to show passengers assigned to transport on current date -->
                                                 <div class="row h-75 mt-1 ml-0">
-                                                    <div class="col">
+                                                    <div class="col" th:id="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}">
                                                         <div class="row"
                                                              th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}"
                                                              th:id="'driverPassengersOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
