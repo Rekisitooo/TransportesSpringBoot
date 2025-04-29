@@ -9,6 +9,6 @@ public class CommunicationForInvolvedController {
     private CommunicationForInvolvedService communicationForInvolvedService;
 
     public void viewCommunicationTableForTemplate() {
-        this.communicationForInvolvedService
+        //this.communicationForInvolvedService
     }
 }

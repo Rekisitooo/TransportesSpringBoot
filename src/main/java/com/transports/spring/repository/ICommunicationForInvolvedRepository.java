@@ -19,18 +19,22 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
 
     @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicated, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
-            "WHERE api.key.transportDateCode = :transportDate")
+            "WHERE " +
+            "   api.key.transportDateCode = :transportDate" +
+            "   AND api.key.involvedCommunicated = :involvedId")
     CommunicationForInvolved getCommunicationForInvolvedInDate(@Param("transportDate") Integer transportDate, @Param("involvedId") Integer involvedId);
+
 
     @Modifying
     @Query("UPDATE CommunicationForInvolved api" +
-            "SET api.driverCode = :newDriverCode" +
-            "WHERE " +
-            "   api.key.communicatedInvolved = :communicatedInvolved" +
-            "   AND api.key.transportDateCode = :transportDateCode" +
-            "   AND api.passengerCode = :passengerCode")
+            "   SET " +
+            "       api.driverCode = :newDriverCode" +
+            "   WHERE " +
+            "       api.key.involvedCommunicated = :involvedCommunicated" +
+            "       AND api.key.transportDateCode = :transportDateCode" +
+            "       AND api.passengerCode = :passengerCode")
     void updateDriver(@Param("transportDateCode") Integer transportDateCode,
-                      @Param("communicatedInvolved") Integer communicatedInvolved,
+                      @Param("communicatedInvolved") Integer involvedCommunicated,
                       @Param("newDriverCode") Integer newDriverCode,
                       @Param("passengerCode") Integer passengerCode
     );

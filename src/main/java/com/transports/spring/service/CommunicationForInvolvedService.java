@@ -13,11 +13,11 @@ public class CommunicationForInvolvedService {
     private ICommunicationForInvolvedRepository communicationForInvolvedRepository;
 
     public List<CommunicationForInvolved> getAllCommunicationsForTemplate (final Integer templateId) {
-        return this.communicationForInvolvedRepository.getAllCommunicationsForTemplate(templateId);
+         return this.communicationForInvolvedRepository.getAllCommunicationsForTemplate(templateId);
     }
 
     public CommunicationForInvolved getCommunicationForInvolvedInDate (final Integer transportDate, final Integer involvedId) {
-        return this.communicationForInvolvedRepository.getCommunicationForInvolvedInDate(transportDate, involvedId);
+         return this.communicationForInvolvedRepository.getCommunicationForInvolvedInDate(transportDate, involvedId);
     }
 
     public void delete(final CommunicationForInvolved communicationForInvolved) {

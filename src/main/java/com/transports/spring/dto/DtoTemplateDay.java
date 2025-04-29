@@ -1,6 +1,6 @@
 package com.transports.spring.dto;
 
-import com.transports.spring.model.AbstractInvolved;
+import com.transports.spring.model.Involved;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
