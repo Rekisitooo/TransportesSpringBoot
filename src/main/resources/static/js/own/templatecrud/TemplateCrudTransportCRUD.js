@@ -1,4 +1,4 @@
-function updateDriverInTransportOption(data, passengerFullName) {
+function updateDriverInTransportOption(data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan) {
     $.ajax({
         type: 'PUT',
         contentType: 'application/json',
@@ -7,8 +7,8 @@ function updateDriverInTransportOption(data, passengerFullName) {
         dataType: 'json',
         success : function(response) {
             if (response.status === 'ok') {
-               addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName);
-               deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
+               addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName, driverTransportsTablePassengerTdToAddSpan);
+               deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p, driverPassengersDivId);
             } else {
                 //TODO configurar la alerta para que se muestre en un idioma u otro
                 window.alert("Ha ocurrido un error al actualizar el conductor.");
@@ -21,7 +21,7 @@ function updateDriverInTransportOption(data, passengerFullName) {
     })
 }
 
-function createTransportOption(data, passengerFullName, actualSelect) {
+function createTransportOption(data, passengerFullName, actualSelect, driverTransportsTablePassengerTdToAddSpan) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
@@ -29,7 +29,7 @@ function createTransportOption(data, passengerFullName, actualSelect) {
         data: JSON.stringify(data),
         dataType: 'json',
         success: function(response){
-           addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName);
+           addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName, driverTransportsTablePassengerTdToAddSpan);
            actualSelect.children().attr("name", "u");
            actualSelect.children(":first").attr("name", "d");
         },
@@ -40,7 +40,7 @@ function createTransportOption(data, passengerFullName, actualSelect) {
     })
 }
 
-function deleteTransportOption(data, actualSelect) {
+function deleteTransportOption(data, actualSelect, driverPassengersDivId) {
     $.ajax({
         type: 'DELETE',
         contentType: 'application/json',
@@ -48,7 +48,7 @@ function deleteTransportOption(data, actualSelect) {
         data: JSON.stringify(data),
         dataType: 'json',
         success: function(response){
-            deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p);
+            deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p, driverPassengersDivId);
             actualSelect.children().attr("name", "c");
             actualSelect.children(":first").attr("name", "d");
         },
@@ -59,29 +59,30 @@ function deleteTransportOption(data, actualSelect) {
     })
 }
 
-function addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName) {
+function addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName, driverTransportsTablePassengerTdToAddSpan) {
     //TODO when UUIDs are implemented, change the id and remove the p, d, t...
-    const driverTransportsTablePassengerTdToAddSpan = 'd' + driverId + 't' + transportDateId;
     const newPassengerSpanNode = document.createElement("span");
     const newPassengerSpanTextNode = document.createTextNode(passengerFullName);
     newPassengerSpanNode.appendChild(newPassengerSpanTextNode);
-    newPassengerSpanNode.setAttribute('id', 'p' + passengerId + driverTransportsTablePassengerTdToAddSpan);
-    $('#' + driverTransportsTablePassengerTdToAddSpan).append(newPassengerSpanNode);
+    newPassengerSpanNode.setAttribute('id', 'p' + passengerId + 'd' + driverId + 't' + transportDateId);
+    newPassengerSpanNode.setAttribute('data-span-id', driverId);
 
-    const newBrNode = document.createElement("br");
-    newBrNode.setAttribute('id', 'brp' + passengerId + driverTransportsTablePassengerTdToAddSpan);
-    $('#' + driverTransportsTablePassengerTdToAddSpan).append(newBrNode);
+    const newDivRowNode = document.createElement("div");
+    newDivRowNode.setAttribute('class', 'row');
+    newDivRowNode.setAttribute('id', 'driverPassengersOnDate_' + driverId + '_' + transportDateId + '_' + passengerId);
+    newDivRowNode.append(newPassengerSpanNode);
+
+    driverTransportsTablePassengerTdToAddSpan.append(newDivRowNode);
 }
 
-function deletePassengerInDriverTransportsTable(transportDateId, passengerId, oldDriverId) {
+function deletePassengerInDriverTransportsTable(transportDateId, passengerId, oldDriverId, driverPassengersDivId) {
     //TODO when UUIDs are implemented, change the id and remove the p, d, t...
     const deleteId = 'p' + passengerId + 'd' + oldDriverId + 't' + transportDateId;
 
     const driverTransportsTablePassengerSpanToDelete = '#' + deleteId;
     $(driverTransportsTablePassengerSpanToDelete).remove();
 
-    const driverTransportsTablePassengerBrToDelete = '#br' + deleteId;
-    $(driverTransportsTablePassengerBrToDelete).remove();
+    driverPassengersDivId.remove();
 }
 
 function operate () {
@@ -97,10 +98,14 @@ function operate () {
         p : driverId,
         t : passengerId
     }
+
+    const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + driverId + '_' + transportDateId + ']');
+    const driverTransportsTablePassengerTdToAddSpan = $('#driverPassengersForDateDiv_' + driverId + '_' + transportDateId);
+
     const operations = {
-        d: deleteTransportOption.bind(undefined, data, actualSelect),
-        u: updateDriverInTransportOption.bind(undefined, data, passengerFullName),
-        c: createTransportOption.bind(undefined, data, passengerFullName, actualSelect)
+        d: deleteTransportOption.bind(undefined, data, actualSelect, driverPassengersDivId),
+        u: updateDriverInTransportOption.bind(undefined, data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan),
+        c: createTransportOption.bind(undefined, data, passengerFullName, actualSelect, driverTransportsTablePassengerTdToAddSpan)
     };
 
     const method = operations[methodName];

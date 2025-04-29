@@ -13,6 +13,6 @@ class LocalDateConverterTest {
         final LocalDate localDate = LocalDate.of(2025, 3, 30);
         int dbDayOfWeek = LocalDateConverter.convertLocalDateDayOfWeekToDbDayOfWeek(localDate);
 
-        assertEquals(dbDayOfWeek, 1);
+        assertEquals(1, dbDayOfWeek);
     }
 }

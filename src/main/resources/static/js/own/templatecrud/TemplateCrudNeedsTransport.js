@@ -1,13 +1,16 @@
-function changePassengerNeedForTransport() {
-    const currentElement = $(this);
-    const driverForPassengerSelect = currentElement.attr('data-passenger-select');
-    const passengerNeedsTransport = currentElement.attr('data-needs-transport');
-    const passengerId = currentElement.attr('data-t');
-    const dateId = currentElement.attr('data-y');
+import { genericErrorAlert } from './alert/GenericErrorAlert.js';
+import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
 
-    const selectDriverForPassengerSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId;
-    const driverForPassengerSelectElement = $(selectDriverForPassengerSelector + ' select');
-    const driverId = driverForPassengerSelectElement.val();
+function changePassengerNeedForTransport() {
+    const needTransportIcon = $(this);
+    const driverForPassengerSelect = needTransportIcon.attr('data-passenger-select');
+    let passengerNeedsTransport = needTransportIcon.attr('data-needs-transport');
+    const passengerId = needTransportIcon.attr('data-t');
+    const dateId = needTransportIcon.attr('data-y');
+
+    const passengerCellContentSelectSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select';
+    const passengerCellContentSelect = $(passengerCellContentSelectSelector);
+    const driverId = passengerCellContentSelect.val();
 
     const data = {
         passengerNeedsTransport : passengerNeedsTransport,
@@ -21,36 +24,43 @@ function changePassengerNeedForTransport() {
         url: '/involvedAvailability/updateNeedForTransport/' + passengerId,
         data: JSON.stringify(data),
         success : function(response) {
-            const driverForPassengerSelectRowElement = $(selectDriverForPassengerSelector);
+            let needTransportIconClass;
 
             if (passengerNeedsTransport == 1) {
-                currentElement.attr('data-needs-transport', 0);
-                currentElement.attr('class', 'position-relative fas fa-car text-muted');
-                currentElement.attr('title', 'Botón para marcar que no necesita transporte este día');
-                driverForPassengerSelectRowElement.attr('class', 'row d-table-cell');
+                passengerNeedsTransport = 0;
+                needTransportIconClass = changeElementClass(needTransportIcon, 'text-primary', 'text-muted');
             } else if (passengerNeedsTransport == 0) {
-                const driverForPassengerSelectOptionElements = $(selectDriverForPassengerSelector + ' select option');
+                passengerNeedsTransport = 1;
+                const driverForPassengerSelectOptionElements = $(passengerCellContentSelectSelector + ' option');
                 driverForPassengerSelectOptionElements.each(
                     function () {
                         $(this).attr('name', 'c');
                     }
                 );
-                currentElement.attr('data-needs-transport', 1);
-                currentElement.attr('class', 'position-relative fas fa-car text-primary');
-                currentElement.attr('title', 'Botón para marcar que necesita transporte este día');
-                driverForPassengerSelectElement.val('');
-                driverForPassengerSelectRowElement.attr('class', 'row d-none');
+
+                needTransportIconClass = changeElementClass(needTransportIcon, 'text-muted', 'text-primary');
+                passengerCellContentSelect.val('');
             }
+            needTransportIcon.attr('class', needTransportIconClass);
+            needTransportIcon.attr('data-needs-transport', passengerNeedsTransport);
+
+            let passengerCellContentElementClass = changeElementDisplayNone(passengerCellContentSelect);
+            passengerCellContentSelect.attr('class', passengerCellContentElementClass);
+
+            const passengerCellDoesNotNeedTransportSpanSelector = '#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotNeedTransportSpan';
+            const passengerCellDoesNotNeedTransportSpan = $(passengerCellDoesNotNeedTransportSpanSelector);
+            let spanElementClass = changeElementDisplayNone(passengerCellDoesNotNeedTransportSpan);
+            passengerCellDoesNotNeedTransportSpan.attr('class', spanElementClass);
         },
         error : function(xhr, status, error) {
-            window.alert("Ha ocurrido un error.");
+            genericErrorAlert();
         }
     })
 }
 
 $(document).ready(
     function () {
-        $('i[class*="fas fa-car"]').each(
+        $('#passengerTransportsTable i[class*=car]').each(
             function () {
                 $(this).on('click', changePassengerNeedForTransport);
             }

@@ -69,7 +69,8 @@ public class InvolvedAvailabiltyForTransportDateService {
 
         final List<Passenger> passengerList = this.involvedByTemplateService.getAllPassengersFromTemplate(templateId);
         for (final Passenger passenger : passengerList) {
-            final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
+            final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate =
+                    this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
             final Map<LocalDate, DtoTemplateDay> passengersAssistanceDates = new HashMap<>();
 
             for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
@@ -87,6 +88,37 @@ public class InvolvedAvailabiltyForTransportDateService {
         }
 
         return allPassengersAssistanceDatesMap;
+    }
+
+    /**
+     * @param templateId
+     * @return Map<DriverId, Map<LocalDate, DtoTemplateDay>>
+     */
+    public Map<Integer, Map<LocalDate, DtoTemplateDay>> findAllDriversAssistanceDates(final int templateId) {
+        final Map<Integer, Map<LocalDate, DtoTemplateDay>> allDriversAssistanceDatesMap = new HashMap<>();
+
+        final List<Driver> driverList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
+        for (final Driver driver : driverList) {
+            final int id = driver.getId();
+            final List<InvolvedAvailabiltyForTransportDate> availablePassengersForDate =
+                    this.involvedAvailabiltyForTransportDateRepository.findAllDriversAssistanceDatesForTemplate(templateId, id);
+
+            final Map<LocalDate, DtoTemplateDay> driversAssistanceDates = new HashMap<>();
+            for (final InvolvedAvailabiltyForTransportDate transportByTemplate : availablePassengersForDate) {
+                final int transportDateId = transportByTemplate.getTransportDateCode();
+                final TransportDateByTemplate transportDate = this.transportDateByTemplateService.findById(transportDateId);
+                final Date transportDateObj = transportDate.getTransportDate();
+                final LocalDate transportLocalDate = transportDateObj.toLocalDate();
+                final String eventName = transportDate.getEventName();
+                final int needsTransport = transportByTemplate.getNeedsTransport();
+
+                driversAssistanceDates.put(transportLocalDate, new DtoTemplateDay(transportLocalDate, eventName, needsTransport));
+            }
+
+            allDriversAssistanceDatesMap.put(id, driversAssistanceDates);
+        }
+
+        return allDriversAssistanceDatesMap;
     }
 
     /**
@@ -148,6 +180,24 @@ public class InvolvedAvailabiltyForTransportDateService {
             }
         }
         this.involvedAvailabiltyForTransportDateRepository.updateInvolvedNeedForTransport(needsTransport, passengerId, transportDateId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Transports associated are erased in a trigger
+     * @param involvedId passenger id to delete in db
+     * @param dateId date id to delete in db
+     * @return ok response
+     */
+    @Transactional
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> deleteInvolvedAssistanceForDate(final Integer involvedId, final Integer dateId) {
+        this.involvedAvailabiltyForTransportDateRepository.deleteInvolvedAssistanceForDate(involvedId, dateId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    public ResponseEntity<InvolvedAvailabiltyForTransportDate> saveAvailability(final Integer involvedId, final Integer dateId) {
+        this.involvedAvailabiltyForTransportDateRepository.save(new InvolvedAvailabiltyForTransportDate(involvedId, dateId));
         return ResponseEntity.ok().build();
     }
 }

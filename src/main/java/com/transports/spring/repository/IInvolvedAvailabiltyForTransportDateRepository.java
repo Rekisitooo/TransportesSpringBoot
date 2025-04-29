@@ -25,9 +25,9 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "   ON ipp.roleCode = rol_conductor.id" +
             "            AND rol_conductor.description = 'Conductor'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
     List<DtoInvolvedAvailabiltyForTransportDate> findAllDriversAvailableDatesForTemplate(@Param("templateId") int templateId);
@@ -40,41 +40,63 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "            concat(ipp.name, ' ',ipp.surname)" +
             "       )" +
             " FROM InvolvedByTemplate ipp " +
-            "  INNER JOIN InvolvedRole rol_viajero" +
-            "   ON ipp.roleCode = rol_viajero.id" +
-            "            AND rol_viajero.description = 'Viajero'" +
+            "  INNER JOIN InvolvedRole passenger_role" +
+            "   ON ipp.roleCode = passenger_role.id" +
+            "            AND passenger_role.description = 'Viajero'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.templateCode = :templateId")
     List<DtoInvolvedAvailabiltyForTransportDate> findAllPassengersAssistanceDatesForTemplate(@Param("templateId") int templateId);
 
     @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, dipft.needsTransport)" +
             " FROM InvolvedByTemplate ipp " +
-            "  INNER JOIN InvolvedRole rol_viajero" +
-            "   ON ipp.roleCode = rol_viajero.id" +
-            "            AND rol_viajero.description = 'Viajero'" +
+            "  INNER JOIN InvolvedRole passenger_role" +
+            "   ON ipp.roleCode = passenger_role.id" +
+            "            AND passenger_role.description = 'Viajero'" +
             "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-            "   ON dipft.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
             "  INNER JOIN TransportDateByTemplate ftpp" +
-            "   ON dipft.transportDateCode = ftpp.id" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
             " WHERE " +
             "  ipp.involvedByTemplateKey.involvedCode = :passengerId" +
             "  AND ipp.involvedByTemplateKey.templateCode = :templateId")
     List<InvolvedAvailabiltyForTransportDate> findAllPassengerAssistanceDatesForTemplate(@Param("templateId") int templateId, @Param("passengerId") int passengerId);
+
+    @Query("SELECT new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, dipft.needsTransport)" +
+            " FROM InvolvedByTemplate ipp " +
+            "  INNER JOIN InvolvedRole passenger_role" +
+            "   ON ipp.roleCode = passenger_role.id" +
+            "            AND passenger_role.description = 'Conductor'" +
+            "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+            "  INNER JOIN TransportDateByTemplate ftpp" +
+            "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
+            " WHERE " +
+            "  ipp.involvedByTemplateKey.involvedCode = :driverId" +
+            "  AND ipp.involvedByTemplateKey.templateCode = :templateId")
+    List<InvolvedAvailabiltyForTransportDate> findAllDriversAssistanceDatesForTemplate(@Param("templateId") int templateId, @Param("driverId") int driverId);
 
     @Modifying
     @Query("UPDATE InvolvedAvailabiltyForTransportDate diftp " +
             "   SET " +
             "       diftp.needsTransport = :needsTransport" +
             "   WHERE" +
-            "       diftp.involvedCode = :involvedCode" +
-            "       AND diftp.transportDateCode = :transportDateCode")
+            "       diftp.involvedAvailabilityForTransportDateKey.involvedCode = :involvedCode" +
+            "       AND diftp.involvedAvailabilityForTransportDateKey.transportDateCode = :transportDateCode")
     void updateInvolvedNeedForTransport(
             @Param("needsTransport") final Integer needsTransport,
             @Param("involvedCode") final Integer involvedCode,
             @Param("transportDateCode") final Integer transportDateCode
     );
+
+
+    @Modifying
+    @Query("DELETE FROM InvolvedAvailabiltyForTransportDate dipft" +
+            " WHERE " +
+            "  dipft.involvedAvailabilityForTransportDateKey.involvedCode = :involvedCode" +
+            "  AND dipft.involvedAvailabilityForTransportDateKey.transportDateCode = :dateCode")
+    void deleteInvolvedAssistanceForDate(@Param("involvedCode") int involvedCode, @Param("dateCode") int dateCode);
 }
