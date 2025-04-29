@@ -1,10 +1,8 @@
 package com.transports.spring.service;
 
-import com.transports.spring.dto.DtoAddNewDateForm;
 import com.transports.spring.dto.DtoInvolvedAvailabiltyForTransportDate;
 import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.requestbody.DtoUpdateNeedForTransport;
-import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.model.*;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.repository.IInvolvedAvailabiltyForTransportDateRepository;
@@ -114,26 +112,6 @@ public class InvolvedAvailabiltyForTransportDateService {
         }
 
         return availableDriversForDateMap;
-    }
-
-    public void addInvolvedAvailabilityForDate(final DtoAddNewDateForm body, final int newTransportDateId, final int templateId) throws InvolvedDoesNotExistException {
-        final List<String> addDateCardDriverAvailabilityCheck = body.getAddDateCardDriverAvailabilityCheck();
-        for (final String driverIdString : addDateCardDriverAvailabilityCheck) {
-            final int driverId = Integer.parseInt(driverIdString);
-            this.involvedByTemplateService.getDriverByIdAndTemplate(driverId, templateId);
-
-            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(driverId, newTransportDateId);
-            this.involvedAvailabiltyForTransportDateRepository.save(entity);
-        }
-
-        final List<String> addDateCardPassegerAvailabilityCheck = body.getAddDateCardPassengerAvailabilityCheck();
-        for (final String passengerIdString : addDateCardPassegerAvailabilityCheck) {
-            final int passengerId = Integer.parseInt(passengerIdString);
-            this.involvedByTemplateService.getPassengerByIdAndTemplate(passengerId, templateId);
-
-            final InvolvedAvailabiltyForTransportDate entity = new InvolvedAvailabiltyForTransportDate(passengerId, newTransportDateId);
-            this.involvedAvailabiltyForTransportDateRepository.save(entity);
-        }
     }
 
     @Transactional

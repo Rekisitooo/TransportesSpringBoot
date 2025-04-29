@@ -5,7 +5,6 @@ import com.transports.spring.dto.DtoTemplateData;
 import com.transports.spring.enumerationclasses.DateTypeEnum;
 import com.transports.spring.exception.InvalidDataInputException;
 import com.transports.spring.exception.TransportsException;
-import com.transports.spring.model.TransportDateByTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,8 +30,7 @@ public class AddNewDateToTemplateService {
         }
 
         if (body.getAddDateCardIsTransportDateCheckboxInput() != null && body.getAddDateCardIsTransportDateCheckboxInput()) {
-            final TransportDateByTemplate newTemplateDate = this.transportDateByTemplateService.addTransportDate(body, template);
-            this.involvedAvailabiltyForTransportDateService.addInvolvedAvailabilityForDate(body, newTemplateDate.getId(), templateId);
+            this.transportDateByTemplateService.addTransportDate(body, template);
             dateType = DateTypeEnum.TRANSPORT_DATE;
         } else {
             this.eventService.addEvent(body, templateId);
