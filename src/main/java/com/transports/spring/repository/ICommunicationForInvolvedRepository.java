@@ -14,7 +14,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "FROM CommunicationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.key.transportDateCode" +
-            "WHERE ftpp.templateCode = :templateId")
+            "   WHERE ftpp.templateCode = :templateId")
     List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") Integer templateId);
 
     @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicated, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
@@ -34,7 +34,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "       AND api.key.transportDateCode = :transportDateCode" +
             "       AND api.passengerCode = :passengerCode")
     void updateDriver(@Param("transportDateCode") Integer transportDateCode,
-                      @Param("communicatedInvolved") Integer involvedCommunicated,
+                      @Param("involvedCommunicated") Integer involvedCommunicated,
                       @Param("newDriverCode") Integer newDriverCode,
                       @Param("passengerCode") Integer passengerCode
     );
