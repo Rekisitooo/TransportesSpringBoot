@@ -300,6 +300,7 @@
                                             style="height:100px"
                                             th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
                                             th:data-t="${passenger.id}"
+                                            th:data-date-id="${date.id}"
                                             th:data-y="'t' + ${date.id}"
                                         >
                                             <!-- Event display -->
@@ -511,6 +512,7 @@
                                         <td th:each="date : ${templateDates}"
                                             th:id="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
                                             th:data-date="${date.transportDate}"
+                                            th:data-date-id="${date.id}"
                                             th:class="${ ( (date.dateType == 'event') or (date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null) )
                                                             ? 'text-nowrap text-center' : 'text-nowrap'}"
                                             th:data-tr-ref="'driver_row_' + ${driver.id}"

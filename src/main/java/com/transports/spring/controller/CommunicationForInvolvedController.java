@@ -5,7 +5,6 @@ import com.transports.spring.model.key.CommunicationForInvolvedKey;
 import com.transports.spring.service.CommunicationForInvolvedService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +23,23 @@ public class CommunicationForInvolvedController {
         //this.communicationForInvolvedService
     }
 
-    @RequestMapping("/get")
-    public List<CommunicationForInvolved> getCommunicationForInvolved(final Model model, @RequestBody CommunicationForInvolvedKey body) {
+    @GetMapping("/get")
+    public List<CommunicationForInvolved> getCommunicationForInvolved(@RequestBody CommunicationForInvolvedKey body) {
         return this.communicationForInvolvedService.getCommunicationForInvolvedInDate(body.getTransportDateCode(), body.getInvolvedCommunicatedId());
     }
 
     @PatchMapping("/updateDriver")
-    public ResponseEntity<CommunicationForInvolved> updateDriver(final Model model, @RequestBody CommunicationForInvolved body) {
+    public ResponseEntity<CommunicationForInvolved> updateDriver(@RequestBody CommunicationForInvolved body) {
         return this.communicationForInvolvedService.updateDriver(body);
     }
 
-    @PostMapping
+    @PostMapping("/createDriverCommunication")
     public ResponseEntity<CommunicationForInvolved> createDriverCommunication(@RequestBody CommunicationForInvolved body){
         return this.communicationForInvolvedService.create(body);
     }
 
     @DeleteMapping
-    public ResponseEntity<CommunicationForInvolved> delete(final Model model, @RequestBody CommunicationForInvolved body) {
+    public ResponseEntity<CommunicationForInvolved> delete(@RequestBody CommunicationForInvolved body) {
         return this.communicationForInvolvedService.deleteCommunicationForDriver(body);
     }
 }

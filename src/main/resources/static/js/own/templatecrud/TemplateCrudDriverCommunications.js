@@ -70,7 +70,7 @@ function communicateTransport(data, alertIcon) {
     $.ajax({
         type: 'GET',
         url:'/involvedCommunication/get',
-        data: JSON.stringify(data),
+        data: data,
         success: function(response){
             if (response === null || response === undefined) {
                 createInvolvedCommunication(data, alertIcon);
@@ -91,8 +91,8 @@ $(document).ready(
                     const driverThId = $(this).attr('data-driver-th');
                     const dataDateTd = $(this).attr('data-date-td');
                     const data = {
-                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date'),
-                        involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d'),
+                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
+                        involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
                     };
 
                     communicateTransport(data, this);
