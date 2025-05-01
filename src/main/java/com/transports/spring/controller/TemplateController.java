@@ -5,10 +5,7 @@ import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.exception.TransportsException;
-import com.transports.spring.model.Driver;
-import com.transports.spring.model.Passenger;
-import com.transports.spring.model.Template;
-import com.transports.spring.model.Transport;
+import com.transports.spring.model.*;
 import com.transports.spring.service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +31,9 @@ public final class TemplateController {
     private final TemplateDateService templateDateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TemplateFileService templateFileService;
+    private final CommunicationForInvolvedService communicationForInvolvedService;
 
-    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService) {
+    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService, CommunicationForInvolvedService communicationForInvolvedService) {
         this.addNewDateToTemplateService = addNewDateToTemplateService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
@@ -43,6 +41,7 @@ public final class TemplateController {
         this.templateDateService = templateDateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
         this.templateFileService = templateFileService;
+        this.communicationForInvolvedService = communicationForInvolvedService;
     }
 
     @GetMapping("/openTemplate")
@@ -126,5 +125,7 @@ public final class TemplateController {
         final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
         model.addAttribute("driverAssistanceDates", driverAssistanceDates);
 
+        final Map<Integer, Map<Integer, CommunicationForInvolved>> involvedCommunications = this.communicationForInvolvedService.getAllCommunicationsForTemplate(templateId);
+        model.addAttribute("involvedCommunications", involvedCommunications);
     }
 }

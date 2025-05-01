@@ -362,7 +362,10 @@
                                                         <div class="col-2">
                                                             <!-- Communication icon -->
                                                             <i
-                                                                class="fas fa-exclamation-circle text-danger"
+                                                                th:class="'fas fa-exclamation-circle' + 
+                                                                        ${(involvedCommunications.get(date.id) == null or 
+                                                                        involvedCommunications.get(date.id).get(passenger.id) == null) ?
+                                                                        ' text-danger' : ' d-none'}"
                                                                 role="button"
                                                                 th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                                 th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -545,7 +548,10 @@
                                                     <div class="col-2">
                                                         <!-- Communication icon -->
                                                         <i
-                                                            class="fas fa-exclamation-circle text-danger"
+                                                            th:class="'fas fa-exclamation-circle' + 
+                                                                        ${(involvedCommunications.get(date.id) == null or 
+                                                                        involvedCommunications  .get(date.id).get(driver.id) == null) ?
+                                                                        ' text-danger' : ' d-none'}"
                                                             role="button"
                                                             th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                             th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
@@ -635,6 +641,7 @@
         <script src="/js/own/templatecrud/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
         <script src="/js/own/templatecrud/animation/MoveTableRows.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudDriverCommunications.js" type="module"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

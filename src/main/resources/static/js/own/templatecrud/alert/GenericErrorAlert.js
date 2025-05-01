@@ -6,4 +6,10 @@ export function genericErrorAlert() {
     });
 }
 
-//$(document).ready(genericErrorAlert);
+export function temporalErrorAlert(error) {
+    Swal.fire({
+        icon: "error",
+        timer: 2000,
+        text: error,
+    });
+}

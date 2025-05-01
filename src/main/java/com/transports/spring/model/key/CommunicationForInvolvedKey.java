@@ -17,8 +17,11 @@ import java.io.Serializable;
 public final class CommunicationForInvolvedKey implements Serializable {
 
     @Column(name = "COD_INVOLUCRADO_AVISADO", nullable = false)
-    private Integer involvedCommunicated;
+    private Integer involvedCommunicatedId;
 
     @Column(name = "COD_FECHA_TRANSPORTE", nullable = false)
     private Integer transportDateCode;
+
+    @Column(name = "COD_PASAJERO", nullable = false)
+    private Integer passengerCode;
 }

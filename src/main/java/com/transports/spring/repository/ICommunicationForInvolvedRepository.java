@@ -10,19 +10,19 @@ import java.util.List;
 
 public interface ICommunicationForInvolvedRepository extends JpaRepository<CommunicationForInvolved, Integer> {
 
-    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicated, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
+    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.key.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.key.transportDateCode" +
             "   WHERE ftpp.templateCode = :templateId")
     List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") Integer templateId);
 
-    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicated, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
+    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.key.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
             "WHERE " +
             "   api.key.transportDateCode = :transportDate" +
-            "   AND api.key.involvedCommunicated = :involvedId")
-    CommunicationForInvolved getCommunicationForInvolvedInDate(@Param("transportDate") Integer transportDate, @Param("involvedId") Integer involvedId);
+            "   AND api.key.involvedCommunicatedId = :involvedId")
+    List<CommunicationForInvolved> getCommunicationForInvolvedInDate(@Param("transportDate") Integer transportDate, @Param("involvedId") Integer involvedId);
 
 
     @Modifying
@@ -30,11 +30,11 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "   SET " +
             "       api.driverCode = :newDriverCode" +
             "   WHERE " +
-            "       api.key.involvedCommunicated = :involvedCommunicated" +
+            "       api.key.involvedCommunicatedId = :involvedCommunicatedId" +
             "       AND api.key.transportDateCode = :transportDateCode" +
-            "       AND api.passengerCode = :passengerCode")
+            "       AND api.key.passengerCode = :passengerCode")
     void updateDriver(@Param("transportDateCode") Integer transportDateCode,
-                      @Param("involvedCommunicated") Integer involvedCommunicated,
+                      @Param("involvedCommunicatedId") Integer involvedCommunicatedId,
                       @Param("newDriverCode") Integer newDriverCode,
                       @Param("passengerCode") Integer passengerCode
     );
