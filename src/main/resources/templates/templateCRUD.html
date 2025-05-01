@@ -270,7 +270,7 @@
                                                 <div class="col">
                                                     <div class="row">
                                                         <div class="col" th:id="'markAsCommunicatedPassegerButtonDiv_' + ${passenger.id}">
-                                                            <i class="fas fa-phone text-primary"
+                                                            <i class="fas fa-exclamation-circle text-danger"
                                                                role="button"
                                                                th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllCommunicationsEnd}"
                                                                th:id="'markAsCommunicatedPassegerButton_' + ${passenger.id}"
@@ -483,7 +483,7 @@
                                                 <div class="col">
                                                     <div class="row">
                                                         <div class="col" th:id="'markAsCommunicatedDriverButtonDiv_' + ${driver.id}">
-                                                            <i class="fas fa-phone text-primary"
+                                                            <i class="fas fa-exclamation-circle text-danger"
                                                                role="button"
                                                                th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllCommunicationsEndda}"
                                                                th:id="'markAsCommunicatedDriverButton_' + ${driver.id}"
