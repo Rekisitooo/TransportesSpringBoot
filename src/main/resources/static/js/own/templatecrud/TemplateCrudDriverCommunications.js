@@ -61,7 +61,7 @@ function ajaxRequestDeleteCommunication(data, alertIcon) {
         },
         error: function(e) {
             //TODO configurar la alerta para que se muestre en un idioma u otro
-            window.alert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
+            temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
         }
     })
 }
@@ -71,8 +71,8 @@ function communicateTransport(data, alertIcon) {
         type: 'GET',
         url:'/involvedCommunication/get',
         data: data,
-        success: function(response){
-            if (response === null || response === undefined) {
+        success: function(response) {
+            if (response === null || response === undefined || response.data.length === 0) {
                 createInvolvedCommunication(data, alertIcon);
             } else {
                 ajaxRequestDeleteCommunication(data, alertIcon);

@@ -1,8 +1,9 @@
 package com.transports.spring.controller;
 
 import com.transports.spring.model.CommunicationForInvolved;
-import com.transports.spring.model.key.CommunicationForInvolvedKey;
 import com.transports.spring.service.CommunicationForInvolvedService;
+import com.transports.spring.service.response.ServiceResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,10 @@ public class CommunicationForInvolvedController {
     }
 
     @GetMapping("/get")
-    public List<CommunicationForInvolved> getCommunicationForInvolved(@RequestBody CommunicationForInvolvedKey body) {
-        return this.communicationForInvolvedService.getCommunicationForInvolvedInDate(body.getTransportDateCode(), body.getInvolvedCommunicatedId());
+    public ResponseEntity<Object> getCommunicationForInvolved(@RequestParam String transportDateCode, @RequestParam String involvedCommunicatedId) {
+        List<CommunicationForInvolved> list = this.communicationForInvolvedService.getCommunicationForInvolvedInDate(Integer.parseInt(transportDateCode), Integer.parseInt(involvedCommunicatedId));
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
+        //return this.communicationForInvolvedService.getCommunicationForInvolvedInDate(transportDateCode, involvedCommunicatedId);
     }
 
     @PatchMapping("/updateDriver")
