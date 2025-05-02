@@ -10,14 +10,14 @@ import java.util.List;
 
 public interface ICommunicationForInvolvedRepository extends JpaRepository<CommunicationForInvolved, Integer> {
 
-    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.key.passengerCode, api.communicationDate) " +
+    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.key.transportDateCode" +
             "   WHERE ftpp.templateCode = :templateId")
     List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") Integer templateId);
 
-    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.key.passengerCode, api.communicationDate) " +
+    @Query("SELECT new CommunicationForInvolved(api.key.involvedCommunicatedId, api.key.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
             "WHERE " +
             "   api.key.transportDateCode = :transportDate" +
@@ -32,7 +32,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "   WHERE " +
             "       api.key.involvedCommunicatedId = :involvedCommunicatedId" +
             "       AND api.key.transportDateCode = :transportDateCode" +
-            "       AND api.key.passengerCode = :passengerCode")
+            "       AND api.passengerCode = :passengerCode")
     void updateDriver(@Param("transportDateCode") Integer transportDateCode,
                       @Param("involvedCommunicatedId") Integer involvedCommunicatedId,
                       @Param("newDriverCode") Integer newDriverCode,

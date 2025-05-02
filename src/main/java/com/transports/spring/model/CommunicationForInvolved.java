@@ -27,10 +27,14 @@ public final class CommunicationForInvolved {
     @Column(name = "FECHA_AVISO")
     private Timestamp communicationDate;
 
+    @Column(name = "COD_PASAJERO")
+    private Integer passengerCode;
+
 
     public CommunicationForInvolved(Integer involvedCommunicated, Integer transportDateCode, Integer driverCode, Integer passengerCode, Timestamp communicationDate) {
-        this.key = new CommunicationForInvolvedKey(involvedCommunicated, transportDateCode, passengerCode);
+        this.key = new CommunicationForInvolvedKey(involvedCommunicated, transportDateCode);
         this.driverCode = driverCode;
+        this.passengerCode = passengerCode;
         this.communicationDate = communicationDate;
     }
 
@@ -42,16 +46,8 @@ public final class CommunicationForInvolved {
         return this.key.getInvolvedCommunicatedId();
     }
 
-    public Integer getPassengerCode() {
-        return this.key.getPassengerCode();
-    }
-
     public void involvedCommunicated(Integer involvedCommunicated) {
         this.key.setInvolvedCommunicatedId(involvedCommunicated);
-    }
-
-    public void passengerCode(Integer passengerCode) {
-        this.key.setPassengerCode(passengerCode);
     }
 
     public void transportDateCode(Integer transportDateCode) {

@@ -26,9 +26,8 @@ public class CommunicationForInvolvedController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getCommunicationForInvolved(@RequestParam String transportDateCode, @RequestParam String involvedCommunicatedId) {
-        List<CommunicationForInvolved> list = this.communicationForInvolvedService.getCommunicationForInvolvedInDate(Integer.parseInt(transportDateCode), Integer.parseInt(involvedCommunicatedId));
+        final List<CommunicationForInvolved> list = this.communicationForInvolvedService.getCommunicationForInvolvedInDate(Integer.parseInt(transportDateCode), Integer.parseInt(involvedCommunicatedId));
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
-        //return this.communicationForInvolvedService.getCommunicationForInvolvedInDate(transportDateCode, involvedCommunicatedId);
     }
 
     @PatchMapping("/updateDriver")

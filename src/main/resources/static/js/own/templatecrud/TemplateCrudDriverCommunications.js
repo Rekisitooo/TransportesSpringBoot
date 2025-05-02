@@ -16,26 +16,38 @@ function showCommunicationAlertIcon(alertIcon) {
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
-function createInvolvedCommunication(data, alertIcon) {
-    $(alertIcon).find('div[class=row] span').each(
+function createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv) {
+    let passengersInserted = 0;
+    data = {
+        key : {
+            transportDateCode : data.transportDateCode,
+            involvedCommunicatedId : data.involvedCommunicatedId
+        },
+        driverCode : data.involvedCommunicatedId,
+        passengerCode : null,
+        communicationDate : Date.now(),
+        involvedCommunicatedId : data.involvedCommunicatedId,
+        transportDateCode : data.transportDateCode
+    }
+
+    $(driverPassengersForDateDiv).find('div[class=row] span').each(
         function() {
-            data = {
-                driverCode : data.involvedCommunicatedId,
-                passengerCode : $(this).attr('data-p-span-id'),
-                communicationDate : Date.now(),
-                involvedCommunicatedId : data.involvedCommunicatedId,
-                transportDateCode : data.transportDateCode
-            }
+            data['passengerCode'] = $(this).attr('data-p-span-id');
             ajaxRequestCreateInvolvedCommunication(data, alertIcon);
+            passengersInserted++;
         }
     );
+
+    if (passengersInserted === 0) {
+        ajaxRequestCreateInvolvedCommunication(data, alertIcon);
+    }
 }
 
 function ajaxRequestCreateInvolvedCommunication(data, alertIcon) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url:'/involvedCommunication',
+        url:'/involvedCommunication/createDriverCommunication',
         data: JSON.stringify(data),
         dataType: 'json',
         success: function(response){
@@ -66,17 +78,17 @@ function ajaxRequestDeleteCommunication(data, alertIcon) {
     })
 }
 
-function communicateTransport(data, alertIcon) {
+function communicateTransport(data, alertIcon, driverPassengersForDateDiv) {
     $.ajax({
         type: 'GET',
         url:'/involvedCommunication/get',
         data: data,
         success: function(response) {
             if (response === null || response === undefined || response.data.length === 0) {
-                createInvolvedCommunication(data, alertIcon);
+                createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
             } else {
                 ajaxRequestDeleteCommunication(data, alertIcon);
-                createInvolvedCommunication(data, alertIcon);
+                createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
             }
         },
         error : showCommunicationError()
@@ -95,7 +107,8 @@ $(document).ready(
                         involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
                     };
 
-                    communicateTransport(data, this);
+                    const driverPassengersForDateDiv = $('#' + $(this).attr('data-passengers-div'));
+                    communicateTransport(data, this, driverPassengersForDateDiv);
                 });
             }
         );
