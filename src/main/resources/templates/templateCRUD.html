@@ -268,6 +268,8 @@
                                             <!-- Passenger buttons row -->
                                             <div class="d-flex flex-column row">
                                                 <div class="col">
+
+                                                    <!-- Communication icon -->
                                                     <div class="row">
                                                         <div class="col" th:id="'markAsCommunicatedPassegerButtonDiv_' + ${passenger.id}">
                                                             <i class="fas fa-exclamation-circle text-danger"
@@ -277,6 +279,8 @@
                                                             ></i>
                                                         </div>
                                                     </div>
+                                                    <!-- Communication icon -->
+
                                                 </div>
                                             </div>
                                             <!-- Passenger buttons row -->
@@ -363,10 +367,20 @@
                                                         <div class="col-2">
                                                             <!-- Communication icon -->
                                                             <i
-                                                                th:class="'fas fa-exclamation-circle' + 
-                                                                        ${(involvedCommunications.get(date.id) == null or 
-                                                                        involvedCommunications.get(date.id).get(passenger.id) == null) ?
-                                                                        ' text-danger' : ' d-none'}"
+                                                                th:class="
+                                                                    'fas fa-exclamation-circle ' +
+                                                                    ${(
+                                                                        (passengerAssistance != null) and
+                                                                        (
+                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()) != null) and
+                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
+                                                                        )
+                                                                        or
+                                                                        (
+                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()) == null)
+                                                                        )
+
+                                                                    ) ? 'd-none' : 'text-danger'}"
                                                                 role="button"
                                                                 th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                                 th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -385,7 +399,8 @@
                                                         <div class="col">
                                                             <!-- Drivers select -->
                                                             <!-- show only if passenger needs transport -->
-                                                            <select name="driverInTransportSelect" th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}"
+                                                            <select name="driverInTransportSelect"
+                                                                    th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}"
                                                                     class="bg-transparent border border-0 w-100"
                                                                     th:data-t="${passenger.id}"
                                                                     th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -482,6 +497,8 @@
                                             <!-- Driver buttons row -->
                                             <div class="d-flex flex-column row">
                                                 <div class="col">
+
+                                                    <!-- Communication icon -->
                                                     <div class="row">
                                                         <div class="col" th:id="'markAsCommunicatedDriverButtonDiv_' + ${driver.id}">
                                                             <i class="fas fa-exclamation-circle text-danger"
@@ -491,6 +508,8 @@
                                                             ></i>
                                                         </div>
                                                     </div>
+                                                    <!-- Communication icon -->
+
                                                 </div>
                                             </div>
                                             <!-- Driver buttons row -->
@@ -550,10 +569,9 @@
                                                     <div class="col-2">
                                                         <!-- Communication icon -->
                                                         <i
-                                                            th:class="'fas fa-exclamation-circle' + 
-                                                                        ${(involvedCommunications.get(date.id) == null or 
-                                                                        involvedCommunications  .get(date.id).get(driver.id) == null) ?
-                                                                        ' text-danger' : ' d-none'}"
+                                                            th:class="
+                                                                'fas fa-exclamation-circle ' +
+                                                                ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' : 'text-danger'}"
                                                             role="button"
                                                             th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                             th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
