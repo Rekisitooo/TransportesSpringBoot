@@ -1,6 +1,7 @@
 package com.transports.spring.service;
 
 import com.transports.spring.dto.DtoDriverTransport;
+import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
 import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
@@ -135,6 +136,10 @@ public class TransportService {
         }
 
         return passengerTransports;
+    }
+
+    public List<DtoGetPassengersForDriverByDate> getPassengersForDriverByDate(final Integer transportDateId, final Integer driverId) {
+        return this.transportByTemplateRepository.getPassengersForDriverByDate(transportDateId, driverId);
     }
 
     //TODO check driver has available seats

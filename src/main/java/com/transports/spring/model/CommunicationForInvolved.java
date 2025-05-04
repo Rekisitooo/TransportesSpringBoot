@@ -1,13 +1,10 @@
 package com.transports.spring.model;
 
-import com.transports.spring.model.key.CommunicationForInvolvedKey;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -18,39 +15,22 @@ import java.sql.Timestamp;
 @Table(name = "AVISO_POR_IVOLUCRADO")
 public final class CommunicationForInvolved {
 
-    @EmbeddedId
-    private CommunicationForInvolvedKey key;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "COD_INVOLUCRADO_AVISADO", nullable = false)
+    private Integer involvedCommunicatedId;
+
+    @Column(name = "COD_FECHA_TRANSPORTE", nullable = false)
+    private Integer transportDateCode;
 
     @Column(name = "COD_CONDUCTOR")
     private Integer driverCode;
 
-    @Column(name = "FECHA_AVISO")
-    private Timestamp communicationDate;
-
     @Column(name = "COD_PASAJERO")
     private Integer passengerCode;
 
-
-    public CommunicationForInvolved(Integer involvedCommunicated, Integer transportDateCode, Integer driverCode, Integer passengerCode, Timestamp communicationDate) {
-        this.key = new CommunicationForInvolvedKey(involvedCommunicated, transportDateCode);
-        this.driverCode = driverCode;
-        this.passengerCode = passengerCode;
-        this.communicationDate = communicationDate;
-    }
-
-    public Integer getTransportDateCode() {
-        return this.key.getTransportDateCode();
-    }
-
-    public Integer getInvolvedCommunicated() {
-        return this.key.getInvolvedCommunicatedId();
-    }
-
-    public void involvedCommunicated(Integer involvedCommunicated) {
-        this.key.setInvolvedCommunicatedId(involvedCommunicated);
-    }
-
-    public void transportDateCode(Integer transportDateCode) {
-        this.key.setTransportDateCode(transportDateCode);
-    }
+    @Column(name = "FECHA_AVISO", nullable = false)
+    private Timestamp communicationDate;
 }

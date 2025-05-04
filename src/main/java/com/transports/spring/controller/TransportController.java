@@ -1,5 +1,6 @@
 package com.transports.spring.controller;
 
+import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
 import com.transports.spring.dto.DtoTransport;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
@@ -9,6 +10,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/t")
@@ -49,6 +52,12 @@ public class TransportController {
 
         body.setDriverId(driverId);
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", body));
+    }
+
+    @GetMapping("/getPassengersForDriverByDate")
+    public ResponseEntity<Object> getPassengersForDriverByDate(@RequestParam Integer transportDateId, @RequestParam Integer driverId) {
+        final List<DtoGetPassengersForDriverByDate> list = this.transportService.getPassengersForDriverByDate(transportDateId, driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
     }
 
     private static TransportKey transformDtoTransportToTransportKey(DtoTransport body) {

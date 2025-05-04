@@ -1,7 +1,6 @@
 package com.transports.spring.service;
 
 import com.transports.spring.model.CommunicationForInvolved;
-import com.transports.spring.model.key.CommunicationForInvolvedKey;
 import com.transports.spring.repository.ICommunicationForInvolvedRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,14 +29,13 @@ public class CommunicationForInvolvedService {
 
         for (final CommunicationForInvolved communicationForInvolved : allCommunicationsForTemplate) {
             final Map<Integer, CommunicationForInvolved> communicationForInvolvedMap = new HashMap<>();
-            final CommunicationForInvolvedKey key = communicationForInvolved.getKey();
 
-            final Map<Integer, CommunicationForInvolved> communicationForInvolvedForDateMap = commmunicationsMap.get(key.getTransportDateCode());
+            final Map<Integer, CommunicationForInvolved> communicationForInvolvedForDateMap = commmunicationsMap.get(communicationForInvolved.getTransportDateCode());
             if (communicationForInvolvedForDateMap == null) {
-                communicationForInvolvedMap.put(key.getInvolvedCommunicatedId(), communicationForInvolved);
-                commmunicationsMap.put(key.getTransportDateCode(), communicationForInvolvedMap);
+                communicationForInvolvedMap.put(communicationForInvolved.getInvolvedCommunicatedId(), communicationForInvolved);
+                commmunicationsMap.put(communicationForInvolved.getTransportDateCode(), communicationForInvolvedMap);
             } else {
-                communicationForInvolvedForDateMap.put(key.getInvolvedCommunicatedId(), communicationForInvolved);
+                communicationForInvolvedForDateMap.put(communicationForInvolved.getInvolvedCommunicatedId(), communicationForInvolved);
             }
 
         }
@@ -63,7 +61,7 @@ public class CommunicationForInvolvedService {
     public ResponseEntity<CommunicationForInvolved> updateDriver(final CommunicationForInvolved communicationForInvolved) {
         this.communicationForInvolvedRepository.updateDriver(
                 communicationForInvolved.getTransportDateCode(),
-                communicationForInvolved.getInvolvedCommunicated(),
+                communicationForInvolved.getInvolvedCommunicatedId(),
                 communicationForInvolved.getDriverCode(),
                 communicationForInvolved.getPassengerCode()
         );

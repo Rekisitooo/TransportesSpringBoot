@@ -1,5 +1,6 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
+import { addPassengerInDriverTransportsTable } from './TemplateCrudTransportCRUD.js';
 
 function showCommunicationError() {
     //TODO configurar la alerta para que se muestre en un idioma u otro
@@ -17,64 +18,63 @@ function showCommunicationAlertIcon(alertIcon) {
 }
 
 function createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv) {
+    const dataGetPassengers = {
+        transportDateId : data[0]['transportDateCode'],
+        driverId : data[0]['involvedCommunicatedId'],
+    };
     let passengersInserted = 0;
-    data = {
-        key : {
-            transportDateCode : data.transportDateCode,
-            involvedCommunicatedId : data.involvedCommunicatedId
-        },
-        driverCode : data.involvedCommunicatedId,
-        passengerCode : null,
-        communicationDate : Date.now(),
-        involvedCommunicatedId : data.involvedCommunicatedId,
-        transportDateCode : data.transportDateCode
-    }
 
-    $(driverPassengersForDateDiv).find('div[class=row] span').each(
-        function() {
-            data['passengerCode'] = $(this).attr('data-p-span-id');
-            ajaxRequestCreateInvolvedCommunication(data, alertIcon);
-            passengersInserted++;
-        }
-    );
+    $.ajax({
+        type: 'GET',
+        url:'/t/getPassengersForDriverByDate',
+        data: dataGetPassengers,
+        success: function(response) {
+            if (response !== null || response !== undefined || response.data.length !== 0) {
+                for (const oData of response.data) {
+                    data[0]['passengerCode'] = oData.passengerCode;
+                    ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
+                    passengersInserted++;
+                }
+            }
+        },
+        error : showCommunicationError()
+    });
 
     if (passengersInserted === 0) {
-        ajaxRequestCreateInvolvedCommunication(data, alertIcon);
+        ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
     }
 }
 
-function ajaxRequestCreateInvolvedCommunication(data, alertIcon) {
+function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url:'/involvedCommunication/createDriverCommunication',
         data: JSON.stringify(data),
         dataType: 'json',
-        success: function(response){
-            if (response.status === 'ok') {
-                hideCommunicationAlertIcon(alertIcon);
-            } else {
-                showCommunicationError();
-            }
+        success: function(response) {
+            hideCommunicationAlertIcon(alertIcon);
+            addPassengerInDriverTransportsTable(
+                data.transportDateCode,
+                data.driverCode,
+                data.passengerCode,
+                passengerFullName,
+                driverPassengersForDateDiv
+            );
         },
-        error : showCommunicationError()
+        error: showCommunicationError()
     })
 }
 
-function ajaxRequestDeleteCommunication(data, alertIcon) {
+function updateInvolvedCommunications(data, alertIcon, driverPassengersForDateDiv) {
     $.ajax({
         type: 'DELETE',
         contentType: 'application/json',
         url:'/involvedCommunication',
         data: JSON.stringify(data),
         dataType: 'json',
-        success: function(response){
-           showCommunicationAlertIcon(alertIcon);
-        },
-        error: function(e) {
-            //TODO configurar la alerta para que se muestre en un idioma u otro
-            temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
-        }
+        success: createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv),
+        error: temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.")
     })
 }
 
@@ -85,10 +85,9 @@ function communicateTransport(data, alertIcon, driverPassengersForDateDiv) {
         data: data,
         success: function(response) {
             if (response === null || response === undefined || response.data.length === 0) {
-                createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
+                createInvolvedCommunication(response.data, alertIcon, driverPassengersForDateDiv);
             } else {
-                ajaxRequestDeleteCommunication(data, alertIcon);
-                createInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv);
+                updateInvolvedCommunications(response.data, alertIcon, driverPassengersForDateDiv);
             }
         },
         error : showCommunicationError()
@@ -108,7 +107,7 @@ $(document).ready(
                     };
 
                     const driverPassengersForDateDiv = $('#' + $(this).attr('data-passengers-div'));
-                    communicateTransport(data, this, driverPassengersForDateDiv);
+                    communicateTransport(data, $(this), driverPassengersForDateDiv);
                 });
             }
         );

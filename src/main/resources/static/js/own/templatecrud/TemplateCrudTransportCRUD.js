@@ -59,7 +59,7 @@ function deleteTransportOption(data, actualSelect, driverPassengersDivId) {
     })
 }
 
-function addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName, driverTransportsTablePassengerTdToAddSpan) {
+export function addPassengerInDriverTransportsTable(transportDateId, driverId, passengerId, passengerFullName, driverTransportsTablePassengerTdToAddSpan) {
     //TODO when UUIDs are implemented, change the id and remove the p, d, t...
     const newPassengerSpanNode = document.createElement("span");
     const newPassengerSpanTextNode = document.createTextNode(passengerFullName);
