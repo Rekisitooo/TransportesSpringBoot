@@ -38,4 +38,11 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
                       @Param("newDriverCode") Integer newDriverCode,
                       @Param("passengerCode") Integer passengerCode
     );
+
+    @Modifying
+    @Query("DELETE FROM CommunicationForInvolved api" +
+            "   WHERE " +
+            "       api.transportDateCode = :transportDateId" +
+            "       AND api.involvedCommunicatedId = :involvedId")
+    void deleteCommunicationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
 }

@@ -31,17 +31,17 @@ public class CommunicationForInvolvedController {
     }
 
     @PatchMapping("/updateDriver")
-    public ResponseEntity<CommunicationForInvolved> updateDriver(@RequestBody CommunicationForInvolved body) {
+    public ResponseEntity<Object> updateDriver(@RequestBody CommunicationForInvolved body) {
         return this.communicationForInvolvedService.updateDriver(body);
     }
 
     @PostMapping("/createDriverCommunication")
-    public ResponseEntity<CommunicationForInvolved> createDriverCommunication(@RequestBody CommunicationForInvolved body){
+    public ResponseEntity<Object> createDriverCommunication(@RequestBody CommunicationForInvolved body){
         return this.communicationForInvolvedService.create(body);
     }
 
     @DeleteMapping
-    public ResponseEntity<CommunicationForInvolved> delete(@RequestBody CommunicationForInvolved body) {
-        return this.communicationForInvolvedService.deleteCommunicationForDriver(body);
+    public ResponseEntity<Object> delete(@RequestBody CommunicationForInvolved body) {
+        return this.communicationForInvolvedService.deleteCommunicationForDriver(body.getInvolvedCommunicatedId(), body.getTransportDateCode());
     }
 }

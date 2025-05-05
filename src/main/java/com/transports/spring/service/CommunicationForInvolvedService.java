@@ -2,6 +2,9 @@ package com.transports.spring.service;
 
 import com.transports.spring.model.CommunicationForInvolved;
 import com.transports.spring.repository.ICommunicationForInvolvedRepository;
+import com.transports.spring.service.response.ServiceResponse;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -48,17 +51,20 @@ public class CommunicationForInvolvedService {
          return this.communicationForInvolvedRepository.getCommunicationForInvolvedInDate(transportDate, involvedId);
     }
 
-    public ResponseEntity<CommunicationForInvolved> deleteCommunicationForDriver(final CommunicationForInvolved communicationForInvolved) {
-        this.communicationForInvolvedRepository.delete(communicationForInvolved);
-        return ResponseEntity.ok().build();
+    @Transactional
+    public ResponseEntity<Object> deleteCommunicationForDriver(final Integer involvedId, final Integer transportDateId) {
+        this.communicationForInvolvedRepository.deleteCommunicationsForInvolvedInDate(involvedId, transportDateId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", null));
     }
 
-    public ResponseEntity<CommunicationForInvolved> create(final CommunicationForInvolved communicationForInvolved) {
+    @Transactional
+    public ResponseEntity<Object> create(final CommunicationForInvolved communicationForInvolved) {
         this.communicationForInvolvedRepository.save(communicationForInvolved);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationForInvolved));
     }
 
-    public ResponseEntity<CommunicationForInvolved> updateDriver(final CommunicationForInvolved communicationForInvolved) {
+    @Transactional
+    public ResponseEntity<Object> updateDriver(final CommunicationForInvolved communicationForInvolved) {
         this.communicationForInvolvedRepository.updateDriver(
                 communicationForInvolved.getTransportDateCode(),
                 communicationForInvolved.getInvolvedCommunicatedId(),
@@ -66,6 +72,6 @@ public class CommunicationForInvolvedService {
                 communicationForInvolved.getPassengerCode()
         );
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationForInvolved));
     }
 }
