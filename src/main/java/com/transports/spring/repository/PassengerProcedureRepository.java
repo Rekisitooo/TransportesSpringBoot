@@ -2,7 +2,6 @@ package com.transports.spring.repository;
 
 import com.transports.spring.dto.DtoGetAllPassengers;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Repository
 public class PassengerProcedureRepository {

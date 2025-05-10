@@ -21,7 +21,7 @@ public class MainController {
     public String index(final Model model) {
         final List<Template> templateList = this.templateService.getAllWithMonthNames();
         model.addAttribute("templateList", templateList);
-        model.addAttribute("username", "Iker Quijano");
+        model.addAttribute("username", "Username");
         return "index";
     }
 

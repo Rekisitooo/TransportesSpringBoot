@@ -4,7 +4,6 @@ import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelDriverBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelHeader;
 import com.transports.spring.model.templategeneration.common.AbstractTemplateExcel;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -22,7 +21,6 @@ public class DriverTemplateExcel extends AbstractTemplateExcel {
         this.driverTemplateExcelBody.generate(this.sheet, templateExcelDriverBody);
 
         final String fullExcelPath = excelPath.toString();
-        final File driverCalendar = new File(fullExcelPath);
         super.writeInExcel(fullExcelPath);
     }
 }

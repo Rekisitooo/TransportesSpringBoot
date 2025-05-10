@@ -3,7 +3,6 @@ package com.transports.spring.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.Month;
 
 @Builder

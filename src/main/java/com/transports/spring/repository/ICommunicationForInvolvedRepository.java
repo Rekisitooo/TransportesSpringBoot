@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import java.util.UUID;
 import java.util.List;
 
-public interface ICommunicationForInvolvedRepository extends JpaRepository<CommunicationForInvolved, Integer> {
+public interface ICommunicationForInvolvedRepository extends JpaRepository<CommunicationForInvolved, UUID> {
 
     @Query("SELECT new CommunicationForInvolved(api.id, api.involvedCommunicatedId, api.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
