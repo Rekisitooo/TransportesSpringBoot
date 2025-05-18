@@ -1,6 +1,5 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
-import { addPassengerInDriverTransportsTable } from './TemplateCrudTransportCRUD.js';
+import { changeElementClass } from './TemplateCrudCommons.js';
 
 $(document).ready(
     function () {
@@ -32,8 +31,8 @@ function createInvolvedCommunications(data, alertIcon, driverPassengersForDateDi
             if (response !== null && response !== undefined && (response.data !== null && response.data.length > 0) ) {
                 for (const transport of response.data) {
                     data['communicationDate'] = Date.now();
-                    data['driverCode'] = transport.transportKey.driverId;
-                    data['passengerCode'] = transport.transportKey.passengerId;
+                    data['driverCode'] = transport.transport.transportKey.driverId;
+                    data['passengerCode'] = transport.transport.transportKey.passengerId;
                     ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv, transport.passengerFullName);
                 }
             } else {
@@ -57,15 +56,6 @@ function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassenger
         dataType: 'json',
         success: function(response) {
             hideCommunicationAlertIcon(alertIcon);
-            if (passengerFullName !== null) {
-                addPassengerInDriverTransportsTable(
-                    data.transportDateCode,
-                    data.driverCode,
-                    data.passengerCode,
-                    passengerFullName,
-                    driverPassengersForDateDiv
-                );
-            }
         },
         error: showCommunicationError()
     })
@@ -82,7 +72,6 @@ function updateInvolvedCommunications(data, alertIcon, driverPassengersForDateDi
         type: 'DELETE',
         contentType: 'application/json',
         url:'/involvedCommunication',
-        data: communication,
         data: JSON.stringify(data),
         dataType: 'json',
         success: function(response) {
@@ -99,7 +88,7 @@ function communicateTransport(data, alertIcon, driverPassengersForDateDiv) {
         url:'/involvedCommunication/get',
         data: data,
         success: function(response) {
-            if (response === null || response === undefined || response.data.length === 0) {
+            if (response === null || response === undefined || !response.data || response.data.length === 0) {
                 createInvolvedCommunications(data, alertIcon, driverPassengersForDateDiv);
             } else {
                 updateInvolvedCommunications(response.data[0], alertIcon, driverPassengersForDateDiv);

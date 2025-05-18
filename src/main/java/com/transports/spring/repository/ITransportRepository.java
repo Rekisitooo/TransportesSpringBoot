@@ -89,14 +89,16 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       ORDER BY ftpp.transportDate ASC")
     List<DtoInvolvedTransport> findPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
 
-    @Query("SELECT " +
+    @Query("SELECT DISTINCT " +
             "   new com.transports.spring.dto.DtoGetPassengersForDriverByDate(" +
             "           new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId), " +
-            "           CONCAT(ipp.name, ' ', ipp.surname)" +
+            "           CONCAT(ipppassenger.name, ' ', ipppassenger.surname)" +
             "   )" +
             "       FROM Transport t" +
-            "           INNER JOIN InvolvedByTemplate ipp" +
-            "               ON t.transportKey.driverId = ipp.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate ippdriver" +
+            "               ON t.transportKey.driverId = ippdriver.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate ipppassenger" +
+            "               ON t.transportKey.passengerId = ipppassenger.involvedByTemplateKey.involvedCode" +
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
             "           AND t.transportKey.transportDateId = :transportDateId")
