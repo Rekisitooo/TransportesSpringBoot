@@ -1,0 +1,2899 @@
+# Test info
+
+- Name: Indicate Passenger Assists >> indicate passenger assists
+- Location: C:\Iker\Transportes_SpringBoot\Transportes_spring_boot\tests\involved-availability\indicate-passenger-assists.spec.ts:13:7
+
+# Error details
+
+```
+Error: expect(received).toBeTruthy()
+
+Received: false
+    at C:\Iker\Transportes_SpringBoot\Transportes_spring_boot\tests\involved-availability\indicate-passenger-assists.spec.ts:20:30
+```
+
+# Page snapshot
+
+```yaml
+- list:
+  - listitem:
+    - link " Administrar " [expanded]:
+      - /url: "#"
+- navigation:
+  - button ""
+  - list:
+    - listitem:
+      - button:
+        - img
+- heading "ENERO - 2024" [level=1]
+- link "Crear cuadrantes":
+  - /url: /template/generate?id=5
+- text: Nueva fecha
+- heading "Transportes por pasajeros" [level=2]
+- table:
+  - rowgroup:
+    - row "Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Conme Vida y Ministerio":
+      - cell
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Conme"
+      - cell "Vida y Ministerio"
+    - row "Martes 02  Domingo 07  Martes 09  Domingo 14  Martes 16  Domingo 21  Martes 23  Domingo 28  Lunes 29  Martes 30 ":
+      - cell
+      - cell "Martes 02 ":
+        - text: Martes 02
+        - button ""
+      - cell "Domingo 07 ":
+        - text: Domingo 07
+        - button ""
+      - cell "Martes 09 ":
+        - text: Martes 09
+        - button ""
+      - cell "Domingo 14 ":
+        - text: Domingo 14
+        - button ""
+      - cell "Martes 16 ":
+        - text: Martes 16
+        - button ""
+      - cell "Domingo 21 ":
+        - text: Domingo 21
+        - button ""
+      - cell "Martes 23 ":
+        - text: Martes 23
+        - button ""
+      - cell "Domingo 28 ":
+        - text: Domingo 28
+        - button ""
+      - cell "Lunes 29 ":
+        - text: Lunes 29
+        - button ""
+      - cell "Martes 30 ":
+        - text: Martes 30
+        - button ""
+  - rowgroup:
+    - row " Adolfo Fernández         No necesita transporte                     ":
+      - cell " Adolfo Fernández":
+        - button ""
+        - text: Adolfo Fernández
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  No necesita transporte":
+        - button ""
+        - button ""
+        - text: No necesita transporte
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Adolfo Fernández: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Julio Lendínez                              ":
+      - cell " Julio Lendínez":
+        - button ""
+        - text: Julio Lendínez
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Julio Lendínez: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Carmen García                              ":
+      - cell " Carmen García":
+        - button ""
+        - text: Carmen García
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen García: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Enriqueta Regis                              ":
+      - cell " Enriqueta Regis":
+        - button ""
+        - text: Enriqueta Regis
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Enriqueta Regis: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Pilar Pérez                              ":
+      - cell " Pilar Pérez":
+        - button ""
+        - text: Pilar Pérez
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pilar Pérez: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Pepe y Bea                              ":
+      - cell " Pepe y Bea":
+        - button ""
+        - text: Pepe y Bea
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Pepe y Bea : conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Roselia Muñoz                              ":
+      - cell " Roselia Muñoz":
+        - button ""
+        - text: Roselia Muñoz
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Roselia Muñoz: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Nicolás Benítez                              ":
+      - cell " Nicolás Benítez":
+        - button ""
+        - text: Nicolás Benítez
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Nicolás Benítez: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Ino Abejón                              ":
+      - cell " Ino Abejón":
+        - button ""
+        - text: Ino Abejón
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ino Abejón: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Tolli Requena                              ":
+      - cell " Tolli Requena":
+        - button ""
+        - text: Tolli Requena
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Tolli Requena: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Ramona Martínez                              ":
+      - cell " Ramona Martínez":
+        - button ""
+        - text: Ramona Martínez
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Ramona Martínez: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Silvia Begazo                              ":
+      - cell " Silvia Begazo":
+        - button ""
+        - text: Silvia Begazo
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Silvia Begazo: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Isabel Laso                              ":
+      - cell " Isabel Laso":
+        - button ""
+        - text: Isabel Laso
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Isabel Laso: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+    - row " Carmen Robles                              ":
+      - cell " Carmen Robles":
+        - button ""
+        - text: Carmen Robles
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Martes 2024-01-02"':
+          - option [selected]
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Domingo 2024-01-07"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Martes 2024-01-09"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Domingo 2024-01-14"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Martes 2024-01-16"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Domingo 2024-01-21"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Martes 2024-01-23"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Domingo 2024-01-28"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Lunes 2024-01-29"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+      - cell "  ":
+        - button ""
+        - button ""
+        - button ""
+        - 'combobox "Carmen Robles: conductor para el Martes 2024-01-30"':
+          - option [selected]
+          - option "Iker Quijano"
+          - option "Paco y Carmela"
+          - option "Juan Manuel González"
+          - option "Familia Cárceles"
+          - option "Familia Conde"
+          - option "Frutos y Rosi"
+          - option "Luisi y Jacinto"
+          - option "Verónica Masaquiza"
+          - option "Abel y Mariana"
+          - option "Familia Cerezo"
+          - option "Vanessa Aparicio"
+- heading "Transportes por conductores" [level=2]
+- table:
+  - rowgroup:
+    - row "Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Vida y Ministerio Reunión Pública Conme Vida y Ministerio":
+      - cell
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Vida y Ministerio"
+      - cell "Reunión Pública"
+      - cell "Conme"
+      - cell "Vida y Ministerio"
+    - row "Martes 02 Domingo 07 Martes 09 Domingo 14 Martes 16 Domingo 21 Martes 23 Domingo 28 Lunes 29 Martes 30":
+      - cell
+      - cell "Martes 02"
+      - cell "Domingo 07"
+      - cell "Martes 09"
+      - cell "Domingo 14"
+      - cell "Martes 16"
+      - cell "Domingo 21"
+      - cell "Martes 23"
+      - cell "Domingo 28"
+      - cell "Lunes 29"
+      - cell "Martes 30"
+  - rowgroup:
+    - row " Iker Quijano                   ":
+      - cell " Iker Quijano":
+        - button ""
+        - text: Iker Quijano
+      - cell "":
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Paco y Carmela                  ":
+      - cell " Paco y Carmela":
+        - button ""
+        - text: Paco y Carmela
+      - cell "":
+        - button ""
+      - cell "":
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Juan Manuel González                    ":
+      - cell " Juan Manuel González":
+        - button ""
+        - text: Juan Manuel González
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Familia Cárceles                    ":
+      - cell " Familia Cárceles":
+        - button ""
+        - text: Familia Cárceles
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Familia Conde                    ":
+      - cell " Familia Conde":
+        - button ""
+        - text: Familia Conde
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Frutos y Rosi                    ":
+      - cell " Frutos y Rosi":
+        - button ""
+        - text: Frutos y Rosi
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Luisi y Jacinto                    ":
+      - cell " Luisi y Jacinto":
+        - button ""
+        - text: Luisi y Jacinto
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Verónica Masaquiza                    ":
+      - cell " Verónica Masaquiza":
+        - button ""
+        - text: Verónica Masaquiza
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Abel y Mariana                    ":
+      - cell " Abel y Mariana":
+        - button ""
+        - text: Abel y Mariana
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Familia Cerezo                    ":
+      - cell " Familia Cerezo":
+        - button ""
+        - text: Familia Cerezo
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+    - row " Vanessa Aparicio                    ":
+      - cell " Vanessa Aparicio":
+        - button ""
+        - text: Vanessa Aparicio
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+      - cell " ":
+        - button ""
+        - button ""
+- contentinfo: Copyright © Your Website 2024
+```
+
+# Test source
+
+```ts
+   1 | import { test, expect } from '@playwright/test';
+   2 | import { AbstractPassengerAssists } from './abstract-passenger-assists';
+   3 | import { PassengerAssists } from './passenger-assists';
+   4 |
+   5 | const PASSENGER_TABLE_ID = 'passengerTransportsTable';
+   6 |
+   7 | test.describe('Indicate Passenger Assists', () => {
+   8 |   test.beforeEach(async ({ page }) => {
+   9 |     // Navigate to the template page
+  10 |     await page.goto('http://localhost:8080/template/openTemplate?id=5');
+  11 |   });
+  12 |
+  13 |   test('indicate passenger assists', async ({ page }) => {
+  14 |     const passengerAssists = new PassengerAssists(page);
+  15 |     const passengerTdSelector = `#${PASSENGER_TABLE_ID} tbody tr:nth-child(1) td:nth-child(3)`;
+  16 |     const assistanceIconSelector = passengerTdSelector + AbstractPassengerAssists.ASSISTANCE_ICON_SELECTOR;
+  17 |
+  18 |     // Verify initial state
+  19 |     const isInitialStateOk = await passengerAssists.isEverythingOkWhenPassengerDoesNotAssist(passengerTdSelector);
+> 20 |     expect(isInitialStateOk).toBeTruthy();
+     |                              ^ Error: expect(received).toBeTruthy()
+  21 |
+  22 |     // Mark passenger assists
+  23 |     await page.click(assistanceIconSelector);
+  24 |
+  25 |     // Verify final state
+  26 |     const isFinalStateOk = await passengerAssists.isEverythingOkWhenPassengerAssistsAndNeedsTransport(passengerTdSelector);
+  27 |     expect(isFinalStateOk).toBeTruthy();
+  28 |
+  29 |     // Reset context
+  30 |     await page.click(assistanceIconSelector);
+  31 |   });
+  32 | }); 
+```
