@@ -61,6 +61,7 @@ async function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPas
             dataType: 'json'
         });
         hideCommunicationAlertIcon(alertIcon);
+
     } catch (error) {
         showCommunicationError();
     }
@@ -82,6 +83,7 @@ async function updateInvolvedCommunications(data, alertIcon, driverPassengersFor
         });
         
         await createInvolvedCommunications(communication, alertIcon, driverPassengersForDateDiv);
+        
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
     }
