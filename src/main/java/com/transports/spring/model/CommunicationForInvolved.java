@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "AVISO_POR_IVOLUCRADO")
+@Table(name = "AVISO_POR_INVOLUCRADO")
 public final class CommunicationForInvolved {
 
     @Id

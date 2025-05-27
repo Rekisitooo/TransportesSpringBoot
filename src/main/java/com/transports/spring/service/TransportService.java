@@ -96,9 +96,9 @@ public class TransportService {
         );
     }
 
-    public void createTransport(final TransportKey transportKey) {
+    public Transport createTransport(final TransportKey transportKey) {
         //TODO Checks
-        this.transportByTemplateRepository.save(new Transport(transportKey));
+        return this.transportByTemplateRepository.save(new Transport(transportKey));
     }
 
     public void deleteTransport(final TransportKey transportKey) {

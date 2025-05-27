@@ -22,7 +22,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "WHERE " +
             "   api.transportDateCode = :transportDate" +
             "   AND api.involvedCommunicatedId = :involvedId")
-    List<CommunicationForInvolved> getCommunicationForInvolvedInDate(@Param("transportDate") Integer transportDate, @Param("involvedId") Integer involvedId);
+    List<CommunicationForInvolved> getCommunicationForInvolvedInDate(@Param("transportDate") String transportDate, @Param("involvedId") String involvedId);
 
 
     @Modifying

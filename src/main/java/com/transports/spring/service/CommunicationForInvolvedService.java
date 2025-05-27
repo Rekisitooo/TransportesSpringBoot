@@ -47,7 +47,7 @@ public class CommunicationForInvolvedService {
 
     }
 
-    public List<CommunicationForInvolved> getCommunicationForInvolvedInDate (final Integer transportDate, final Integer involvedId) {
+    public List<CommunicationForInvolved> getCommunicationForInvolvedInDate (final String transportDate, final String involvedId) {
          return this.communicationForInvolvedRepository.getCommunicationForInvolvedInDate(transportDate, involvedId);
     }
 

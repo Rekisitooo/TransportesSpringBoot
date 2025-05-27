@@ -9,14 +9,14 @@ import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 async function updatePassengerWarningIcon(data, passengerWarningIcon) {
     try {
         const passengerCommunicationResponse = 
-        await $.ajax({
-            type: 'GET',
-            url: '/involvedCommunication/get',
-            data: {
-                involvedCommunicatedId: data.t,
-                transportDateCode: data.d
-            }
-        });
+            await $.ajax({
+                type: 'GET',
+                url: '/involvedCommunication/get',
+                data: {
+                    involvedCommunicatedId: data.t,
+                    transportDateCode: data.d
+                }
+            });
 
         if (passengerCommunicationResponse?.data?.length) {
             const previousDriverId = passengerCommunicationResponse.data[0].driverId;
@@ -42,16 +42,16 @@ async function updatePassengerWarningIcon(data, passengerWarningIcon) {
  * Updates the warning icon visibility for a driver based on their communication status.
  * Shows the icon if the passenger is not in the driver's communications or if there are no communications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} driverWarningIcon - The warning icon element for the driver
+ * @param {jQuery} newDriverWarningIcon - The warning icon element for the driver
  */
-async function updateDriverWarningIcon(data, driverWarningIcon) {
+async function updateDriverWarningIcon(data, newDriverWarningIcon) {
     try {
         const driverCommunicationResponse = 
         await $.ajax({
             type: 'GET',
             url: '/involvedCommunication/get',
             data: {
-                involvedCommunicatedId: data.p,
+                involvedCommunicatedId: data.t,
                 transportDateCode: data.d
             }
         });
@@ -62,17 +62,17 @@ async function updateDriverWarningIcon(data, driverWarningIcon) {
             );
             
             if (hasPassengerInCommunications) {
-                driverWarningIcon.addClass('d-none');
+                newDriverWarningIcon.addClass('d-none');
             } else {
-                driverWarningIcon.removeClass('d-none');
+                newDriverWarningIcon.removeClass('d-none');
             }
         } else {
             //si no hay comunicaciones, se muestra el icono para que se pueda indicar el aviso
-            driverWarningIcon.removeClass('d-none');
+            newDriverWarningIcon.removeClass('d-none');
         }
 
     } catch (error) {
-        passengerWarningIcon.removeClass('d-none');
+        newDriverWarningIcon.removeClass('d-none');
     }
 }
 
@@ -83,10 +83,11 @@ async function updateDriverWarningIcon(data, driverWarningIcon) {
  * @param {string} passengerFullName - Full name of the passenger
  * @param {jQuery} driverPassengersDivId - Div containing the driver's passengers
  * @param {jQuery} driverTransportsTablePassengerTdToAddSpan - Table cell to add passenger span
- * @param {jQuery} driverWarningIcon - The warning icon element for the driver
+ * @param {jQuery} newDriverWarningIcon - The warning icon element for the driver
+ * @param {jQuery} previousDriverWarningIcon - The warning icon element for the previous driver
  * @param {jQuery} passengerWarningIcon - The warning icon element for the passenger
  */
-async function updateDriverInTransportOption(data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan, driverWarningIcon, passengerWarningIcon) {
+async function updateDriverInTransportOption(data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan, newDriverWarningIcon, previousDriverWarningIcon, passengerWarningIcon) {
     try {
         const response = 
             await $.ajax({
@@ -101,7 +102,11 @@ async function updateDriverInTransportOption(data, passengerFullName, driverPass
                 addPassengerInDriverTransportsTable(data.d, data.p, data.t, passengerFullName, driverTransportsTablePassengerTdToAddSpan);
                 deletePassengerInDriverTransportsTable(data.d, data.t, response.data.p, driverPassengersDivId);
                 await updatePassengerWarningIcon(data, passengerWarningIcon);
-                await updateDriverWarningIcon(data, driverWarningIcon);
+                await updateDriverWarningIcon(data, newDriverWarningIcon);
+                if (previousDriverWarningIcon != null) {
+                    newDriverWarningIcon.removeClass('d-none');
+                }
+
             } else {
                 temporalErrorAlert("Ha ocurrido un error al actualizar el conductor.");
             }
@@ -118,10 +123,10 @@ async function updateDriverInTransportOption(data, passengerFullName, driverPass
  * @param {string} passengerFullName - Full name of the passenger
  * @param {jQuery} actualSelect - The select element being modified
  * @param {jQuery} driverTransportsTablePassengerTdToAddSpan - Table cell to add passenger span
- * @param {jQuery} driverWarningIcon - The warning icon element for the driver
+ * @param {jQuery} newDriverWarningIcon - The warning icon element for the driver
  * @param {jQuery} passengerWarningIcon - The warning icon element for the passenger
  */
-async function createTransportOption(data, passengerFullName, actualSelect, driverTransportsTablePassengerTdToAddSpan, driverWarningIcon, passengerWarningIcon) {
+async function createTransportOption(data, passengerFullName, actualSelect, driverTransportsTablePassengerTdToAddSpan, newDriverWarningIcon, passengerWarningIcon) {
     try {
         await $.ajax({
             type: 'POST',
@@ -135,7 +140,7 @@ async function createTransportOption(data, passengerFullName, actualSelect, driv
         actualSelect.children().attr("name", "u");
         actualSelect.children(":first").attr("name", "d");
         await updatePassengerWarningIcon(data, passengerWarningIcon);
-        await updateDriverWarningIcon(data, driverWarningIcon);
+        await updateDriverWarningIcon(data, newDriverWarningIcon);
 
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al asignar el conductor.");
@@ -148,12 +153,12 @@ async function createTransportOption(data, passengerFullName, actualSelect, driv
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} actualSelect - The select element being modified
  * @param {jQuery} driverPassengersDivId - Div containing the driver's passengers
- * @param {jQuery} driverWarningIcon - The warning icon element for the driver
+ * @param {jQuery} previousDriverWarningIcon - The warning icon element for the driver
  * @param {jQuery} passengerWarningIcon - The warning icon element for the passenger
  */
-async function deleteTransportOption(data, actualSelect, driverPassengersDivId, driverWarningIcon, passengerWarningIcon) {
+async function deleteTransportOption(data, actualSelect, driverPassengersDivId, previousDriverWarningIcon, passengerWarningIcon) {
     try {
-        await $.ajax({
+        const response = await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
             url:'/t',
@@ -165,7 +170,7 @@ async function deleteTransportOption(data, actualSelect, driverPassengersDivId, 
         actualSelect.children().attr("name", "c");
         actualSelect.children(":first").attr("name", "d");
         await updatePassengerWarningIcon(data, passengerWarningIcon);
-        await updateDriverWarningIcon(data, driverWarningIcon);
+        await updateDriverWarningIcon(data, previousDriverWarningIcon);
 
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al desasignar el conductor.");
@@ -217,36 +222,61 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
  * Handles the change event of the driver selection.
  * Determines the operation to perform (create, update, or delete) based on the selected option.
  * Executes the corresponding operation with the appropriate parameters.
+ * @param {jQuery} actualSelect - The select element being modified
+ * @param {number} previousDriverId - ID of the previous driver
  */
-function operate () {
-    const actualSelect = $(this);
-    const selectedOption = actualSelect.find('option:selected');
-    const driverId = actualSelect.val();
+function operate (actualSelect, previousDriverId) {
+    const selectedOption = $(actualSelect).find('option:selected');
+    const newDriverId = $(actualSelect).val();
     const passengerId = selectedOption.attr('data-t');
     const transportDateId = selectedOption.attr('data-d');
     const passengerFullName = selectedOption.attr('data-passenger-name');
     const methodName = selectedOption.attr('name');
+
+    if (!methodName) {
+        temporalErrorAlert("Error: No se pudo determinar la operación a realizar.");
+        return;
+    }
+
+    if ((!newDriverId || !passengerId || !transportDateId) && (!passengerId || !transportDateId && methodName === 'd')) {
+        console.error('Missing required data:', { newDriverId, passengerId, transportDateId });
+        temporalErrorAlert("Error: Faltan datos requeridos para la operación.");
+        return;
+    }
+
     const data = {
         d : transportDateId,
-        p : driverId,
+        p : newDriverId,
         t : passengerId
     }
 
-    const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + driverId + '_' + transportDateId + ']');
-    const driverTransportsTablePassengerTdToAddSpan = $('#driverPassengersForDateDiv_' + driverId + '_' + transportDateId);
-    const driverWarningIcon = $(`#d${transportDateId}t${passengerId}_date_td fa-exclamation-circle`);
-    const passengerWarningIcon = $(`#p${driverId}t${passengerId}_date_td fa-exclamation-circle`);
+    const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + newDriverId + '_' + transportDateId + ']');
+    const driverTransportsTablePassengerTdToAddSpan = $('#driverPassengersForDateDiv_' + newDriverId + '_' + transportDateId);
+    const newDriverWarningIcon = $(`#d${newDriverId}t${transportDateId}_date_td .fa-exclamation-circle`);
+    const previousDriverWarningIcon = $(`#d${previousDriverId}t${transportDateId}_date_td .fa-exclamation-circle`);
+    const passengerWarningIcon = $(`#p${passengerId}t${transportDateId}_date_td .fa-exclamation-circle`);
 
     const operations = {
-        d: deleteTransportOption.bind(undefined, data, actualSelect, driverPassengersDivId, driverWarningIcon, passengerWarningIcon),
-        u: updateDriverInTransportOption.bind(undefined, data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan, driverWarningIcon, passengerWarningIcon),
-        c: createTransportOption.bind(undefined, data, passengerFullName, actualSelect, driverTransportsTablePassengerTdToAddSpan, driverWarningIcon, passengerWarningIcon)
+        d: () => deleteTransportOption(data, $(actualSelect), driverPassengersDivId, previousDriverWarningIcon, passengerWarningIcon),
+        u: () => updateDriverInTransportOption(data, passengerFullName, driverPassengersDivId, driverTransportsTablePassengerTdToAddSpan, newDriverWarningIcon, previousDriverWarningIcon, passengerWarningIcon),
+        c: () => createTransportOption(data, passengerFullName, $(actualSelect), driverTransportsTablePassengerTdToAddSpan, newDriverWarningIcon, passengerWarningIcon)
     };
 
     const method = operations[methodName];
-    method();
+    if (typeof method === 'function') {
+        method();
+    } else {
+        console.error(`Unknown operation: "${methodName}". Available: ${Object.keys(operations).join(', ')}`);
+        temporalErrorAlert(`Error: Operación desconocida "${methodName}".`);
+    }
 }
 
 $(function() {
-    $('select[name="driverInTransportSelect"]').on('change', operate);
+    $('select[name="driverInTransportSelect"]').each(function() {
+        $(this).attr('data-previous-driver-id', $(this).val());
+    }).on('change', function (event) {
+        const previousDriverId = $(this).data('data-previous-driver-id');
+        operate(this, previousDriverId);
+        $(this).data('data-previous-driver-id', $(this).val());
+    });
 });

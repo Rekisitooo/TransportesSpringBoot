@@ -37,7 +37,7 @@ public class TransportController {
     @PostMapping
     public ResponseEntity<Object> createDriverInTransport(@RequestBody DtoTransport body){
         final TransportKey transportKey = transformDtoTransportToTransportKey(body);
-        this.transportService.createTransport(transportKey);
+        final Transport transport = this.transportService.createTransport(transportKey);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", body));
     }
 

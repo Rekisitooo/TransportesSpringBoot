@@ -26,7 +26,7 @@ public class CommunicationForInvolvedController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getCommunicationForInvolved(@RequestParam String transportDateCode, @RequestParam String involvedCommunicatedId) {
-        final List<CommunicationForInvolved> list = this.communicationForInvolvedService.getCommunicationForInvolvedInDate(Integer.parseInt(transportDateCode), Integer.parseInt(involvedCommunicatedId));
+        final List<CommunicationForInvolved> list = this.communicationForInvolvedService.getCommunicationForInvolvedInDate(transportDateCode, involvedCommunicatedId);
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
     }
 
