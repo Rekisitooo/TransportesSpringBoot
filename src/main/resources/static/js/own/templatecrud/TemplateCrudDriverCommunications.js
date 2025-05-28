@@ -5,15 +5,17 @@ $(function() {
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', function() {
-                const driverThId = $(this).attr('data-driver-th');
-                const dataDateTd = $(this).attr('data-date-td');
-                const data = {
-                    transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
-                };
+                if ($(this).attr('class').includes('text-danger')) {
+                    const driverThId = $(this).attr('data-driver-th');
+                    const dataDateTd = $(this).attr('data-date-td');
+                    const data = {
+                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
+                        involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
+                    };
 
-                const driverPassengersForDateDiv = $('#' + $(this).attr('data-passengers-div'));
-                communicateTransport(data, $(this), driverPassengersForDateDiv);
+                    const driverPassengersForDateDiv = $('#' + $(this).attr('data-passengers-div'));
+                    communicateTransport(data, $(this), driverPassengersForDateDiv);
+                }
             });
         }
     );
