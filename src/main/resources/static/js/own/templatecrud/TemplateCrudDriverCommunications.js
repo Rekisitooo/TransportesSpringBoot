@@ -60,7 +60,7 @@ async function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPas
             data: JSON.stringify(data),
             dataType: 'json'
         });
-        hideCommunicationAlertIcon(alertIcon);
+        changeAlertIconToCommunicated(alertIcon);
 
     } catch (error) {
         showCommunicationError();
@@ -111,12 +111,12 @@ function showCommunicationError() {
     temporalErrorAlert("Ha ocurrido un error al indicar que se ha avisado del transporte al conductor.");
 }
 
-function hideCommunicationAlertIcon(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'd-none', 'text-danger');
+function changeAlertIconToCommunicated(alertIcon) {
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
-function showCommunicationAlertIcon(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'd-none');
+function changeAlertIconToNotCommunicated(alertIcon) {
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', communicateTransportIconClass);
 }
