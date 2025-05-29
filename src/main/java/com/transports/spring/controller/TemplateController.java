@@ -125,7 +125,7 @@ public final class TemplateController {
         final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
         model.addAttribute("driverAssistanceDates", driverAssistanceDates);
 
-        final Map<Integer, Map<Integer, CommunicationForInvolved>> involvedCommunications = this.communicationForInvolvedService.getAllCommunicationsForTemplate(templateId);
+        Map<Integer, Map<Integer, Boolean>> involvedCommunications = this.communicationForInvolvedService.getAllNotificationsForTemplate(templateId);
         model.addAttribute("involvedCommunications", involvedCommunications);
     }
 }

@@ -369,20 +369,18 @@
                                                         <div class="col-2">
                                                             <!-- Communication icon -->
                                                             <i
-                                                                th:class="
-                                                                    'fas fa-exclamation-circle ' +
-                                                                    ${(
-                                                                        (passengerAssistance != null) and
-                                                                        (
-                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()) != null) and
-                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
-                                                                        )
-                                                                        or
-                                                                        (
-                                                                            (passengerAssistance.get(date.transportDate.toLocalDate()) == null)
-                                                                        )
-
-                                                                    ) ? 'd-none' : 'text-danger'}"
+                                                                    th:class="'fas fa-exclamation-circle ' +
+                                                                        ${(passengerAssistance != null
+                                                                            and passengerAssistance.get(date.transportDate.toLocalDate()) != null
+                                                                            and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
+                                                                            or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null) ?
+                                                                                'd-none' :
+                                                                                    (
+                                                                                        involvedCommunications.get(date.id) != null
+                                                                                        and involvedCommunications.get(date.id).get(driver.id) != null
+                                                                                        and involvedCommunications.get(date.id).get(driver.id) == true ?
+                                                                                            'text-muted' : 'text-danger'
+                                                                                    )}"
                                                                 role="button"
                                                                 th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                                 th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -573,7 +571,9 @@
                                                         <i
                                                             th:class="
                                                                 'fas fa-exclamation-circle ' +
-                                                                ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' : 'text-danger'}"
+                                                                ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
+                                                                    (involvedCommunications.get(date.id).get(driver.id) == null or (involvedCommunications.get(date.id).get(driver.id) == false) ?
+                                                                        'text-danget' : 'text-muted'}"
                                                             role="button"
                                                             th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                                             th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"

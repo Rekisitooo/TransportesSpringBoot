@@ -44,7 +44,6 @@ public class CommunicationForInvolvedService {
         }
 
         return commmunicationsMap;
-
     }
 
     public List<CommunicationForInvolved> getCommunicationForInvolvedInDate (final String transportDate, final String involvedId) {
@@ -72,5 +71,38 @@ public class CommunicationForInvolvedService {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationForInvolved));
+    }
+
+    /**
+     * Returns a map with the notifications for the template.
+     * @param templateId - The template id.
+     * @return  Map<dateId, Map<InvolvedId, Boolean (true if notification is sent)>>
+     */
+    public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
+        Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
+
+        List<Object[]> driverNotifications = communicationForInvolvedRepository.findDriverNotificationsByTemplate(templateId);
+        processNotifications(driverNotifications, result);
+
+        List<Object[]> passengerNotifications = communicationForInvolvedRepository.findPassengerNotificationsByTemplate(templateId);
+        processNotifications(passengerNotifications, result);
+
+        return result;
+    }
+
+    /**
+     * Process the notifications and update the result map.
+     * @param notifications List of notifications to process.
+     * @param result Map to update with the processed notifications.
+     */
+    private void processNotifications(List<Object[]> notifications, Map<Integer, Map<Integer, Boolean>> result) {
+        for (final Object[] row : notifications) {
+            final Integer transportDateId = (Integer) row[0];
+            final Integer involvedId = (Integer) row[1];
+            final Boolean hasNotification = (Boolean) row[2];
+
+            final Map<Integer, Boolean> involvedMap = result.computeIfAbsent(transportDateId, k -> new HashMap<>());
+            involvedMap.put(involvedId, !hasNotification);
+        }
     }
 }

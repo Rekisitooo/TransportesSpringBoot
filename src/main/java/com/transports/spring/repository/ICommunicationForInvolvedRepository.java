@@ -45,4 +45,34 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "       api.transportDateCode = :transportDateId" +
             "       AND api.involvedCommunicatedId = :involvedId")
     void deleteCommunicationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
+
+    @Query("SELECT " +
+            "   t.transportKey.transportDateId, " +
+            "   t.transportKey.driverId, " +
+            "   CASE " +
+            "       WHEN apiDriver.id IS NOT NULL THEN true " +
+            "       ELSE false END " +
+            "      FROM Transport t " +
+            "           LEFT JOIN CommunicationForInvolved apiDriver " +
+            "               ON (apiDriver.transportDateCode = t.transportKey.transportDateId " +
+            "               AND apiDriver.involvedCommunicatedId = t.transportKey.driverId) " +
+            "           JOIN TransportDateByTemplate td " +
+            "               ON td.id = t.transportKey.transportDateId " +
+            "       WHERE td.id = :templateId")
+    List<Object[]> findDriverNotificationsByTemplate(@Param("templateId") Integer templateId);
+
+    @Query("SELECT " +
+            "   t.transportKey.transportDateId, " +
+            "   t.transportKey.passengerId, " +
+            "   CASE " +
+            "       WHEN apiPassenger.id IS NOT NULL THEN true " +
+            "       ELSE false END" +
+            "      FROM Transport t" +
+            "           LEFT JOIN CommunicationForInvolved apiPassenger" +
+            "               ON (apiPassenger.transportDateCode = t.transportKey.transportDateId" +
+            "               AND apiPassenger.involvedCommunicatedId = t.transportKey.passengerId)" +
+            "           JOIN TransportDateByTemplate td " +
+            "               ON td.id = t.transportKey.transportDateId" +
+            "       WHERE td.id = :templateId")
+    List<Object[]> findPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);
 }
