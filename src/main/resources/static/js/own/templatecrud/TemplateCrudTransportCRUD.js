@@ -12,7 +12,7 @@ $(function() {
 });
 
 const SELECTORS = {
-    DRIVER_PASSENGERS_DIV: (newDriverId, transportDateId) => `div[id*=driverPassengersOnDate_${newDriverId}_${transportDateId}]`,
+    DRIVER_PASSENGERS_DIV: (newDriverId, transportDateId) => `div[id*=driverPassengersOnDate_${newDriverId}_${transportDateId}_${passengerId}]`,
     DRIVER_TRANSPORTS_TABLE_TD: (newDriverId, transportDateId) => `#driverPassengersForDateDiv_${newDriverId}_${transportDateId}`,
     DRIVER_WARNING_ICON: (driverId, transportDateId) => `#d${driverId}t${transportDateId}_date_td .fa-exclamation-circle`,
     PASSENGER_WARNING_ICON: (passengerId, transportDateId) => `#p${passengerId}t${transportDateId}_date_td .fa-exclamation-circle`
@@ -25,7 +25,6 @@ function getTransportElements(transportDateId, newDriverId, passengerId, previou
         newDriverWarningIcon: $(SELECTORS.DRIVER_WARNING_ICON(newDriverId, transportDateId)),
         passengerWarningIcon: $(SELECTORS.PASSENGER_WARNING_ICON(passengerId, transportDateId))
     };
-
     if (previousDriverId && previousDriverId > 0) {
         elements.previousDriverWarningIcon = $(SELECTORS.DRIVER_WARNING_ICON(previousDriverId, transportDateId));
     }
