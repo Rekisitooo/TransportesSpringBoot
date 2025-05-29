@@ -5,17 +5,17 @@ $(function() {
     $('#passengerTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', function() {
+                const passengerThId = $(this).attr('data-passenger-th');
+                const dataDateTd = $(this).attr('data-date-td');
+                const data = {
+                    transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
+                    involvedCommunicatedId : $('th[id=' + passengerThId + ']').attr('data-t')
+                };
+
                 if ($(this).attr('class').includes('text-danger')) {
-                    const passengerThId = $(this).attr('data-passenger-th');
-                    const dataDateTd = $(this).attr('data-date-td');
                     const driverSelectSelector = $(this).attr('data-drivers-selector');
                     const driverSelect = $('#' + driverSelectSelector);
                     const driverSelectedId = driverSelect.val();
-                    
-                    const data = {
-                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                        involvedCommunicatedId : $('th[id=' + passengerThId + ']').attr('data-t')
-                    };
 
                     communicateTransport(data, $(this), driverSelectedId);
                 } else if ($(this).attr('class').includes('text-muted')) {

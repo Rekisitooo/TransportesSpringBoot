@@ -5,14 +5,14 @@ $(function() {
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', function() {
-                if ($(this).attr('class').includes('text-danger')) {
-                    const driverThId = $(this).attr('data-driver-th');
-                    const dataDateTd = $(this).attr('data-date-td');
-                    const data = {
-                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                        involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
-                    };
+                const driverThId = $(this).attr('data-driver-th');
+                const dataDateTd = $(this).attr('data-date-td');
+                const data = {
+                    transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
+                    involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
+                };
 
+                if ($(this).attr('class').includes('text-danger')) {
                     communicateTransport(data, $(this));
                 } else if ($(this).attr('class').includes('text-muted')) {
                     deleteDriverCommunication(data, $(this));
