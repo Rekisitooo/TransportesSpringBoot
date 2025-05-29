@@ -103,4 +103,11 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           t.transportKey.driverId = :driverId" +
             "           AND t.transportKey.transportDateId = :transportDateId")
     List<DtoGetPassengersForDriverByDate> getPassengersForDriverByDate(@Param("transportDateId") Integer transportDateId, @Param("driverId") Integer driverId);
+
+    @Query("SELECT new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
+        "   FROM Transport t" +
+        "       WHERE " +
+        "           t.transportKey.transportDateId = :transportDateId" +
+        "           AND t.transportKey.passengerId = :passengerId")
+    Transport findDriverForPassengerByDate(@Param("transportDateId") Integer transportDateId, @Param("passengerId") Integer passengerId);
 }

@@ -254,7 +254,7 @@
 
                                 </thead>
                                 <tbody>
-                                    <tr th:each="passenger : ${passengersFromTemplateList}">
+                                    <tr th:each="passenger : ${passengersFromTemplateList}" th:id="'passenger_row_' + ${passenger.id}">
 
                                         <!-- Passenger name -->
                                         <th th:id="'passengerNameCell_' + ${passenger.id}"
@@ -306,6 +306,8 @@
                                             th:data-t="${passenger.id}"
                                             th:data-date-id="${date.id}"
                                             th:data-y="'t' + ${date.id}"
+                                            th:data-tr-ref="'passenger_row_' + ${passenger.id}"
+                                            th:data-driver-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                         >
                                             <!-- Event display -->
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
@@ -662,6 +664,7 @@
         <script src="/js/own/templatecrud/TemplateCrudCommons.js" type="module"></script>
         <script src="/js/own/templatecrud/animation/MoveTableRows.js" type="module"></script>
         <script src="/js/own/templatecrud/TemplateCrudDriverCommunications.js" type="module"></script>
+        <script src="/js/own/templatecrud/TemplateCrudPassengerCommunications.js" type="module"></script>
 
         <!-- Custom alerts -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

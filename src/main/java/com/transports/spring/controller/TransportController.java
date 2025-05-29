@@ -57,7 +57,25 @@ public class TransportController {
     @GetMapping("/getPassengersForDriverByDate")
     public ResponseEntity<Object> getPassengersForDriverByDate(@RequestParam Integer transportDateCode, @RequestParam Integer involvedCommunicatedId) {
         final List<DtoGetPassengersForDriverByDate> list = this.transportService.getPassengersForDriverByDate(transportDateCode, involvedCommunicatedId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
+        if (list != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ServiceResponse<>("No passengers found for the given driver and date", list)
+            );
+        }
+    }
+
+    @GetMapping("/getDriverForPassengerByDate")
+    public ResponseEntity<Object> getDriverForPassengerByDate(@RequestParam Integer transportDateId, @RequestParam Integer passengerId) {
+        final Transport transport = this.transportService.getDriverForPassengerByDate(transportDateId, passengerId);
+        if (transport != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", transport));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ServiceResponse<>("No transport found for the given passenger and date", null)
+            );
+        }
     }
 
     private static TransportKey transformDtoTransportToTransportKey(DtoTransport body) {

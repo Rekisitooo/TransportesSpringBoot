@@ -1,106 +1,135 @@
-import { genericErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
+import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
+import { changeElementClass } from './TemplateCrudCommons.js';
 
-function showCommunicationError() {
-    //TODO configurar la alerta para que se muestre en un idioma u otro
-    window.alert("Ha ocurrido un error al indicar que se ha avisado del transporte al conductor.");
+$(function() {
+    $('#passengerTransportsTable i[class*=exclamation-circle]').each(
+        function () {
+            $(this).on('click', function() {
+                if ($(this).attr('class').includes('text-danger')) {
+                    const passengerThId = $(this).attr('data-passenger-th');
+                    const dataDateTd = $(this).attr('data-date-td');
+                    const driverSelectSelector = $(this).attr('data-drivers-selector');
+                    const driverSelect = $('#' + driverSelectSelector);
+                    const driverSelectedId = driverSelect.val();
+                    
+                    const data = {
+                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
+                        involvedCommunicatedId : $('th[id=' + passengerThId + ']').attr('data-t')
+                    };
+
+                    communicateTransport(data, $(this), driverSelectedId);
+                } else if ($(this).attr('class').includes('text-muted')) {
+                    deletePassengerCommunication(data, $(this));
+                }
+            });
+        }
+    );
+});
+
+async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
+    try {
+        const response = await $.ajax({
+            type: 'GET',
+            url: '/t/getPassengersForDriverByDate',
+            data: data
+        });
+
+        const newData = {
+            ...data,
+            communicationDate: Date.now(),
+            driverCode: driverSelectedId,
+            passengerCode: data.involvedCommunicatedId
+        };
+        await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
+
+    } catch (error) {
+        showCommunicationError();
+    }
 }
 
-function hideCommunicationAlertIcon(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'd-none');
+async function ajaxRequestCreatePassengerCommunication(data, alertIcon) {
+    try {
+        await $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: '/involvedCommunication/createCommunication',
+            data: JSON.stringify(data),
+            dataType: 'json'
+        });
+        changeAlertIconToCommunicated(alertIcon);
+
+    } catch (error) {
+        showCommunicationError();
+    }
+}
+
+async function ajaxRequestDeletePassengerCommunication(data) {
+    try {
+        await $.ajax({
+            type: 'DELETE',
+            contentType: 'application/json',
+            url: '/involvedCommunication',
+            data: JSON.stringify(data),
+            dataType: 'json'
+        });
+        return true;
+
+    } catch (error) {
+        temporalErrorAlert("Ha ocurrido un error al indicar que el transporte se ha comunicado.");
+        return false;
+    }
+}
+
+async function deletePassengerCommunication(data, alertIcon) {
+    if (ajaxRequestDeletePassengerCommunication(data)) {
+        changeAlertIconToNotCommunicated(alertIcon);
+    }
+}
+
+async function updatePassengerCommunications(data, alertIcon, driverSelectedId) {
+    try {
+        const isCommunicationDeleted = await ajaxRequestDeletePassengerCommunication(data);
+        if (isCommunicationDeleted) {
+            const communication = {
+                transportDateCode: data.transportDateCode,
+                involvedCommunicatedId: data.involvedCommunicatedId
+            };
+            await createPassengerCommunication(communication, alertIcon);
+        }
+
+    } catch (error) {
+        temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
+    }
+}
+
+async function communicateTransport(data, alertIcon, driverSelectedId) {
+    try {
+        const response = await $.ajax({
+            type: 'GET',
+            url: '/involvedCommunication/get',
+            data: data
+        });
+
+        if (!response?.data?.length) {
+            await createPassengerCommunication(data, alertIcon, driverSelectedId);
+        } else {
+            await updatePassengerCommunications(response.data[0], alertIcon, driverSelectedId);
+        }
+    } catch (error) {
+        showCommunicationError();
+    }
+}
+
+function showCommunicationError() {
+    temporalErrorAlert("Ha ocurrido un error al indicar que se ha avisado del transporte al viajero.");
+}
+
+function changeAlertIconToCommunicated(alertIcon) {
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-muted', 'text-danger');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
-function updateInvolvedCommunication(communication, alertIcon) {
-    $.ajax({
-        type: 'PATCH',
-        contentType: 'application/json',
-        url: '/involvedCommunication/updateDriver',
-        data: JSON.stringify(communication),
-        dataType: 'json',
-        success : function(response) {
-            if (response.status === 'ok') {
-                hideCommunicationAlertIcon(alertIcon);
-            } else {
-                showCommunicationError();
-            }
-        },
-        error : showCommunicationError()
-    })
+function changeAlertIconToNotCommunicated(alertIcon) {
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-muted');
+    alertIcon.attr('class', communicateTransportIconClass);
 }
-
-function createInvolvedCommunication(data, alertIcon) {
-    $.ajax({
-        type: 'POST',
-        contentType: 'application/json',
-        url:'/t',
-        data: JSON.stringify(data),
-        dataType: 'json',
-        success: function(response){
-            if (response.status === 'ok') {
-                hideCommunicationAlertIcon(alertIcon);
-            } else {
-                showCommunicationError();
-            }
-        },
-        error : showCommunicationError()
-    })
-}
-
-function deleteCommunication(data, actualSelect, driverPassengersDivId) {
-    $.ajax({
-        type: 'DELETE',
-        contentType: 'application/json',
-        url:'/t',
-        data: JSON.stringify(data),
-        dataType: 'json',
-        success: function(response){
-           //TODO complete
-        },
-        error: function(e) {
-            //TODO configurar la alerta para que se muestre en un idioma u otro
-            window.alert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
-        }
-    })
-}
-
-function communicateTransport(data, alertIcon) {
-    $.ajax({
-        type: 'GET',
-        contentType: 'application/json',
-        url:'/involvedCommunication/get',
-        data: JSON.stringify(data),
-        dataType: 'json',
-        success: function(response){
-            //recoger los pasajeros que tiene
-            if (response === null || response === undefined) {
-                //por cada pasajero, crear un aviso
-                createInvolvedCommunication(data, alertIcon);
-            } else {
-                //borrar todos los avisos que tenga el conductor para esta fecha
-                //por cada pasajero, crear un aviso
-                updateInvolvedCommunication(response, alertIcon);
-            }
-        },
-        error: function(e) {}
-    });
-}
-
-$(document).ready(
-    function () {
-        $('#driverTransportsTable i[class*=exclamation-circle]').each(
-            function () {
-                $(this).on('click', function() {
-                    const driverThId = $(this).attr('data-driver-th');
-                    const dataDateTd = $(this).attr('data-date-td');
-                    const data = {
-                        transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date'),
-                        involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d'),
-                    };
-
-                    communicateTransport(data, this);
-                });
-            }
-        );
-    }
-);

@@ -1,7 +1,16 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementClass } from './TemplateCrudCommons.js';
 
-// Constantes para selectores
+$(function() {
+    $('select[name="driverInTransportSelect"]').each(function() {
+        $(this).data('previous-driver-id', $(this).val());
+    }).on('change', function (event) {
+        const previousDriverId = $(this).data('previous-driver-id');
+        operate(this, previousDriverId);
+        $(this).data('previous-driver-id', $(this).val());
+    });
+});
+
 const SELECTORS = {
     DRIVER_PASSENGERS_DIV: (newDriverId, transportDateId) => `div[id*=driverPassengersOnDate_${newDriverId}_${transportDateId}]`,
     DRIVER_TRANSPORTS_TABLE_TD: (newDriverId, transportDateId) => `#driverPassengersForDateDiv_${newDriverId}_${transportDateId}`,
@@ -9,7 +18,6 @@ const SELECTORS = {
     PASSENGER_WARNING_ICON: (passengerId, transportDateId) => `#p${passengerId}t${transportDateId}_date_td .fa-exclamation-circle`
 };
 
-// Función helper para obtener elementos
 function getTransportElements(transportDateId, newDriverId, passengerId, previousDriverId = null) {
     const elements = {
         driverPassengersDivId: $(SELECTORS.DRIVER_PASSENGERS_DIV(newDriverId, transportDateId)),
@@ -52,21 +60,21 @@ async function updatePassengerWarningIcon(data, passengerWarningIcon) {
 
             let passengerWarningIconClass;
             if (hasChangedDriver) { //icon turns red
-                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-primary');
+                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
                 passengerWarningIcon.attr('class', passengerWarningIconClass);
             } else { //icon turns blue
-                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-primary', 'text-danger');
+                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-muted', 'text-danger');
                 passengerWarningIcon.attr('class', passengerWarningIconClass);
             }
         } else {
             //if no communications, icon turns red
-            passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-primary');
+            passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
             passengerWarningIcon.attr('class', passengerWarningIconClass);
         }
 
 
     } catch (error) { //if error, icon turns red
-        passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-primary');
+        passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
         passengerWarningIcon.attr('class', passengerWarningIconClass);
     }
 }
@@ -98,20 +106,20 @@ async function updateDriverWarningIcon(data, driverWarningIcon) {
             );
 
             if (hasPassengerInCommunications) { // icon turns blue
-                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-primary', 'text-danger');
+                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-muted', 'text-danger');
                 driverWarningIcon.attr('class', driverWarningIconClass);
             } else { // icon turns red
-                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-primary');
+                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
                 driverWarningIcon.attr('class', driverWarningIconClass);
             }
         } else {
              // if no communications, icon turns red
-            driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-primary');
+            driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
             driverWarningIcon.attr('class', driverWarningIconClass);
         }
 
     } catch (error) { // if error, icon turns red
-        driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-primary');
+        driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
         driverWarningIcon.attr('class', driverWarningIconClass);
     }
 }
@@ -316,13 +324,3 @@ function operate(actualSelect, previousDriverId) {
         temporalErrorAlert(`Error: Operación desconocida "${methodName}".`);
     }
 }
-
-$(function() {
-    $('select[name="driverInTransportSelect"]').each(function() {
-        $(this).data('previous-driver-id', $(this).val());
-    }).on('change', function (event) {
-        const previousDriverId = $(this).data('previous-driver-id');
-        operate(this, previousDriverId);
-        $(this).data('previous-driver-id', $(this).val());
-    });
-});

@@ -52,9 +52,8 @@ public class CommunicationForInvolvedService {
     }
 
     @Transactional
-    public ResponseEntity<Object> deleteCommunicationForDriver(final Integer involvedId, final Integer transportDateId) {
+    public void deleteCommunicationForDriver(final Integer involvedId, final Integer transportDateId) {
         this.communicationForInvolvedRepository.deleteCommunicationsForInvolvedInDate(involvedId, transportDateId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", null));
     }
 
     @Transactional

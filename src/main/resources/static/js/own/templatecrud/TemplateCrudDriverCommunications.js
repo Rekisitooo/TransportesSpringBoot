@@ -13,19 +13,20 @@ $(function() {
                         involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
                     };
 
-                    const driverPassengersForDateDiv = $('#' + $(this).attr('data-passengers-div'));
-                    communicateTransport(data, $(this), driverPassengersForDateDiv);
+                    communicateTransport(data, $(this));
+                } else if ($(this).attr('class').includes('text-muted')) {
+                    deleteDriverCommunication(data, $(this));
                 }
             });
         }
     );
 });
 
-async function createInvolvedCommunications(data, alertIcon, driverPassengersForDateDiv) {
+async function createDriverCommunications(data, alertIcon) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/t/getPassengersForDriverByDate',
+            url: '/t/getDriverForPassengerByDate',
             data: data
         });
 
@@ -37,7 +38,7 @@ async function createInvolvedCommunications(data, alertIcon, driverPassengersFor
                     driverCode: transport.transport.transportKey.driverId,
                     passengerCode: transport.transport.transportKey.passengerId
                 };
-                return ajaxRequestCreateInvolvedCommunication(newData, alertIcon, driverPassengersForDateDiv, transport.passengerFullName);
+                return ajaxRequestCreateDriverCommunication(newData, alertIcon);
             }));
         } else {
             const newData = {
@@ -46,19 +47,19 @@ async function createInvolvedCommunications(data, alertIcon, driverPassengersFor
                 driverCode: data.involvedCommunicatedId,
                 passengerCode: null
             };
-            await ajaxRequestCreateInvolvedCommunication(newData, alertIcon, driverPassengersForDateDiv, null);
+            await ajaxRequestCreateDriverCommunication(newData, alertIcon);
         }
     } catch (error) {
         showCommunicationError();
     }
 }
 
-async function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPassengersForDateDiv, passengerFullName) {
+async function ajaxRequestCreateDriverCommunication(data, alertIcon) {
     try {
         await $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            url: '/involvedCommunication/createDriverCommunication',
+            url: '/involvedCommunication/createCommunication',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -69,13 +70,14 @@ async function ajaxRequestCreateInvolvedCommunication(data, alertIcon, driverPas
     }
 }
 
-async function updateInvolvedCommunications(data, alertIcon, driverPassengersForDateDiv) {
-    try {
-        const communication = {
-            transportDateCode: data.transportDateCode,
-            involvedCommunicatedId: data.involvedCommunicatedId
-        };
+async function deleteDriverCommunication(data, alertIcon) {
+    if (ajaxRequestDeleteDriverCommunication(data)) {
+        changeAlertIconToNotCommunicated(alertIcon);
+    }
+}
 
+async function ajaxRequestDeleteDriverCommunication(data) {
+    try {
         await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
@@ -83,15 +85,31 @@ async function updateInvolvedCommunications(data, alertIcon, driverPassengersFor
             data: JSON.stringify(data),
             dataType: 'json'
         });
-        
-        await createInvolvedCommunications(communication, alertIcon, driverPassengersForDateDiv);
+        return true;
+
+    } catch (error) {
+        temporalErrorAlert("Ha ocurrido un error al indicar que el transporte se ha comunicado.");
+        return false;
+    }
+}
+
+async function updateDriverCommunications(data, alertIcon) {
+    try {
+        const isCommunicationDeleted = await ajaxRequestDeleteDriverCommunication(data);
+        if (isCommunicationDeleted) {
+            const communication = {
+                transportDateCode: data.transportDateCode,
+                involvedCommunicatedId: data.involvedCommunicatedId
+            };
+            await createDriverCommunications(communication, alertIcon);
+        }
         
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
     }
 }
 
-async function communicateTransport(data, alertIcon, driverPassengersForDateDiv) {
+async function communicateTransport(data, alertIcon) {
     try {
         const response = await $.ajax({
             type: 'GET',
@@ -100,9 +118,9 @@ async function communicateTransport(data, alertIcon, driverPassengersForDateDiv)
         });
 
         if (!response?.data?.length) {
-            await createInvolvedCommunications(data, alertIcon, driverPassengersForDateDiv);
+            await createDriverCommunications(data, alertIcon);
         } else {
-            await updateInvolvedCommunications(response.data[0], alertIcon, driverPassengersForDateDiv);
+            await updateDriverCommunications(response.data[0], alertIcon);
         }
     } catch (error) {
         showCommunicationError();
@@ -114,11 +132,11 @@ function showCommunicationError() {
 }
 
 function changeAlertIconToCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-muted', 'text-danger');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
 function changeAlertIconToNotCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-muted');
     alertIcon.attr('class', communicateTransportIconClass);
 }

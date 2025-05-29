@@ -35,13 +35,20 @@ public class CommunicationForInvolvedController {
         return this.communicationForInvolvedService.updateDriver(body);
     }
 
-    @PostMapping("/createDriverCommunication")
+    @PostMapping("/createCommunication")
     public ResponseEntity<Object> createDriverCommunication(@RequestBody CommunicationForInvolved body){
         return this.communicationForInvolvedService.create(body);
     }
 
     @DeleteMapping
     public ResponseEntity<Object> delete(@RequestBody CommunicationForInvolved body) {
-        return this.communicationForInvolvedService.deleteCommunicationForDriver(body.getInvolvedCommunicatedId(), body.getTransportDateCode());
+        ResponseEntity<Object> re = ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", body));
+        try {
+            this.communicationForInvolvedService.deleteCommunicationForDriver(body.getInvolvedCommunicatedId(), body.getTransportDateCode());
+        } catch (final Exception e) {
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ServiceResponse<>("ok", body));
+        }
+        return re;
+
     }
 }
