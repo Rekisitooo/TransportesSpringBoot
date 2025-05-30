@@ -2,6 +2,8 @@ DROP DATABASE IF EXISTS transportesspringboot;
 CREATE DATABASE IF NOT EXISTS transportesspringboot;
 USE transportesspringboot;
 
+SELECT * FROM AVISO_POR_INVOLUCRADO;
+
 DROP TABLE IF EXISTS GRUPO_USUARIO;
 CREATE TABLE IF NOT EXISTS GRUPO_USUARIO (
 	ID	INT UNSIGNED AUTO_INCREMENT,
@@ -389,16 +391,18 @@ BEGIN
 	-- Inserta la dipsonibilidad de cada involucrado para cada fecha de transporte de la plantilla creada
     OPEN cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE;
 		read_loop: LOOP
-			FETCH cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE INTO cod_fecha_transporte, fecha_transporte;
+			FETCH cursor_insertar_en_DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE 
+            INTO cod_fecha_transporte, fecha_transporte;
 
 			IF cursor_dipft_terminado THEN
 				LEAVE read_loop;
 			END IF;
           
-          INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_FECHA_TRANSPORTE)
+          INSERT INTO DISPONIBILIDAD_INVOLUCRADO_POR_FECHA_TRANSPORTE (COD_INVOLUCRADO, COD_FECHA_TRANSPORTE, NECESITA_TRANSPORTE)
 				SELECT DISTINCT 
 					ipp.COD_INVOLUCRADO, 
-					cod_fecha_transporte as COD_FECHA_TRANSPORTE
+					cod_fecha_transporte as COD_FECHA_TRANSPORTE,
+                    1 as NECESITA_TRANSPORTE
 						FROM INVOLUCRADO_POR_PLANTILLA ipp
 							INNER JOIN DISPONIBILIDAD_INVOLUCRADO_POR_DIA_TRANSPORTE_SEMANAL dipdts
 								ON dipdts.COD_INVOLUCRADO = ipp.COD_INVOLUCRADO

@@ -1,0 +1,11 @@
+<div th:fragment="showPassengerIconsCheckbox" id = "passengerIconDisplayDivRow" class="row mt-4 mb-3" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="col">
+        <div class="form-check form-switch">
+            <input class="form-check-input"
+                   type="checkbox"
+                   checked
+                   id="passengerTableHideIconsBtn">
+            <label th:text="#{templateCRUD.passengerTable.hideIcons}" class="form-check-label" for="passengerTableHideIconsBtn"></label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+<!-- Drivers table -->
+<div th:fragment="driverTable" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-2"></h2>
+    <th:block th:insert="~{components/templatecrud/driver/showDriverTablesEditIcons :: showDriverIconsCheckbox}">  </th:block>
+
+    <table class="table table-striped table-bordered shadow-lg" id="driverTransportsTable" width="100%" cellspacing="0">
+        <thead class="bg-light">
+
+        <!-- Event Name row -->
+        <tr>
+            <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+            <th th:each="date: ${templateDates}" th:data-date="${date.transportDate}" th:text="${date.eventName}" class="text-nowrap"></th>
+        </tr>
+
+        <!-- Days of the week row -->
+        <tr>
+            <!-- empty for the drivers column -->
+            <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+            <th th:each="date: ${templateDates}"
+                th:data-date="${date.transportDate}"
+                th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
+                class="text-nowrap"
+            ></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr th:each="driver : ${driversFromTemplateList}" th:id="'driver_row_' + ${driver.id}">
+
+            <!-- Driver Name -->
+            <th
+                    th:id="${driver.id} + '_th'"
+                    th:data-d="${driver.id}"
+                    th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
+                    class="text-nowrap text-left"
+                    style="cursor:move"
+                    draggable="true"
+                    data-draggable="involvedTable"
+            >
+                <!-- Driver buttons row -->
+                <div class="d-flex flex-column row">
+                    <div class="col" data-driver-showable-icon="data-driver-showable-icon">
+
+                        <!-- Communication icon -->
+                        <div class="row">
+                            <div class="col" th:id="'markAsCommunicatedDriverButtonDiv_' + ${driver.id}">
+                                <i class="fas fa-exclamation-circle text-danger"
+                                   role="button"
+                                   th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllCommunicationsEndda}"
+                                   th:id="'markAsCommunicatedDriverButton_' + ${driver.id}"
+                                ></i>
+                            </div>
+                        </div>
+                        <!-- Communication icon -->
+
+                    </div>
+                </div>
+                <!-- Driver buttons row -->
+
+                <!-- Driver name row -->
+                <div class="row mt-1">
+                    <div class="col">
+                                                <span
+                                                        th:text="${driver.name} + ' ' + ${driver.surname}"
+                                                        th:id="${driver.id} + '_th_driver_name_span'" >
+                                                </span>
+                    </div>
+                </div>
+                <!-- Driver name row -->
+            </th>
+
+            <!-- Driver Data -->
+            <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
+            <td th:each="date : ${templateDates}"
+                th:id="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
+                th:data-date="${date.transportDate}"
+                th:data-date-id="${date.id}"
+                th:class="${ ( (date.dateType == 'event') or (date.dateType == 'transportDate') and (passengersAvailableForDate.get(date.id) == null) )
+                                                        ? 'text-nowrap text-center' : 'text-nowrap'}"
+                th:data-tr-ref="'driver_row_' + ${driver.id}"
+            >
+
+                <!-- Event display -->
+                <span th:if="${(date.dateType == 'event')}">--------</span>
+                <!-- Event display -->
+
+                <!-- Transport Date display -->
+                <div th:unless="${'event' == date.dateType}" class="d-flex flex-column">
+
+                    <!-- Div for buttons to change driver status on current date -->
+                    <div class="row h-25" data-driver-showable-icon="data-driver-showable-icon" th:id="${'driver_icon_row_' + driver.id}">
+
+                        <!-- Assistance div -->
+                        <div class="col-2">
+
+                            <!-- Assistance icon -->
+                            <i
+                                    th:data-d="${driver.id}"
+                                    th:data-y="${date.id}"
+                                    th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
+                                    th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
+                                    role="button"
+                                    th:class="'fas fa-car ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
+                                                                'text-primary' : 'text-muted'}"
+                            ></i>
+                            <!-- Assistance icon -->
+
+                        </div>
+                        <!-- Assistance div -->
+
+                        <!-- Communication icon div -->
+                        <div class="col-2">
+                            <!-- Communication icon -->
+                            <i
+                                    th:class="
+                                                            'fas fa-exclamation-circle ' +
+                                                            ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
+                                                                (
+                                                                    involvedCommunications.get(date.id) != null and
+                                                                    involvedCommunications.get(date.id).get(driver.id) != null and
+                                                                    involvedCommunications.get(date.id).get(driver.id) == false
+                                                                ) ?
+                                                                    'text-muted' : 'text-danger'}"
+                                    role="button"
+                                    th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
+                                    th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
+                                    th:data-driver-th="${driver.id} + '_th'"
+                                    th:data-date-td="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
+                            ></i>
+                            <!-- Communication icon -->
+                        </div>
+                        <!-- Communication icon div -->
+
+                    </div>
+                    <!-- Div for buttons to change driver status on current date -->
+
+                    <!-- Div to show passengers assigned to transport on current date -->
+                    <div class="row h-75 mt-1 ml-0">
+                        <div class="col" th:id="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}">
+                            <div class="row"
+                                 th:each="passenger : ${allDriverTransportsFromTemplate.get(driver.id).get(date.id)}"
+                                 th:id="'driverPassengersOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
+                                 th:if="${(allDriverTransportsFromTemplate.get(driver.id) != null)
+                                                                and (allDriverTransportsFromTemplate.get(driver.id).get(date.id) != null)}"
+                            >
+                                <!-- Passenger name -->
+                                <span
+                                        th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                        th:data-span-id="${driver.id}"
+                                        th:data-p-span-id="${passenger.id}"
+                                        th:id="'p' + ${passenger.id} + 'd' + ${driver.id} + 't' + ${date.id}">
+                                                            <!-- TODO when UUIDs are implemented, change the id and remove the p, d, t... -->
+                                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Div to show passengers assigned to transport on current date -->
+
+                </div>
+                <!-- Transport Date display -->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/own/templatecrud/driver/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
+<script src="/js/own/templatecrud/driver/TemplateCrudDriverCommunications.js" type="module"></script>
