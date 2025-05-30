@@ -12,7 +12,7 @@ $(function() {
 });
 
 const SELECTORS = {
-    DRIVER_PASSENGERS_DIV: (newDriverId, transportDateId) => `div[id*=driverPassengersOnDate_${newDriverId}_${transportDateId}_${passengerId}]`,
+    DRIVER_PASSENGERS_DIV: (newDriverId, transportDateId, passengerId) => `div[id*=driverPassengersOnDate_${newDriverId}_${transportDateId}_${passengerId}]`,
     DRIVER_TRANSPORTS_TABLE_TD: (newDriverId, transportDateId) => `#driverPassengersForDateDiv_${newDriverId}_${transportDateId}`,
     DRIVER_WARNING_ICON: (driverId, transportDateId) => `#d${driverId}t${transportDateId}_date_td .fa-exclamation-circle`,
     PASSENGER_WARNING_ICON: (passengerId, transportDateId) => `#p${passengerId}t${transportDateId}_date_td .fa-exclamation-circle`
@@ -20,7 +20,7 @@ const SELECTORS = {
 
 function getTransportElements(transportDateId, newDriverId, passengerId, previousDriverId = null) {
     const elements = {
-        driverPassengersDivId: $(SELECTORS.DRIVER_PASSENGERS_DIV(newDriverId, transportDateId)),
+        driverPassengersDivId: $(SELECTORS.DRIVER_PASSENGERS_DIV(newDriverId, transportDateId, passengerId)),
         driverTransportsTablePassengerTdToAddSpan: $(SELECTORS.DRIVER_TRANSPORTS_TABLE_TD(newDriverId, transportDateId)),
         newDriverWarningIcon: $(SELECTORS.DRIVER_WARNING_ICON(newDriverId, transportDateId)),
         passengerWarningIcon: $(SELECTORS.PASSENGER_WARNING_ICON(passengerId, transportDateId))
