@@ -3,17 +3,17 @@ import { changeElementClass } from './TemplateCrudCommons.js';
 $(function() {
     $('#passengerTableHideIconsBtn').on('change', function () {
         if (this.checked) {
-            showIcons('div[id*=passenger_icon_row_]');
+            showIcons('[data-passenger-showable-icon]');
         } else {
-            hideIcons('div[id*=passenger_icon_row_]');
+            hideIcons('[data-passenger-showable-icon]');
         }
     });
 
     $('#driverTableHideIconsBtn').on('change', function () {
             if (this.checked) {
-                showIcons('div[id*=driver_icon_row_]');
+                showIcons('[data-driver-showable-icon]');
             } else {
-                hideIcons('div[id*=driver_icon_row_]');
+                hideIcons('[data-driver-showable-icon]');
             }
         });
 });

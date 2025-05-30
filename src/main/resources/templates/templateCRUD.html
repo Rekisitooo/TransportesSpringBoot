@@ -256,7 +256,7 @@
                                             class="text-nowrap"
                                         >
                                             <span th:text="${#messages.msgOrNull(date.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"></span>
-                                                <i class="fas fa-trash text-danger" role="button" data-name="date-delete-icon"
+                                                <i class="fas fa-trash text-danger" role="button" data-name="date-delete-icon" data-passenger-showable-icon="data-passenger-showable-icon"
                                                    th:data-a="${(date.dateType == 'transportDate') ? date.id : ''}"
                                                    th:data-b="${(date.dateType == 'event') ? date.id : ''}"
                                                 ></i>
@@ -278,7 +278,7 @@
                                         >
                                             <!-- Passenger buttons row -->
                                             <div class="d-flex flex-column row">
-                                                <div class="col">
+                                                <div class="col" data-passenger-showable-icon="data-passenger-showable-icon">
 
                                                     <!-- Communication icon -->
                                                     <div class="row">
@@ -312,13 +312,13 @@
                                         <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}"
                                             th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate')
                                                 and (passengersAvailableForDate.get(date.id) == null)) ? 'text-center' : ''}"
-                                            style="height:100px"
                                             th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
                                             th:data-t="${passenger.id}"
                                             th:data-date-id="${date.id}"
                                             th:data-y="'t' + ${date.id}"
                                             th:data-tr-ref="'passenger_row_' + ${passenger.id}"
                                             th:data-driver-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
+                                            data-passenger-td="data-passenger-td"
                                         >
                                             <!-- Event display -->
                                             <span th:if="${(date.dateType == 'event')}">--------</span>
@@ -328,10 +328,10 @@
                                             <th:block th:if="${(date.dateType == 'transportDate')}"
                                                       th:with="passengerAssistance=${passengersAssistanceDates.get(passenger.id)}">
 
-                                                <div class="d-flex flex-column h-100">
+                                                <div class="d-flex flex-column">
 
                                                     <!-- Div for buttons to change passenger status on current date -->
-                                                    <div class="row h-25" th:id="${'passenger_icon_row_' + passenger.id}">
+                                                    <div class="row h-25" data-passenger-showable-icon="data-passenger-showable-icon" th:id="${'passenger_icon_row_' + passenger.id}">
 
                                                         <!-- Needs Transport div (Show if passenger assists) -->
                                                         <div
@@ -412,7 +412,7 @@
                                                             <!-- show only if passenger needs transport -->
                                                             <select name="driverInTransportSelect"
                                                                     th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{templateCRUD.driverFor} + ' ' + ${date.dayOfTheWeekName} + ' ' + ${date.transportDate}"
-                                                                    class="bg-transparent border border-0 w-100"
+                                                                    class="bg-transparent border border-0"
                                                                     th:data-t="${passenger.id}"
                                                                     th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                                                     th:class="${((passengerAssistance != null)
@@ -518,7 +518,7 @@
                                         >
                                             <!-- Driver buttons row -->
                                             <div class="d-flex flex-column row">
-                                                <div class="col">
+                                                <div class="col" data-driver-showable-icon="data-driver-showable-icon">
 
                                                     <!-- Communication icon -->
                                                     <div class="row">
@@ -564,10 +564,10 @@
                                             <!-- Event display -->
 
                                             <!-- Transport Date display -->
-                                            <div th:unless="${'event' == date.dateType}" class="d-flex flex-column h-100">
+                                            <div th:unless="${'event' == date.dateType}" class="d-flex flex-column">
 
                                                 <!-- Div for buttons to change driver status on current date -->
-                                                <div class="row h-25" th:id="${'driver_icon_row_' + driver.id}">
+                                                <div class="row h-25" data-driver-showable-icon="data-driver-showable-icon" th:id="${'driver_icon_row_' + driver.id}">
 
                                                     <!-- Assistance div -->
                                                     <div class="col-2">
