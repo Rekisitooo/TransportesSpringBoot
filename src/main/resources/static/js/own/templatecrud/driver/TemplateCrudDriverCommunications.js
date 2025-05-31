@@ -1,5 +1,5 @@
-import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementClass } from './TemplateCrudCommons.js';
+import { temporalErrorAlert } from '../alert/GenericErrorAlert.js';
+import { changeElementClass } from '../TemplateCrudCommons.js';
 
 $(function() {
     $('#driverTransportsTable i[class*=exclamation-circle]').each(

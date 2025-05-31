@@ -1,9 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const tabButtons = document.querySelectorAll('#templateTabs button[data-bs-toggle="tab"]');
+$(function() {
+    const $tabButtons = $('#templateTabs button[data-bs-toggle="tab"]');
+    const tabButtons = Array.from($tabButtons);
 
     tabButtons.forEach(button => {
-        button.addEventListener('shown.bs.tab', function(event) {
-            const targetTab = event.target.getAttribute('data-bs-target');
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const tab = new bootstrap.Tab(this);
+            tab.show();
         });
     });
 });

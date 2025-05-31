@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Sidebar</title>
-</head>
-<body>
-    <!-- Sidebar -->
-    <ul th:fragment="sidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sidebar</title>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <ul th:fragment="sidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span th:text="#{sidebar.manage}"></span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a href="passenger/Crud" class="collapse-item" th:text="#{sidebar.manage.passengers}"></a>
-                    <a href="driver/Crud" class="collapse-item" th:text="#{sidebar.manage.drivers}"></a>
-                    <a href="weeklyTransportDays/Crud" class="collapse-item" th:text="#{sidebar.manage.weeklyTransports}"></a>
-                    <a href="specialDays/Crud" class="collapse-item" th:text="#{sidebar.manage.specialDays}"></a>
-                    <a href="abscenses/Crud" class="collapse-item" th:text="#{sidebar.manage.abscenses}"></a>
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span th:text="#{sidebar.manage}"></span>
+                </a>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a href="passenger/Crud" class="collapse-item" th:text="#{sidebar.manage.passengers}"></a>
+                        <a href="driver/Crud" class="collapse-item" th:text="#{sidebar.manage.drivers}"></a>
+                        <a href="weeklyTransportDays/Crud" class="collapse-item" th:text="#{sidebar.manage.weeklyTransports}"></a>
+                        <a href="specialDays/Crud" class="collapse-item" th:text="#{sidebar.manage.specialDays}"></a>
+                        <a href="abscenses/Crud" class="collapse-item" th:text="#{sidebar.manage.abscenses}"></a>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
 
-        <!-- Ejemplo de entrada sin dropdown
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="/config" aria-expanded="true">
-                <i class="fas fa-fw fa-cog"></i>
-                <span th:text="#{sidebar.config}"></span>
-            </a>
-        </li>  -->
-    </ul>
-    <!-- End of Sidebar -->
-</body>
+            <!-- Ejemplo de entrada sin dropdown
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/config" aria-expanded="true">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span th:text="#{sidebar.config}"></span>
+                </a>
+            </li>  -->
+        </ul>
+        <!-- End of Sidebar -->
+    </body>
 </html>

@@ -1,5 +1,5 @@
-import { genericErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
+import { genericErrorAlert } from '../alert/GenericErrorAlert.js';
+import { changeElementDisplayNone, changeElementClass } from '../TemplateCrudCommons.js';
 
 function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId) {
     const driverId = data.involvedId;
