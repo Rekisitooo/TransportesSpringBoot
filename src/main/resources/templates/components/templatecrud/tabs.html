@@ -9,16 +9,16 @@
         <ul th:fragment="tabs" class="nav nav-tabs mt-3 mb-4" id="templateTabs" role="tablist" xmlns:th="http://www.w3.org/1999/xhtml">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="template-management-tab" data-bs-toggle="tab"
-                        data-bs-target="#template-management-content" type="button" role="tab"
-                        aria-controls="template-management-content" aria-selected="true">
+                        data-bs-target="#transportsTab" type="button" role="tab"
+                        aria-controls="transportsTab" aria-selected="true">
                     <i class="fas fa-car text-primary"></i>
                     <span th:text="#{templateCRUD.tabs.transports}"></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="new-feature-tab" data-bs-toggle="tab"
-                        data-bs-target="#new-feature-content" type="button" role="tab"
-                        aria-controls="new-feature-content" aria-selected="false">
+                        data-bs-target="#communicationsTab" type="button" role="tab"
+                        aria-controls="communicationsTab" aria-selected="false">
                     <i class="fas fa-exclamation-circle text-danger"></i>
                     <span th:text="#{templateCRUD.tabs.communications}"></span>
                 </button>

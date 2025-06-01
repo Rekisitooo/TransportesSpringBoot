@@ -128,4 +128,20 @@ public final class TemplateController {
         Map<Integer, Map<Integer, Boolean>> involvedCommunications = this.communicationForInvolvedService.getAllNotificationsForTemplate(templateId);
         model.addAttribute("involvedCommunications", involvedCommunications);
     }
+
+    @GetMapping("/openCommunicationsTab")
+    public String openCommunicationsTab(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
+        final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        model.addAttribute("templateDates", templateDates);
+
+        final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
+        final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
+        model.addAttribute("driversFromTemplateList", driversFromTemplateList);
+
+        final DtoPassengerList dtoPassengerList = this.involvedByTemplateService.getAllPassengersFromTemplateForTemplateView(templateId);
+        final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
+        model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
+
+        return "components/templatecrud/communications/communications :: communications";
+    }
 }

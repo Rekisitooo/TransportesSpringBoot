@@ -81,10 +81,10 @@ public class CommunicationForInvolvedService {
     public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
         Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
 
-        List<Object[]> driverNotifications = communicationForInvolvedRepository.findDriverNotificationsByTemplate(templateId);
+        List<Object[]> driverNotifications = this.communicationForInvolvedRepository.findDriverNotificationsByTemplate(templateId);
         processNotifications(driverNotifications, result);
 
-        List<Object[]> passengerNotifications = communicationForInvolvedRepository.findPassengerNotificationsByTemplate(templateId);
+        List<Object[]> passengerNotifications = this.communicationForInvolvedRepository.findPassengerNotificationsByTemplate(templateId);
         processNotifications(passengerNotifications, result);
 
         return result;
@@ -104,5 +104,9 @@ public class CommunicationForInvolvedService {
             final Map<Integer, Boolean> involvedMap = result.computeIfAbsent(transportDateId, k -> new HashMap<>());
             involvedMap.put(involvedId, !hasNotification);
         }
+    }
+
+    public List<CommunicationForInvolved> getAllCommunicationsForTemplate(final String templateId) {
+        return this.communicationForInvolvedRepository.getAllCommunicationsForTemplate(templateId);
     }
 }

@@ -145,16 +145,15 @@
 
                         <!-- Start of Pestañas -->
                         <div class="tab-content mt-3" id="templateTabsContent">
+
                             <!-- Transports Tab -->
-                            <div class="tab-pane fade show active mt-4 ml-4 mr-4" id="template-management-content" role="tabpanel" aria-labelledby="template-management-tab">
-                                <th:block th:insert="~{components/templatecrud/passenger/passengerTransportsTable :: passengerTable}"></th:block>
-                                <th:block th:insert="~{components/templatecrud/driver/driverTransportsTable :: driverTable}"></th:block>
+                            <div class="tab-pane fade show active mt-4 ml-4 mr-4" id="transportsTab" role="tabpanel" aria-labelledby="template-management-tab">
+                                <th:block th:insert="~{components/templatecrud/transports/passenger/passengerTransportsTable :: passengerTable}"></th:block>
+                                <th:block th:insert="~{components/templatecrud/transports/driver/driverTransportsTable :: driverTable}"></th:block>
                             </div>
 
                             <!-- Communications Tab -->
-                            <div class="tab-pane fade mt-4 ml-4 mr-4" id="new-feature-content" role="tabpanel" aria-labelledby="new-feature-tab">
-
-                            </div>
+                            <div class="tab-pane fade mt-4 ml-4 mr-4" id="communicationsTab" role="tabpanel" aria-labelledby="new-feature-tab"></div>
                         </div>
                         <!-- End of Pestañas -->
 

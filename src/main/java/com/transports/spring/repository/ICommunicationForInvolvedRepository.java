@@ -15,7 +15,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
             "   WHERE ftpp.templateCode = :templateId")
-    List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") Integer templateId);
+    List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") String templateId);
 
     @Query("SELECT new CommunicationForInvolved(api.id, api.involvedCommunicatedId, api.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +

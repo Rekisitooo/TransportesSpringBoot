@@ -10,3 +10,17 @@ $(function() {
         });
     });
 });
+
+// Controlador devuelve fragmento
+@GetMapping("/api/tab/usuarios")
+public String getUsuariosTab(Model model) {
+    model.addAttribute("usuarios", usuarioService.findAll());
+    return "fragments/usuarios-tab :: usuariosContent";
+}
+
+
+// Frontend inserta HTML directamente
+$.get('/api/tab/usuarios')
+ .done(function(html) {
+     $('#usuarios').html(html);
+ });
