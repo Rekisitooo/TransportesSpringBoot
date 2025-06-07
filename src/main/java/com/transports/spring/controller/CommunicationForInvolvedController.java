@@ -6,7 +6,6 @@ import com.transports.spring.service.response.ServiceResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class CommunicationForInvolvedController {
     }
 
     @PostMapping("/createCommunication")
-    public ResponseEntity<Object> createDriverCommunication(@RequestBody CommunicationForInvolved body) {
+    public ResponseEntity<Object> createDriverCommunication(@RequestBody CommunicationForInvolved body){
         return this.communicationForInvolvedService.create(body);
     }
 
@@ -48,18 +47,6 @@ public class CommunicationForInvolvedController {
             this.communicationForInvolvedService.deleteCommunicationForDriver(body.getInvolvedCommunicatedId(), body.getTransportDateCode());
         } catch (final Exception e) {
             re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ServiceResponse<>("ok", body));
-        }
-        return re;
-    }
-
-    @GetMapping("/tab/communications/{templateId}")
-    public ResponseEntity<Object> getAllCommunicationsForTemplate(@PathVariable("templateId") String templateId, Model model) {
-        ResponseEntity<Object> re = null;
-        try {
-            List<CommunicationForInvolved> communicationList = this.communicationForInvolvedService.getAllCommunicationsForTemplate(templateId);
-            re = ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationList));
-        } catch (final Exception e) {
-            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ServiceResponse<>("ok", null));
         }
         return re;
     }

@@ -45,7 +45,7 @@ public final class TemplateController {
     }
 
     @GetMapping("/openTemplate")
-    public String getById(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
+    public String openTemplate(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
         this.addDataToTemplateCrud(model, templateId);
 
         return "templateCRUD";
@@ -130,7 +130,7 @@ public final class TemplateController {
     }
 
     @GetMapping("/openCommunicationsTab")
-    public String openCommunicationsTab(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
+    public String openCommunicationsTab(final Model model, @RequestParam (value = "id") final int templateId) {
         final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
@@ -142,6 +142,20 @@ public final class TemplateController {
         final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
 
+        final String templateIdString = String.valueOf(templateId);
+        final Map<Integer, Map<Integer, List<String>>> driverCommunicationsMap = this.communicationForInvolvedService.getDriverCommunicationsMapByTemplate(templateIdString);
+        model.addAttribute("driverCommunicationsMap", driverCommunicationsMap);
+
+        final Map<Integer, Map<Integer, String>> passengerCommunicationsMap = this.communicationForInvolvedService.getPassengerCommunicationsMapByTemplate(templateIdString);
+        model.addAttribute("passengerCommunicationsMap", passengerCommunicationsMap);
+
         return "components/templatecrud/communications/communications :: communications";
+    }
+
+    @GetMapping("/openTransportsTab")
+    public String openTransportsTab(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
+        this.addDataToTemplateCrud(model, templateId);
+
+        return "components/templatecrud/transports/transports :: transports";
     }
 }

@@ -10,12 +10,37 @@ import java.util.List;
 
 public interface ICommunicationForInvolvedRepository extends JpaRepository<CommunicationForInvolved, UUID> {
 
-    @Query("SELECT new CommunicationForInvolved(api.id, api.involvedCommunicatedId, api.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
+    @Query("SELECT " +
+            "   api.involvedCommunicatedId, " +
+            "   api.transportDateCode, " +
+            "   concat(ippdriver.name, ' ', ippdriver.surname)" +
             "FROM CommunicationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
-            "   WHERE ftpp.templateCode = :templateId")
-    List<CommunicationForInvolved> getAllCommunicationsForTemplate(@Param("templateId") String templateId);
+            "   INNER JOIN InvolvedByTemplate ipp" +
+            "       ON ipp.involvedByTemplateKey.involvedCode = api.involvedCommunicatedId" +
+            "   INNER JOIN InvolvedByTemplate ippdriver" +
+            "       ON ippdriver.involvedByTemplateKey.involvedCode = api.driverCode" +
+            "   WHERE " +
+            "       ftpp.templateCode = :templateId" +
+            "       AND ipp.roleCode = 1")
+    List<Object[]> getAllPassengerCommunicationsForTemplate(@Param("templateId") String templateId);
+
+    @Query("SELECT " +
+            "   api.involvedCommunicatedId, " +
+            "   api.transportDateCode, " +
+            "   concat(ipppassenger.name, ' ', ipppassenger.surname)" +
+            "FROM CommunicationForInvolved api " +
+            "   INNER JOIN TransportDateByTemplate ftpp " +
+            "       ON ftpp.id = api.transportDateCode" +
+            "   INNER JOIN InvolvedByTemplate ipp" +
+            "       ON ipp.involvedByTemplateKey.involvedCode = api.involvedCommunicatedId" +
+            "   INNER JOIN InvolvedByTemplate ipppassenger" +
+            "       ON ipppassenger.involvedByTemplateKey.involvedCode = api.passengerCode" +
+            "   WHERE " +
+            "       ftpp.templateCode = :templateId" +
+            "       AND ipp.roleCode = 2")
+    List<Object[]> getAllDriverCommunicationsForTemplate(@Param("templateId") String templateId);
 
     @Query("SELECT new CommunicationForInvolved(api.id, api.involvedCommunicatedId, api.transportDateCode, api.driverCode, api.passengerCode, api.communicationDate) " +
             "FROM CommunicationForInvolved api " +
@@ -51,7 +76,8 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "   t.transportKey.driverId, " +
             "   CASE " +
             "       WHEN apiDriver.id IS NOT NULL THEN true " +
-            "       ELSE false END " +
+            "       ELSE false " +
+            "   END " +
             "      FROM Transport t " +
             "           LEFT JOIN CommunicationForInvolved apiDriver " +
             "               ON (apiDriver.transportDateCode = t.transportKey.transportDateId " +
@@ -59,14 +85,15 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId " +
             "       WHERE td.id = :templateId")
-    List<Object[]> findDriverNotificationsByTemplate(@Param("templateId") Integer templateId);
+    List<Object[]> getDriverCommunicationsByTemplate(@Param("templateId") Integer templateId);
 
     @Query("SELECT " +
             "   t.transportKey.transportDateId, " +
             "   t.transportKey.passengerId, " +
             "   CASE " +
             "       WHEN apiPassenger.id IS NOT NULL THEN true " +
-            "       ELSE false END" +
+            "       ELSE false " +
+            "   END" +
             "      FROM Transport t" +
             "           LEFT JOIN CommunicationForInvolved apiPassenger" +
             "               ON (apiPassenger.transportDateCode = t.transportKey.transportDateId" +
@@ -74,5 +101,5 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId" +
             "       WHERE td.id = :templateId")
-    List<Object[]> findPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);
+    List<Object[]> getPassengerCommunicationsByTemplate(@Param("templateId") Integer templateId);
 }

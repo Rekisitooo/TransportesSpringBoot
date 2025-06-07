@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,31 +20,6 @@ public class CommunicationForInvolvedService {
 
     public CommunicationForInvolvedService(ICommunicationForInvolvedRepository communicationForInvolvedRepository) {
         this.communicationForInvolvedRepository = communicationForInvolvedRepository;
-    }
-
-    /**
-     * Returns all the communications for a template.
-     * @param templateId
-     * @return Map<dateId, Map<InvolvedId, CommunicationForInvolved>>
-     */
-    public Map<Integer, Map<Integer, CommunicationForInvolved>> getAllCommunicationsForTemplate (final Integer templateId) {
-        final Map<Integer, Map<Integer, CommunicationForInvolved>> commmunicationsMap = new HashMap<>();
-        final List<CommunicationForInvolved> allCommunicationsForTemplate = this.communicationForInvolvedRepository.getAllCommunicationsForTemplate(templateId);
-
-        for (final CommunicationForInvolved communicationForInvolved : allCommunicationsForTemplate) {
-            final Map<Integer, CommunicationForInvolved> communicationForInvolvedMap = new HashMap<>();
-
-            final Map<Integer, CommunicationForInvolved> communicationForInvolvedForDateMap = commmunicationsMap.get(communicationForInvolved.getTransportDateCode());
-            if (communicationForInvolvedForDateMap == null) {
-                communicationForInvolvedMap.put(communicationForInvolved.getInvolvedCommunicatedId(), communicationForInvolved);
-                commmunicationsMap.put(communicationForInvolved.getTransportDateCode(), communicationForInvolvedMap);
-            } else {
-                communicationForInvolvedForDateMap.put(communicationForInvolved.getInvolvedCommunicatedId(), communicationForInvolved);
-            }
-
-        }
-
-        return commmunicationsMap;
     }
 
     public List<CommunicationForInvolved> getCommunicationForInvolvedInDate (final String transportDate, final String involvedId) {
@@ -81,10 +57,10 @@ public class CommunicationForInvolvedService {
     public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
         Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
 
-        List<Object[]> driverNotifications = this.communicationForInvolvedRepository.findDriverNotificationsByTemplate(templateId);
+        List<Object[]> driverNotifications = this.communicationForInvolvedRepository.getDriverCommunicationsByTemplate(templateId);
         processNotifications(driverNotifications, result);
 
-        List<Object[]> passengerNotifications = this.communicationForInvolvedRepository.findPassengerNotificationsByTemplate(templateId);
+        List<Object[]> passengerNotifications = this.communicationForInvolvedRepository.getPassengerCommunicationsByTemplate(templateId);
         processNotifications(passengerNotifications, result);
 
         return result;
@@ -95,7 +71,7 @@ public class CommunicationForInvolvedService {
      * @param notifications List of notifications to process.
      * @param result Map to update with the processed notifications.
      */
-    private void processNotifications(List<Object[]> notifications, Map<Integer, Map<Integer, Boolean>> result) {
+    private static void processNotifications(List<Object[]> notifications, Map<Integer, Map<Integer, Boolean>> result) {
         for (final Object[] row : notifications) {
             final Integer transportDateId = (Integer) row[0];
             final Integer involvedId = (Integer) row[1];
@@ -106,7 +82,83 @@ public class CommunicationForInvolvedService {
         }
     }
 
-    public List<CommunicationForInvolved> getAllCommunicationsForTemplate(final String templateId) {
-        return this.communicationForInvolvedRepository.getAllCommunicationsForTemplate(templateId);
+    /**
+     * Returns a map with passenger transport assignments for a template.
+     * @param templateId consulted template
+     * @return Map<passengerId, Map<transportDateId, driverName>>
+     */
+    public Map<Integer, Map<Integer, String>> getPassengerCommunicationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, String>> passengerCommunicationsMap = new HashMap<>();
+
+        final List<Object[]> allPassengerCommunicationsForTemplate =
+                this.communicationForInvolvedRepository.getAllPassengerCommunicationsForTemplate(templateId);
+
+        for (final Object[] row : allPassengerCommunicationsForTemplate) {
+            final Integer passengerId = (Integer) row[0]; // involvedCommunicatedId
+            final Integer transportDateId = (Integer) row[1]; // transportDateCode
+            final String driverName = (String) row[2]; // driver name + surname
+
+            // Skip if there is no driver assigned
+            if (driverName == null) {
+                continue;
+            }
+
+            // Get or create the transport map for this passenger
+            Map<Integer, String> passengerTransports = passengerCommunicationsMap.get(passengerId);
+            if (passengerTransports == null) {
+                passengerTransports = new HashMap<>();
+                passengerCommunicationsMap.put(passengerId, passengerTransports);
+            }
+
+            // Add the transport assignment (transportDateId -> driverName)
+            passengerTransports.put(transportDateId, driverName);
+        }
+
+        return passengerCommunicationsMap;
+    }
+
+
+    /**
+     * Returns a map with driver transport assignments for a template.
+     * @param templateId consulted template
+     * @return Map<driverId, Map<transportDateId, List<passengerName>>>
+     */
+    public Map<Integer, Map<Integer, List<String>>> getDriverCommunicationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, List<String>>> driverCommunicationsMap = new HashMap<>();
+
+        final List<Object[]> allDriverCommunicationsForTemplate =
+                this.communicationForInvolvedRepository.getAllDriverCommunicationsForTemplate(templateId);
+
+        for (final Object[] row : allDriverCommunicationsForTemplate) {
+            final Integer driverId = (Integer) row[0]; // involvedCommunicatedId
+            final Integer transportDateId = (Integer) row[1]; // transportDateCode
+            final String passengerName = (String) row[2]; // passenger name + surname
+
+            // Skip if there are no passengers assigned to driver
+            if (passengerName == null) {
+                continue;
+            }
+
+            // Get or create the transport map for this driver
+            Map<Integer, List<String>> driverTransports = driverCommunicationsMap.get(driverId);
+            if (driverTransports == null) {
+                driverTransports = new HashMap<>();
+                driverCommunicationsMap.put(driverId, driverTransports);
+            }
+
+            // Get or create the passenger list for this transport date
+            List<String> passengerList = driverTransports.get(transportDateId);
+            if (passengerList == null) {
+                passengerList = new ArrayList<>();
+                driverTransports.put(transportDateId, passengerList);
+            }
+
+            // Add the passenger name to the list if not already present
+            if (!passengerList.contains(passengerName)) {
+                passengerList.add(passengerName);
+            }
+        }
+
+        return driverCommunicationsMap;
     }
 }

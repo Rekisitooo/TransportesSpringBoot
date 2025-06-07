@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
-        <title>Crus Tabs</title>
+        <title>Template Crud Tabs</title>
         <link href="/css/own/templatecrud/tabs/templateCrudTabs.css" rel="stylesheet">
     </head>
     <body>
@@ -10,7 +10,7 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="template-management-tab" data-bs-toggle="tab"
                         data-bs-target="#transportsTab" type="button" role="tab"
-                        aria-controls="transportsTab" aria-selected="true">
+                        aria-controls="transportsTab" aria-selected="true" data-call="TransportsTab">
                     <i class="fas fa-car text-primary"></i>
                     <span th:text="#{templateCRUD.tabs.transports}"></span>
                 </button>
@@ -18,7 +18,7 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="new-feature-tab" data-bs-toggle="tab"
                         data-bs-target="#communicationsTab" type="button" role="tab"
-                        aria-controls="communicationsTab" aria-selected="false">
+                        aria-controls="communicationsTab" aria-selected="false" data-call="CommunicationsTab">
                     <i class="fas fa-exclamation-circle text-danger"></i>
                     <span th:text="#{templateCRUD.tabs.communications}"></span>
                 </button>

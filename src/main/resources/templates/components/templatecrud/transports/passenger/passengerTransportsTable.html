@@ -1,6 +1,6 @@
-<div th:fragment="passengerTable" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:fragment="passengerTable" xmlns:th="http://www.w3.org/1999/xhtml" data-hideable="hiddeable">
     <h2 th:text="#{templateCRUD.transportsForPassengerTableTitle}" class="mt-2 mb-2"></h2>
-    <th:block th:insert="~{components/templatecrud/passenger/showPassengerTablesEditIcons :: showPassengerIconsCheckbox}">  </th:block>
+    <th:block th:insert="~{components/templatecrud/transports/passenger/showPassengerTablesEditIcons :: showPassengerIconsCheckbox}">  </th:block>
 
     <table class="table table-striped table-bordered shadow-lg w-100" id="passengerTransportsTable" cellspacing="0">
         <thead class="bg-light">

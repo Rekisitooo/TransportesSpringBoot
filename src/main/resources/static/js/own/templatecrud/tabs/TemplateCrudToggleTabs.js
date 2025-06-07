@@ -5,22 +5,23 @@ $(function() {
     tabButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault();
+            $('[data-hideable]').remove();
+            const tabName = $(this).attr('aria-controls');
+            const templateId = $('#templateTitle').attr('data-template-id');
+            const dataCall = $(this).attr('data-call');
+            insertTabHTML('/template/open' + dataCall + '?id=' + templateId, tabName);
+
             const tab = new bootstrap.Tab(this);
             tab.show();
         });
     });
 });
 
-// Controlador devuelve fragmento
-@GetMapping("/api/tab/usuarios")
-public String getUsuariosTab(Model model) {
-    model.addAttribute("usuarios", usuarioService.findAll());
-    return "fragments/usuarios-tab :: usuariosContent";
+async function insertTabHTML(urlCall, tabName) {
+    const response =
+        await $.ajax({
+            type: 'GET',
+            url: urlCall
+        });
+    $('#' + tabName).html(response);
 }
-
-
-// Frontend inserta HTML directamente
-$.get('/api/tab/usuarios')
- .done(function(html) {
-     $('#usuarios').html(html);
- });

@@ -125,7 +125,7 @@
                         <div class="container-fluid mt-4">
                             <div class="row">
                                 <div class="col">
-                                    <h1 class="text-dark mb-3" th:text="${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
+                                    <h1 class="text-dark mb-3" id="templateTitle" th:data-template-id="${templateId}" th:text="${#messages.msgOrNull(templateMonth)} + ' - ' + ${templateYear}"></h1>
                                 </div>
                                 <div class="col">
                                     <div class="d-sm-flex align-items-center justify-content-end">
@@ -148,8 +148,7 @@
 
                             <!-- Transports Tab -->
                             <div class="tab-pane fade show active mt-4 ml-4 mr-4" id="transportsTab" role="tabpanel" aria-labelledby="template-management-tab">
-                                <th:block th:insert="~{components/templatecrud/transports/passenger/passengerTransportsTable :: passengerTable}"></th:block>
-                                <th:block th:insert="~{components/templatecrud/transports/driver/driverTransportsTable :: driverTable}"></th:block>
+                                <th:block th:insert="~{components/templatecrud/transports/transports :: transports}"></th:block>
                             </div>
 
                             <!-- Communications Tab -->
