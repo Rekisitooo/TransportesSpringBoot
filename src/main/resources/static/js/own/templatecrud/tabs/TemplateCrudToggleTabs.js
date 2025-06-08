@@ -1,3 +1,5 @@
+import { changeElementClass } from '../TemplateCrudCommons.js';
+
 $(function() {
     const $tabButtons = $('#templateTabs button[data-bs-toggle="tab"]');
     const tabButtons = Array.from($tabButtons);
@@ -5,14 +7,36 @@ $(function() {
     tabButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault();
-            $('[data-hideable]').remove();
+
+            // hides the tab content of the tab unselected
+            $('[data-hideable]').each(function() {
+                let elementClass = changeElementClass($(this), 'd-none', 'd-block');
+                $(this).attr('class', elementClass);
+            });
+
             const tabName = $(this).attr('aria-controls');
-            const templateId = $('#templateTitle').attr('data-template-id');
-            const dataCall = $(this).attr('data-call');
-            insertTabHTML('/template/open' + dataCall + '?id=' + templateId, tabName);
+            const tabElementsToShow = $('[data-tab = ' + tabName + ']');
+
+            // elements haven't been loaded yet
+            if (tabElementsToShow?.length !== 2) {
+                const templateId = $('#templateTitle').attr('data-template-id');
+                const dataCall = $(this).attr('data-call');
+                insertTabHTML('/template/open' + dataCall + '?id=' + templateId, tabName);
+            } else {
+                tabElementsToShow.each(function() {
+                   let elementClass = changeElementClass($(this), 'd-block', 'd-none');
+                   $(this).attr('class', elementClass);
+               });
+            }
 
             const tab = new bootstrap.Tab(this);
             tab.show();
+
+            $('[data-tabs="generalTabs"]').each(function() {
+                $(this).removeClass('show active');
+            });
+
+            $('#' + tabName).addClass('show active');
         });
     });
 });

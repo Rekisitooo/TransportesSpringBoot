@@ -1,5 +1,5 @@
 <!-- Drivers table -->
-<div th:fragment="driverTable" xmlns:th="http://www.w3.org/1999/xhtml" data-hideable="hiddeable">
+<div th:fragment="driverTable" class="d-block" xmlns:th="http://www.w3.org/1999/xhtml" data-hideable="hiddeable" data-tab="transportsTab">
     <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-2"></h2>
     <th:block th:insert="~{components/templatecrud/transports/driver/showDriverTablesEditIcons :: showDriverIconsCheckbox}">  </th:block>
 
