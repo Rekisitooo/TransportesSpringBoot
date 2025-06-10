@@ -96,11 +96,10 @@ public class CommunicationForInvolvedService {
         for (final Object[] row : allPassengerCommunicationsForTemplate) {
             final Integer passengerId = (Integer) row[0]; // involvedCommunicatedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
-            final String driverName = (String) row[2]; // driver name + surname
+            String driverName = (String) row[2]; // driver name + surname
 
-            // Skip if there is no driver assigned
             if (driverName == null) {
-                continue;
+                driverName = "";
             }
 
             // Get or create the transport map for this passenger
@@ -132,11 +131,10 @@ public class CommunicationForInvolvedService {
         for (final Object[] row : allDriverCommunicationsForTemplate) {
             final Integer driverId = (Integer) row[0]; // involvedCommunicatedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
-            final String passengerName = (String) row[2]; // passenger name + surname
+            String passengerName = (String) row[2]; // passenger name + surname
 
-            // Skip if there are no passengers assigned to driver
             if (passengerName == null) {
-                continue;
+                passengerName = "";
             }
 
             // Get or create the transport map for this driver

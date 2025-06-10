@@ -1,6 +1,6 @@
 <!-- Drivers table -->
 <div th:fragment="driverTable" class="d-block" xmlns:th="http://www.w3.org/1999/xhtml" data-hideable="hiddeable" data-tab="communicationsTab">
-    <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-2"></h2>
+    <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-4"></h2>
 
     <table class="table table-striped table-bordered shadow-lg" id="driverCommunicationsTable" width="100%" cellspacing="0">
         <thead class="bg-light">
@@ -33,8 +33,6 @@
                     th:data-driver-id="${driver.id}"
                     class="text-nowrap text-left"
                     style="cursor:move"
-                    draggable="true"
-                    data-draggable="involvedTable"
             >
                 <div class="row mt-1">
                     <div class="col">
@@ -51,7 +49,7 @@
                 th:class="'text-nowrap' + ${(date.dateType != 'transportDate') ? ' text-center' : ''}"
             >
                 <!-- Event display -->
-                <span th:if="${(date.dateType == 'event')}" th:text="${date.eventName}"></span>
+                <span th:if="${(date.dateType == 'event')}" class="text-danger">------------</span>
 
                 <!-- Transport Date display -->
                 <div th:unless="${'event' == date.dateType}" class="d-flex flex-column">
