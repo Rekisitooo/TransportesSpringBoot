@@ -43,7 +43,6 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
         const passengerCommunicationCreationResponse = await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
         if (passengerCommunicationCreationResponse) {
             await changeAlertIconToCommunicated(alertIcon);
-            await addPassengerCommunicationToCommunicationsTable(response.data, alertIcon);
         }
     } catch (error) {
         showCommunicationError();
