@@ -95,12 +95,12 @@
 
                             <!-- Assistance icon -->
                             <i
-                                    th:data-d="${driver.id}"
-                                    th:data-y="${date.id}"
-                                    th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
-                                    th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
-                                    role="button"
-                                    th:class="'fas fa-car ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
+                                th:data-d="${driver.id}"
+                                th:data-y="${date.id}"
+                                th:data-driver-assist="${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 0 : 1}"
+                                th:title="#{templateCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"
+                                role="button"
+                                th:class="'fas fa-car ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
                                                                 'text-primary' : 'text-muted'}"
                             ></i>
                             <!-- Assistance icon -->
@@ -109,23 +109,25 @@
                         <!-- Assistance div -->
 
                         <!-- Communication icon div -->
-                        <div class="col-2">
+                        <div th:id="${'communicationIcon_' + driver.id + '_' + date.id}"
+                             th:class="'col-2 ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
+                                             '' : 'd-none'}">
                             <!-- Communication icon -->
                             <i
-                                    th:class="
-                                                            'fas fa-exclamation-circle ' +
-                                                            ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
-                                                                (
-                                                                    involvedCommunications.get(date.id) != null and
-                                                                    involvedCommunications.get(date.id).get(driver.id) != null and
-                                                                    involvedCommunications.get(date.id).get(driver.id) == false
-                                                                ) ?
-                                                                    'text-muted' : 'text-danger'}"
-                                    role="button"
-                                    th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
-                                    th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
-                                    th:data-driver-th="${driver.id} + '_th'"
-                                    th:data-date-td="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
+                                th:class="
+                                    'fas fa-exclamation-circle ' +
+                                    ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
+                                        (
+                                            involvedCommunications.get(date.id) != null and
+                                            involvedCommunications.get(date.id).get(driver.id) != null and
+                                            involvedCommunications.get(date.id).get(driver.id) == false
+                                        ) ?
+                                            'text-muted' : 'text-danger'}"
+                                role="button"
+                                th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
+                                th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
+                                th:data-driver-th="${driver.id} + '_th'"
+                                th:data-date-td="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
                             ></i>
                             <!-- Communication icon -->
                         </div>

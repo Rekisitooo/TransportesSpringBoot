@@ -142,7 +142,7 @@
                                 <!-- Assistance div -->
 
                                 <!-- Communication icon div -->
-                                <div class="col-2"
+                                <div
                                      th:id="${'communicationIcon_' + passenger.id + '_' + date.id}"
                                      th:class="'col-2 ' + ${((passengerAssistance != null) and
                                                     (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ?
@@ -238,4 +238,5 @@
 
     <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerCommunications.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/TemplateCrudNeedsTransport.js" type="module"></script>
 </div>

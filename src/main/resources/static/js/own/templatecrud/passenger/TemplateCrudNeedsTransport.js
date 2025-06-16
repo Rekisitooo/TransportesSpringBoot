@@ -1,5 +1,5 @@
-import { genericErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementDisplayNone, changeElementClass } from './TemplateCrudCommons.js';
+import { genericErrorAlert } from '../alert/GenericErrorAlert.js';
+import { changeElementDisplayNone, changeElementClass } from '../TemplateCrudCommons.js';
 
 function changePassengerNeedForTransport() {
     const needTransportIcon = $(this);
