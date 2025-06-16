@@ -33,10 +33,11 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
             //cambia el icono de asistencia
             changeAssistanceIcon(0, assistanceIcon, 'text-primary', 'text-muted');
 
-            //si está el combo de conductores, lo quitas
+            //si está el combo de conductores, se quita y se cambian los name para que hagan create
             if (!driverSelectForPassenger.attr('class').includes('d-none')) {
                  changeElementDisplay(driverSelectForPassenger);
                  driverSelectForPassenger.val('');
+                 driverSelectForPassenger.children('option:not(:first)').attr('name', 'c');
             }
 
             //si está el 'no necesita transporte' se lo quitas

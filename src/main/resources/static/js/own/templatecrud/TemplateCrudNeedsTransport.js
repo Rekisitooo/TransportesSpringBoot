@@ -34,7 +34,9 @@ function changePassengerNeedForTransport() {
                 const driverForPassengerSelectOptionElements = $(passengerCellContentSelectSelector + ' option');
                 driverForPassengerSelectOptionElements.each(
                     function () {
-                        $(this).attr('name', 'c');
+                        if ($(this).attr('name') !== 'd') {
+                            $(this).attr('name', 'c');
+                        }
                     }
                 );
 
