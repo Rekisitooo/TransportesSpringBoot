@@ -142,21 +142,25 @@
                                 <!-- Assistance div -->
 
                                 <!-- Communication icon div -->
-                                <div class="col-2">
+                                <div class="col-2"
+                                     th:id="${'communicationIcon_' + passenger.id + '_' + date.id}"
+                                     th:class="'col-2 ' + ${((passengerAssistance != null) and
+                                                    (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ?
+                                                        'd-none' : ''}">
                                     <!-- Communication icon -->
                                     <i
-                                            th:class="'fas fa-exclamation-circle ' +
-                                                ${(passengerAssistance != null
-                                                    and passengerAssistance.get(date.transportDate.toLocalDate()) != null
-                                                    and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
-                                                    or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null) ?
-                                                        'd-none' :
-                                                            (
-                                                                involvedCommunications.get(date.id) != null
-                                                                and involvedCommunications.get(date.id).get(passenger.id) != null
-                                                                and involvedCommunications.get(date.id).get(passenger.id) == true ?
-                                                                    'text-muted' : 'text-danger'
-                                                            )}"
+                                        th:class="'fas fa-exclamation-circle ' +
+                                            ${(passengerAssistance != null
+                                                and passengerAssistance.get(date.transportDate.toLocalDate()) != null
+                                                and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
+                                                or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null) ?
+                                                    'd-none' :
+                                                        (
+                                                            involvedCommunications.get(date.id) != null
+                                                            and involvedCommunications.get(date.id).get(passenger.id) != null
+                                                            and involvedCommunications.get(date.id).get(passenger.id) == true ?
+                                                                'text-muted' : 'text-danger'
+                                                        )}"
                                         role="button"
                                         th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                         th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -231,7 +235,7 @@
             </tr>
         </tbody>
     </table>
-</div>
 
-<script src="/js/own/templatecrud/passenger/TemplateCrudPassengerCommunications.js" type="module"></script>
-<script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
+</div>

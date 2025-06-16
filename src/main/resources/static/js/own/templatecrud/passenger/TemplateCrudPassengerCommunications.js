@@ -40,8 +40,11 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
             driverCode: driverSelectedId,
             passengerCode: data.involvedCommunicatedId
         };
-        await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
-
+        const passengerCommunicationCreationResponse = await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
+        if (passengerCommunicationCreationResponse) {
+            await changeAlertIconToCommunicated(alertIcon);
+            await addPassengerCommunicationToCommunicationsTable(response.data, alertIcon);
+        }
     } catch (error) {
         showCommunicationError();
     }
@@ -56,10 +59,11 @@ async function ajaxRequestCreatePassengerCommunication(data, alertIcon) {
             data: JSON.stringify(data),
             dataType: 'json'
         });
-        changeAlertIconToCommunicated(alertIcon);
+        return true;
 
     } catch (error) {
         showCommunicationError();
+        return false;
     }
 }
 
