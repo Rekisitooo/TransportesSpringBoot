@@ -26,53 +26,52 @@
             <!-- Days of the week row -->
         </thead>
         <tbody>
-        <tr th:each="driver : ${driversFromTemplateList}" th:data-driver:="${driver.id}" th:id="'driver_row_' + ${driver.id}">
-            <!-- Driver Name cell -->
-            <td
-                    th:id="${driver.id} + '_th'"
-                    th:data-driver-id="${driver.id}"
-                    class="text-nowrap text-left"
-                    style="cursor:move"
-            >
-                <div class="row mt-1">
-                    <div class="col">
-                        <span th:text="${driver.name} + ' ' + ${driver.surname}"></span>
-                    </div>
-                </div>
-            </td>
-            <!-- Driver Name cell -->
-
-            <!-- Driver Data -->
-            <td th:each="date : ${templateDates}"
-                th:data-date-id="${date.id}"
-                th:id="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
-                th:class="'text-nowrap' + ${(date.dateType != 'transportDate') ? ' text-center' : ''}"
-            >
-                <!-- Event display -->
-                <span th:if="${(date.dateType == 'event')}" class="text-danger">------------</span>
-
-                <!-- Transport Date display -->
-                <div th:unless="${'event' == date.dateType}" class="d-flex flex-column">
-
-                    <!-- Div to show drivers assigned to transport on current date -->
-                    <div class="row h-75 mt-1 ml-0">
-                        <div class="col" th:id="'driverPassengersCommunicationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
-                             th:if="${driverCommunicationsMap.get(driver.id) != null}">
-                            <div class="row"
-                                 th:each="passengerName : ${driverCommunicationsMap.get(driver.id).get(date.id)}"
-                                 th:id="'driverPassengersCommunicationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
-                            >
-                                <!-- Passenger name -->
-                                <span th:text="${passengerFullName}"></span>
-                            </div>
+            <tr th:each="driver : ${driversFromTemplateList}" th:data-driver:="${driver.id}" th:id="'driver_row_' + ${driver.id}">
+                <!-- Driver Name cell -->
+                <td
+                        th:id="${driver.id} + '_th'"
+                        th:data-driver-id="${driver.id}"
+                        class="text-nowrap text-left"
+                >
+                    <div class="row mt-1">
+                        <div class="col">
+                            <span th:text="${driver.name} + ' ' + ${driver.surname}"></span>
                         </div>
                     </div>
-                    <!-- Div to show passengers assigned to transport on current date -->
+                </td>
+                <!-- Driver Name cell -->
 
-                </div>
-                <!-- Transport Date display -->
-            </td>
-        </tr>
+                <!-- Driver Data -->
+                <td th:each="date : ${templateDates}"
+                    th:data-date-id="${date.id}"
+                    th:id="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
+                    th:class="'text-nowrap' + ${(date.dateType != 'transportDate') ? ' text-center' : ''}"
+                >
+                    <!-- Event display -->
+                    <span th:if="${(date.dateType == 'event')}" class="text-danger">------------</span>
+
+                    <!-- Transport Date display -->
+                    <div th:unless="${'event' == date.dateType}" class="d-flex flex-column">
+
+                        <!-- Div to show drivers assigned to transport on current date -->
+                        <div class="row h-75 mt-1 ml-0">
+                            <div class="col" th:id="'driverPassengersCommunicationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
+                                 th:if="${driverCommunicationsMap.get(driver.id) != null}">
+                                <div class="row"
+                                     th:each="passengerName : ${driverCommunicationsMap.get(driver.id).get(date.id)}"
+                                     th:id="'driverPassengersCommunicationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
+                                >
+                                    <!-- Passenger name -->
+                                    <span th:text="${passengerFullName}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Div to show passengers assigned to transport on current date -->
+
+                    </div>
+                    <!-- Transport Date display -->
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
