@@ -84,7 +84,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "               AND apiDriver.involvedCommunicatedId = t.transportKey.driverId) " +
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId " +
-            "       WHERE td.id = :templateId")
+            "       WHERE td.templateCode = :templateId")
     List<Object[]> getDriverCommunicationsByTemplate(@Param("templateId") Integer templateId);
 
     @Query("SELECT " +
@@ -100,6 +100,6 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "               AND apiPassenger.involvedCommunicatedId = t.transportKey.passengerId)" +
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId" +
-            "       WHERE td.id = :templateId")
+            "       WHERE td.templateCode = :templateId")
     List<Object[]> getPassengerCommunicationsByTemplate(@Param("templateId") Integer templateId);
 }

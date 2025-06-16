@@ -119,8 +119,7 @@
                                     ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
                                         (
                                             involvedCommunications.get(date.id) != null and
-                                            involvedCommunications.get(date.id).get(driver.id) != null and
-                                            involvedCommunications.get(date.id).get(driver.id) == false
+                                            involvedCommunications.get(date.id).get(driver.id) != null
                                         ) ?
                                             'text-muted' : 'text-danger'}"
                                 role="button"
