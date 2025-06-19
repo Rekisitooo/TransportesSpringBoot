@@ -1,10 +1,10 @@
-import { temporalErrorAlert } from '../alert/GenericErrorAlert.js';
-import { changeElementClass } from '../TemplateCrudCommons.js';
+import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
+import { changeElementClass } from '../../TemplateCrudCommons.js';
 
 $(function() {
     $('#passengerTransportsTable i[class*=exclamation-circle]').each(
         function () {
-            $(this).on('click', function() {
+            $(this).on('click', async function() {
                 const passengerThId = $(this).attr('data-passenger-th');
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
@@ -17,7 +17,14 @@ $(function() {
                     const driverSelect = $('#' + driverSelectSelector);
                     const driverSelectedId = driverSelect.val();
 
-                    communicateTransport(data, $(this), driverSelectedId);
+                    if (driverSelectedId === undefined || driverSelectedId === '') {
+                        await ajaxRequestDeletePassengerCommunication(data);
+                        $(this).addClass('d-none');
+
+                    } else {
+                        communicateTransport(data, $(this), driverSelectedId);
+                    }
+
                 } else if ($(this).attr('class').includes('text-muted')) {
                     deletePassengerCommunication(data, $(this));
                 }
@@ -25,6 +32,24 @@ $(function() {
         }
     );
 });
+
+async function communicateTransport(data, alertIcon, driverSelectedId) {
+    try {
+        const response = await $.ajax({
+            type: 'GET',
+            url: '/involvedCommunication/get',
+            data: data
+        });
+
+        if (!response?.data?.length) {
+            await createPassengerCommunication(data, alertIcon, driverSelectedId);
+        } else {
+            await updatePassengerCommunications(response.data[0], alertIcon, driverSelectedId);
+        }
+    } catch (error) {
+        showCommunicationError();
+    }
+}
 
 async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
     try {
@@ -102,24 +127,6 @@ async function updatePassengerCommunications(data, alertIcon, driverSelectedId) 
 
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
-    }
-}
-
-async function communicateTransport(data, alertIcon, driverSelectedId) {
-    try {
-        const response = await $.ajax({
-            type: 'GET',
-            url: '/involvedCommunication/get',
-            data: data
-        });
-
-        if (!response?.data?.length) {
-            await createPassengerCommunication(data, alertIcon, driverSelectedId);
-        } else {
-            await updatePassengerCommunications(response.data[0], alertIcon, driverSelectedId);
-        }
-    } catch (error) {
-        showCommunicationError();
     }
 }
 

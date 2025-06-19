@@ -1,10 +1,10 @@
-import { temporalErrorAlert } from '../alert/GenericErrorAlert.js';
-import { changeElementClass } from '../TemplateCrudCommons.js';
+import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
+import { changeElementClass } from '../../TemplateCrudCommons.js';
 
 $(function() {
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
         function () {
-            $(this).on('click', function() {
+            $(this).on('click', async function() {
                 const driverThId = $(this).attr('data-driver-th');
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
@@ -13,7 +13,15 @@ $(function() {
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
-                    communicateTransport(data, $(this));
+                    const driverCommunications = await getDriverCommunications(data);
+                    if (!driverCommunications?.data?.length) {
+                        await ajaxRequestDeleteDriverCommunication(data);
+                        $(this).addClass('d-none');
+
+                    } else {
+                        communicateTransport(data, $(this));
+                    }
+
                 } else if ($(this).attr('class').includes('text-muted')) {
                     deleteDriverCommunication(data, $(this));
                 }
@@ -111,11 +119,7 @@ async function updateDriverCommunications(data, alertIcon) {
 
 async function communicateTransport(data, alertIcon) {
     try {
-        const response = await $.ajax({
-            type: 'GET',
-            url: '/involvedCommunication/get',
-            data: data
-        });
+        const response = await getDriverCommunications(data);
 
         if (!response?.data?.length) {
             await createDriverCommunications(data, alertIcon);
@@ -139,4 +143,12 @@ function changeAlertIconToCommunicated(alertIcon) {
 function changeAlertIconToNotCommunicated(alertIcon) {
     let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-muted');
     alertIcon.attr('class', communicateTransportIconClass);
+}
+
+async function getDriverCommunications(data) {
+    return await $.ajax({
+        type: 'GET',
+        url: '/involvedCommunication/get',
+        data: data
+    });
 }

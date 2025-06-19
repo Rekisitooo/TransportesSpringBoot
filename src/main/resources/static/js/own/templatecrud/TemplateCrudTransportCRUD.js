@@ -1,5 +1,7 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementClass } from './TemplateCrudCommons.js';
+import { changePassengerComIconOnTransportDeletion, changePassengerComIconOnPassengerSelection} from './passenger/communication/TCPassengerComIconChanger.js';
+import { changeDriverComIconOnTransportDeletion, changeDriverComIconOnDriverSelection } from './driver/communication/TCDriverComIconChanger.js';
 
 $(function() {
     $('select[name="driverInTransportSelect"]').each(function() {
@@ -33,97 +35,6 @@ function getTransportElements(transportDateId, newDriverId, passengerId, previou
 }
 
 /**
- * Updates the warning icon visibility for a passenger based on their communication status.
- * Shows the icon if the driver has changed or if there are no communications.
- * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} passengerWarningIcon - The warning icon element for the passenger
- */
-async function updatePassengerWarningIcon(data, passengerWarningIcon) {
-    try {
-        const passengerCommunicationResponse = 
-            await $.ajax({
-                type: 'GET',
-                url: '/involvedCommunication/get',
-                data: {
-                    involvedCommunicatedId: data.t,
-                    transportDateCode: data.d
-                }
-            });
-
-        let passengerWarningIconClass;
-
-        //if there were communications
-        if (passengerCommunicationResponse?.data?.length) {
-            const previousDriverId = passengerCommunicationResponse.data[0].driverId;
-            const hasChangedDriver = previousDriverId !== data.p;
-
-            let passengerWarningIconClass;
-            if (hasChangedDriver) { //icon turns red
-                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
-                passengerWarningIcon.attr('class', passengerWarningIconClass);
-            } else { //icon turns blue
-                passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-muted', 'text-danger');
-                passengerWarningIcon.attr('class', passengerWarningIconClass);
-            }
-        } else {
-            //if no communications, icon turns red
-            passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
-            passengerWarningIcon.attr('class', passengerWarningIconClass);
-        }
-
-
-    } catch (error) { //if error, icon turns red
-        passengerWarningIconClass = changeElementClass(passengerWarningIcon, 'text-danger', 'text-muted');
-        passengerWarningIcon.attr('class', passengerWarningIconClass);
-    }
-}
-
-/**
- * Updates the warning icon visibility for a driver based on their communication status.
- * Shows the icon if the passenger is not in the driver's communications or if there are no communications.
- * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} driverWarningIcon - The warning icon element for the driver
- */
-async function updateDriverWarningIcon(data, driverWarningIcon) {
-    try {
-        const driverCommunicationResponse =
-        await $.ajax({
-            type: 'GET',
-            url: '/involvedCommunication/get',
-            data: {
-                involvedCommunicatedId: data.p,
-                transportDateCode: data.d
-            }
-        });
-
-        let driverWarningIconClass;
-
-        //if there were communications
-        if (driverCommunicationResponse?.data?.length) {
-            const hasPassengerInCommunications = driverCommunicationResponse.data.some(
-                communication => communication.passengerId === data.t
-            );
-
-            if (hasPassengerInCommunications) { // icon turns blue
-                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-muted', 'text-danger');
-                driverWarningIcon.attr('class', driverWarningIconClass);
-            } else { // icon turns red
-                driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
-                driverWarningIcon.attr('class', driverWarningIconClass);
-            }
-        } else {
-             // if no communications, icon turns red
-            driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
-            driverWarningIcon.attr('class', driverWarningIconClass);
-        }
-
-    } catch (error) { // if error, icon turns red
-        driverWarningIconClass = changeElementClass(driverWarningIcon, 'text-danger', 'text-muted');
-        driverWarningIcon.attr('class', driverWarningIconClass);
-    }
-}
-
-/**
  * Updates the driver assigned to a transport and manages related UI updates.
  * @param {number} transportDateId - ID of the transport date
  * @param {number} newDriverId - ID of the new driver
@@ -152,13 +63,13 @@ async function updateDriverInTransportOption(transportDateId, newDriverId, passe
         if (response?.status === 'ok') {
             addPassengerInDriverTransportsTable(transportDateId, newDriverId, passengerId, passengerFullName, elements.driverTransportsTablePassengerTdToAddSpan);
             deletePassengerInDriverTransportsTable(transportDateId, passengerId, response.data.p, elements.driverPassengersDivId);
-            await updatePassengerWarningIcon(data, elements.passengerWarningIcon);
-            await updateDriverWarningIcon(data, elements.newDriverWarningIcon);
+            await changePassengerComIconOnPassengerSelection(data, elements.passengerWarningIcon);
+            await changeDriverComIconOnDriverSelection(data, elements.newDriverWarningIcon);
 
             //if there was a previous driver, update its warning icon
             if (previousDriverId && previousDriverId > 0 && elements.previousDriverWarningIcon?.length) {
                 const previousDriverData = { ...data, p: previousDriverId };
-                await updateDriverWarningIcon(previousDriverData, elements.previousDriverWarningIcon);
+                await changeDriverComIconOnDriverSelection(previousDriverData, elements.previousDriverWarningIcon);
             }
 
         } else {
@@ -199,8 +110,8 @@ async function createTransportOption(transportDateId, newDriverId, passengerId, 
         actualSelect.children().attr("name", "u");
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
-            updatePassengerWarningIcon(data, elements.passengerWarningIcon),
-            updateDriverWarningIcon(data, elements.newDriverWarningIcon)
+            changePassengerComIconOnPassengerSelection(data, elements.passengerWarningIcon),
+            changeDriverComIconOnDriverSelection(data, elements.newDriverWarningIcon)
         ]);
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al asignar el conductor.");
@@ -236,8 +147,8 @@ async function deleteTransportOption(transportDateId, passengerId, previousDrive
         actualSelect.children().attr("name", "c");
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
-            updatePassengerWarningIcon(data, elements.passengerWarningIcon),
-            updateDriverWarningIcon(data, elements.newDriverWarningIcon)
+            changeDriverComIconOnTransportDeletion(data, elements.newDriverWarningIcon),
+            changePassengerComIconOnTransportDeletion(data, elements.newDriverWarningIcon),
         ]);
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al desasignar el conductor.");

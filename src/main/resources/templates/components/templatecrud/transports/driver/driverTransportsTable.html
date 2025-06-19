@@ -116,12 +116,17 @@
                             <i
                                 th:class="
                                     'fas fa-exclamation-circle ' +
-                                    ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null) ? 'd-none' :
-                                        (
-                                            involvedCommunications.get(date.id) != null and
-                                            involvedCommunications.get(date.id).get(driver.id) != null
-                                        ) ?
-                                            'text-muted' : 'text-danger'}"
+                                    ${  (
+                                            (driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null)
+                                            or (allDriverTransportsFromTemplate.get(driver.id).get(date.id) == null)
+                                        )?
+                                            'd-none' :
+                                                (
+                                                    involvedCommunications.get(date.id) != null and
+                                                    involvedCommunications.get(date.id).get(driver.id) != null
+                                                ) ?
+                                                    'text-muted' : 'text-danger'
+                                    }"
                                 role="button"
                                 th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
                                 th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
@@ -165,5 +170,5 @@
     </table>
 
     <script src="/js/own/templatecrud/driver/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
-    <script src="/js/own/templatecrud/driver/TemplateCrudDriverCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/driver/communication/TemplateCrudDriverCommunications.js" type="module"></script>
 </div>

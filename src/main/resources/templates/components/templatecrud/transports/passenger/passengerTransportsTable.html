@@ -150,10 +150,12 @@
                                     <!-- Communication icon -->
                                     <i
                                         th:class="'fas fa-exclamation-circle ' +
-                                            ${(passengerAssistance != null
+                                            ${(
+                                                passengerAssistance != null
                                                 and passengerAssistance.get(date.transportDate.toLocalDate()) != null
-                                                and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
-                                                or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null) ?
+                                                    and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
+                                                or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null)
+                                                or (allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null)  ?
                                                     'd-none' :
                                                         (
                                                             involvedCommunications.get(date.id) != null
@@ -235,7 +237,7 @@
         </tbody>
     </table>
 
-    <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/communication/TemplateCrudPassengerCommunications.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudNeedsTransport.js" type="module"></script>
 </div>
