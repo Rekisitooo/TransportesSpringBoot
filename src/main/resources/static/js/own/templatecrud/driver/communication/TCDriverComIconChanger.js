@@ -42,7 +42,7 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
 
     } else {
         const driverCommunications = await getDriverCommunications(data);
-        const hasPassengerInCommunications = driverCommunicationResponse.data.some(
+        const hasPassengerInCommunications = driverCommunications.data.some(
             communication => communication.passengerId === data.t
         );
 

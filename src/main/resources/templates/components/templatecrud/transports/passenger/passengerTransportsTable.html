@@ -159,7 +159,8 @@
                                                     'd-none' :
                                                         (
                                                             involvedCommunications.get(date.id) != null
-                                                            and involvedCommunications.get(date.id).get(passenger.id) != null ?
+                                                            and involvedCommunications.get(date.id).get(passenger.id) != null
+                                                            and involvedCommunications.get(date.id).get(passenger.id) == false ?
                                                                 'text-muted' : 'text-danger'
                                                         )}"
                                         role="button"

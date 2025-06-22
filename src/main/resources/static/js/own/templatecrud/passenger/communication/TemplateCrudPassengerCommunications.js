@@ -55,8 +55,11 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/t/getPassengersForDriverByDate',
-            data: data
+            url: '/t/getDriverForPassengerByDate',
+            data : {
+                transportDateId: data.transportDateCode,
+                passengerId: data.involvedCommunicatedId
+            }
         });
 
         const newData = {
@@ -65,6 +68,7 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
             driverCode: driverSelectedId,
             passengerCode: data.involvedCommunicatedId
         };
+
         const passengerCommunicationCreationResponse = await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
         if (passengerCommunicationCreationResponse) {
             await changeAlertIconToCommunicated(alertIcon);

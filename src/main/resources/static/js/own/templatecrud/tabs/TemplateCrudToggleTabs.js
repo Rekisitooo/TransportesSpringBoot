@@ -1,4 +1,5 @@
 import { changeElementClass } from '../TemplateCrudCommons.js';
+import { temporalErrorAlert } from '../alert/GenericErrorAlert.js';
 
 $(function() {
     const $tabButtons = $('#templateTabs button[data-bs-toggle="tab"]');
@@ -41,10 +42,14 @@ $(function() {
 });
 
 async function insertTabHTML(urlCall, tabName) {
-    const response =
-        await $.ajax({
-            type: 'GET',
-            url: urlCall
-        });
-    $('#' + tabName).html(response);
+    try {
+        const response =
+            await $.ajax({
+                type: 'GET',
+                url: urlCall
+            });
+        $('#' + tabName).html(response);
+    } catch (error) {
+        temporalErrorAlert("Ha ocurrido un error al recuperar la información de la pestaña.");
+    }
 }

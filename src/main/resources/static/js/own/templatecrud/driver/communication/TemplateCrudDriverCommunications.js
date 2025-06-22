@@ -14,7 +14,7 @@ $(function() {
 
                 if ($(this).attr('class').includes('text-danger')) {
                     const driverCommunications = await getDriverCommunications(data);
-                    if (!driverCommunications?.data?.length) {
+                    if (driverCommunications?.data?.length) {
                         await ajaxRequestDeleteDriverCommunication(data);
                         $(this).addClass('d-none');
 
@@ -34,7 +34,7 @@ async function createDriverCommunications(data, alertIcon) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/t/getDriverForPassengerByDate',
+            url: '/t/getPassengersForDriverByDate',
             data: data
         });
 

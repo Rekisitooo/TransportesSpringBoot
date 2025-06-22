@@ -71,7 +71,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "       AND api.involvedCommunicatedId = :involvedId")
     void deleteCommunicationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
 
-    @Query("SELECT " +
+    @Query("SELECT DISTINCT" +
             "   t.transportKey.transportDateId, " +
             "   t.transportKey.driverId, " +
             "   CASE " +
@@ -87,7 +87,7 @@ public interface ICommunicationForInvolvedRepository extends JpaRepository<Commu
             "       WHERE td.templateCode = :templateId")
     List<Object[]> getDriverCommunicationsByTemplate(@Param("templateId") Integer templateId);
 
-    @Query("SELECT " +
+    @Query("SELECT DISTINCT" +
             "   t.transportKey.transportDateId, " +
             "   t.transportKey.passengerId, " +
             "   CASE " +

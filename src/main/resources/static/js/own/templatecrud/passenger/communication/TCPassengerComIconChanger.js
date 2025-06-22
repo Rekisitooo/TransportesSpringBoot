@@ -31,11 +31,11 @@ export async function changePassengerComIconOnPassengerSelection(data, passenger
 
     } else {
         const passengerCommunications = await getPassengerCommunications(data);
-        const hasPassengerInCommunications = passengerCommunicationResponse.data.some(
+        const hasPassengerInCommunications = passengerCommunications.data.some(
             communication => communication.driverId === data.p
         );
 
-        if (passengerCommunicationResponse.data.driverId === data.p) {
+        if (passengerCommunications.data.driverId === data.p) {
             passengerCommunicationIcon.removeClass("text-danger");
             passengerCommunicationIcon.addClass("text-muted");
         } else {
