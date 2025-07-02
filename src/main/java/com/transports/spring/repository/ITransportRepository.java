@@ -14,29 +14,29 @@ import java.util.List;
 @Repository
 public interface ITransportRepository extends JpaRepository<Transport, Integer> {
 
-    @Query("SELECT " +
-            "   new Transport(passenger.id, driver.id, ftpp.id)" +
+    @Query("SELECT DISTINCT" +
+            "   new Transport(passenger.involvedByTemplateKey.involvedCode, driver.involvedByTemplateKey.involvedCode, ftpp.id)" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN Involved passenger" +
-            "               ON t.transportKey.passengerId = passenger.id" +
-            "           INNER JOIN Involved driver" +
-            "               ON t.transportKey.driverId = driver.id" +
+            "           INNER JOIN InvolvedByTemplate passenger" +
+            "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate driver" +
+            "               ON t.transportKey.driverId = driver.involvedByTemplateKey.involvedCode" +
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +
             "           AND ftpp.templateCode = :templateId")
     List<Transport> findAllPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
 
-    @Query("SELECT " +
-            "   new Transport(passenger.id, driver.id, ftpp.id)" +
+    @Query("SELECT DISTINCT" +
+            "   new Transport(passenger.involvedByTemplateKey.involvedCode, driver.involvedByTemplateKey.involvedCode, ftpp.id)" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN Involved passenger" +
-            "               ON t.transportKey.passengerId = passenger.id" +
-            "           INNER JOIN Involved driver" +
-            "               ON t.transportKey.driverId = driver.id" +
+            "           INNER JOIN InvolvedByTemplate passenger" +
+            "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate driver" +
+            "               ON t.transportKey.driverId = driver.involvedByTemplateKey.involvedCode" +
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
             "           AND ftpp.templateCode = :templateId")
@@ -51,24 +51,14 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     void updateDriverInTransport(@Param("transportDateId") int transportDateId, @Param("driverId") int driverId, @Param("passengerId") int passengerId);
 
     @Query("SELECT " +
-            "   new Transport(t.transportKey.passengerId, driver.id, t.transportKey.transportDateId)" +
-            "       FROM Transport t" +
-            "           INNER JOIN Involved driver" +
-            "               ON t.transportKey.driverId = driver.id" +
-            "       WHERE " +
-            "           t.transportKey.passengerId = :passengerId" +
-            "           AND t.transportKey.transportDateId = :transportDateId")
-    Transport findTransportByPassenger(@Param("transportDateId") int transportDateId, @Param("passengerId") int passengerId);
-
-    @Query("SELECT " +
             "   new com.transports.spring.dto.DtoInvolvedTransport(ftpp.transportDate, ftpp.eventName, CONCAT(passenger.name, ' ', passenger.surname))" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN Involved passenger" +
-            "               ON t.transportKey.passengerId = passenger.id" +
-            "           INNER JOIN Involved driver" +
-            "               ON t.transportKey.driverId = driver.id" +
+            "           INNER JOIN InvolvedByTemplate passenger" +
+            "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate driver" +
+            "               ON t.transportKey.driverId = driver.involvedByTemplateKey.involvedCode" +
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
             "           AND ftpp.templateCode = :templateId")
@@ -79,10 +69,10 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
-            "           INNER JOIN Involved passenger" +
-            "               ON t.transportKey.passengerId = passenger.id" +
-            "           INNER JOIN Involved driver" +
-            "               ON t.transportKey.driverId = driver.id" +
+            "           INNER JOIN InvolvedByTemplate passenger" +
+            "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
+            "           INNER JOIN InvolvedByTemplate driver" +
+            "               ON t.transportKey.driverId = driver.involvedByTemplateKey.involvedCode" +
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +
             "           AND ftpp.templateCode = :templateId" +
@@ -104,10 +94,11 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           AND t.transportKey.transportDateId = :transportDateId")
     List<DtoGetPassengersForDriverByDate> getPassengersForDriverByDate(@Param("transportDateId") Integer transportDateId, @Param("driverId") Integer driverId);
 
-    @Query("SELECT new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
-        "   FROM Transport t" +
-        "       WHERE " +
-        "           t.transportKey.transportDateId = :transportDateId" +
-        "           AND t.transportKey.passengerId = :passengerId")
-    Transport findDriverForPassengerByDate(@Param("transportDateId") Integer transportDateId, @Param("passengerId") Integer passengerId);
+    @Query("SELECT " +
+            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
+            "       FROM Transport t" +
+            "       WHERE " +
+            "           t.transportKey.passengerId = :passengerId" +
+            "           AND t.transportKey.transportDateId = :transportDateId")
+    Transport findTransportByPassenger(@Param("transportDateId") Integer transportDateId, @Param("passengerId") Integer passengerId);
 }

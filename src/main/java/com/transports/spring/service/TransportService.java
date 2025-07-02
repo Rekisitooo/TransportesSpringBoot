@@ -143,7 +143,7 @@ public class TransportService {
     }
 
     public Transport getDriverForPassengerByDate(Integer transportDateId, Integer passengerId) {
-        return this.transportByTemplateRepository.findDriverForPassengerByDate(transportDateId, passengerId);
+        return this.transportByTemplateRepository.findTransportByPassenger(transportDateId, passengerId);
     }
 
     //TODO check driver has available seats
