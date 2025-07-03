@@ -57,12 +57,12 @@
                         <div class="row h-75 mt-1 ml-0">
                             <div class="col" th:id="'driverPassengersCommunicationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
                                  th:if="${driverCommunicationsMap.get(driver.id) != null}">
+
                                 <div class="row"
                                      th:each="passengerName : ${driverCommunicationsMap.get(driver.id).get(date.id)}"
-                                     th:id="'driverPassengersCommunicationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger.id}"
+                                     th:id="'driverPassengersCommunicationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passengerName}"
                                 >
-                                    <!-- Passenger name -->
-                                    <span th:text="${passengerFullName}"></span>
+                                    <span th:text="${passengerName}"></span>
                                 </div>
                             </div>
                         </div>
