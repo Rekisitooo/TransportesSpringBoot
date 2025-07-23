@@ -1,7 +1,7 @@
 const rows = document.querySelectorAll('tbody tr');
 
 rows.forEach(row => {
-    const dragHandle = row.querySelector('th[data-draggable=involvedTable]');
+    const dragHandle = row.querySelector('td[data-draggable=involvedTable]');
 
     dragHandle.addEventListener('dragstart', () => {
         row.classList.add('dragging');
