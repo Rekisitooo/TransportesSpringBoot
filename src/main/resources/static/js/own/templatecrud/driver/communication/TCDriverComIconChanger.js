@@ -17,12 +17,12 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
 
             if (hasInvolvedId) {
                 driverCommunicationIcon.removeClass("text-danger");
-                driverCommunicationIcon.addClass("text-muted");
+                driverCommunicationIcon.addClass("text-primary");
             }
         }
 
-    } else if (driverCommunicationIcon.hasClass("text-muted")) {
-        driverCommunicationIcon.removeClass("alert-muted");
+    } else if (driverCommunicationIcon.hasClass("text-primary")) {
+        driverCommunicationIcon.removeClass("text-primary");
         driverCommunicationIcon.addClass("text-danger");
     }
 
@@ -37,7 +37,7 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
 export async function changeDriverComIconOnDriverSelection(data, driverCommunicationIcon) {
     if (driverCommunicationIcon.hasClass("d-none")) {
         driverCommunicationIcon.removeClass("d-none");
-        driverCommunicationIcon.removeClass("text-muted");
+        driverCommunicationIcon.removeClass("text-primary");
         driverCommunicationIcon.addClass("text-danger");
 
     } else {
@@ -48,9 +48,9 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
 
         if (!hasPassengerInCommunications) {
             driverCommunicationIcon.removeClass("text-danger");
-            driverCommunicationIcon.addClass("text-muted");
+            driverCommunicationIcon.addClass("text-primary");
         } else {
-            driverCommunicationIcon.removeClass("text-muted");
+            driverCommunicationIcon.removeClass("text-primary");
             driverCommunicationIcon.addClass("text-danger");
         }
     }

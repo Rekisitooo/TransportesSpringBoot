@@ -11,8 +11,8 @@ export async function changePassengerComIconOnTransportDeletion(data, passengerC
             passengerCommunicationIcon.addClass("d-none");
         }
 
-    } else if (passengerCommunicationIcon.hasClass("text-muted")) {
-        passengerCommunicationIcon.removeClass("alert-muted");
+    } else if (passengerCommunicationIcon.hasClass("text-primary")) {
+        passengerCommunicationIcon.removeClass("text-primary");
         passengerCommunicationIcon.addClass("text-danger");
     }
 }
@@ -26,7 +26,7 @@ export async function changePassengerComIconOnTransportDeletion(data, passengerC
 export async function changePassengerComIconOnPassengerSelection(data, passengerCommunicationIcon) {
     if (passengerCommunicationIcon.hasClass("d-none")) {
         passengerCommunicationIcon.removeClass("d-none");
-        passengerCommunicationIcon.removeClass("text-muted");
+        passengerCommunicationIcon.removeClass("text-primary");
         passengerCommunicationIcon.addClass("text-danger");
 
     } else {
@@ -37,9 +37,9 @@ export async function changePassengerComIconOnPassengerSelection(data, passenger
 
         if (passengerCommunications.data.driverId === data.p) {
             passengerCommunicationIcon.removeClass("text-danger");
-            passengerCommunicationIcon.addClass("text-muted");
+            passengerCommunicationIcon.addClass("text-primary");
         } else {
-            passengerCommunicationIcon.removeClass("text-muted");
+            passengerCommunicationIcon.removeClass("text-primary");
             passengerCommunicationIcon.addClass("text-danger");
         }
     }

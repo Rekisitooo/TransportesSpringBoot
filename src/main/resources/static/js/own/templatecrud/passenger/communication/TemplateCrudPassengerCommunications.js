@@ -25,7 +25,7 @@ $(function() {
                         communicateTransport(data, $(this), driverSelectedId);
                     }
 
-                } else if ($(this).attr('class').includes('text-muted')) {
+                } else if ($(this).attr('class').includes('text-primary')) {
                     deletePassengerCommunication(data, $(this));
                 }
             });
@@ -139,11 +139,44 @@ function showCommunicationError() {
 }
 
 function changeAlertIconToCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-muted', 'text-danger');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
 function changeAlertIconToNotCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-muted');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', communicateTransportIconClass);
 }
+
+function showHideCheckAllCommunicationsButton () {
+    const passengerTransportsTableRowList = $('#passengerTransportsTable tr');
+
+    for (let i = 0; i < passengerTransportsTableRowList.length; i++) {
+        const passengerId = $(passengerTransportsTableRowList[i]);
+        const checkAllCommunicationsButton = $(checkAllCommunicationsButtonList[i]);
+        const checkAllCommunicationsButtonClass = checkAllCommunicationsButton.attr('class');
+        if (checkAllCommunicationsButtonClass.includes('d-none')) {
+            checkAllCommunicationsButton.removeClass('d-none');
+        } else {
+            checkAllCommunicationsButton.addClass('d-none');
+        }
+    }
+
+    const checkAllCommunicationsButtonClass = checkAllCommunicationsButton.attr('class');
+    if (checkAllCommunicationsButtonClass.includes('d-none')) {
+        checkAllCommunicationsButton.removeClass('d-none');
+    } else {
+        checkAllCommunicationsButton.addClass('d-none');
+    }
+}
+
+Gestionar si se muestran todos los botones al cargar
+	for fila pasajeros
+		pilla el id del pasajero
+		guarda el botón general
+		consulta los botones
+		si no se muestra ninguno o están todos en azul
+			se esconde
+		si no
+			se muestra
+	fin for

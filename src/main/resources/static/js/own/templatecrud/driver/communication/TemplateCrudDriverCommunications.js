@@ -22,7 +22,7 @@ $(function() {
                         communicateTransport(data, $(this));
                     }
 
-                } else if ($(this).attr('class').includes('text-muted')) {
+                } else if ($(this).attr('class').includes('text-primary')) {
                     deleteDriverCommunication(data, $(this));
                 }
             });
@@ -136,12 +136,12 @@ function showCommunicationError() {
 }
 
 function changeAlertIconToCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-muted', 'text-danger');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
 function changeAlertIconToNotCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-muted');
+    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
