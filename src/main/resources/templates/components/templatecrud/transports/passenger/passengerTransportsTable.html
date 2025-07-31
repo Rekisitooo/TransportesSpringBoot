@@ -51,7 +51,7 @@
                                 <div class="col" th:id="'markAsCommunicatedPassegerButtonDiv_' + ${passenger.id}">
                                     <i class="fas fa-exclamation-circle text-danger"
                                        role="button"
-                                       th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllCommunicationsEnd}"
+                                       th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEnd}"
                                        th:id="'markAsCommunicatedPassegerButton_' + ${passenger.id}"
                                     ></i>
                                 </div>
@@ -159,9 +159,9 @@
                                                 or (allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null)  ?
                                                     'd-none' :
                                                         (
-                                                            involvedCommunications.get(date.id) != null
-                                                            and involvedCommunications.get(date.id).get(passenger.id) != null
-                                                            and involvedCommunications.get(date.id).get(passenger.id) == false ?
+                                                            involvedNotifications.get(date.id) != null
+                                                            and involvedNotifications.get(date.id).get(passenger.id) != null
+                                                            and involvedNotifications.get(date.id).get(passenger.id) == false ?
                                                                 'text-primary' : 'text-danger'
                                                         )}"
                                         role="button"
@@ -239,7 +239,7 @@
         </tbody>
     </table>
 
-    <script src="/js/own/templatecrud/passenger/notification/TemplateCrudPassengerCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/notification/TemplateCrudPassengerNotifications.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudNeedsTransport.js" type="module"></script>
 </div>

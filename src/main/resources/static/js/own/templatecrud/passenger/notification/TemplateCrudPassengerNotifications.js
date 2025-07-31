@@ -44,7 +44,7 @@ async function communicateTransport(data, alertIcon, driverSelectedId) {
         if (!response?.data?.length) {
             await createPassengerCommunication(data, alertIcon, driverSelectedId);
         } else {
-            await updatePassengerCommunications(response.data[0], alertIcon, driverSelectedId);
+            await updatePassengerNotifications(response.data[0], alertIcon, driverSelectedId);
         }
     } catch (error) {
         showCommunicationError();
@@ -118,7 +118,7 @@ async function deletePassengerCommunication(data, alertIcon) {
     }
 }
 
-async function updatePassengerCommunications(data, alertIcon, driverSelectedId) {
+async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
     try {
         const isCommunicationDeleted = await ajaxRequestDeletePassengerCommunication(data);
         if (isCommunicationDeleted) {
@@ -152,26 +152,26 @@ function changeAlertIconToNotCommunicated(alertIcon) {
  * When transports table is loaded, it shows the notification icon to check
  * every whether
  */
-function showHideCheckAllCommunicationsButton() {
+function showHideCheckAllNotificationsButton() {
     const passengerTransportsTableRowList = $('#passengerTransportsTable tr');
 
     for (let i = 0; i < passengerTransportsTableRowList.length; i++) {
         const passengerId = $(passengerTransportsTableRowList[i]);
-        const checkAllCommunicationsButton = $(checkAllCommunicationsButtonList[i]);
-        const checkAllCommunicationsButtonClass = checkAllCommunicationsButton.attr('class');
+        const checkAllNotificationsButton = $(checkAllNotificationsButtonList[i]);
+        const checkAllNotificationsButtonClass = checkAllNotificationsButton.attr('class');
 
-        if (checkAllCommunicationsButtonClass.includes('d-none')) {
-            checkAllCommunicationsButton.removeClass('d-none');
+        if (checkAllNotificationsButtonClass.includes('d-none')) {
+            checkAllNotificationsButton.removeClass('d-none');
         } else {
-            checkAllCommunicationsButton.addClass('d-none');
+            checkAllNotificationsButton.addClass('d-none');
         }
     }
 
-    const checkAllCommunicationsButtonClass = checkAllCommunicationsButton.attr('class');
-    if (checkAllCommunicationsButtonClass.includes('d-none')) {
-        checkAllCommunicationsButton.removeClass('d-none');
+    const checkAllNotificationsButtonClass = checkAllNotificationsButton.attr('class');
+    if (checkAllNotificationsButtonClass.includes('d-none')) {
+        checkAllNotificationsButton.removeClass('d-none');
     } else {
-        checkAllCommunicationsButton.addClass('d-none');
+        checkAllNotificationsButton.addClass('d-none');
     }
 }
 

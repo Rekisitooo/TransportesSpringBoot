@@ -109,7 +109,7 @@ async function updateDriverNotifications(data, alertIcon) {
                 transportDateCode: data.transportDateCode,
                 involvedCommunicatedId: data.involvedCommunicatedId
             };
-            await createDriverCommunications(notification, alertIcon);
+            await createDriverNotifications(notification, alertIcon);
         }
         
     } catch (error) {
@@ -119,12 +119,12 @@ async function updateDriverNotifications(data, alertIcon) {
 
 async function communicateTransport(data, alertIcon) {
     try {
-        const response = await getDriverCommunications(data);
+        const response = await getDriverNotifications(data);
 
         if (!response?.data?.length) {
-            await createDriverCommunications(data, alertIcon);
+            await createDriverNotifications(data, alertIcon);
         } else {
-            await updateDriverCommunications(response.data[0], alertIcon);
+            await updateDriverNotifications(response.data[0], alertIcon);
         }
     } catch (error) {
         showCommunicationError();
@@ -145,7 +145,7 @@ function changeAlertIconToNotCommunicated(alertIcon) {
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
-async function getDriverCommunications(data) {
+async function getDriverNotifications(data) {
     return await $.ajax({
         type: 'GET',
         url: '/involvedCommunication/get',

@@ -122,13 +122,13 @@ public class NotificationForInvolvedService {
      * @param templateId consulted template
      * @return Map<driverId, Map<transportDateId, List<passengerName>>>
      */
-    public Map<Integer, Map<Integer, List<String>>> getDriverCommunicationsMapByTemplate(final String templateId) {
-        final Map<Integer, Map<Integer, List<String>>> driverCommunicationsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, List<String>>> getDriverNotificationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, List<String>>> driverNotificationsMap = new HashMap<>();
 
-        final List<Object[]> allDriverCommunicationsForTemplate =
-                this.notificationForInvolvedRepository.getAllDriverCommunicationsForTemplate(templateId);
+        final List<Object[]> allDriverNotificationsForTemplate =
+                this.notificationForInvolvedRepository.getAllDriverNotificationsForTemplate(templateId);
 
-        for (final Object[] row : allDriverCommunicationsForTemplate) {
+        for (final Object[] row : allDriverNotificationsForTemplate) {
             final Integer driverId = (Integer) row[0]; // involvedCommunicatedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
             String passengerName = (String) row[2]; // passenger name + surname
@@ -138,10 +138,10 @@ public class NotificationForInvolvedService {
             }
 
             // Get or create the transport map for this driver
-            Map<Integer, List<String>> driverTransports = driverCommunicationsMap.get(driverId);
+            Map<Integer, List<String>> driverTransports = driverNotificationsMap.get(driverId);
             if (driverTransports == null) {
                 driverTransports = new HashMap<>();
-                driverCommunicationsMap.put(driverId, driverTransports);
+                driverNotificationsMap.put(driverId, driverTransports);
             }
 
             // Get or create the passenger list for this transport date
@@ -157,6 +157,6 @@ public class NotificationForInvolvedService {
             }
         }
 
-        return driverCommunicationsMap;
+        return driverNotificationsMap;
     }
 }

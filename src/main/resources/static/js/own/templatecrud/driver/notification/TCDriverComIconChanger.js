@@ -6,12 +6,12 @@
 export async function changeDriverComIconOnTransportDeletion(data, driverCommunicationIcon) {
 
     if (driverCommunicationIcon.hasClass("text-danger")) {
-        const driverCommunications = await getDriverCommunications(data);
+        const driverNotifications = await getDriverNotifications(data);
 
-        if (!driverCommunications?.data?.length) {
+        if (!driverNotifications?.data?.length) {
             driverCommunicationIcon.addClass("d-none");
         } else {
-            const hasInvolvedId = driverCommunications.data.some(
+            const hasInvolvedId = driverNotifications.data.some(
                 communication => communication.involvedId === data.involvedId
             );
 
@@ -30,7 +30,7 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
 
 /**
  * Updates the warning icon visibility for a driver based on their communication status.
- * Shows the icon if the passenger is not in the driver's communications or if there are no communications.
+ * Shows the icon if the passenger is not in the driver's notifications or if there are no notifications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} driverCommunicationIcon - The warning icon element for the driver
  */
@@ -41,12 +41,12 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
         driverCommunicationIcon.addClass("text-danger");
 
     } else {
-        const driverCommunications = await getDriverCommunications(data);
-        const hasPassengerInCommunications = driverCommunications.data.some(
+        const driverNotifications = await getDriverNotifications(data);
+        const hasPassengerInNotifications = driverNotifications.data.some(
             communication => communication.passengerId === data.t
         );
 
-        if (!hasPassengerInCommunications) {
+        if (!hasPassengerInNotifications) {
             driverCommunicationIcon.removeClass("text-danger");
             driverCommunicationIcon.addClass("text-primary");
         } else {
@@ -57,11 +57,11 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
  }
 
 /**
- * Retrieves the driver communications for a given driver and transport date.
+ * Retrieves the driver notifications for a given driver and transport date.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @returns {Promise<Object|null>} - A promise that resolves to the response data or null if an error occurs.
  */
-async function getDriverCommunications(data) {
+async function getDriverNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',

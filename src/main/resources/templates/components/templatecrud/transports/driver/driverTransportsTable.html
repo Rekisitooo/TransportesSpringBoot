@@ -46,7 +46,7 @@
                             <div class="col" th:id="'markAsCommunicatedDriverButtonDiv_' + ${driver.id}">
                                 <i class="fas fa-exclamation-circle text-danger"
                                    role="button"
-                                   th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllCommunicationsEndda}"
+                                   th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEndda}"
                                    th:id="'markAsCommunicatedDriverButton_' + ${driver.id}"
                                 ></i>
                             </div>
@@ -122,9 +122,9 @@
                                         )?
                                             'd-none' :
                                                 (
-                                                    involvedCommunications.get(date.id) != null and
-                                                    involvedCommunications.get(date.id).get(driver.id) != null
-                                                    and involvedCommunications.get(date.id).get(driver.id) == false
+                                                    involvedNotifications.get(date.id) != null and
+                                                    involvedNotifications.get(date.id).get(driver.id) != null
+                                                    and involvedNotifications.get(date.id).get(driver.id) == false
                                                 ) ?
                                                     'text-primary' : 'text-danger'
                                     }"
@@ -171,5 +171,5 @@
     </table>
 
     <script src="/js/own/templatecrud/driver/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
-    <script src="/js/own/templatecrud/driver/notification/TemplateCrudDriverCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/driver/notification/TemplateCrudDriverNotifications.js" type="module"></script>
 </div>

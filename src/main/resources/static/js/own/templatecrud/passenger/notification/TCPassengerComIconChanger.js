@@ -5,9 +5,9 @@
  */
 export async function changePassengerComIconOnTransportDeletion(data, passengerCommunicationIcon) {
     if (passengerCommunicationIcon.hasClass("text-danger")) {
-        const passengerCommunications = await getPassengerCommunications(data);
+        const passengerNotifications = await getPassengerNotifications(data);
 
-        if (!passengerCommunications?.data?.length) {
+        if (!passengerNotifications?.data?.length) {
             passengerCommunicationIcon.addClass("d-none");
         }
 
@@ -19,7 +19,7 @@ export async function changePassengerComIconOnTransportDeletion(data, passengerC
 
 /**
  * Updates the warning icon visibility for a passenger based on their communication status.
- * Shows the icon if the passenger is not in the passenger's communications or if there are no communications.
+ * Shows the icon if the passenger is not in the passenger's notifications or if there are no notifications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} passengerCommunicationIcon - The warning icon element for the passenger
  */
@@ -30,12 +30,12 @@ export async function changePassengerComIconOnPassengerSelection(data, passenger
         passengerCommunicationIcon.addClass("text-danger");
 
     } else {
-        const passengerCommunications = await getPassengerCommunications(data);
-        const hasPassengerInCommunications = passengerCommunications.data.some(
+        const passengerNotifications = await getPassengerNotifications(data);
+        const hasPassengerInNotifications = passengerNotifications.data.some(
             communication => communication.driverId === data.p
         );
 
-        if (passengerCommunications.data.driverId === data.p) {
+        if (passengerNotifications.data.driverId === data.p) {
             passengerCommunicationIcon.removeClass("text-danger");
             passengerCommunicationIcon.addClass("text-primary");
         } else {
@@ -46,11 +46,11 @@ export async function changePassengerComIconOnPassengerSelection(data, passenger
  }
 
 /**
- * Retrieves the passenger communications for a given passenger and transport date.
+ * Retrieves the passenger notifications for a given passenger and transport date.
  * @param {Object} data - Contains passengerId (t), passengerId (p), and transportDateId (d)
  * @returns {Promise<Object|null>} - A promise that resolves to the response data or null if an error occurs.
  */
-async function getPassengerCommunications(data) {
+async function getPassengerNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',

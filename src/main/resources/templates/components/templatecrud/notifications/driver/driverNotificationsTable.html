@@ -2,7 +2,7 @@
 <div th:fragment="driverTable" class="d-block" xmlns:th="http://www.w3.org/1999/xhtml" data-hideable="hiddeable" data-tab="notificationsTab">
     <h2 th:text="#{templateCRUD.transportsForDriversTableTitle}" class="mt-5 mb-4"></h2>
 
-    <table class="table table-striped table-bordered shadow-lg" id="driverCommunicationsTable" width="100%" cellspacing="0">
+    <table class="table table-striped table-bordered shadow-lg" id="driverNotificationsTable" width="100%" cellspacing="0">
         <thead class="bg-light">
             <!-- Event Name row -->
             <tr>
@@ -55,12 +55,12 @@
 
                         <!-- Div to show drivers assigned to transport on current date -->
                         <div class="row h-75 mt-1 ml-0">
-                            <div class="col" th:id="'driverPassengersCommunicationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
-                                 th:if="${driverCommunicationsMap.get(driver.id) != null}">
+                            <div class="col" th:id="'driverPassengersNotificationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
+                                 th:if="${driverNotificationsMap.get(driver.id) != null}">
 
                                 <div class="row"
-                                     th:each="passengerName : ${driverCommunicationsMap.get(driver.id).get(date.id)}"
-                                     th:id="'driverPassengersCommunicationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passengerName}"
+                                     th:each="passengerName : ${driverNotificationsMap.get(driver.id).get(date.id)}"
+                                     th:id="'driverPassengersNotificationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passengerName}"
                                 >
                                     <span th:text="${passengerName}"></span>
                                 </div>
