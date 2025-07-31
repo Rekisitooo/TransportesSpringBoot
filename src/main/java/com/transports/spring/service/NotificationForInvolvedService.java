@@ -41,7 +41,7 @@ public class NotificationForInvolvedService {
     public ResponseEntity<Object> updateDriver(final NotificationForInvolved notificationForInvolved) {
         this.notificationForInvolvedRepository.updateDriver(
                 notificationForInvolved.getTransportDateCode(),
-                notificationForInvolved.getInvolvedCommunicatedId(),
+                notificationForInvolved.getNotifiedInvolvedId(),
                 notificationForInvolved.getDriverCode(),
                 notificationForInvolved.getPassengerCode()
         );
@@ -94,7 +94,7 @@ public class NotificationForInvolvedService {
                 this.notificationForInvolvedRepository.getAllPassengerNotificationsForTemplate(templateId);
 
         for (final Object[] row : allPassengerNotificationsForTemplate) {
-            final Integer passengerId = (Integer) row[0]; // involvedCommunicatedId
+            final Integer passengerId = (Integer) row[0]; // notifiedInvolvedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
             String driverName = (String) row[2]; // driver name + surname
 
@@ -129,7 +129,7 @@ public class NotificationForInvolvedService {
                 this.notificationForInvolvedRepository.getAllDriverNotificationsForTemplate(templateId);
 
         for (final Object[] row : allDriverNotificationsForTemplate) {
-            final Integer driverId = (Integer) row[0]; // involvedCommunicatedId
+            final Integer driverId = (Integer) row[0]; // notifiedInvolvedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
             String passengerName = (String) row[2]; // passenger name + surname
 

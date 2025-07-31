@@ -20,7 +20,7 @@ public final class NotificationForInvolved {
     private UUID id;
 
     @Column(name = "COD_INVOLUCRADO_AVISADO", nullable = false)
-    private Integer involvedCommunicatedId;
+    private Integer notifiedInvolvedId;
 
     @Column(name = "COD_FECHA_TRANSPORTE", nullable = false)
     private Integer transportDateCode;

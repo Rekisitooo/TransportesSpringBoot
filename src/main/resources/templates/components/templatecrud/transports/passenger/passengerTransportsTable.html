@@ -46,17 +46,17 @@
                     <div class="d-flex flex-column row">
                         <div class="col" data-passenger-showable-icon="data-passenger-showable-icon">
 
-                            <!-- Communication icon -->
+                            <!-- Notification icon -->
                             <div class="row">
-                                <div class="col" th:id="'markAsCommunicatedPassegerButtonDiv_' + ${passenger.id}">
+                                <div class="col" th:id="'markAsNotifiedPassegerButtonDiv_' + ${passenger.id}">
                                     <i class="fas fa-exclamation-circle text-danger"
                                        role="button"
-                                       th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEnd}"
-                                       th:id="'markAsCommunicatedPassegerButton_' + ${passenger.id}"
+                                       th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEnd}"
+                                       th:id="'markAsNotifiedPassegerButton_' + ${passenger.id}"
                                     ></i>
                                 </div>
                             </div>
-                            <!-- Communication icon -->
+                            <!-- Notification icon -->
 
                         </div>
                     </div>
@@ -142,13 +142,13 @@
                                 </div>
                                 <!-- Assistance div -->
 
-                                <!-- Communication icon div -->
+                                <!-- Notification icon div -->
                                 <div
                                      th:id="${'notificationIcon_' + passenger.id + '_' + date.id}"
                                      th:class="'col-2 ' + ${((passengerAssistance != null) and
                                                     (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ?
                                                         'd-none' : ''}">
-                                    <!-- Communication icon -->
+                                    <!-- Notification icon -->
                                     <i
                                         th:class="'fas fa-exclamation-circle ' +
                                             ${(
@@ -165,14 +165,14 @@
                                                                 'text-primary' : 'text-danger'
                                                         )}"
                                         role="button"
-                                        th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
+                                        th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"
                                         th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                         th:data-passenger-th="'passengerNameCell_' + ${passenger.id}"
                                         th:data-date-td="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
                                     ></i>
-                                    <!-- Communication icon -->
+                                    <!-- Notification icon -->
                                 </div>
-                                <!-- Communication icon div -->
+                                <!-- Notification icon div -->
 
                             </div>
                             <!-- Div for buttons to change passenger status on current date -->

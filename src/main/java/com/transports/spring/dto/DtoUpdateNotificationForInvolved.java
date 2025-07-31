@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public class DtoUpdateNotificationForInvolved {
-    private Integer involvedCommunicated;
+    private Integer involvedNotified;
     private Integer transportDateCode;
     private Integer driverCode;
     private Integer passengerCode;

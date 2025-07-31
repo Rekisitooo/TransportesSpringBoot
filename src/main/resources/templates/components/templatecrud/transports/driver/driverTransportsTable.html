@@ -41,17 +41,17 @@
                 <div class="d-flex flex-column row">
                     <div class="col" data-driver-showable-icon="data-driver-showable-icon">
 
-                        <!-- Communication icon -->
+                        <!-- Notification icon -->
                         <div class="row">
-                            <div class="col" th:id="'markAsCommunicatedDriverButtonDiv_' + ${driver.id}">
+                            <div class="col" th:id="'markAsNotifiedDriverButtonDiv_' + ${driver.id}">
                                 <i class="fas fa-exclamation-circle text-danger"
                                    role="button"
-                                   th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEndda}"
-                                   th:id="'markAsCommunicatedDriverButton_' + ${driver.id}"
+                                   th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEndda}"
+                                   th:id="'markAsNotifiedDriverButton_' + ${driver.id}"
                                 ></i>
                             </div>
                         </div>
-                        <!-- Communication icon -->
+                        <!-- Notification icon -->
 
                     </div>
                 </div>
@@ -108,11 +108,11 @@
                         </div>
                         <!-- Assistance div -->
 
-                        <!-- Communication icon div -->
+                        <!-- Notification icon div -->
                         <div th:id="${'notificationIcon_' + driver.id + '_' + date.id}"
                              th:class="'col-2 ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
                                              '' : 'd-none'}">
-                            <!-- Communication icon -->
+                            <!-- Notification icon -->
                             <i
                                 th:class="
                                     'fas fa-exclamation-circle ' +
@@ -129,14 +129,14 @@
                                                     'text-primary' : 'text-danger'
                                     }"
                                 role="button"
-                                th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
+                                th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"
                                 th:data-passengers-div="'driverPassengersForDateDiv_' + ${driver.id} + '_' + ${date.id}"
                                 th:data-driver-th="${driver.id} + '_th'"
                                 th:data-date-td="'d' + ${driver.id} + 't' + ${date.id} + '_date_td'"
                             ></i>
-                            <!-- Communication icon -->
+                            <!-- Notification icon -->
                         </div>
-                        <!-- Communication icon div -->
+                        <!-- Notification icon div -->
 
                     </div>
                     <!-- Div for buttons to change driver status on current date -->

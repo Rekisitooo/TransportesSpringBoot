@@ -25,8 +25,8 @@ public class NotificationForInvolvedController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Object> getNotificationForInvolved(@RequestParam String transportDateCode, @RequestParam String involvedCommunicatedId) {
-        final List<NotificationForInvolved> list = this.notificationForInvolvedService.getNotificationForInvolvedInDate(transportDateCode, involvedCommunicatedId);
+    public ResponseEntity<Object> getNotificationForInvolved(@RequestParam String transportDateCode, @RequestParam String notifiedInvolvedId) {
+        final List<NotificationForInvolved> list = this.notificationForInvolvedService.getNotificationForInvolvedInDate(transportDateCode, notifiedInvolvedId);
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
     }
 
@@ -44,7 +44,7 @@ public class NotificationForInvolvedController {
     public ResponseEntity<Object> delete(@RequestBody NotificationForInvolved body) {
         ResponseEntity<Object> re = ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", body));
         try {
-            this.notificationForInvolvedService.deleteNotificationForDriver(body.getInvolvedCommunicatedId(), body.getTransportDateCode());
+            this.notificationForInvolvedService.deleteNotificationForDriver(body.getNotifiedInvolvedId(), body.getTransportDateCode());
         } catch (final Exception e) {
             re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ServiceResponse<>("ok", body));
         }

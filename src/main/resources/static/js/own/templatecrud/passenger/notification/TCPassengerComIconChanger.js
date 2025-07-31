@@ -1,19 +1,19 @@
 /**
  * Changes the passenger notification icon based on the transport deletion.
  * @param {Object} data - Contains passengerId (t), passengerId (p), and transportDateId (d)
- * @param {jQuery} passengerCommunicationIcon - The warning icon element for the passenger
+ * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
-export async function changePassengerComIconOnTransportDeletion(data, passengerCommunicationIcon) {
-    if (passengerCommunicationIcon.hasClass("text-danger")) {
+export async function changePassengerComIconOnTransportDeletion(data, passengerNotificationIcon) {
+    if (passengerNotificationIcon.hasClass("text-danger")) {
         const passengerNotifications = await getPassengerNotifications(data);
 
         if (!passengerNotifications?.data?.length) {
-            passengerCommunicationIcon.addClass("d-none");
+            passengerNotificationIcon.addClass("d-none");
         }
 
-    } else if (passengerCommunicationIcon.hasClass("text-primary")) {
-        passengerCommunicationIcon.removeClass("text-primary");
-        passengerCommunicationIcon.addClass("text-danger");
+    } else if (passengerNotificationIcon.hasClass("text-primary")) {
+        passengerNotificationIcon.removeClass("text-primary");
+        passengerNotificationIcon.addClass("text-danger");
     }
 }
 
@@ -21,13 +21,13 @@ export async function changePassengerComIconOnTransportDeletion(data, passengerC
  * Updates the warning icon visibility for a passenger based on their notification status.
  * Shows the icon if the passenger is not in the passenger's notifications or if there are no notifications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} passengerCommunicationIcon - The warning icon element for the passenger
+ * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
-export async function changePassengerComIconOnPassengerSelection(data, passengerCommunicationIcon) {
-    if (passengerCommunicationIcon.hasClass("d-none")) {
-        passengerCommunicationIcon.removeClass("d-none");
-        passengerCommunicationIcon.removeClass("text-primary");
-        passengerCommunicationIcon.addClass("text-danger");
+export async function changePassengerComIconOnPassengerSelection(data, passengerNotificationIcon) {
+    if (passengerNotificationIcon.hasClass("d-none")) {
+        passengerNotificationIcon.removeClass("d-none");
+        passengerNotificationIcon.removeClass("text-primary");
+        passengerNotificationIcon.addClass("text-danger");
 
     } else {
         const passengerNotifications = await getPassengerNotifications(data);
@@ -36,11 +36,11 @@ export async function changePassengerComIconOnPassengerSelection(data, passenger
         );
 
         if (passengerNotifications.data.driverId === data.p) {
-            passengerCommunicationIcon.removeClass("text-danger");
-            passengerCommunicationIcon.addClass("text-primary");
+            passengerNotificationIcon.removeClass("text-danger");
+            passengerNotificationIcon.addClass("text-primary");
         } else {
-            passengerCommunicationIcon.removeClass("text-primary");
-            passengerCommunicationIcon.addClass("text-danger");
+            passengerNotificationIcon.removeClass("text-primary");
+            passengerNotificationIcon.addClass("text-danger");
         }
     }
  }
@@ -54,9 +54,9 @@ async function getPassengerNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',
-            url: '/involvedCommunication/get',
+            url: '/involvedNotification/get',
             data: {
-                involvedCommunicatedId: data.t,
+                notifiedInvolvedId: data.t,
                 transportDateCode: data.d
             }
         });

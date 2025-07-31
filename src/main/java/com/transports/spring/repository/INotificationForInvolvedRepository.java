@@ -11,14 +11,14 @@ import java.util.List;
 public interface INotificationForInvolvedRepository extends JpaRepository<NotificationForInvolved, UUID> {
 
     @Query("SELECT " +
-            "   api.involvedCommunicatedId, " +
+            "   api.notifiedInvolvedId, " +
             "   api.transportDateCode, " +
             "   concat(ippdriver.name, ' ', ippdriver.surname)" +
             "FROM NotificationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
             "   INNER JOIN InvolvedByTemplate ipp" +
-            "       ON ipp.involvedByTemplateKey.involvedCode = api.involvedCommunicatedId" +
+            "       ON ipp.involvedByTemplateKey.involvedCode = api.notifiedInvolvedId" +
             "   INNER JOIN InvolvedByTemplate ippdriver" +
             "       ON ippdriver.involvedByTemplateKey.involvedCode = api.driverCode" +
             "   WHERE " +
@@ -27,14 +27,14 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
     List<Object[]> getAllPassengerNotificationsForTemplate(@Param("templateId") String templateId);
 
     @Query("SELECT " +
-            "   api.involvedCommunicatedId, " +
+            "   api.notifiedInvolvedId, " +
             "   api.transportDateCode, " +
             "   concat(ipppassenger.name, ' ', ipppassenger.surname)" +
             "FROM NotificationForInvolved api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
             "   INNER JOIN InvolvedByTemplate ipp" +
-            "       ON ipp.involvedByTemplateKey.involvedCode = api.involvedCommunicatedId" +
+            "       ON ipp.involvedByTemplateKey.involvedCode = api.notifiedInvolvedId" +
             "   INNER JOIN InvolvedByTemplate ipppassenger" +
             "       ON ipppassenger.involvedByTemplateKey.involvedCode = api.passengerCode" +
             "   WHERE " +
@@ -42,11 +42,11 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
             "       AND ipp.roleCode = 2")
     List<Object[]> getAllDriverNotificationsForTemplate(@Param("templateId") String templateId);
 
-    @Query("SELECT new NotificationForInvolved(api.id, api.involvedCommunicatedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +
+    @Query("SELECT new NotificationForInvolved(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +
             "FROM NotificationForInvolved api " +
             "WHERE " +
             "   api.transportDateCode = :transportDate" +
-            "   AND api.involvedCommunicatedId = :involvedId")
+            "   AND api.notifiedInvolvedId = :involvedId")
     List<NotificationForInvolved> getNotificationForInvolvedInDate(@Param("transportDate") String transportDate, @Param("involvedId") String involvedId);
 
 
@@ -55,11 +55,11 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
             "   SET " +
             "       api.driverCode = :newDriverCode" +
             "   WHERE " +
-            "       api.involvedCommunicatedId = :involvedCommunicatedId" +
+            "       api.notifiedInvolvedId = :notifiedInvolvedId" +
             "       AND api.transportDateCode = :transportDateCode" +
             "       AND api.passengerCode = :passengerCode")
     void updateDriver(@Param("transportDateCode") Integer transportDateCode,
-                      @Param("involvedCommunicatedId") Integer involvedCommunicatedId,
+                      @Param("notifiedInvolvedId") Integer notifiedInvolvedId,
                       @Param("newDriverCode") Integer newDriverCode,
                       @Param("passengerCode") Integer passengerCode
     );
@@ -68,7 +68,7 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
     @Query("DELETE FROM NotificationForInvolved api" +
             "   WHERE " +
             "       api.transportDateCode = :transportDateId" +
-            "       AND api.involvedCommunicatedId = :involvedId")
+            "       AND api.notifiedInvolvedId = :involvedId")
     void deleteNotificationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
 
     @Query("SELECT DISTINCT" +
@@ -81,7 +81,7 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
             "      FROM Transport t " +
             "           LEFT JOIN NotificationForInvolved apiDriver " +
             "               ON (apiDriver.transportDateCode = t.transportKey.transportDateId " +
-            "               AND apiDriver.involvedCommunicatedId = t.transportKey.driverId) " +
+            "               AND apiDriver.notifiedInvolvedId = t.transportKey.driverId) " +
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId " +
             "       WHERE td.templateCode = :templateId")
@@ -97,7 +97,7 @@ public interface INotificationForInvolvedRepository extends JpaRepository<Notifi
             "      FROM Transport t" +
             "           LEFT JOIN NotificationForInvolved apiPassenger" +
             "               ON (apiPassenger.transportDateCode = t.transportKey.transportDateId" +
-            "               AND apiPassenger.involvedCommunicatedId = t.transportKey.passengerId)" +
+            "               AND apiPassenger.notifiedInvolvedId = t.transportKey.passengerId)" +
             "           JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId" +
             "       WHERE td.templateCode = :templateId")

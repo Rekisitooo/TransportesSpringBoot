@@ -1,29 +1,29 @@
 /**
  * Changes the driver notification icon based on the transport deletion.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} driverCommunicationIcon - The warning icon element for the driver
+ * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
  */
-export async function changeDriverComIconOnTransportDeletion(data, driverCommunicationIcon) {
+export async function changeDriverComIconOnTransportDeletion(data, driverNotificationIcon) {
 
-    if (driverCommunicationIcon.hasClass("text-danger")) {
+    if (driverNotificationIcon.hasClass("text-danger")) {
         const driverNotifications = await getDriverNotifications(data);
 
         if (!driverNotifications?.data?.length) {
-            driverCommunicationIcon.addClass("d-none");
+            driverNotificationIcon.addClass("d-none");
         } else {
             const hasInvolvedId = driverNotifications.data.some(
                 notification => notification.involvedId === data.involvedId
             );
 
             if (hasInvolvedId) {
-                driverCommunicationIcon.removeClass("text-danger");
-                driverCommunicationIcon.addClass("text-primary");
+                driverNotificationIcon.removeClass("text-danger");
+                driverNotificationIcon.addClass("text-primary");
             }
         }
 
-    } else if (driverCommunicationIcon.hasClass("text-primary")) {
-        driverCommunicationIcon.removeClass("text-primary");
-        driverCommunicationIcon.addClass("text-danger");
+    } else if (driverNotificationIcon.hasClass("text-primary")) {
+        driverNotificationIcon.removeClass("text-primary");
+        driverNotificationIcon.addClass("text-danger");
     }
 
 }
@@ -32,13 +32,13 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
  * Updates the warning icon visibility for a driver based on their notification status.
  * Shows the icon if the passenger is not in the driver's notifications or if there are no notifications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
- * @param {jQuery} driverCommunicationIcon - The warning icon element for the driver
+ * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
  */
-export async function changeDriverComIconOnDriverSelection(data, driverCommunicationIcon) {
-    if (driverCommunicationIcon.hasClass("d-none")) {
-        driverCommunicationIcon.removeClass("d-none");
-        driverCommunicationIcon.removeClass("text-primary");
-        driverCommunicationIcon.addClass("text-danger");
+export async function changeDriverComIconOnDriverSelection(data, driverNotificationIcon) {
+    if (driverNotificationIcon.hasClass("d-none")) {
+        driverNotificationIcon.removeClass("d-none");
+        driverNotificationIcon.removeClass("text-primary");
+        driverNotificationIcon.addClass("text-danger");
 
     } else {
         const driverNotifications = await getDriverNotifications(data);
@@ -47,11 +47,11 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
         );
 
         if (!hasPassengerInNotifications) {
-            driverCommunicationIcon.removeClass("text-danger");
-            driverCommunicationIcon.addClass("text-primary");
+            driverNotificationIcon.removeClass("text-danger");
+            driverNotificationIcon.addClass("text-primary");
         } else {
-            driverCommunicationIcon.removeClass("text-primary");
-            driverCommunicationIcon.addClass("text-danger");
+            driverNotificationIcon.removeClass("text-primary");
+            driverNotificationIcon.addClass("text-danger");
         }
     }
  }
@@ -65,9 +65,9 @@ async function getDriverNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',
-            url: '/involvedCommunication/get',
+            url: '/involvedNotification/get',
             data: {
-                involvedCommunicatedId: data.p,
+                notifiedInvolvedId: data.p,
                 transportDateCode: data.d
             }
         });

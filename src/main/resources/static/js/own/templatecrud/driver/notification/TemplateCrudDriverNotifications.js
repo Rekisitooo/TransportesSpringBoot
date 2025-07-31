@@ -9,7 +9,7 @@ $(function() {
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    involvedCommunicatedId : $('th[id=' + driverThId + ']').attr('data-d')
+                    notifiedInvolvedId : $('th[id=' + driverThId + ']').attr('data-d')
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
@@ -52,7 +52,7 @@ async function createDriverNotifications(data, alertIcon) {
             const newData = {
                 ...data,
                 notificationDate: Date.now(),
-                driverCode: data.involvedCommunicatedId,
+                driverCode: data.notifiedInvolvedId,
                 passengerCode: null
             };
             await ajaxRequestCreateDriverNotification(newData, alertIcon);
@@ -71,7 +71,7 @@ async function ajaxRequestCreateDriverNotification(data, alertIcon) {
             data: JSON.stringify(data),
             dataType: 'json'
         });
-        changeAlertIconToCommunicated(alertIcon);
+        changeAlertIconToNotified(alertIcon);
 
     } catch (error) {
         showNotificationError();
@@ -80,7 +80,7 @@ async function ajaxRequestCreateDriverNotification(data, alertIcon) {
 
 async function deleteDriverNotification(data, alertIcon) {
     if (ajaxRequestDeleteDriverNotification(data)) {
-        changeAlertIconToNotCommunicated(alertIcon);
+        changeAlertIconToNotNotified(alertIcon);
     }
 }
 
@@ -104,10 +104,10 @@ async function ajaxRequestDeleteDriverNotification(data) {
 async function updateDriverNotifications(data, alertIcon) {
     try {
         const isNotificationDeleted = await ajaxRequestDeleteDriverNotification(data);
-        if (isCommunicationDeleted) {
+        if (isNotificationDeleted) {
             const notification = {
                 transportDateCode: data.transportDateCode,
-                involvedCommunicatedId: data.involvedCommunicatedId
+                notifiedInvolvedId: data.notifiedInvolvedId
             };
             await createDriverNotifications(notification, alertIcon);
         }
@@ -127,20 +127,20 @@ async function notifyTransport(data, alertIcon) {
             await updateDriverNotifications(response.data[0], alertIcon);
         }
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
     }
 }
 
-function showCommunicationError() {
+function showNotificationError() {
     temporalErrorAlert("Ha ocurrido un error al indicar que se ha avisado del transporte al conductor.");
 }
 
-function changeAlertIconToCommunicated(alertIcon) {
+function changeAlertIconToNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', notifyTransportIconClass);
 }
 
-function changeAlertIconToNotCommunicated(alertIcon) {
+function changeAlertIconToNotNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', notifyTransportIconClass);
 }
@@ -148,7 +148,7 @@ function changeAlertIconToNotCommunicated(alertIcon) {
 async function getDriverNotifications(data) {
     return await $.ajax({
         type: 'GET',
-        url: '/involvedCommunication/get',
+        url: '/involvedNotification/get',
         data: data
     });
 }

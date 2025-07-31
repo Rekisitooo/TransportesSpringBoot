@@ -9,7 +9,7 @@ $(function() {
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    involvedCommunicatedId : $('th[id=' + passengerThId + ']').attr('data-t')
+                    notifiedInvolvedId : $('th[id=' + passengerThId + ']').attr('data-t')
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
@@ -18,7 +18,7 @@ $(function() {
                     const driverSelectedId = driverSelect.val();
 
                     if (driverSelectedId === undefined || driverSelectedId === '') {
-                        await ajaxRequestDeletePassengerCommunication(data);
+                        await ajaxRequestDeletePassengerNotification(data);
                         $(this).addClass('d-none');
 
                     } else {
@@ -26,7 +26,7 @@ $(function() {
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
-                    deletePassengerCommunication(data, $(this));
+                    deletePassengerNotification(data, $(this));
                 }
             });
         }
@@ -37,28 +37,28 @@ async function notifyTransport(data, alertIcon, driverSelectedId) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/involvedCommunication/get',
+            url: '/involvedNotification/get',
             data: data
         });
 
         if (!response?.data?.length) {
-            await createPassengerCommunication(data, alertIcon, driverSelectedId);
+            await createPassengerNotification(data, alertIcon, driverSelectedId);
         } else {
             await updatePassengerNotifications(response.data[0], alertIcon, driverSelectedId);
         }
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
     }
 }
 
-async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
+async function createPassengerNotification(data, alertIcon, driverSelectedId) {
     try {
         const response = await $.ajax({
             type: 'GET',
             url: '/t/getDriverForPassengerByDate',
             data : {
                 transportDateId: data.transportDateCode,
-                passengerId: data.involvedCommunicatedId
+                passengerId: data.notifiedInvolvedId
             }
         });
 
@@ -66,41 +66,41 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
             ...data,
             notificationDate: Date.now(),
             driverCode: driverSelectedId,
-            passengerCode: data.involvedCommunicatedId
+            passengerCode: data.notifiedInvolvedId
         };
 
-        const passengerCommunicationCreationResponse = await ajaxRequestCreatePassengerCommunication(newData, alertIcon);
-        if (passengerCommunicationCreationResponse) {
-            await changeAlertIconToCommunicated(alertIcon);
+        const passengerNotificationCreationResponse = await ajaxRequestCreatePassengerNotification(newData, alertIcon);
+        if (passengerNotificationCreationResponse) {
+            await changeAlertIconToNotified(alertIcon);
         }
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
     }
 }
 
-async function ajaxRequestCreatePassengerCommunication(data, alertIcon) {
+async function ajaxRequestCreatePassengerNotification(data, alertIcon) {
     try {
         await $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            url: '/involvedCommunication/createCommunication',
+            url: '/involvedNotification/createNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
         return true;
 
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
         return false;
     }
 }
 
-async function ajaxRequestDeletePassengerCommunication(data) {
+async function ajaxRequestDeletePassengerNotification(data) {
     try {
         await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
-            url: '/involvedCommunication',
+            url: '/involvedNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -112,21 +112,21 @@ async function ajaxRequestDeletePassengerCommunication(data) {
     }
 }
 
-async function deletePassengerCommunication(data, alertIcon) {
-    if (ajaxRequestDeletePassengerCommunication(data)) {
-        changeAlertIconToNotCommunicated(alertIcon);
+async function deletePassengerNotification(data, alertIcon) {
+    if (ajaxRequestDeletePassengerNotification(data)) {
+        changeAlertIconToNotNotified(alertIcon);
     }
 }
 
 async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
     try {
-        const isCommunicationDeleted = await ajaxRequestDeletePassengerCommunication(data);
-        if (isCommunicationDeleted) {
+        const isNotificationDeleted = await ajaxRequestDeletePassengerNotification(data);
+        if (isNotificationDeleted) {
             const notification = {
                 transportDateCode: data.transportDateCode,
-                involvedCommunicatedId: data.involvedCommunicatedId
+                notifiedInvolvedId: data.notifiedInvolvedId
             };
-            await createPassengerCommunication(notification, alertIcon);
+            await createPassengerNotification(notification, alertIcon);
         }
 
     } catch (error) {
@@ -134,16 +134,16 @@ async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
     }
 }
 
-function showCommunicationError() {
+function showNotificationError() {
     temporalErrorAlert("Ha ocurrido un error al indicar que se ha avisado del transporte al viajero.");
 }
 
-function changeAlertIconToCommunicated(alertIcon) {
+function changeAlertIconToNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', notifyTransportIconClass);
 }
 
-function changeAlertIconToNotCommunicated(alertIcon) {
+function changeAlertIconToNotNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', notifyTransportIconClass);
 }

@@ -55,8 +55,8 @@ public class TransportController {
     }
 
     @GetMapping("/getPassengersForDriverByDate")
-    public ResponseEntity<Object> getPassengersForDriverByDate(@RequestParam Integer transportDateCode, @RequestParam Integer involvedCommunicatedId) {
-        final List<DtoGetPassengersForDriverByDate> list = this.transportService.getPassengersForDriverByDate(transportDateCode, involvedCommunicatedId);
+    public ResponseEntity<Object> getPassengersForDriverByDate(@RequestParam Integer transportDateCode, @RequestParam Integer notifiedInvolvedId) {
+        final List<DtoGetPassengersForDriverByDate> list = this.transportService.getPassengersForDriverByDate(transportDateCode, notifiedInvolvedId);
         if (list != null) {
             return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", list));
         } else {
