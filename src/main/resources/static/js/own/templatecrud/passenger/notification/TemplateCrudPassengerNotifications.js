@@ -64,7 +64,7 @@ async function createPassengerCommunication(data, alertIcon, driverSelectedId) {
 
         const newData = {
             ...data,
-            communicationDate: Date.now(),
+            notificationDate: Date.now(),
             driverCode: driverSelectedId,
             passengerCode: data.involvedCommunicatedId
         };
@@ -122,11 +122,11 @@ async function updatePassengerCommunications(data, alertIcon, driverSelectedId) 
     try {
         const isCommunicationDeleted = await ajaxRequestDeletePassengerCommunication(data);
         if (isCommunicationDeleted) {
-            const communication = {
+            const notification = {
                 transportDateCode: data.transportDateCode,
                 involvedCommunicatedId: data.involvedCommunicatedId
             };
-            await createPassengerCommunication(communication, alertIcon);
+            await createPassengerCommunication(notification, alertIcon);
         }
 
     } catch (error) {
@@ -148,13 +148,18 @@ function changeAlertIconToNotCommunicated(alertIcon) {
     alertIcon.attr('class', communicateTransportIconClass);
 }
 
-function showHideCheckAllCommunicationsButton () {
+/**
+ * When transports table is loaded, it shows the notification icon to check
+ * every whether
+ */
+function showHideCheckAllCommunicationsButton() {
     const passengerTransportsTableRowList = $('#passengerTransportsTable tr');
 
     for (let i = 0; i < passengerTransportsTableRowList.length; i++) {
         const passengerId = $(passengerTransportsTableRowList[i]);
         const checkAllCommunicationsButton = $(checkAllCommunicationsButtonList[i]);
         const checkAllCommunicationsButtonClass = checkAllCommunicationsButton.attr('class');
+
         if (checkAllCommunicationsButtonClass.includes('d-none')) {
             checkAllCommunicationsButton.removeClass('d-none');
         } else {
@@ -170,6 +175,7 @@ function showHideCheckAllCommunicationsButton () {
     }
 }
 
+/*
 Gestionar si se muestran todos los botones al cargar
 	for fila pasajeros
 		pilla el id del pasajero
@@ -179,4 +185,4 @@ Gestionar si se muestran todos los botones al cargar
 			se esconde
 		si no
 			se muestra
-	fin for
+	fin for */

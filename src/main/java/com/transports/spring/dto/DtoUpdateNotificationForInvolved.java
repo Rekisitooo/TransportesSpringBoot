@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DtoUpdateCommunicationForInvolved {
+public class DtoUpdateNotificationForInvolved {
     private Integer involvedCommunicated;
     private Integer transportDateCode;
     private Integer driverCode;

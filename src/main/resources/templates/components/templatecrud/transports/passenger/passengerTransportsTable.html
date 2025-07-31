@@ -33,7 +33,8 @@
             <tr th:each="passenger : ${passengersFromTemplateList}" th:id="'passenger_row_' + ${passenger.id}" class="" >
 
                 <!-- Passenger name -->
-                <th th:id="'passengerNameCell_' + ${passenger.id}"
+                <td
+                    th:id="'passengerNameCell_' + ${passenger.id}"
                     th:data-t="${passenger.id}"
                     th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                     class="text-nowrap text-left"
@@ -71,7 +72,7 @@
                         </div>
                     </div>
                     <!-- Passenger name row -->
-                </th>
+                </td>
 
                 <!-- Assistance for date -->
                 <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}"
@@ -143,7 +144,7 @@
 
                                 <!-- Communication icon div -->
                                 <div
-                                     th:id="${'communicationIcon_' + passenger.id + '_' + date.id}"
+                                     th:id="${'notificationIcon_' + passenger.id + '_' + date.id}"
                                      th:class="'col-2 ' + ${((passengerAssistance != null) and
                                                     (passengerAssistance.get(date.transportDate.toLocalDate()) == null)) ?
                                                         'd-none' : ''}">
@@ -161,7 +162,7 @@
                                                             involvedCommunications.get(date.id) != null
                                                             and involvedCommunications.get(date.id).get(passenger.id) != null
                                                             and involvedCommunications.get(date.id).get(passenger.id) == false ?
-                                                                'text-muted' : 'text-danger'
+                                                                'text-primary' : 'text-danger'
                                                         )}"
                                         role="button"
                                         th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
@@ -238,7 +239,7 @@
         </tbody>
     </table>
 
-    <script src="/js/own/templatecrud/passenger/communication/TemplateCrudPassengerCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/passenger/notification/TemplateCrudPassengerCommunications.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudPassengerAvailabilityForDateCRUD.js" type="module"></script>
     <script src="/js/own/templatecrud/passenger/TemplateCrudNeedsTransport.js" type="module"></script>
 </div>

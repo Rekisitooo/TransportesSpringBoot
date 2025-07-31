@@ -18,7 +18,7 @@ $(function() {
             const tabName = $(this).attr('aria-controls');
             const tabElementsToShow = $('[data-tab = ' + tabName + ']');
 
-            if (tabName === 'communicationsTab') {
+            if (tabName === 'notificationsTab') {
                 const templateId = $('#templateTitle').attr('data-template-id');
                 const dataCall = $(this).attr('data-call');
                 insertTabHTML('/template/open' + dataCall + '?id=' + templateId, tabName);

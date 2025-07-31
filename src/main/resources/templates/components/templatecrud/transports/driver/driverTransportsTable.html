@@ -28,14 +28,14 @@
         <tr th:each="driver : ${driversFromTemplateList}" th:id="'driver_row_' + ${driver.id}">
 
             <!-- Driver Name -->
-            <th
-                    th:id="${driver.id} + '_th'"
-                    th:data-d="${driver.id}"
-                    th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
-                    class="text-nowrap text-left"
-                    style="cursor:move"
-                    draggable="true"
-                    data-draggable="involvedTable"
+            <td
+                th:id="${driver.id} + '_th'"
+                th:data-d="${driver.id}"
+                th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
+                class="text-nowrap text-left"
+                style="cursor:move"
+                draggable="true"
+                data-draggable="involvedTable"
             >
                 <!-- Driver buttons row -->
                 <div class="d-flex flex-column row">
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- Driver name row -->
-            </th>
+            </td>
 
             <!-- Driver Data -->
             <!-- TODO when UUIDs are implemented, change the id and remove the p and t... -->
@@ -109,7 +109,7 @@
                         <!-- Assistance div -->
 
                         <!-- Communication icon div -->
-                        <div th:id="${'communicationIcon_' + driver.id + '_' + date.id}"
+                        <div th:id="${'notificationIcon_' + driver.id + '_' + date.id}"
                              th:class="'col-2 ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
                                              '' : 'd-none'}">
                             <!-- Communication icon -->
@@ -126,7 +126,7 @@
                                                     involvedCommunications.get(date.id).get(driver.id) != null
                                                     and involvedCommunications.get(date.id).get(driver.id) == false
                                                 ) ?
-                                                    'text-muted' : 'text-danger'
+                                                    'text-primary' : 'text-danger'
                                     }"
                                 role="button"
                                 th:title="#{templateCRUD.titleMarkCommunicationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkCommunicationEnd} + ' ' + ${date.transportDate}"
@@ -171,5 +171,5 @@
     </table>
 
     <script src="/js/own/templatecrud/driver/TemplateCrudDriverAvailabilityForDateCRUD.js" type="module"></script>
-    <script src="/js/own/templatecrud/driver/communication/TemplateCrudDriverCommunications.js" type="module"></script>
+    <script src="/js/own/templatecrud/driver/notification/TemplateCrudDriverCommunications.js" type="module"></script>
 </div>

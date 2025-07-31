@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "AVISO_POR_INVOLUCRADO")
-public final class CommunicationForInvolved {
+public final class NotificationForInvolved {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,5 +32,5 @@ public final class CommunicationForInvolved {
     private Integer passengerCode;
 
     @Column(name = "FECHA_AVISO", nullable = false)
-    private Timestamp communicationDate;
+    private Timestamp notificationDate;
 }

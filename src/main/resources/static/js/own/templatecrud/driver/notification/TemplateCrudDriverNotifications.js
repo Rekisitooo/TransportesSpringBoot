@@ -13,9 +13,9 @@ $(function() {
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
-                    const driverCommunications = await getDriverCommunications(data);
-                    if (driverCommunications?.data?.length) {
-                        await ajaxRequestDeleteDriverCommunication(data);
+                    const driverNotifications = await getDriverNotifications(data);
+                    if (driverNotifications?.data?.length) {
+                        await ajaxRequestDeleteDriverNotification(data);
                         $(this).addClass('d-none');
 
                     } else {
@@ -23,14 +23,14 @@ $(function() {
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
-                    deleteDriverCommunication(data, $(this));
+                    deleteDriverNotification(data, $(this));
                 }
             });
         }
     );
 });
 
-async function createDriverCommunications(data, alertIcon) {
+async function createDriverNotifications(data, alertIcon) {
     try {
         const response = await $.ajax({
             type: 'GET',
@@ -42,54 +42,54 @@ async function createDriverCommunications(data, alertIcon) {
             await Promise.all(response.data.map(async (transport) => {
                 const newData = {
                     ...data,
-                    communicationDate: Date.now(),
+                    notificationDate: Date.now(),
                     driverCode: transport.transport.transportKey.driverId,
                     passengerCode: transport.transport.transportKey.passengerId
                 };
-                return ajaxRequestCreateDriverCommunication(newData, alertIcon);
+                return ajaxRequestCreateDriverNotification(newData, alertIcon);
             }));
         } else {
             const newData = {
                 ...data,
-                communicationDate: Date.now(),
+                notificationDate: Date.now(),
                 driverCode: data.involvedCommunicatedId,
                 passengerCode: null
             };
-            await ajaxRequestCreateDriverCommunication(newData, alertIcon);
+            await ajaxRequestCreateDriverNotification(newData, alertIcon);
         }
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
     }
 }
 
-async function ajaxRequestCreateDriverCommunication(data, alertIcon) {
+async function ajaxRequestCreateDriverNotification(data, alertIcon) {
     try {
         await $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            url: '/involvedCommunication/createCommunication',
+            url: '/involvedNotification/createNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
         changeAlertIconToCommunicated(alertIcon);
 
     } catch (error) {
-        showCommunicationError();
+        showNotificationError();
     }
 }
 
-async function deleteDriverCommunication(data, alertIcon) {
-    if (ajaxRequestDeleteDriverCommunication(data)) {
+async function deleteDriverNotification(data, alertIcon) {
+    if (ajaxRequestDeleteDriverNotification(data)) {
         changeAlertIconToNotCommunicated(alertIcon);
     }
 }
 
-async function ajaxRequestDeleteDriverCommunication(data) {
+async function ajaxRequestDeleteDriverNotification(data) {
     try {
         await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
-            url: '/involvedCommunication',
+            url: '/involvedNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -101,15 +101,15 @@ async function ajaxRequestDeleteDriverCommunication(data) {
     }
 }
 
-async function updateDriverCommunications(data, alertIcon) {
+async function updateDriverNotifications(data, alertIcon) {
     try {
-        const isCommunicationDeleted = await ajaxRequestDeleteDriverCommunication(data);
+        const isNotificationDeleted = await ajaxRequestDeleteDriverNotification(data);
         if (isCommunicationDeleted) {
-            const communication = {
+            const notification = {
                 transportDateCode: data.transportDateCode,
                 involvedCommunicatedId: data.involvedCommunicatedId
             };
-            await createDriverCommunications(communication, alertIcon);
+            await createDriverCommunications(notification, alertIcon);
         }
         
     } catch (error) {

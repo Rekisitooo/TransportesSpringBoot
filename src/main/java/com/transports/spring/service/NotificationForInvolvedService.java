@@ -1,7 +1,7 @@
 package com.transports.spring.service;
 
-import com.transports.spring.model.CommunicationForInvolved;
-import com.transports.spring.repository.ICommunicationForInvolvedRepository;
+import com.transports.spring.model.NotificationForInvolved;
+import com.transports.spring.repository.INotificationForInvolvedRepository;
 import com.transports.spring.service.response.ServiceResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -14,39 +14,39 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CommunicationForInvolvedService {
+public class NotificationForInvolvedService {
 
-    private final ICommunicationForInvolvedRepository communicationForInvolvedRepository;
+    private final INotificationForInvolvedRepository notificationForInvolvedRepository;
 
-    public CommunicationForInvolvedService(ICommunicationForInvolvedRepository communicationForInvolvedRepository) {
-        this.communicationForInvolvedRepository = communicationForInvolvedRepository;
+    public NotificationForInvolvedService(INotificationForInvolvedRepository notificationForInvolvedRepository) {
+        this.notificationForInvolvedRepository = notificationForInvolvedRepository;
     }
 
-    public List<CommunicationForInvolved> getCommunicationForInvolvedInDate (final String transportDate, final String involvedId) {
-         return this.communicationForInvolvedRepository.getCommunicationForInvolvedInDate(transportDate, involvedId);
-    }
-
-    @Transactional
-    public void deleteCommunicationForDriver(final Integer involvedId, final Integer transportDateId) {
-        this.communicationForInvolvedRepository.deleteCommunicationsForInvolvedInDate(involvedId, transportDateId);
+    public List<NotificationForInvolved> getNotificationForInvolvedInDate (final String transportDate, final String involvedId) {
+         return this.notificationForInvolvedRepository.getNotificationForInvolvedInDate(transportDate, involvedId);
     }
 
     @Transactional
-    public ResponseEntity<Object> create(final CommunicationForInvolved communicationForInvolved) {
-        this.communicationForInvolvedRepository.save(communicationForInvolved);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationForInvolved));
+    public void deleteNotificationForDriver(final Integer involvedId, final Integer transportDateId) {
+        this.notificationForInvolvedRepository.deleteNotificationsForInvolvedInDate(involvedId, transportDateId);
     }
 
     @Transactional
-    public ResponseEntity<Object> updateDriver(final CommunicationForInvolved communicationForInvolved) {
-        this.communicationForInvolvedRepository.updateDriver(
-                communicationForInvolved.getTransportDateCode(),
-                communicationForInvolved.getInvolvedCommunicatedId(),
-                communicationForInvolved.getDriverCode(),
-                communicationForInvolved.getPassengerCode()
+    public ResponseEntity<Object> create(final NotificationForInvolved notificationForInvolved) {
+        this.notificationForInvolvedRepository.save(notificationForInvolved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", notificationForInvolved));
+    }
+
+    @Transactional
+    public ResponseEntity<Object> updateDriver(final NotificationForInvolved notificationForInvolved) {
+        this.notificationForInvolvedRepository.updateDriver(
+                notificationForInvolved.getTransportDateCode(),
+                notificationForInvolved.getInvolvedCommunicatedId(),
+                notificationForInvolved.getDriverCode(),
+                notificationForInvolved.getPassengerCode()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", communicationForInvolved));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", notificationForInvolved));
     }
 
     /**
@@ -57,10 +57,10 @@ public class CommunicationForInvolvedService {
     public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
         Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
 
-        List<Object[]> driverNotifications = this.communicationForInvolvedRepository.getDriverCommunicationsByTemplate(templateId);
+        List<Object[]> driverNotifications = this.notificationForInvolvedRepository.getDriverNotificationsByTemplate(templateId);
         processNotifications(driverNotifications, result);
 
-        List<Object[]> passengerNotifications = this.communicationForInvolvedRepository.getPassengerCommunicationsByTemplate(templateId);
+        List<Object[]> passengerNotifications = this.notificationForInvolvedRepository.getPassengerNotificationsByTemplate(templateId);
         processNotifications(passengerNotifications, result);
 
         return result;
@@ -87,13 +87,13 @@ public class CommunicationForInvolvedService {
      * @param templateId consulted template
      * @return Map<passengerId, Map<transportDateId, driverName>>
      */
-    public Map<Integer, Map<Integer, String>> getPassengerCommunicationsMapByTemplate(final String templateId) {
-        final Map<Integer, Map<Integer, String>> passengerCommunicationsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, String>> getPassengerNotificationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, String>> passengerNotificationsMap = new HashMap<>();
 
-        final List<Object[]> allPassengerCommunicationsForTemplate =
-                this.communicationForInvolvedRepository.getAllPassengerCommunicationsForTemplate(templateId);
+        final List<Object[]> allPassengerNotificationsForTemplate =
+                this.notificationForInvolvedRepository.getAllPassengerNotificationsForTemplate(templateId);
 
-        for (final Object[] row : allPassengerCommunicationsForTemplate) {
+        for (final Object[] row : allPassengerNotificationsForTemplate) {
             final Integer passengerId = (Integer) row[0]; // involvedCommunicatedId
             final Integer transportDateId = (Integer) row[1]; // transportDateCode
             String driverName = (String) row[2]; // driver name + surname
@@ -103,17 +103,17 @@ public class CommunicationForInvolvedService {
             }
 
             // Get or create the transport map for this passenger
-            Map<Integer, String> passengerTransports = passengerCommunicationsMap.get(passengerId);
+            Map<Integer, String> passengerTransports = passengerNotificationsMap.get(passengerId);
             if (passengerTransports == null) {
                 passengerTransports = new HashMap<>();
-                passengerCommunicationsMap.put(passengerId, passengerTransports);
+                passengerNotificationsMap.put(passengerId, passengerTransports);
             }
 
             // Add the transport assignment (transportDateId -> driverName)
             passengerTransports.put(transportDateId, driverName);
         }
 
-        return passengerCommunicationsMap;
+        return passengerNotificationsMap;
     }
 
 
@@ -126,7 +126,7 @@ public class CommunicationForInvolvedService {
         final Map<Integer, Map<Integer, List<String>>> driverCommunicationsMap = new HashMap<>();
 
         final List<Object[]> allDriverCommunicationsForTemplate =
-                this.communicationForInvolvedRepository.getAllDriverCommunicationsForTemplate(templateId);
+                this.notificationForInvolvedRepository.getAllDriverCommunicationsForTemplate(templateId);
 
         for (final Object[] row : allDriverCommunicationsForTemplate) {
             final Integer driverId = (Integer) row[0]; // involvedCommunicatedId

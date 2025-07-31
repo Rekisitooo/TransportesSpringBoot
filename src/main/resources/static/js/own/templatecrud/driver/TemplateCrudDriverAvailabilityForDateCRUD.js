@@ -1,7 +1,7 @@
 import { genericErrorAlert } from '../alert/GenericErrorAlert.js';
 import { changeElementDisplayNone, changeElementClass } from '../TemplateCrudCommons.js';
 
-function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, communicationIconCol) {
+function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol) {
     const driverId = data.involvedId;
     $.ajax({
         url: '/involvedAvailability',
@@ -19,8 +19,8 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
             changeTransportOfferingIcon(0, offersTransportIcon, 'text-primary', 'text-muted');
 
             // quitar el icono de aviso
-            let communicationIconColClass = changeElementDisplayNone(communicationIconCol);
-            communicationIconCol.attr('class', communicationIconColClass);
+            let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            notificationIconCol.attr('class', notificationIconColClass);
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -28,7 +28,7 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
     });
 }
 
-function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, communicationIconCol) {
+function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol) {
     $.ajax({
         url: '/involvedAvailability',
         type: 'POST',
@@ -42,8 +42,8 @@ function createDriverAssistance(data, driverFullName, passengerSelectsSelector, 
             changeTransportOfferingIcon(1, offersTransportIcon, 'text-muted', 'text-primary');
 
             // quitar el icono de aviso
-            let communicationIconColClass = changeElementDisplayNone(communicationIconCol);
-            communicationIconCol.attr('class', communicationIconColClass);
+            let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            notificationIconCol.attr('class', notificationIconColClass);
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -116,17 +116,17 @@ function changeDriverAssistance() {
     }
     
     const passengerSelectsSelector = 'select[name=driverInTransportSelect][id*=' + data.transportDateId + '_select]';
-    const communicationIconCol = $('#communicationIcon_' + driverId + '_' + dateId);
+    const notificationIconCol = $('#notificationIcon_' + driverId + '_' + dateId);
 
     const driverTransportOffer = offersTransportIcon.attr('data-driver-assist');
     if (driverTransportOffer === "1") {
         const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + driverId + '_' + dateId + ']');
-        deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, communicationIconCol);
+        deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol);
 
     } else if (driverTransportOffer === "0") {
         const driverFullName = $('#' + driverId + '_th').text();
         const passengerNameCells = $('th[id*=passengerNameCell_]');
-        createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, communicationIconCol);
+        createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol);
     }
 }
 

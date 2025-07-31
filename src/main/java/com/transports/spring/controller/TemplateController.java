@@ -31,9 +31,9 @@ public final class TemplateController {
     private final TemplateDateService templateDateService;
     private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TemplateFileService templateFileService;
-    private final CommunicationForInvolvedService communicationForInvolvedService;
+    private final NotificationForInvolvedService notificationForInvolvedService;
 
-    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService, CommunicationForInvolvedService communicationForInvolvedService) {
+    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService, NotificationForInvolvedService notificationForInvolvedService) {
         this.addNewDateToTemplateService = addNewDateToTemplateService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
@@ -41,7 +41,7 @@ public final class TemplateController {
         this.templateDateService = templateDateService;
         this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
         this.templateFileService = templateFileService;
-        this.communicationForInvolvedService = communicationForInvolvedService;
+        this.notificationForInvolvedService = notificationForInvolvedService;
     }
 
     @GetMapping("/openTemplate")
@@ -125,12 +125,12 @@ public final class TemplateController {
         final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
         model.addAttribute("driverAssistanceDates", driverAssistanceDates);
 
-        Map<Integer, Map<Integer, Boolean>> involvedCommunications = this.communicationForInvolvedService.getAllNotificationsForTemplate(templateId);
-        model.addAttribute("involvedCommunications", involvedCommunications);
+        Map<Integer, Map<Integer, Boolean>> involvedNotifications = this.notificationForInvolvedService.getAllNotificationsForTemplate(templateId);
+        model.addAttribute("involvedNotifications", involvedNotifications);
     }
 
-    @GetMapping("/openCommunicationsTab")
-    public String openCommunicationsTab(final Model model, @RequestParam (value = "id") final int templateId) {
+    @GetMapping("/openNotificationsTab")
+    public String openNotificationsTab(final Model model, @RequestParam (value = "id") final int templateId) {
         final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
@@ -143,13 +143,13 @@ public final class TemplateController {
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
 
         final String templateIdString = String.valueOf(templateId);
-        final Map<Integer, Map<Integer, List<String>>> driverCommunicationsMap = this.communicationForInvolvedService.getDriverCommunicationsMapByTemplate(templateIdString);
-        model.addAttribute("driverCommunicationsMap", driverCommunicationsMap);
+        final Map<Integer, Map<Integer, List<String>>> driverNotificationsMap = this.notificationForInvolvedService.getDriverNotificationsMapByTemplate(templateIdString);
+        model.addAttribute("driverNotificationsMap", driverNotificationsMap);
 
-        final Map<Integer, Map<Integer, String>> passengerCommunicationsMap = this.communicationForInvolvedService.getPassengerCommunicationsMapByTemplate(templateIdString);
-        model.addAttribute("passengerCommunicationsMap", passengerCommunicationsMap);
+        final Map<Integer, Map<Integer, String>> passengerNotificationsMap = this.notificationForInvolvedService.getPassengerNotificationsMapByTemplate(templateIdString);
+        model.addAttribute("passengerNotificationsMap", passengerNotificationsMap);
 
-        return "components/templatecrud/communications/communications :: communications";
+        return "components/templatecrud/notifications/notifications :: notifications";
     }
 
     @GetMapping("/openTransportsTab")

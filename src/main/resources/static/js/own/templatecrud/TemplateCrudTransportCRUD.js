@@ -1,7 +1,7 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementClass } from './TemplateCrudCommons.js';
-import { changePassengerComIconOnTransportDeletion, changePassengerComIconOnPassengerSelection} from './passenger/communication/TCPassengerComIconChanger.js';
-import { changeDriverComIconOnTransportDeletion, changeDriverComIconOnDriverSelection } from './driver/communication/TCDriverComIconChanger.js';
+import { changePassengerComIconOnTransportDeletion, changePassengerComIconOnPassengerSelection} from './passenger/notification/TCPassengerComIconChanger.js';
+import { changeDriverComIconOnTransportDeletion, changeDriverComIconOnDriverSelection } from './driver/notification/TCDriverComIconChanger.js';
 
 $(function() {
     $('select[name="driverInTransportSelect"]').each(function() {
