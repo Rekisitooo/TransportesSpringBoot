@@ -22,7 +22,7 @@ $(function() {
                         $(this).addClass('d-none');
 
                     } else {
-                        communicateTransport(data, $(this), driverSelectedId);
+                        notifyTransport(data, $(this), driverSelectedId);
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
@@ -33,7 +33,7 @@ $(function() {
     );
 });
 
-async function communicateTransport(data, alertIcon, driverSelectedId) {
+async function notifyTransport(data, alertIcon, driverSelectedId) {
     try {
         const response = await $.ajax({
             type: 'GET',
@@ -139,13 +139,13 @@ function showCommunicationError() {
 }
 
 function changeAlertIconToCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
-    alertIcon.attr('class', communicateTransportIconClass);
+    let notifyTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
+    alertIcon.attr('class', notifyTransportIconClass);
 }
 
 function changeAlertIconToNotCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
-    alertIcon.attr('class', communicateTransportIconClass);
+    let notifyTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
+    alertIcon.attr('class', notifyTransportIconClass);
 }
 
 /**

@@ -19,7 +19,7 @@ $(function() {
                         $(this).addClass('d-none');
 
                     } else {
-                        communicateTransport(data, $(this));
+                        notifyTransport(data, $(this));
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
@@ -117,7 +117,7 @@ async function updateDriverNotifications(data, alertIcon) {
     }
 }
 
-async function communicateTransport(data, alertIcon) {
+async function notifyTransport(data, alertIcon) {
     try {
         const response = await getDriverNotifications(data);
 
@@ -136,13 +136,13 @@ function showCommunicationError() {
 }
 
 function changeAlertIconToCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
-    alertIcon.attr('class', communicateTransportIconClass);
+    let notifyTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
+    alertIcon.attr('class', notifyTransportIconClass);
 }
 
 function changeAlertIconToNotCommunicated(alertIcon) {
-    let communicateTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
-    alertIcon.attr('class', communicateTransportIconClass);
+    let notifyTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
+    alertIcon.attr('class', notifyTransportIconClass);
 }
 
 async function getDriverNotifications(data) {

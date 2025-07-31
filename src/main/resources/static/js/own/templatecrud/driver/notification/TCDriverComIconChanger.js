@@ -1,5 +1,5 @@
 /**
- * Changes the driver communication icon based on the transport deletion.
+ * Changes the driver notification icon based on the transport deletion.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} driverCommunicationIcon - The warning icon element for the driver
  */
@@ -12,7 +12,7 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
             driverCommunicationIcon.addClass("d-none");
         } else {
             const hasInvolvedId = driverNotifications.data.some(
-                communication => communication.involvedId === data.involvedId
+                notification => notification.involvedId === data.involvedId
             );
 
             if (hasInvolvedId) {
@@ -29,7 +29,7 @@ export async function changeDriverComIconOnTransportDeletion(data, driverCommuni
 }
 
 /**
- * Updates the warning icon visibility for a driver based on their communication status.
+ * Updates the warning icon visibility for a driver based on their notification status.
  * Shows the icon if the passenger is not in the driver's notifications or if there are no notifications.
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} driverCommunicationIcon - The warning icon element for the driver
@@ -43,7 +43,7 @@ export async function changeDriverComIconOnDriverSelection(data, driverCommunica
     } else {
         const driverNotifications = await getDriverNotifications(data);
         const hasPassengerInNotifications = driverNotifications.data.some(
-            communication => communication.passengerId === data.t
+            notification => notification.passengerId === data.t
         );
 
         if (!hasPassengerInNotifications) {
