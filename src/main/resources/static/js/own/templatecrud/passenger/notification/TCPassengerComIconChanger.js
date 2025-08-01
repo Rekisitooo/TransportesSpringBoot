@@ -54,7 +54,7 @@ async function getPassengerNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',
-            url: '/involvedNotification/get',
+            url: '/involvedTransportNotification/get',
             data: {
                 notifiedInvolvedId: data.t,
                 transportDateCode: data.d

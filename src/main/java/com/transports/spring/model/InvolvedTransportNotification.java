@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "AVISO_POR_INVOLUCRADO")
-public final class NotificationForInvolved {
+public final class InvolvedTransportNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -159,9 +159,9 @@
                                                 or (allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null)  ?
                                                     'd-none' :
                                                         (
-                                                            involvedNotifications.get(date.id) != null
-                                                            and involvedNotifications.get(date.id).get(passenger.id) != null
-                                                            and involvedNotifications.get(date.id).get(passenger.id) == false ?
+                                                            involvedTransportNotifications.get(date.id) != null
+                                                            and involvedTransportNotifications.get(date.id).get(passenger.id) != null
+                                                            and involvedTransportNotifications.get(date.id).get(passenger.id) == false ?
                                                                 'text-primary' : 'text-danger'
                                                         )}"
                                         role="button"

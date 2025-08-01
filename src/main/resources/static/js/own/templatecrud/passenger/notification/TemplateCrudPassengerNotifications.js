@@ -9,7 +9,7 @@ $(function() {
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    notifiedInvolvedId : $('th[id=' + passengerThId + ']').attr('data-t')
+                    notifiedInvolvedId : $('td[id=' + passengerThId + ']').attr('data-t')
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
@@ -37,7 +37,7 @@ async function notifyTransport(data, alertIcon, driverSelectedId) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/involvedNotification/get',
+            url: '/involvedTransportNotification/get',
             data: data
         });
 
@@ -83,7 +83,7 @@ async function ajaxRequestCreatePassengerNotification(data, alertIcon) {
         await $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            url: '/involvedNotification/createNotification',
+            url: '/involvedTransportNotification/createNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -100,7 +100,7 @@ async function ajaxRequestDeletePassengerNotification(data) {
         await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
-            url: '/involvedNotification',
+            url: '/involvedTransportNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });

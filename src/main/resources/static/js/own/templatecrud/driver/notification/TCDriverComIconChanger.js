@@ -65,7 +65,7 @@ async function getDriverNotifications(data) {
     try {
         return await $.ajax({
             type: 'GET',
-            url: '/involvedNotification/get',
+            url: '/involvedTransportNotification/get',
             data: {
                 notifiedInvolvedId: data.p,
                 transportDateCode: data.d

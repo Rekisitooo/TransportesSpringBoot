@@ -9,7 +9,7 @@ $(function() {
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    notifiedInvolvedId : $('th[id=' + driverThId + ']').attr('data-d')
+                    notifiedInvolvedId : $('td[id=' + driverThId + ']').attr('data-d')
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
@@ -67,7 +67,7 @@ async function ajaxRequestCreateDriverNotification(data, alertIcon) {
         await $.ajax({
             type: 'POST',
             contentType: 'application/json',
-            url: '/involvedNotification/createNotification',
+            url: '/involvedTransportNotification/createNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -89,7 +89,7 @@ async function ajaxRequestDeleteDriverNotification(data) {
         await $.ajax({
             type: 'DELETE',
             contentType: 'application/json',
-            url: '/involvedNotification',
+            url: '/involvedTransportNotification',
             data: JSON.stringify(data),
             dataType: 'json'
         });
@@ -148,7 +148,7 @@ function changeAlertIconToNotNotified(alertIcon) {
 async function getDriverNotifications(data) {
     return await $.ajax({
         type: 'GET',
-        url: '/involvedNotification/get',
+        url: '/involvedTransportNotification/get',
         data: data
     });
 }

@@ -1,7 +1,7 @@
 package com.transports.spring.service;
 
-import com.transports.spring.model.NotificationForInvolved;
-import com.transports.spring.repository.INotificationForInvolvedRepository;
+import com.transports.spring.model.InvolvedTransportNotification;
+import com.transports.spring.repository.IInvolvedTransportNotificationRepository;
 import com.transports.spring.service.response.ServiceResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class NotificationForInvolvedService {
+public class InvolvedTransportNotificationService {
 
-    private final INotificationForInvolvedRepository notificationForInvolvedRepository;
+    private final IInvolvedTransportNotificationRepository notificationForInvolvedRepository;
 
-    public NotificationForInvolvedService(INotificationForInvolvedRepository notificationForInvolvedRepository) {
+    public InvolvedTransportNotificationService(IInvolvedTransportNotificationRepository notificationForInvolvedRepository) {
         this.notificationForInvolvedRepository = notificationForInvolvedRepository;
     }
 
-    public List<NotificationForInvolved> getNotificationForInvolvedInDate (final String transportDate, final String involvedId) {
+    public List<InvolvedTransportNotification> getNotificationForInvolvedInDate (final String transportDate, final String involvedId) {
          return this.notificationForInvolvedRepository.getNotificationForInvolvedInDate(transportDate, involvedId);
     }
 
@@ -32,21 +32,21 @@ public class NotificationForInvolvedService {
     }
 
     @Transactional
-    public ResponseEntity<Object> create(final NotificationForInvolved notificationForInvolved) {
-        this.notificationForInvolvedRepository.save(notificationForInvolved);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", notificationForInvolved));
+    public ResponseEntity<Object> create(final InvolvedTransportNotification involvedTransportNotification) {
+        this.notificationForInvolvedRepository.save(involvedTransportNotification);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", involvedTransportNotification));
     }
 
     @Transactional
-    public ResponseEntity<Object> updateDriver(final NotificationForInvolved notificationForInvolved) {
+    public ResponseEntity<Object> updateDriver(final InvolvedTransportNotification involvedTransportNotification) {
         this.notificationForInvolvedRepository.updateDriver(
-                notificationForInvolved.getTransportDateCode(),
-                notificationForInvolved.getNotifiedInvolvedId(),
-                notificationForInvolved.getDriverCode(),
-                notificationForInvolved.getPassengerCode()
+                involvedTransportNotification.getTransportDateCode(),
+                involvedTransportNotification.getNotifiedInvolvedId(),
+                involvedTransportNotification.getDriverCode(),
+                involvedTransportNotification.getPassengerCode()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", notificationForInvolved));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ServiceResponse<>("ok", involvedTransportNotification));
     }
 
     /**
