@@ -199,13 +199,12 @@ async function showHidePassengerNotificationsButton(passengerId) {
     }
     
     // if the passenger has less than two red notification icons, the notification button is not shown
-    console.log(passengerRedNotifIconCount)
     if (passengerRedNotifIconCount < 2) {
-        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassegerButtonDiv_' + passengerId + ']')
+        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
             .addClass('d-none');
     
     } else {
-        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassegerButtonDiv_' + passengerId + ']')
+        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
             .removeClass('d-none');
     }
 }

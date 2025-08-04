@@ -2,14 +2,18 @@ import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
 import { changeElementClass } from '../../TemplateCrudCommons.js';
 
 $(function() {
+    // on load, hide or show all the buttons to mark all the month transports have been notified to the driver
+    showHideCheckAllNotificationsButton();
+
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', async function() {
                 const driverThId = $(this).attr('data-driver-th');
+                const driverId = $('td[id=' + driverThId + ']').attr('data-d');
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),
-                    notifiedInvolvedId : $('td[id=' + driverThId + ']').attr('data-d')
+                    notifiedInvolvedId : driverId
                 };
 
                 if ($(this).attr('class').includes('text-danger')) {
@@ -19,12 +23,15 @@ $(function() {
                         $(this).addClass('d-none');
 
                     } else {
-                        notifyTransport(data, $(this));
+                        await notifyTransport(data, $(this));
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
-                    deleteDriverNotification(data, $(this));
+                    await deleteDriverNotification(data, $(this));
                 }
+
+                // hide or show the button to mark all the month transports have been notified to the driver
+                await showHideDriverNotificationsButton(driverId);
             });
         }
     );
@@ -111,7 +118,7 @@ async function updateDriverNotifications(data, alertIcon) {
             };
             await createDriverNotifications(notification, alertIcon);
         }
-        
+
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al indicar que el transporte no se ha comunicado.");
     }
@@ -151,4 +158,58 @@ async function getDriverNotifications(data) {
         url: '/involvedTransportNotification/get',
         data: data
     });
+}
+
+/**
+ * Shows the notification icon to indicate the
+ * driver has been notified the transports for the whole month if there are
+ * two or more icons in red. If not, it remains hidden.
+ */
+async function showHideCheckAllNotificationsButton() {
+    const driverTransportsTableCellsList = $('#driverTransportsTable tr td:first-child');
+
+    // for each passenger the table
+    for (let i = 0; i < driverTransportsTableCellsList.length; i++) {
+        const driverId = $(driverTransportsTableCellsList[i]).attr('data-d');
+
+        showHideDriverNotificationsButton(driverId);
+    }
+
+}
+
+/**
+ * Shows the notification icon to indicate the
+ * driver has been notified the transports for the whole month if there are
+ * two or more icons in red. If not, it remains hidden.
+ * @driverId
+ */
+async function showHideDriverNotificationsButton(driverId) {
+    const driverTransportsNotificationIconDivList = document.querySelectorAll('#driverTransportsTable tr td div[id*=notificationIcon_' + driverId + '_]');
+    const driverTransportsNotificationIconList = document.querySelectorAll('#driverTransportsTable tr td div[id*=notificationIcon_' + driverId + '_] i');
+    let driverRedNotifIconCount = 0;
+
+    // count the red notification icons
+    for (let j = 0; j < driverTransportsNotificationIconDivList.length; j++) {
+        const transportNotifIconDiv = driverTransportsNotificationIconDivList[j];
+        const transportNotifIcon = driverTransportsNotificationIconList[j];
+
+        // driver assist and needs transport
+        const isIconDivShown = !transportNotifIconDiv.classList.contains('d-none');
+        // driver does not have a transport and notification
+        const isIconShown = !transportNotifIcon.classList.contains('d-none')
+        const isIconRed = transportNotifIcon.classList.contains('text-danger');
+        if (isIconDivShown && isIconShown && isIconRed) {
+            driverRedNotifIconCount++;
+        }
+    }
+
+    // if the driver has less than two red notification icons, the notification button is not shown
+    if (driverRedNotifIconCount < 2) {
+        $('#driverTransportsTable tr td:first-child div[id*=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+            .addClass('d-none');
+
+    } else {
+        $('#driverTransportsTable tr td:first-child div[id*=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+            .removeClass('d-none');
+    }
 }
