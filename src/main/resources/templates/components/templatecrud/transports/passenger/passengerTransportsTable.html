@@ -50,9 +50,9 @@
                             <div class="row">
                                 <div class="col" th:id="'markAsNotifiedPassengerButtonDiv_' + ${passenger.id}">
                                     <i th:class="
-                                            'fas fa-exclamation-circle ' +
-                                            ${involvedMarkAllNotificationsButton.get(passenger.id) == true ?
-                                                'text-danger' : 'd-none'
+                                            'fas fa-exclamation-circle text-danger' +
+                                            ${involvedMarkAllNotificationsButton.get(passenger.id) == false ?
+                                                'd-none' : ''
                                             }"
                                        role="button"
                                        th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEnd}"
