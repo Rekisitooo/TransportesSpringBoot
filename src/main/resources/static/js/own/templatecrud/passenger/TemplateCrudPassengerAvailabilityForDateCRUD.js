@@ -26,8 +26,8 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
             let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
             needsTransportIconCol.attr('class', needsTransportIconColClass);
 
-            // quitar el icono de aviso
-            let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            // poner el icono de aviso a rojo
+            let notificationIconColClass = changeElementClass(notificationIconCol, 'text-danger', 'text-primary');
             notificationIconCol.attr('class', notificationIconColClass);
 
             //cambia el icono de asistencia
@@ -70,8 +70,9 @@ function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenge
             let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
             needsTransportIconCol.attr('class', needsTransportIconColClass);
 
-            //mostrar el icono de avisos
+            //mostrar el icono de avisos en rojo
             let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            notificationIconColClass = changeElementClass(notificationIconCol, 'text-danger', 'text-primary');
             notificationIconCol.attr('class', notificationIconColClass);
 
             //pone el texto 'no asiste'

@@ -1,15 +1,38 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
 import { changeElementClass } from './TemplateCrudCommons.js';
-import { changePassengerComIconOnTransportDeletion, changePassengerComIconOnPassengerSelection} from './passenger/notification/TCPassengerComIconChanger.js';
-import { changeDriverComIconOnTransportDeletion, changeDriverComIconOnDriverSelection } from './driver/notification/TCDriverComIconChanger.js';
+import {
+    changePassengerNotifIconOnTransportDeletion,
+    changePassengerNotifIconOnPassengerSelection,
+} from './passenger/notification/TCPassengerNotifIconChanger.js';
+import {
+    changeDriverNotifIconOnTransportDeletion,
+    changeDriverNotifIconOnDriverSelection,
+} from './driver/notification/TCDriverNotifIconChanger.js';
+import { showHideDriverNotificationsButton } from './driver/notification/TemplateCrudDriverNotifications.js';
+import { showHidePassengerNotificationsButton } from './passenger/notification/TemplateCrudPassengerNotifications.js';
 
 $(function() {
     $('select[name="driverInTransportSelect"]').each(function() {
         $(this).data('previous-driver-id', $(this).val());
-    }).on('change', function (event) {
+
+    }).on('change', async function (event) {
+        const newDriverId = $(this).val();
         const previousDriverId = $(this).data('previous-driver-id');
-        operate(this, previousDriverId);
+        const selectedOption = $(this).find('option:selected');
+        const passengerId = selectedOption.attr('data-t');
+
+        await operate(this, previousDriverId, newDriverId, passengerId);
         $(this).data('previous-driver-id', $(this).val());
+
+        const templateId = $('#templateTitle').attr('data-template-id');
+        // shows or hides notification icon to indicate all transports are notified
+        await showHidePassengerNotificationsButton(passengerId, templateId);
+        if (newDriverId !== undefined && newDriverId !== '') {
+            await showHideDriverNotificationsButton(newDriverId, templateId);
+        }
+        if (previousDriverId !== undefined && previousDriverId !== '') {
+            await showHideDriverNotificationsButton(previousDriverId, templateId);
+        }
     });
 });
 
@@ -63,13 +86,13 @@ async function updateDriverInTransportOption(transportDateId, newDriverId, passe
         if (response?.status === 'ok') {
             addPassengerInDriverTransportsTable(transportDateId, newDriverId, passengerId, passengerFullName, elements.driverTransportsTablePassengerTdToAddSpan);
             deletePassengerInDriverTransportsTable(transportDateId, passengerId, response.data.p, elements.driverPassengersDivId);
-            await changePassengerComIconOnPassengerSelection(data, elements.passengerWarningIcon);
-            await changeDriverComIconOnDriverSelection(data, elements.newDriverWarningIcon);
+            await changePassengerNotifIconOnPassengerSelection(data, elements.passengerWarningIcon);
+            await changeDriverNotifIconOnDriverSelection(data, elements.newDriverWarningIcon);
 
             //if there was a previous driver, update its warning icon
             if (previousDriverId && previousDriverId > 0 && elements.previousDriverWarningIcon?.length) {
                 const previousDriverData = { ...data, p: previousDriverId };
-                await changeDriverComIconOnDriverSelection(previousDriverData, elements.previousDriverWarningIcon);
+                await changeDriverNotifIconOnDriverSelection(previousDriverData, elements.previousDriverWarningIcon);
             }
 
         } else {
@@ -110,9 +133,10 @@ async function createTransportOption(transportDateId, newDriverId, passengerId, 
         actualSelect.children().attr("name", "u");
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
-            changePassengerComIconOnPassengerSelection(data, elements.passengerWarningIcon),
-            changeDriverComIconOnDriverSelection(data, elements.newDriverWarningIcon)
+            changePassengerNotifIconOnPassengerSelection(data, elements.passengerWarningIcon),
+            changeDriverNotifIconOnDriverSelection(data, elements.newDriverWarningIcon)
         ]);
+
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al asignar el conductor.");
     }
@@ -147,9 +171,10 @@ async function deleteTransportOption(transportDateId, passengerId, previousDrive
         actualSelect.children().attr("name", "c");
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
-            changeDriverComIconOnTransportDeletion(data, elements.newDriverWarningIcon),
-            changePassengerComIconOnTransportDeletion(data, elements.newDriverWarningIcon),
+            changeDriverNotifIconOnTransportDeletion(data, elements.newDriverWarningIcon),
+            changePassengerNotifIconOnTransportDeletion(data, elements.newDriverWarningIcon),
         ]);
+
     } catch (error) {
         temporalErrorAlert("Ha ocurrido un error al desasignar el conductor.");
     }
@@ -200,11 +225,11 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
  * Handles the change event of the driver selection.
  * @param {jQuery} actualSelect - The select element being modified
  * @param {number} previousDriverId - ID of the previous driver
+ * @param {numbe} newDriverId - ID of the driver selected
+ * @param {number} passengerId - ID of the passenger
  */
-function operate(actualSelect, previousDriverId) {
+async function operate(actualSelect, previousDriverId, newDriverId, passengerId) {
     const selectedOption = $(actualSelect).find('option:selected');
-    const newDriverId = $(actualSelect).val();
-    const passengerId = selectedOption.attr('data-t');
     const transportDateId = selectedOption.attr('data-d');
     const passengerFullName = selectedOption.attr('data-passenger-name');
     const methodName = selectedOption.attr('name');

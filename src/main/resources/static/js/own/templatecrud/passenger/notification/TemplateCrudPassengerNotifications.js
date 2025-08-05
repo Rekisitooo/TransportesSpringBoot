@@ -2,9 +2,6 @@ import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
 import { changeElementClass } from '../../TemplateCrudCommons.js';
 
 $(function() {
-    // on load, hide or show all the buttons to mark all the month transports have been notified to the passengers
-    showHideCheckAllNotificationsButton();
-
     $('#passengerTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', async function() {
@@ -34,7 +31,8 @@ $(function() {
                 }
 
                 // hide or show the button to mark all the month transports have been notified to the passenger
-                await showHidePassengerNotificationsButton(passengerId);
+                const templateId = $('#templateTitle').attr('data-template-id');
+                await showHidePassengerNotificationsButton(passengerId, templateId);
             });
         }
     );
@@ -157,54 +155,32 @@ function changeAlertIconToNotNotified(alertIcon) {
 
 /**
  * Shows the notification icon to indicate the
- * passenger has been notified the transports for the whole month if there are
- * two or more icons in red. If not, it remains hidden.
+ * driver has been notified the transports for the whole month if there are
+ * two or more transports without notification. If not, it remains hidden.
+ * @param {number} passengerId - Contains the passenger id
+ * @param {number} templateId - Contains the template id
  */
-async function showHideCheckAllNotificationsButton() {
-    const passengerTransportsTableCellsList = $('#passengerTransportsTable tr td:first-child');
+export async function showHidePassengerNotificationsButton(passengerId, templateId) {
+    try {
+        const response = await $.ajax({
+            type: 'GET',
+            url: '/t/getPassengerTransportsWithoutNotification',
+            data: {
+                templateId : templateId,
+                passengerId : passengerId
+            }
+        });
 
-    // for each passenger the table
-    for (let i = 0; i < passengerTransportsTableCellsList.length; i++) {
-        const passengerId = $(passengerTransportsTableCellsList[i]).attr('data-t');
+        // if the driver has more than 2 transports without notification, the icon shows
+        if (response?.data?.length < 2) {
+            $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
+                .addClass('d-none');
 
-        showHidePassengerNotificationsButton(passengerId);
-    }
-
-}
-
-/**
- * Shows the notification icon to indicate the
- * passenger has been notified the transports for the whole month if there are
- * two or more icons in red. If not, it remains hidden.
- * @passengerId
- */
-async function showHidePassengerNotificationsButton(passengerId) {
-    const passengerTransportsNotificationIconDivList = document.querySelectorAll('#passengerTransportsTable tr td div[id*=notificationIcon_' + passengerId + '_]');
-    const passengerTransportsNotificationIconList = document.querySelectorAll('#passengerTransportsTable tr td div[id*=notificationIcon_' + passengerId + '_] i');
-    let passengerRedNotifIconCount = 0;
-
-    // count the red notification icons
-    for (let j = 0; j < passengerTransportsNotificationIconDivList.length; j++) {
-        const transportNotifIconDiv = passengerTransportsNotificationIconDivList[j];
-        const transportNotifIcon = passengerTransportsNotificationIconList[j];
-    
-        // passenger assist and needs transport
-        const isIconDivShown = !transportNotifIconDiv.classList.contains('d-none');
-        // passenger does not have a transport and notification
-        const isIconShown = !transportNotifIcon.classList.contains('d-none')
-        const isIconRed = transportNotifIcon.classList.contains('text-danger');
-        if (isIconDivShown && isIconShown && isIconRed) {
-            passengerRedNotifIconCount++;
+        } else {
+            $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
+                .removeClass('d-none');
         }
-    }
-    
-    // if the passenger has less than two red notification icons, the notification button is not shown
-    if (passengerRedNotifIconCount < 2) {
-        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
-            .addClass('d-none');
-    
-    } else {
-        $('#passengerTransportsTable tr td:first-child div[id*=markAsNotifiedPassengerButtonDiv_' + passengerId + ']')
-            .removeClass('d-none');
+    } catch (error) {
+        console.error('Error updating passengers whole month notification button');
     }
 }

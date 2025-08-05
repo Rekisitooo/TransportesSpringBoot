@@ -127,6 +127,9 @@ public final class TemplateController {
 
         Map<Integer, Map<Integer, Boolean>> involvedTransportNotifications = this.involvedTransportNotificationService.getAllNotificationsForTemplate(templateId);
         model.addAttribute("involvedTransportNotifications", involvedTransportNotifications);
+
+        final Map<Integer, Boolean> involvedMarkAllNotificationsButton = this.involvedTransportNotificationService.getInvolvedMarkAllNotificationsButton(templateId);
+        model.addAttribute("involvedMarkAllNotificationsButton", involvedMarkAllNotificationsButton);
     }
 
     @GetMapping("/openNotificationsTab")
@@ -148,6 +151,9 @@ public final class TemplateController {
 
         final Map<Integer, Map<Integer, String>> passengerNotificationsMap = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateIdString);
         model.addAttribute("passengerNotificationsMap", passengerNotificationsMap);
+
+        final Map<Integer, Boolean> involvedMarkAllNotificationsButton = this.involvedTransportNotificationService.getInvolvedMarkAllNotificationsButton(templateId);
+        model.addAttribute("involvedMarkAllNotificationsButton", involvedMarkAllNotificationsButton);
 
         return "components/templatecrud/notifications/notifications :: notifications";
     }

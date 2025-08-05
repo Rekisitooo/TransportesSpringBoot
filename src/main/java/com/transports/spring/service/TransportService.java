@@ -149,4 +149,24 @@ public class TransportService {
     //TODO check driver has available seats
     //TODO check input data
     //TODO check if transport allready existed
+
+    /**
+     * Gets all the passenger transports that have not been notified to him/her
+     * @param templateId
+     * @param passengerId
+     * @return list of transports
+     */
+    public List<Transport> getPassengerTransportsWithoutNotification(final Integer templateId, final Integer passengerId) {
+        return this.transportByTemplateRepository.getPassengerTransportsWithoutNotification(templateId, passengerId);
+    }
+
+    /**
+     * Gets all the driver transports that have not been notified to him/her
+     * @param templateId
+     * @param driverId
+     * @return list of transports
+     */
+    public List<Transport> getDriverTransportsWithoutNotification(final Integer templateId, final Integer driverId) {
+        return this.transportByTemplateRepository.getDriverTransportsWithoutNotification(templateId, driverId);
+    }
 }

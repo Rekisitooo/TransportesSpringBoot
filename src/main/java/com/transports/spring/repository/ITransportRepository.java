@@ -101,4 +101,38 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           t.transportKey.passengerId = :passengerId" +
             "           AND t.transportKey.transportDateId = :transportDateId")
     Transport findTransportByPassenger(@Param("transportDateId") Integer transportDateId, @Param("passengerId") Integer passengerId);
+
+    @Query("SELECT DISTINCT" +
+            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
+            "       FROM Transport t" +
+            "           LEFT OUTER JOIN InvolvedTransportNotification api" +
+            "               ON t.transportKey.transportDateId = api.transportDateCode" +
+            "               AND t.transportKey.passengerId = api.passengerCode" +
+            "               AND t.transportKey.driverId = api.driverCode" +
+            "           INNER JOIN TransportDateByTemplate ftpp" +
+            "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN Template p" +
+            "               ON ftpp.templateCode = p.ID" +
+            "       WHERE " +
+            "           p.id = :templateId" +
+            "           AND t.transportKey.passengerId = :passengerId" +
+            "           AND api.id IS NULL")
+    List<Transport> getPassengerTransportsWithoutNotification(@Param("templateId") Integer templateId, @Param("passengerId") Integer passengerId);
+
+    @Query("SELECT DISTINCT" +
+            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
+            "       FROM Transport t" +
+            "           LEFT OUTER JOIN InvolvedTransportNotification api" +
+            "               ON t.transportKey.transportDateId = api.transportDateCode" +
+            "               AND t.transportKey.passengerId = api.passengerCode" +
+            "               AND t.transportKey.driverId = api.driverCode" +
+            "           INNER JOIN TransportDateByTemplate ftpp" +
+            "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN Template p" +
+            "               ON ftpp.templateCode = p.ID" +
+            "       WHERE " +
+            "           p.id = :templateId" +
+            "           AND t.transportKey.driverId = :driverId" +
+            "           AND api.id IS NULL")
+    List<Transport> getDriverTransportsWithoutNotification(@Param("templateId") Integer templateId, @Param("driverId") Integer driverId);
 }

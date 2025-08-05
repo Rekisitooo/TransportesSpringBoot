@@ -159,4 +159,36 @@ public class InvolvedTransportNotificationService {
 
         return driverNotificationsMap;
     }
+
+    /**
+     * Returns a map that indicates whether the icon to mark all of the transports as notified
+     * should show or not.
+     * If it has two or more transports without notification, it shows.
+     *
+     * @param templateId - The template id.
+     * @return  Map<InvolvedId, Boolean (true if button has to appear)>>
+     */
+    public Map<Integer, Boolean> getInvolvedMarkAllNotificationsButton(final Integer templateId) {
+        final Map<Integer, Map<Integer, Boolean>> allNotificationsForTemplate = this.getAllNotificationsForTemplate(templateId);
+        final Map<Integer, Boolean> allNotificationButtonMap = new HashMap<>();
+
+        // each involved
+        for (final Map.Entry<Integer, Map<Integer, Boolean>> integerMapEntry : allNotificationsForTemplate.entrySet()) {
+            Integer involvedId = integerMapEntry.getKey();
+            Map<Integer, Boolean> involvedNoticationsMap = integerMapEntry.getValue();
+
+            // each notification for date
+            int notNotifiedTransportsCounter = 0;
+            for (final Map.Entry<Integer, Boolean> integerBooleanEntry : involvedNoticationsMap.entrySet()) {
+                if (Boolean.FALSE.equals(integerBooleanEntry.getValue())) {
+                    notNotifiedTransportsCounter++;
+                }
+            }
+
+            // it there is more than 1 notification, mark true to show the button
+            allNotificationButtonMap.put(involvedId, (notNotifiedTransportsCounter > 1) );
+        }
+
+        return allNotificationButtonMap;
+    }
 }

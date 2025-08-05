@@ -2,9 +2,6 @@ import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
 import { changeElementClass } from '../../TemplateCrudCommons.js';
 
 $(function() {
-    // on load, hide or show all the buttons to mark all the month transports have been notified to the driver
-    showHideCheckAllNotificationsButton();
-
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
         function () {
             $(this).on('click', async function() {
@@ -16,22 +13,24 @@ $(function() {
                     notifiedInvolvedId : driverId
                 };
 
+                // if icon is red, the driver has not been notified of its current transport
                 if ($(this).attr('class').includes('text-danger')) {
+                    // get if driver had notifications
                     const driverNotifications = await getDriverNotifications(data);
                     if (driverNotifications?.data?.length) {
+                        // deletes driver notifications
                         await ajaxRequestDeleteDriverNotification(data);
-                        $(this).addClass('d-none');
-
-                    } else {
-                        await notifyTransport(data, $(this));
                     }
+                    await notifyTransport(data, $(this));
 
+                // if icon is blue, the driver has been notified of its current transport
                 } else if ($(this).attr('class').includes('text-primary')) {
                     await deleteDriverNotification(data, $(this));
                 }
 
                 // hide or show the button to mark all the month transports have been notified to the driver
-                await showHideDriverNotificationsButton(driverId);
+                const templateId = $('#templateTitle').attr('data-template-id');
+                await showHideDriverNotificationsButton(driverId, templateId);
             });
         }
     );
@@ -39,22 +38,28 @@ $(function() {
 
 async function createDriverNotifications(data, alertIcon) {
     try {
+        // gets the transports already assigned to the driver in that date
         const response = await $.ajax({
             type: 'GET',
             url: '/t/getPassengersForDriverByDate',
             data: data
         });
 
+        // creates a notification for each passenger and changes the icon to blue
         if (response?.data?.length > 0) {
-            await Promise.all(response.data.map(async (transport) => {
-                const newData = {
-                    ...data,
-                    notificationDate: Date.now(),
-                    driverCode: transport.transport.transportKey.driverId,
-                    passengerCode: transport.transport.transportKey.passengerId
-                };
-                return ajaxRequestCreateDriverNotification(newData, alertIcon);
-            }));
+            await Promise.all(
+                response.data.map(async (transport) => {
+                    const newData = {
+                        ...data,
+                        notificationDate: Date.now(),
+                        driverCode: transport.transport.transportKey.driverId,
+                        passengerCode: transport.transport.transportKey.passengerId
+                    };
+                return createDriverNotification(newData, alertIcon);
+                })
+           );
+
+        // creates a notification without passenger and changes the icon to blue
         } else {
             const newData = {
                 ...data,
@@ -62,14 +67,18 @@ async function createDriverNotifications(data, alertIcon) {
                 driverCode: data.notifiedInvolvedId,
                 passengerCode: null
             };
-            await ajaxRequestCreateDriverNotification(newData, alertIcon);
+            await createDriverNotification(newData, alertIcon);
         }
+
     } catch (error) {
         showNotificationError();
     }
 }
 
-async function ajaxRequestCreateDriverNotification(data, alertIcon) {
+/**
+ * Creates driver notification in db and changes the icon
+ */
+async function createDriverNotification(data, alertIcon) {
     try {
         await $.ajax({
             type: 'POST',
@@ -85,6 +94,9 @@ async function ajaxRequestCreateDriverNotification(data, alertIcon) {
     }
 }
 
+/**
+ * Deletes the driver notification in db and changes icon to red
+ */
 async function deleteDriverNotification(data, alertIcon) {
     if (ajaxRequestDeleteDriverNotification(data)) {
         changeAlertIconToNotNotified(alertIcon);
@@ -152,6 +164,10 @@ function changeAlertIconToNotNotified(alertIcon) {
     alertIcon.attr('class', notifyTransportIconClass);
 }
 
+/**
+ * Gets all the notifications for the driver
+ * @param {object} data - Contains the transport date id and notificated id (driver)
+ */
 async function getDriverNotifications(data) {
     return await $.ajax({
         type: 'GET',
@@ -163,53 +179,32 @@ async function getDriverNotifications(data) {
 /**
  * Shows the notification icon to indicate the
  * driver has been notified the transports for the whole month if there are
- * two or more icons in red. If not, it remains hidden.
+ * two or more transports without notification. If not, it remains hidden.
+ * @param {number} driverId - Contains the drivers id
+ * @param {number} templateId - Contains the template id
  */
-async function showHideCheckAllNotificationsButton() {
-    const driverTransportsTableCellsList = $('#driverTransportsTable tr td:first-child');
+export async function showHideDriverNotificationsButton(driverId, templateId) {
+    try {
+        const response = await $.ajax({
+            type: 'GET',
+            url: '/t/getDriverTransportsWithoutNotification',
+            data: {
+                templateId : templateId,
+                driverId : driverId
+            }
+        });
 
-    // for each passenger the table
-    for (let i = 0; i < driverTransportsTableCellsList.length; i++) {
-        const driverId = $(driverTransportsTableCellsList[i]).attr('data-d');
+        // if the driver has more than 2 transports without notification, the icon shows
+        if (response?.data?.length < 2) {
+            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+                .addClass('d-none');
 
-        showHideDriverNotificationsButton(driverId);
-    }
-
-}
-
-/**
- * Shows the notification icon to indicate the
- * driver has been notified the transports for the whole month if there are
- * two or more icons in red. If not, it remains hidden.
- * @driverId
- */
-async function showHideDriverNotificationsButton(driverId) {
-    const driverTransportsNotificationIconDivList = document.querySelectorAll('#driverTransportsTable tr td div[id*=notificationIcon_' + driverId + '_]');
-    const driverTransportsNotificationIconList = document.querySelectorAll('#driverTransportsTable tr td div[id*=notificationIcon_' + driverId + '_] i');
-    let driverRedNotifIconCount = 0;
-
-    // count the red notification icons
-    for (let j = 0; j < driverTransportsNotificationIconDivList.length; j++) {
-        const transportNotifIconDiv = driverTransportsNotificationIconDivList[j];
-        const transportNotifIcon = driverTransportsNotificationIconList[j];
-
-        // driver assist and needs transport
-        const isIconDivShown = !transportNotifIconDiv.classList.contains('d-none');
-        // driver does not have a transport and notification
-        const isIconShown = !transportNotifIcon.classList.contains('d-none')
-        const isIconRed = transportNotifIcon.classList.contains('text-danger');
-        if (isIconDivShown && isIconShown && isIconRed) {
-            driverRedNotifIconCount++;
+        } else {
+            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+                .removeClass('d-none');
         }
-    }
 
-    // if the driver has less than two red notification icons, the notification button is not shown
-    if (driverRedNotifIconCount < 2) {
-        $('#driverTransportsTable tr td:first-child div[id*=markAsNotifiedDriverButtonDiv_' + driverId + ']')
-            .addClass('d-none');
-
-    } else {
-        $('#driverTransportsTable tr td:first-child div[id*=markAsNotifiedDriverButtonDiv_' + driverId + ']')
-            .removeClass('d-none');
+    } catch (error) {
+        console.error('Error updating drivers whole month notification button');
     }
 }

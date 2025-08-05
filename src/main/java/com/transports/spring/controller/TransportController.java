@@ -85,4 +85,28 @@ public class TransportController {
                 passengerId(body.getPassengerId()).
                 build();
     }
+
+    /**
+     * Gets all the passenger transports that have not been notified to him/her
+     * @param templateId
+     * @param passengerId
+     * @return list of transports
+     */
+    @GetMapping("/getPassengerTransportsWithoutNotification")
+    public ResponseEntity<Object> getPassengerTransportsWithoutNotification(@RequestParam Integer templateId, @RequestParam Integer passengerId) {
+        final List<Transport> passengerTransportsWithoutNotification = this.transportService.getPassengerTransportsWithoutNotification(templateId, passengerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", passengerTransportsWithoutNotification));
+    }
+
+    /**
+     * Gets all the driver transports that have not been notified to him/her
+     * @param templateId
+     * @param driverId
+     * @return list of transports
+     */
+    @GetMapping("/getDriverTransportsWithoutNotification")
+    public ResponseEntity<Object> getDriverTransportsWithoutNotification(@RequestParam Integer templateId, @RequestParam Integer driverId) {
+        final List<Transport> driverTransportsWithoutNotification = this.transportService.getDriverTransportsWithoutNotification(templateId, driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", driverTransportsWithoutNotification));
+    }
 }

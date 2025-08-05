@@ -44,7 +44,11 @@
                         <!-- Notification icon -->
                         <div class="row">
                             <div class="col" th:id="'markAsNotifiedDriverButtonDiv_' + ${driver.id}">
-                                <i class="fas fa-exclamation-circle text-danger"
+                                <i th:class="
+                                        'fas fa-exclamation-circle ' +
+                                        ${involvedMarkAllNotificationsButton.get(driver.id) == true ?
+                                            'text-danger' : 'd-none'
+                                        }"
                                    role="button"
                                    th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEndda}"
                                    th:id="'markAsNotifiedDriverButton_' + ${driver.id}"
@@ -125,7 +129,10 @@
                                                     and involvedTransportNotifications.get(driver.id).get(date.id) != null
                                                     and involvedTransportNotifications.get(driver.id).get(date.id) == true
                                                 ) ?
-                                                    'text-primary' : 'text-danger'
+                                                    'text-primary' :
+                                                        (allDriverTransportsFromTemplate.get(driver.id) == null or
+                                                            allDriverTransportsFromTemplate.get(driver.id).get(date.id) == null) ?
+                                                            'd-none' : 'text-danger'
                                     }"
                                 role="button"
                                 th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"

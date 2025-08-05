@@ -49,7 +49,11 @@
                             <!-- Notification icon -->
                             <div class="row">
                                 <div class="col" th:id="'markAsNotifiedPassengerButtonDiv_' + ${passenger.id}">
-                                    <i class="fas fa-exclamation-circle text-danger"
+                                    <i th:class="
+                                            'fas fa-exclamation-circle ' +
+                                            ${involvedMarkAllNotificationsButton.get(passenger.id) == true ?
+                                                'text-danger' : 'd-none'
+                                            }"
                                        role="button"
                                        th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkAllNotificationsEnd}"
                                        th:id="'markAsNotifiedPassegerButton_' + ${passenger.id}"
@@ -76,8 +80,13 @@
 
                 <!-- Assistance for date -->
                 <td th:each="date : ${templateDates}" th:data-date="${date.transportDate}"
-                    th:class="${((date.dateType == 'event') or (date.dateType == 'transportDate')
-                        and (passengersAvailableForDate.get(date.id) == null)) ? 'text-center' : ''}"
+                    th:class="${
+                                    (
+                                        (date.dateType == 'event')
+                                        or (date.dateType == 'transportDate')
+                                        and (passengersAvailableForDate.get(date.id) == null)
+                                    ) ? 'text-center' : ''
+                               }"
                     th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
                     th:data-t="${passenger.id}"
                     th:data-date-id="${date.id}"
@@ -154,14 +163,16 @@
                                             ${(
                                                 passengerAssistance != null
                                                 and passengerAssistance.get(date.transportDate.toLocalDate()) != null
-                                                    and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
+                                                and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
                                                 or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null)  ?
                                                     'd-none' :
                                                         (
                                                             involvedTransportNotifications.get(passenger.id) != null
                                                             and involvedTransportNotifications.get(passenger.id).get(date.id) != null
                                                             and involvedTransportNotifications.get(passenger.id).get(date.id) == true ?
-                                                                'text-primary' : 'text-danger'
+                                                                'text-primary' :
+                                                                    (allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null) ?
+                                                                        'd-none' : 'text-danger'
                                                         )}"
                                         role="button"
                                         th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{templateCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"

@@ -3,7 +3,7 @@
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
  */
-export async function changeDriverComIconOnTransportDeletion(data, driverNotificationIcon) {
+export async function changeDriverNotifIconOnTransportDeletion(data, driverNotificationIcon) {
 
     if (driverNotificationIcon.hasClass("text-danger")) {
         const driverNotifications = await getDriverNotifications(data);
@@ -34,7 +34,7 @@ export async function changeDriverComIconOnTransportDeletion(data, driverNotific
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
  */
-export async function changeDriverComIconOnDriverSelection(data, driverNotificationIcon) {
+export async function changeDriverNotifIconOnDriverSelection(data, driverNotificationIcon) {
     if (driverNotificationIcon.hasClass("d-none")) {
         driverNotificationIcon.removeClass("d-none");
         driverNotificationIcon.removeClass("text-primary");

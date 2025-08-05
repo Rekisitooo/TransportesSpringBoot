@@ -3,7 +3,7 @@
  * @param {Object} data - Contains passengerId (t), passengerId (p), and transportDateId (d)
  * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
-export async function changePassengerComIconOnTransportDeletion(data, passengerNotificationIcon) {
+export async function changePassengerNotifIconOnTransportDeletion(data, passengerNotificationIcon) {
     if (passengerNotificationIcon.hasClass("text-danger")) {
         const passengerNotifications = await getPassengerNotifications(data);
 
@@ -23,7 +23,7 @@ export async function changePassengerComIconOnTransportDeletion(data, passengerN
  * @param {Object} data - Contains passengerId (t), driverId (p), and transportDateId (d)
  * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
-export async function changePassengerComIconOnPassengerSelection(data, passengerNotificationIcon) {
+export async function changePassengerNotifIconOnPassengerSelection(data, passengerNotificationIcon) {
     if (passengerNotificationIcon.hasClass("d-none")) {
         passengerNotificationIcon.removeClass("d-none");
         passengerNotificationIcon.removeClass("text-primary");
