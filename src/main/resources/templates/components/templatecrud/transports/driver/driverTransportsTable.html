@@ -45,8 +45,9 @@
                         <div class="row">
                             <div class="col" th:id="'markAsNotifiedDriverButtonDiv_' + ${driver.id}">
                                 <i th:class="
-                                        'fas fa-exclamation-circle text-danger' +
-                                        ${involvedMarkAllNotificationsButton.get(driver.id) == false ?
+                                        'fas fa-exclamation-circle text-danger ' +
+                                        ${involvedMarkAllNotificationsButton.get(driver.id) == false
+                                            or involvedMarkAllNotificationsButton.get(driver.id) == null ?
                                             'd-none' : ''
                                         }"
                                    role="button"
