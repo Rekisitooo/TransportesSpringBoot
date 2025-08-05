@@ -155,13 +155,12 @@
                                                 passengerAssistance != null
                                                 and passengerAssistance.get(date.transportDate.toLocalDate()) != null
                                                     and passengerAssistance.get(date.transportDate.toLocalDate()).needsTransport == 0)
-                                                or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null)
-                                                or (allPassengerTransportsFromTemplate.get(passenger.id).get(date.id) == null)  ?
+                                                or (passengerAssistance == null or passengerAssistance.get(date.transportDate.toLocalDate()) == null)  ?
                                                     'd-none' :
                                                         (
-                                                            involvedTransportNotifications.get(date.id) != null
-                                                            and involvedTransportNotifications.get(date.id).get(passenger.id) != null
-                                                            and involvedTransportNotifications.get(date.id).get(passenger.id) == false ?
+                                                            involvedTransportNotifications.get(passenger.id) != null
+                                                            and involvedTransportNotifications.get(passenger.id).get(date.id) != null
+                                                            and involvedTransportNotifications.get(passenger.id).get(date.id) == true ?
                                                                 'text-primary' : 'text-danger'
                                                         )}"
                                         role="button"

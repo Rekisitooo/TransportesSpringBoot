@@ -60,10 +60,10 @@
                 <!-- Driver name row -->
                 <div class="row mt-1">
                     <div class="col">
-                                                <span
-                                                        th:text="${driver.name} + ' ' + ${driver.surname}"
-                                                        th:id="${driver.id} + '_th_driver_name_span'" >
-                                                </span>
+                        <span
+                                th:text="${driver.name} + ' ' + ${driver.surname}"
+                                th:id="${driver.id} + '_th_driver_name_span'" >
+                        </span>
                     </div>
                 </div>
                 <!-- Driver name row -->
@@ -118,13 +118,12 @@
                                     'fas fa-exclamation-circle ' +
                                     ${  (
                                             (driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null)
-                                            or (allDriverTransportsFromTemplate.get(driver.id).get(date.id) == null)
                                         )?
                                             'd-none' :
                                                 (
-                                                    involvedTransportNotifications.get(date.id) != null and
-                                                    involvedTransportNotifications.get(date.id).get(driver.id) != null
-                                                    and involvedTransportNotifications.get(date.id).get(driver.id) == false
+                                                    involvedTransportNotifications.get(driver.id) != null
+                                                    and involvedTransportNotifications.get(driver.id).get(date.id) != null
+                                                    and involvedTransportNotifications.get(driver.id).get(date.id) == true
                                                 ) ?
                                                     'text-primary' : 'text-danger'
                                     }"

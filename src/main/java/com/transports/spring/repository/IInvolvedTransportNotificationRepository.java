@@ -80,9 +80,11 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
             "   END " +
             "      FROM Transport t " +
             "           LEFT JOIN InvolvedTransportNotification apiDriver " +
-            "               ON (apiDriver.transportDateCode = t.transportKey.transportDateId " +
-            "               AND apiDriver.notifiedInvolvedId = t.transportKey.driverId) " +
-            "           JOIN TransportDateByTemplate td " +
+            "               ON apiDriver.transportDateCode = t.transportKey.transportDateId " +
+            "               AND apiDriver.passengerCode = t.transportKey.passengerId" +
+            "               AND apiDriver.driverCode = t.transportKey.driverId" +
+            "               AND apiDriver.notifiedInvolvedId = t.transportKey.driverId " +
+            "           INNER JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId " +
             "       WHERE td.templateCode = :templateId")
     List<Object[]> getDriverNotificationsByTemplate(@Param("templateId") Integer templateId);
@@ -96,9 +98,11 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
             "   END" +
             "      FROM Transport t" +
             "           LEFT JOIN InvolvedTransportNotification apiPassenger" +
-            "               ON (apiPassenger.transportDateCode = t.transportKey.transportDateId" +
-            "               AND apiPassenger.notifiedInvolvedId = t.transportKey.passengerId)" +
-            "           JOIN TransportDateByTemplate td " +
+            "               ON apiPassenger.transportDateCode = t.transportKey.transportDateId" +
+        "                   AND apiPassenger.driverCode = t.transportKey.driverId" +
+            "               AND apiPassenger.passengerCode = t.transportKey.passengerId" +
+            "               AND apiPassenger.notifiedInvolvedId = t.transportKey.passengerId" +
+            "           INNER JOIN TransportDateByTemplate td " +
             "               ON td.id = t.transportKey.transportDateId" +
             "       WHERE td.templateCode = :templateId")
     List<Object[]> getPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);

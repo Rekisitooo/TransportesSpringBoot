@@ -52,7 +52,7 @@ public class InvolvedTransportNotificationService {
     /**
      * Returns a map with the notifications for the template.
      * @param templateId - The template id.
-     * @return  Map<dateId, Map<InvolvedId, Boolean (true if notification is sent)>>
+     * @return  Map<InvolvedId, Map<dateId, Boolean (true if notification is sent)>>
      */
     public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
         Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
@@ -77,8 +77,8 @@ public class InvolvedTransportNotificationService {
             final Integer involvedId = (Integer) row[1];
             final Boolean hasNotification = (Boolean) row[2];
 
-            final Map<Integer, Boolean> involvedMap = result.computeIfAbsent(transportDateId, k -> new HashMap<>());
-            involvedMap.put(involvedId, !hasNotification);
+            final Map<Integer, Boolean> involvedMap = result.computeIfAbsent(involvedId, k -> new HashMap<>());
+            involvedMap.put(transportDateId, hasNotification);
         }
     }
 
