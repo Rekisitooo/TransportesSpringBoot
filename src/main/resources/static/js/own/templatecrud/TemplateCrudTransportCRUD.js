@@ -26,14 +26,6 @@ $(function() {
         $(this).data('previous-driver-id', $(this).val());
 
         const templateId = $('#templateTitle').attr('data-template-id');
-        // shows or hides notification icon to indicate all transports are notified
-        await showHidePassengerNotificationsButton(passengerId, templateId);
-        if (newDriverId !== undefined && newDriverId !== '') {
-            await showHideDriverNotificationsButton(newDriverId, templateId);
-        }
-        if (previousDriverId !== undefined && previousDriverId !== '') {
-            await showHideDriverNotificationsButton(previousDriverId, templateId);
-        }
     });
 });
 

@@ -203,7 +203,8 @@ export async function showHideDriverNotificationsButton(driverId, templateId) {
 export async function changeDriverNotifIconOnTransportDeletion(data, driverNotificationIcon) {
 
     if (driverNotificationIcon.hasClass("text-danger")) {
-        const driverNotifications = await getInvolvedNotifications(data);
+        const driverNotifications = await getInvolvedNotifications(
+            {transportDateCode : data.transportDateCode, notifiedInvolvedId : data.driverId});
 
         // if there were not previous notifications, icon should be red
         if (!driverNotifications?.data?.length) {
