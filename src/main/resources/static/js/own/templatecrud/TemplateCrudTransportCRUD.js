@@ -172,7 +172,7 @@ async function deleteTransportOption(transportDateId, passengerId, previousDrive
         await Promise.all([
             changeDriverNotifIconOnTransportDeletion(
                 {transportDateCode: transportDateId, driverId: previousDriverId}, elements.newDriverWarningIcon),
-            changePassengerNotifIconOnTransportDeletion(data, elements.newDriverWarningIcon),
+            changePassengerNotifIconOnTransportDeletion(data, elements.passengerWarningIcon),
         ]);
 
     } catch (error) {

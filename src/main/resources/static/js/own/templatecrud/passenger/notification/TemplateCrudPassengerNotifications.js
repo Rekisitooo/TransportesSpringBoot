@@ -200,7 +200,8 @@ export async function showHidePassengerNotificationsButton(passengerId, template
  */
 export async function changePassengerNotifIconOnTransportDeletion(data, passengerNotificationIcon) {
     if (passengerNotificationIcon.hasClass("text-danger")) {
-        const passengerNotifications = await getPassengerNotifications(data);
+        const passengerNotifications = await getInvolvedNotifications(
+            {transportDateCode : data.d, notifiedInvolvedId : data.t});
 
         if (!passengerNotifications?.data?.length) {
             passengerNotificationIcon.addClass("d-none");
