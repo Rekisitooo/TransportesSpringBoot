@@ -107,7 +107,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       FROM Transport t" +
             "           LEFT OUTER JOIN InvolvedTransportNotification api" +
             "               ON t.transportKey.transportDateId = api.transportDateCode" +
-            "               AND t.transportKey.passengerId = api.passengerCode" +
+            "               AND t.transportKey.passengerId = api.notifiedInvolvedId" +
             "               AND t.transportKey.driverId = api.driverCode" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
@@ -125,7 +125,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "           LEFT OUTER JOIN InvolvedTransportNotification api" +
             "               ON t.transportKey.transportDateId = api.transportDateCode" +
             "               AND t.transportKey.passengerId = api.passengerCode" +
-            "               AND t.transportKey.driverId = api.driverCode" +
+            "               AND t.transportKey.driverId = api.notifiedInvolvedId" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
             "           INNER JOIN Template p" +
