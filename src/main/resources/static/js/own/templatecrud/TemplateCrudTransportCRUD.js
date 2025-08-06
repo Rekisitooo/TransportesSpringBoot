@@ -3,13 +3,14 @@ import { changeElementClass } from './TemplateCrudCommons.js';
 import {
     changePassengerNotifIconOnTransportDeletion,
     changePassengerNotifIconOnPassengerSelection,
-} from './passenger/notification/TCPassengerNotifIconChanger.js';
+    showHidePassengerNotificationsButton,
+} from './passenger/notification/TemplateCrudPassengerNotifications.js';
 import {
+    showHideDriverNotificationsButton,
     changeDriverNotifIconOnTransportDeletion,
     changeDriverNotifIconOnDriverSelection,
-} from './driver/notification/TCDriverNotifIconChanger.js';
-import { showHideDriverNotificationsButton } from './driver/notification/TemplateCrudDriverNotifications.js';
-import { showHidePassengerNotificationsButton } from './passenger/notification/TemplateCrudPassengerNotifications.js';
+} from './driver/notification/TemplateCrudDriverNotifications.js';
+import { deleteTransport } from '../TransportAJAX.js';
 
 $(function() {
     $('select[name="driverInTransportSelect"]').each(function() {
@@ -86,13 +87,16 @@ async function updateDriverInTransportOption(transportDateId, newDriverId, passe
         if (response?.status === 'ok') {
             addPassengerInDriverTransportsTable(transportDateId, newDriverId, passengerId, passengerFullName, elements.driverTransportsTablePassengerTdToAddSpan);
             deletePassengerInDriverTransportsTable(transportDateId, passengerId, response.data.p, elements.driverPassengersDivId);
+
             await changePassengerNotifIconOnPassengerSelection(data, elements.passengerWarningIcon);
-            await changeDriverNotifIconOnDriverSelection(data, elements.newDriverWarningIcon);
+
+            await changeDriverNotifIconOnDriverSelection(
+                {transportDateCode: transportDateId, driverId: newDriverId}, elements.newDriverWarningIcon);
 
             //if there was a previous driver, update its warning icon
             if (previousDriverId && previousDriverId > 0 && elements.previousDriverWarningIcon?.length) {
-                const previousDriverData = { ...data, p: previousDriverId };
-                await changeDriverNotifIconOnDriverSelection(previousDriverData, elements.previousDriverWarningIcon);
+                await changeDriverNotifIconOnDriverSelection(
+                    {transportDateCode: transportDateId, driverId: previousDriverId}, elements.previousDriverWarningIcon);
             }
 
         } else {
@@ -134,7 +138,8 @@ async function createTransportOption(transportDateId, newDriverId, passengerId, 
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
             changePassengerNotifIconOnPassengerSelection(data, elements.passengerWarningIcon),
-            changeDriverNotifIconOnDriverSelection(data, elements.newDriverWarningIcon)
+            changeDriverNotifIconOnDriverSelection(
+                {transportDateCode: transportDateId, driverId: newDriverId}, elements.newDriverWarningIcon)
         ]);
 
     } catch (error) {
@@ -159,19 +164,14 @@ async function deleteTransportOption(transportDateId, passengerId, previousDrive
     const elements = getTransportElements(transportDateId, previousDriverId, passengerId);
 
     try {
-        const response = await $.ajax({
-            type: 'DELETE',
-            contentType: 'application/json',
-            url: '/t',
-            data: JSON.stringify(data),
-            dataType: 'json'
-        });
+        const deleteTransportResponse = await deleteTransport(data);
 
-        deletePassengerInDriverTransportsTable(transportDateId, passengerId, response.data.p, elements.driverPassengersDivId);
+        deletePassengerInDriverTransportsTable(transportDateId, passengerId, deleteTransportResponse.data.p, elements.driverPassengersDivId);
         actualSelect.children().attr("name", "c");
         actualSelect.children(":first").attr("name", "d");
         await Promise.all([
-            changeDriverNotifIconOnTransportDeletion(data, elements.newDriverWarningIcon),
+            changeDriverNotifIconOnTransportDeletion(
+                {transportDateCode: transportDateId, driverId: previousDriverId}, elements.newDriverWarningIcon),
             changePassengerNotifIconOnTransportDeletion(data, elements.newDriverWarningIcon),
         ]);
 

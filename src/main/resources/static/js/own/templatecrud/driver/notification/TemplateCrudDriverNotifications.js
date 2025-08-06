@@ -1,5 +1,7 @@
 import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
 import { changeElementClass } from '../../TemplateCrudCommons.js';
+import { getInvolvedNotifications } from '../../../NotificationAJAX.js';
+import { getDriverPassengersForDate } from '../../../TransportAJAX.js';
 
 $(function() {
     $('#driverTransportsTable i[class*=exclamation-circle]').each(
@@ -16,7 +18,7 @@ $(function() {
                 // if icon is red, the driver has not been notified of its current transport
                 if ($(this).attr('class').includes('text-danger')) {
                     // get if driver had notifications
-                    const driverNotifications = await getDriverNotifications(data);
+                    const driverNotifications = await getInvolvedNotifications(data);
                     if (driverNotifications?.data?.length) {
                         // deletes driver notifications
                         await ajaxRequestDeleteDriverNotification(data);
@@ -39,11 +41,7 @@ $(function() {
 async function createDriverNotifications(data, alertIcon) {
     try {
         // gets the transports already assigned to the driver in that date
-        const response = await $.ajax({
-            type: 'GET',
-            url: '/t/getPassengersForDriverByDate',
-            data: data
-        });
+        const response = await getDriverPassengersForDate(data);
 
         // creates a notification for each passenger and changes the icon to blue
         if (response?.data?.length > 0) {
@@ -138,7 +136,7 @@ async function updateDriverNotifications(data, alertIcon) {
 
 async function notifyTransport(data, alertIcon) {
     try {
-        const response = await getDriverNotifications(data);
+        const response = await getInvolvedNotifications(data);
 
         if (!response?.data?.length) {
             await createDriverNotifications(data, alertIcon);
@@ -165,18 +163,6 @@ function changeAlertIconToNotNotified(alertIcon) {
 }
 
 /**
- * Gets all the notifications for the driver
- * @param {object} data - Contains the transport date id and notificated id (driver)
- */
-async function getDriverNotifications(data) {
-    return await $.ajax({
-        type: 'GET',
-        url: '/involvedTransportNotification/get',
-        data: data
-    });
-}
-
-/**
  * Shows the notification icon to indicate the
  * driver has been notified the transports for the whole month if there are
  * two or more transports without notification. If not, it remains hidden.
@@ -196,15 +182,104 @@ export async function showHideDriverNotificationsButton(driverId, templateId) {
 
         // if the driver has more than 2 transports without notification, the icon shows
         if (response?.data?.length < 2) {
-            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + '] i')
                 .addClass('d-none');
 
         } else {
-            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + ']')
+            $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + '] i')
                 .removeClass('d-none');
         }
 
     } catch (error) {
         console.error('Error updating drivers whole month notification button');
     }
+}
+
+/**
+ * Changes the driver notification icon based on the transport deletion.
+ * @param {Object} data - Contains transportDateCode and driverId
+ * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
+ */
+export async function changeDriverNotifIconOnTransportDeletion(data, driverNotificationIcon) {
+
+    if (driverNotificationIcon.hasClass("text-danger")) {
+        const driverNotifications = await getInvolvedNotifications(data);
+
+        // if there were not previous notifications, icon should be red
+        if (!driverNotifications?.data?.length) {
+            driverNotificationIcon.addClass("d-none");
+
+        } else {
+            const getInvolvedNotificationsData = {
+                transportDateCode : data.transportDateCode,
+                notifiedInvolvedId : data.driverId
+            }
+
+            const driverNotifications = await getInvolvedNotifications(getInvolvedNotificationsData).data;
+            const driverTransports = await getDriverPassengersForDate(data).data;
+
+            if (isNotificationEqualToDriversActualTransport(driverNotifications, driverTransports, data)) {
+                driverNotificationIcon.removeClass("text-danger");
+                driverNotificationIcon.addClass("text-primary");
+            }
+        }
+
+    } else if (driverNotificationIcon.hasClass("text-primary")) {
+        driverNotificationIcon.removeClass("text-primary");
+        driverNotificationIcon.addClass("text-danger");
+    }
+
+}
+
+/**
+ * Updates the warning icon visibility for a driver based on their notification status.
+ * Shows the icon if the passenger is not in the driver's notifications or if there are no notifications.
+ * @param {Object} data - Contains transportDateCode and driverId
+ * @param {jQuery} driverNotificationIcon - The warning icon element for the driver
+ */
+export async function changeDriverNotifIconOnDriverSelection(data, driverNotificationIcon) {
+
+    if (driverNotificationIcon.hasClass("d-none")) {
+        driverNotificationIcon.removeClass("d-none");
+        driverNotificationIcon.removeClass("text-primary");
+        driverNotificationIcon.addClass("text-danger");
+
+    } else {
+        const getInvolvedNotificationsData = {
+            transportDateCode : data.transportDateCode,
+            notifiedInvolvedId : data.driverId
+        }
+
+        const driverNotifications = await getInvolvedNotifications(getInvolvedNotificationsData).data;
+        const driverTransports = await getDriverPassengersForDate(data).data;
+
+        if (isNotificationEqualToDriversActualTransport(driverNotifications, driverTransports, data)) {
+            driverNotificationIcon.removeClass("text-danger");
+            driverNotificationIcon.addClass("text-primary");
+        } else {
+            driverNotificationIcon.removeClass("text-primary");
+            driverNotificationIcon.addClass("text-danger");
+        }
+    }
+ }
+
+/**
+ * Gets if the driver has the same passengers assigned to transport than in the current notification .
+ * @param {Array} driverNotifications - Contains the driver's notifications (InvolvedTransportNotification
+ * @param {Array} driverTransports - Contains the driver's transports (DtoGetPassengersForDriverByDate)
+ * @param {Object} data - Contains driverId and transportDateId
+ */
+function isNotificationEqualToDriversActualTransport(driverNotifications, driverTransports, data) {
+    if (driverNotifications === undefined || driverTransports === undefined) {
+        return false;
+    }
+
+    if (driverNotifications?.length !== driverTransports?.length) {
+        return false;
+    }
+
+    const driverNotificationValues  = driverNotifications   .map(obj => obj['passengerCode']).sort();
+    const driverTransportsValues    = driverTransports      .map(obj => obj['transport.transportKey.passengerId']).sort();
+
+    return driverNotificationValues.every((value, index) => value === driverTransportsValues[index]);
 }
