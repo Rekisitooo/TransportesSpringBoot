@@ -30,8 +30,6 @@ $(function() {
                             $(this).removeClass('text-primary');
                             $(this).addClass('text-danger');
 
-                        } else {
-                            $(this).addClass('d-none');
                         }
 
                     } else {
@@ -200,16 +198,7 @@ export async function showHidePassengerNotificationsButton(passengerId, template
  * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
 export async function changePassengerNotifIconOnTransportDeletion(data, passengerNotificationIcon) {
-    if (passengerNotificationIcon.hasClass("text-danger")) {
-        const passengerNotifications = await getInvolvedNotifications(
-            {transportDateCode : data.d, notifiedInvolvedId : data.t});
-
-        // if there were no notifications, don't show the icon
-        if (!passengerNotifications?.data?.length) {
-            passengerNotificationIcon.addClass("d-none");
-        }
-
-    } else if (passengerNotificationIcon.hasClass("text-primary")) {
+    if (passengerNotificationIcon.hasClass("text-primary")) {
         passengerNotificationIcon.removeClass("text-primary");
         passengerNotificationIcon.addClass("text-danger");
     }
@@ -226,27 +215,21 @@ export async function changePassengerNotifIconOnTransportDeletion(data, passenge
  * @param {jQuery} passengerNotificationIcon - The warning icon element for the passenger
  */
 export async function changePassengerNotifIconOnPassengerSelection(data, passengerNotificationIcon) {
-    if (passengerNotificationIcon.hasClass("d-none")) {
-        passengerNotificationIcon.removeClass("d-none");
-        passengerNotificationIcon.removeClass("text-primary");
-        passengerNotificationIcon.addClass("text-danger");
+
+    const driver = await getDriverForPassengerByDate({transportDateId : data.d, passengerId : data.t});
+    const notifiedDriver = await getInvolvedNotifications(
+        {transportDateCode : data.d, notifiedInvolvedId : data.t});
+
+    const isSameDriverNotifiedThanTransport =
+        (driver !== undefined) && (driver?.data?.transportKey?.driverId === notifiedDriver?.data[0]?.driverCode);
+
+    if (isSameDriverNotifiedThanTransport) {
+        passengerNotificationIcon.removeClass("text-danger");
+        passengerNotificationIcon.addClass("text-primary");
 
     } else {
-        const driver = await getDriverForPassengerByDate({transportDateId : data.d, passengerId : data.t});
-        const notifiedDriver = await getInvolvedNotifications(
-            {transportDateCode : data.d, notifiedInvolvedId : data.t});
-
-        const isSameDriverNotifiedThanTransport =
-            (driver !== undefined) && (driver?.data?.transportKey?.driverId === notifiedDriver?.data[0]?.driverCode);
-
-        if (isSameDriverNotifiedThanTransport) {
-            passengerNotificationIcon.removeClass("text-danger");
-            passengerNotificationIcon.addClass("text-primary");
-
-        } else {
-            passengerNotificationIcon.removeClass("text-primary");
-            passengerNotificationIcon.addClass("text-danger");
-        }
+        passengerNotificationIcon.removeClass("text-primary");
+        passengerNotificationIcon.addClass("text-danger");
     }
 
     // hide or show the button to mark all the month transports have been notified to the passenger

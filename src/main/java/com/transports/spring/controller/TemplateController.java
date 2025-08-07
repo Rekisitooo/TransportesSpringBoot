@@ -125,11 +125,11 @@ public final class TemplateController {
         final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
         model.addAttribute("driverAssistanceDates", driverAssistanceDates);
 
-        Map<Integer, Map<Integer, Boolean>> involvedTransportNotifications = this.involvedTransportNotificationService.getAllNotificationsForTemplate(templateId);
+        Map<Integer, List<Integer>> involvedTransportNotifications = this.involvedTransportNotificationService.getAllNotificationsForTemplate(templateId);
         model.addAttribute("involvedTransportNotifications", involvedTransportNotifications);
 
-        final Map<Integer, Boolean> involvedMarkAllNotificationsButton = this.involvedTransportNotificationService.getInvolvedMarkAllNotificationsButton(templateId);
-        model.addAttribute("involvedMarkAllNotificationsButton", involvedMarkAllNotificationsButton);
+        final Map<Integer, List<Integer>> allInvolvedNotifications = this.involvedTransportNotificationService.getAllInvolvedNotifications(templateId);
+        model.addAttribute("allInvolvedNotifications", allInvolvedNotifications);
     }
 
     @GetMapping("/openNotificationsTab")
@@ -152,8 +152,8 @@ public final class TemplateController {
         final Map<Integer, Map<Integer, String>> passengerNotificationsMap = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateIdString);
         model.addAttribute("passengerNotificationsMap", passengerNotificationsMap);
 
-        final Map<Integer, Boolean> involvedMarkAllNotificationsButton = this.involvedTransportNotificationService.getInvolvedMarkAllNotificationsButton(templateId);
-        model.addAttribute("involvedMarkAllNotificationsButton", involvedMarkAllNotificationsButton);
+        final Map<Integer, List<Integer>> allInvolvedNotifications = this.involvedTransportNotificationService.getAllInvolvedNotifications(templateId);
+        model.addAttribute("allInvolvedNotifications", allInvolvedNotifications);
 
         return "components/templatecrud/notifications/notifications :: notifications";
     }

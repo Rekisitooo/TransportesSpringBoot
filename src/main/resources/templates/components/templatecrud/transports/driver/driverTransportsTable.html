@@ -46,8 +46,8 @@
                             <div class="col" th:id="'markAsNotifiedDriverButtonDiv_' + ${driver.id}">
                                 <i th:class="
                                         'fas fa-exclamation-circle text-danger ' +
-                                        ${involvedMarkAllNotificationsButton.get(driver.id) == false
-                                            or involvedMarkAllNotificationsButton.get(driver.id) == null ?
+                                        ${allInvolvedNotifications.get(driver.id) == false
+                                            or allInvolvedNotifications.get(driver.id) == null ?
                                             'd-none' : ''
                                         }"
                                    role="button"
@@ -115,25 +115,21 @@
 
                         <!-- Notification icon div -->
                         <div th:id="${'notificationIcon_' + driver.id + '_' + date.id}"
-                             th:class="'col-2 ' + ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) != null) ?
-                                             '' : 'd-none'}">
+                             th:class=" 'col-2 ' +
+                                            ${(driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null)
+                                                ? 'd-none' : ''
+                                            }">
                             <!-- Notification icon -->
                             <i
                                 th:class="
                                     'fas fa-exclamation-circle ' +
-                                    ${  (
-                                            (driverAssistanceDates.get(driver.id).get(date.transportDate.toLocalDate()) == null)
-                                        )?
-                                            'd-none' :
-                                                (
-                                                    involvedTransportNotifications.get(driver.id) != null
-                                                    and involvedTransportNotifications.get(driver.id).get(date.id) != null
-                                                    and involvedTransportNotifications.get(driver.id).get(date.id) == true
-                                                ) ?
-                                                    'text-primary' :
-                                                        (allDriverTransportsFromTemplate.get(driver.id) == null or
-                                                            allDriverTransportsFromTemplate.get(driver.id).get(date.id) == null) ?
-                                                            'd-none' : 'text-danger'
+                                    ${
+                                        (
+                                            involvedTransportNotifications.get(driver.id) != null
+                                            and involvedTransportNotifications.get(driver.id).get(date.id) != null
+                                            and involvedTransportNotifications.get(driver.id).get(date.id) == true
+                                        ) ?
+                                            'text-primary' : 'text-danger'
                                     }"
                                 role="button"
                                 th:title="#{templateCRUD.titleMarkNotificationStart} + ' ' + ${driver.name} + ' ' + ${driver.surname} + ' ' + #{templateCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"

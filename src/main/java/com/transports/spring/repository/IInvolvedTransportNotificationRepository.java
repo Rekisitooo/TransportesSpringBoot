@@ -73,38 +73,31 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
     void deleteNotificationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
 
     @Query("SELECT DISTINCT" +
-            "   t.transportKey.transportDateId, " +
-            "   t.transportKey.driverId, " +
-            "   CASE " +
-            "       WHEN apiDriver.id IS NOT NULL THEN true " +
-            "       ELSE false " +
-            "   END " +
+            "   api.transportDateCode, " +
+            "   api.driverCode " +
             "      FROM Transport t " +
-            "           LEFT JOIN InvolvedTransportNotification apiDriver " +
-            "               ON apiDriver.transportDateCode = t.transportKey.transportDateId " +
-            "               AND apiDriver.passengerCode = t.transportKey.passengerId" +
-            "               AND apiDriver.driverCode = t.transportKey.driverId" +
-            "               AND apiDriver.notifiedInvolvedId = t.transportKey.driverId " +
+            "           INNER JOIN InvolvedTransportNotification api " +
+            "               ON api.transportDateCode = t.transportKey.transportDateId" +
+            "               AND api.passengerCode = t.transportKey.passengerId" +
+            "               AND api.driverCode = t.transportKey.driverId" +
+            "               AND api.notifiedInvolvedId = t.transportKey.driverId " +
             "           INNER JOIN TransportDateByTemplate td " +
-            "               ON td.id = t.transportKey.transportDateId " +
-            "       WHERE td.templateCode = :templateId")
+            "               ON td.id = api.transportDateCode " +
+            "       WHERE " +
+            "           td.templateCode = :templateId")
     List<Object[]> getDriverNotificationsByTemplate(@Param("templateId") Integer templateId);
 
     @Query("SELECT DISTINCT" +
-            "   t.transportKey.transportDateId, " +
-            "   t.transportKey.passengerId, " +
-            "   CASE " +
-            "       WHEN apiPassenger.id IS NOT NULL THEN true " +
-            "       ELSE false " +
-            "   END" +
+            "   api.transportDateCode, " +
+            "   api.passengerCode " +
             "      FROM Transport t" +
-            "           LEFT JOIN InvolvedTransportNotification apiPassenger" +
-            "               ON apiPassenger.transportDateCode = t.transportKey.transportDateId" +
-        "                   AND apiPassenger.driverCode = t.transportKey.driverId" +
-            "               AND apiPassenger.passengerCode = t.transportKey.passengerId" +
-            "               AND apiPassenger.notifiedInvolvedId = t.transportKey.passengerId" +
+            "           INNER JOIN InvolvedTransportNotification api" +
+            "               ON api.transportDateCode = t.transportKey.transportDateId" +
+            "               AND api.driverCode = t.transportKey.driverId" +
+            "               AND api.passengerCode = t.transportKey.passengerId" +
+            "               AND api.notifiedInvolvedId = t.transportKey.passengerId" +
             "           INNER JOIN TransportDateByTemplate td " +
-            "               ON td.id = t.transportKey.transportDateId" +
+            "               ON td.id = api.transportDateCode" +
             "       WHERE td.templateCode = :templateId")
     List<Object[]> getPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);
 

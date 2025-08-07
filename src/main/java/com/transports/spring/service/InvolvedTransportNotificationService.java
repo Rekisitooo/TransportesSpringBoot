@@ -52,10 +52,10 @@ public class InvolvedTransportNotificationService {
     /**
      * Returns a map with the notifications for the template.
      * @param templateId - The template id.
-     * @return  Map<InvolvedId, Map<dateId, Boolean (true if notification is sent)>>
+     * @return  Map<InvolvedId, List<dateId>>
      */
-    public Map<Integer, Map<Integer, Boolean>> getAllNotificationsForTemplate(Integer templateId) {
-        Map<Integer, Map<Integer, Boolean>> result = new HashMap<>();
+    public Map<Integer, List<Integer>> getAllNotificationsForTemplate(Integer templateId) {
+        Map<Integer, List<Integer>> result = new HashMap<>();
 
         List<Object[]> driverNotifications = this.notificationForInvolvedRepository.getDriverNotificationsByTemplate(templateId);
         processNotifications(driverNotifications, result);
@@ -71,14 +71,18 @@ public class InvolvedTransportNotificationService {
      * @param notifications List of notifications to process.
      * @param result Map to update with the processed notifications.
      */
-    private static void processNotifications(List<Object[]> notifications, Map<Integer, Map<Integer, Boolean>> result) {
+    private static void processNotifications(List<Object[]> notifications, Map<Integer, List<Integer>> result) {
         for (final Object[] row : notifications) {
             final Integer transportDateId = (Integer) row[0];
             final Integer involvedId = (Integer) row[1];
-            final Boolean hasNotification = (Boolean) row[2];
 
-            final Map<Integer, Boolean> involvedMap = result.computeIfAbsent(involvedId, k -> new HashMap<>());
-            involvedMap.put(transportDateId, hasNotification);
+            List<Integer> transportDateList = result.get(involvedId);
+            if (transportDateList != null) {
+                transportDateList.add(transportDateId);
+            } else {
+                transportDateList = new ArrayList<>();
+                transportDateList.add(transportDateId);
+            }
         }
     }
 
@@ -168,28 +172,8 @@ public class InvolvedTransportNotificationService {
      * @param templateId - The template id.
      * @return  Map<InvolvedId, Boolean (true if button has to appear)>>
      */
-    public Map<Integer, Boolean> getInvolvedMarkAllNotificationsButton(final Integer templateId) {
-        final Map<Integer, Map<Integer, Boolean>> allNotificationsForTemplate = this.getAllNotificationsForTemplate(templateId);
-        final Map<Integer, Boolean> allNotificationButtonMap = new HashMap<>();
-
-        // each involved
-        for (final Map.Entry<Integer, Map<Integer, Boolean>> integerMapEntry : allNotificationsForTemplate.entrySet()) {
-            Integer involvedId = integerMapEntry.getKey();
-            Map<Integer, Boolean> involvedNoticationsMap = integerMapEntry.getValue();
-
-            // each notification for date
-            int notNotifiedTransportsCounter = 0;
-            for (final Map.Entry<Integer, Boolean> integerBooleanEntry : involvedNoticationsMap.entrySet()) {
-                if (Boolean.FALSE.equals(integerBooleanEntry.getValue())) {
-                    notNotifiedTransportsCounter++;
-                }
-            }
-
-            // it there is more than 1 notification, mark true to show the button
-            allNotificationButtonMap.put(involvedId, (notNotifiedTransportsCounter > 1) );
-        }
-
-        return allNotificationButtonMap;
+    public Map<Integer, List<Integer>> getAllInvolvedNotifications(final Integer templateId) {
+        return this.getAllNotificationsForTemplate(templateId);
     }
 
     /**

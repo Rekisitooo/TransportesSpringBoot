@@ -207,10 +207,7 @@ export async function changeDriverNotifIconOnTransportDeletion(data, driverNotif
             {transportDateCode : data.transportDateCode, notifiedInvolvedId : data.driverId});
 
         // if there were not previous notifications, icon should be red
-        if (!driverNotifications?.data?.length) {
-            driverNotificationIcon.addClass("d-none");
-
-        } else {
+        if (driverNotifications?.data?.length) {
             const getInvolvedNotificationsData = {
                 transportDateCode : data.transportDateCode,
                 notifiedInvolvedId : data.driverId
@@ -240,27 +237,20 @@ export async function changeDriverNotifIconOnTransportDeletion(data, driverNotif
  */
 export async function changeDriverNotifIconOnDriverSelection(data, driverNotificationIcon) {
 
-    if (driverNotificationIcon.hasClass("d-none")) {
-        driverNotificationIcon.removeClass("d-none");
+    const getInvolvedNotificationsData = {
+        transportDateCode : data.transportDateCode,
+        notifiedInvolvedId : data.driverId
+    }
+
+    const driverNotifications = await getInvolvedNotifications(getInvolvedNotificationsData).data;
+    const driverTransports = await getDriverPassengersForDate(data).data;
+
+    if (isNotificationEqualToDriversActualTransport(driverNotifications, driverTransports, data)) {
+        driverNotificationIcon.removeClass("text-danger");
+        driverNotificationIcon.addClass("text-primary");
+    } else {
         driverNotificationIcon.removeClass("text-primary");
         driverNotificationIcon.addClass("text-danger");
-
-    } else {
-        const getInvolvedNotificationsData = {
-            transportDateCode : data.transportDateCode,
-            notifiedInvolvedId : data.driverId
-        }
-
-        const driverNotifications = await getInvolvedNotifications(getInvolvedNotificationsData).data;
-        const driverTransports = await getDriverPassengersForDate(data).data;
-
-        if (isNotificationEqualToDriversActualTransport(driverNotifications, driverTransports, data)) {
-            driverNotificationIcon.removeClass("text-danger");
-            driverNotificationIcon.addClass("text-primary");
-        } else {
-            driverNotificationIcon.removeClass("text-primary");
-            driverNotificationIcon.addClass("text-danger");
-        }
     }
  }
 
