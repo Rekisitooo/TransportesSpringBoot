@@ -15,7 +15,6 @@ $(function() {
                     notifiedInvolvedId : passengerId
                 };
 
-                let addition;
                 if ($(this).attr('class').includes('text-danger')) {
                     const driverSelectSelector = $(this).attr('data-drivers-selector');
                     const driverSelect = $('#' + driverSelectSelector);
@@ -30,25 +29,22 @@ $(function() {
                         if (passengerNotification?.data?.length) {
                             $(this).removeClass('text-primary');
                             $(this).addClass('text-danger');
-                            addition = 1;
+
                         } else {
                             $(this).addClass('d-none');
-                            addition = -1;
                         }
 
                     } else {
                         await notifyTransport(data, $(this), driverSelectedId);
-                        addition = -1;
                     }
 
                 } else if ($(this).attr('class').includes('text-primary')) {
                     await deletePassengerNotification(data, $(this));
-                    addition = 1;
                 }
 
                  // hide or show the button to mark all the month transports have been notified to the passenger
                 const templateId = $('#templateTitle').attr('data-template-id');
-                await showHidePassengerNotificationsButton(passengerId, templateId, addition);
+                await showHidePassengerNotificationsButton(passengerId, templateId);
             });
         }
     );
@@ -113,7 +109,7 @@ async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
 }
 
 async function deletePassengerNotification(data, alertIcon) {
-    if (ajaxRequestDeletePassengerNotification(data)) {
+    if (await ajaxRequestDeletePassengerNotification(data)) {
         changeAlertIconToNotNotified(alertIcon);
     }
 }
@@ -172,10 +168,8 @@ function changeAlertIconToNotNotified(alertIcon) {
  * two or more transports without notification. If not, it remains hidden.
  * @param {number} passengerId - Contains the passenger id
  * @param {number} templateId - Contains the template id
- * @param {number} addition - if the current operation was to turn the icon red, it is +1, if not, -1
- *  because the AJAX request does not take it.
  */
-export async function showHidePassengerNotificationsButton(passengerId, templateId, addition) {
+export async function showHidePassengerNotificationsButton(passengerId, templateId) {
     try {
         const response = await $.ajax({
             type: 'GET',
@@ -187,7 +181,7 @@ export async function showHidePassengerNotificationsButton(passengerId, template
         });
 
         // if the driver has more than 2 transports without notification, the icon shows
-        if ((response?.data?.length + addition) < 2) {
+        if ((response?.data?.length) < 2) {
             $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + '] i')
                 .addClass('d-none');
 
@@ -210,6 +204,7 @@ export async function changePassengerNotifIconOnTransportDeletion(data, passenge
         const passengerNotifications = await getInvolvedNotifications(
             {transportDateCode : data.d, notifiedInvolvedId : data.t});
 
+        // if there were no notifications, don't show the icon
         if (!passengerNotifications?.data?.length) {
             passengerNotificationIcon.addClass("d-none");
         }
@@ -240,19 +235,17 @@ export async function changePassengerNotifIconOnPassengerSelection(data, passeng
         const isSameDriverNotifiedThanTransport =
             (driver !== undefined) && (driver?.data?.transportKey?.driverId === notifiedDriver?.data[0]?.driverCode);
 
-        let addition;
         if (isSameDriverNotifiedThanTransport) {
             passengerNotificationIcon.removeClass("text-danger");
             passengerNotificationIcon.addClass("text-primary");
-            addition = -1;
+
         } else {
             passengerNotificationIcon.removeClass("text-primary");
             passengerNotificationIcon.addClass("text-danger");
-            addition = +1;
         }
 
         // hide or show the button to mark all the month transports have been notified to the passenger
         const templateId = $('#templateTitle').attr('data-template-id');
-        await showHidePassengerNotificationsButton(data.t, templateId, addition);
+        await showHidePassengerNotificationsButton(data.t, templateId);
     }
  }
