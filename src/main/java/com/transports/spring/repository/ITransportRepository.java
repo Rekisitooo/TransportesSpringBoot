@@ -120,7 +120,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
     List<Transport> getPassengerTransportsWithoutNotification(@Param("templateId") Integer templateId, @Param("passengerId") Integer passengerId);
 
     @Query("SELECT DISTINCT" +
-            "   new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
+            "       new Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)" +
             "       FROM Transport t" +
             "           LEFT OUTER JOIN InvolvedTransportNotification api" +
             "               ON t.transportKey.transportDateId = api.transportDateCode" +

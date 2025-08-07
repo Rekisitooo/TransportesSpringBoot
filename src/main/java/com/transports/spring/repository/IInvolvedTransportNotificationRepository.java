@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.UUID;
+
 import java.util.List;
+import java.util.UUID;
 
 public interface IInvolvedTransportNotificationRepository extends JpaRepository<InvolvedTransportNotification, UUID> {
 
@@ -106,4 +107,38 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
             "               ON td.id = t.transportKey.transportDateId" +
             "       WHERE td.templateCode = :templateId")
     List<Object[]> getPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);
+
+    @Query("SELECT DISTINCT" +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +
+            "           FROM Transport t" +
+            "               RIGHT OUTER JOIN InvolvedTransportNotification api" +
+            "                   ON t.transportKey.transportDateId = api.transportDateCode" +
+            "                   AND t.transportKey.passengerId = api.notifiedInvolvedId" +
+            "                   AND t.transportKey.driverId = api.driverCode" +
+            "               INNER JOIN TransportDateByTemplate ftpp" +
+            "                   ON api.transportDateCode = ftpp.id" +
+            "               INNER JOIN Template p" +
+            "                   ON ftpp.templateCode = p.ID" +
+            "           WHERE" +
+            "               p.id = :templateId" +
+            "               AND api.notifiedInvolvedId = :passengerId" +
+            "               AND t.transportKey.transportDateId IS NULL")
+    List<InvolvedTransportNotification> getPassengerNotificationsWithoutTransport(@Param("templateId") Integer templateId, @Param("passengerId") Integer passengerId);
+
+    @Query("SELECT DISTINCT" +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +
+            "           FROM Transport t" +
+            "               RIGHT OUTER JOIN InvolvedTransportNotification api" +
+            "                   ON t.transportKey.transportDateId = api.transportDateCode" +
+            "                   AND t.transportKey.passengerId = api.passengerCode" +
+            "                   AND t.transportKey.driverId = api.notifiedInvolvedId" +
+            "               INNER JOIN TransportDateByTemplate ftpp" +
+            "                   ON api.transportDateCode = ftpp.id" +
+            "               INNER JOIN Template p" +
+            "                   ON ftpp.templateCode = p.ID" +
+            "           WHERE" +
+            "               p.id = :templateId" +
+            "               AND api.notifiedInvolvedId = :driverId" +
+            "               AND t.transportKey.transportDateId IS NULL")
+    List<InvolvedTransportNotification> getDriverNotificationsWithoutTransport(@Param("templateId") Integer templateId, @Param("driverId") Integer driverId);
 }

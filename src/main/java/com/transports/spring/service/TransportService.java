@@ -6,6 +6,7 @@ import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.model.Driver;
+import com.transports.spring.model.InvolvedTransportNotification;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
@@ -19,10 +20,12 @@ public class TransportService {
 
     private final ITransportRepository transportByTemplateRepository;
     private final InvolvedByTemplateService involvedByTemplateService;
+    private final InvolvedTransportNotificationService involvedTransportNotificationService;
 
-    public TransportService(final ITransportRepository transportByTemplateRepository, InvolvedByTemplateService involvedByTemplateService) {
+    public TransportService(final ITransportRepository transportByTemplateRepository, InvolvedByTemplateService involvedByTemplateService, InvolvedTransportNotificationService involvedTransportNotificationService) {
         this.transportByTemplateRepository = transportByTemplateRepository;
         this.involvedByTemplateService = involvedByTemplateService;
+        this.involvedTransportNotificationService = involvedTransportNotificationService;
     }
 
     /**
@@ -151,22 +154,40 @@ public class TransportService {
     //TODO check if transport allready existed
 
     /**
-     * Gets all the passenger transports that have not been notified to him/her
+     * Gets all the passenger transports that have not been notified to him/her.
+     * As JPQL does not supports unions, it has to be done adding the items manually
      * @param templateId
      * @param passengerId
      * @return list of transports
      */
     public List<Transport> getPassengerTransportsWithoutNotification(final Integer templateId, final Integer passengerId) {
-        return this.transportByTemplateRepository.getPassengerTransportsWithoutNotification(templateId, passengerId);
+        final List<Transport> passengerTransportsWithoutNotification = this.transportByTemplateRepository.getPassengerTransportsWithoutNotification(templateId, passengerId);
+        final List<InvolvedTransportNotification> passengerNotificationsWithoutTransport = this.involvedTransportNotificationService.getPassengerNotificationsWithoutTransport(templateId, passengerId);
+
+        for (final InvolvedTransportNotification notif : passengerNotificationsWithoutTransport) {
+            final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
+            passengerTransportsWithoutNotification.add(transport);
+        }
+
+        return passengerTransportsWithoutNotification;
     }
 
     /**
      * Gets all the driver transports that have not been notified to him/her
+     * As JPQL does not supports unions, it has to be done adding the items manually
      * @param templateId
      * @param driverId
      * @return list of transports
      */
     public List<Transport> getDriverTransportsWithoutNotification(final Integer templateId, final Integer driverId) {
-        return this.transportByTemplateRepository.getDriverTransportsWithoutNotification(templateId, driverId);
+        final List<Transport> driverTransportsWithoutNotification = this.transportByTemplateRepository.getDriverTransportsWithoutNotification(templateId, driverId);
+        final List<InvolvedTransportNotification> getDriverNotificationsWithoutTransport = this.involvedTransportNotificationService.getDriverNotificationsWithoutTransport(templateId, driverId);
+
+        for (final InvolvedTransportNotification notif : getDriverNotificationsWithoutTransport) {
+            final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
+            driverTransportsWithoutNotification.add(transport);
+        }
+
+        return driverTransportsWithoutNotification;
     }
 }

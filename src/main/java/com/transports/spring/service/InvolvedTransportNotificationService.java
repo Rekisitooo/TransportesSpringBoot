@@ -191,4 +191,24 @@ public class InvolvedTransportNotificationService {
 
         return allNotificationButtonMap;
     }
+
+    /**
+     * Gets all the passenger notifications that are not transports anymore
+     * @param templateId
+     * @param passengerId
+     * @return list of notifications
+     */
+    public List<InvolvedTransportNotification> getPassengerNotificationsWithoutTransport(final Integer templateId, final Integer passengerId) {
+        return this.notificationForInvolvedRepository.getPassengerNotificationsWithoutTransport(templateId, passengerId);
+    }
+
+    /**
+     * Gets all the driver notifications that are not transports anymore
+     * @param templateId
+     * @param driverId
+     * @return list of transports
+     */
+    public List<InvolvedTransportNotification> getDriverNotificationsWithoutTransport(final Integer templateId, final Integer driverId) {
+        return this.notificationForInvolvedRepository.getDriverNotificationsWithoutTransport(templateId, driverId);
+    }
 }

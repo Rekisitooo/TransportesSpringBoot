@@ -87,7 +87,8 @@ public class TransportController {
     }
 
     /**
-     * Gets all the passenger transports that have not been notified to him/her
+     * Gets all the passenger transports that have not been notified to him/her.
+     *
      * @param templateId
      * @param passengerId
      * @return list of transports
