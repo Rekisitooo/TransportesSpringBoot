@@ -213,6 +213,10 @@ export async function changePassengerNotifIconOnTransportDeletion(data, passenge
         passengerNotificationIcon.removeClass("text-primary");
         passengerNotificationIcon.addClass("text-danger");
     }
+
+    // hide or show the button to mark all the month transports have been notified to the passenger
+    const templateId = $('#templateTitle').attr('data-template-id');
+    await showHidePassengerNotificationsButton(data.t, templateId);
 }
 
 /**
@@ -243,9 +247,9 @@ export async function changePassengerNotifIconOnPassengerSelection(data, passeng
             passengerNotificationIcon.removeClass("text-primary");
             passengerNotificationIcon.addClass("text-danger");
         }
-
-        // hide or show the button to mark all the month transports have been notified to the passenger
-        const templateId = $('#templateTitle').attr('data-template-id');
-        await showHidePassengerNotificationsButton(data.t, templateId);
     }
+
+    // hide or show the button to mark all the month transports have been notified to the passenger
+    const templateId = $('#templateTitle').attr('data-template-id');
+    await showHidePassengerNotificationsButton(data.t, templateId);
  }
