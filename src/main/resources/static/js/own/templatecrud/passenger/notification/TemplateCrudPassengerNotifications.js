@@ -100,7 +100,7 @@ async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
                 transportDateCode: data.transportDateCode,
                 notifiedInvolvedId: data.notifiedInvolvedId
             };
-            await createPassengerNotification(notification, alertIcon);
+            await createPassengerNotification(notification, alertIcon, driverSelectedId);
         }
 
     } catch (error) {
