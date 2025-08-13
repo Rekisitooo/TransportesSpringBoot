@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class IndicatePassengerDoesNotAssistWhenHasTransportTest extends AbstractPassengerAssists {
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         super.playwright = Playwright.create();
         super.browser = this.playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
         super.page = this.browser.newPage();
@@ -32,7 +32,7 @@ class IndicatePassengerDoesNotAssistWhenHasTransportTest extends AbstractPasseng
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         super.page.close();
         super.browser.close();
         super.playwright.close();

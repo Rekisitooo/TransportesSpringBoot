@@ -1,12 +1,9 @@
 import { temporalErrorAlert } from './alert/GenericErrorAlert.js';
-import { changeElementClass } from './TemplateCrudCommons.js';
 import {
     changePassengerNotifIconOnTransportDeletion,
     changePassengerNotifIconOnPassengerSelection,
-    showHidePassengerNotificationsButton,
 } from './passenger/notification/TemplateCrudPassengerNotifications.js';
 import {
-    showHideDriverNotificationsButton,
     changeDriverNotifIconOnTransportDeletion,
     changeDriverNotifIconOnDriverSelection,
 } from './driver/notification/TemplateCrudDriverNotifications.js';
@@ -24,8 +21,6 @@ $(function() {
 
         await operate(this, previousDriverId, newDriverId, passengerId);
         $(this).data('previous-driver-id', $(this).val());
-
-        const templateId = $('#templateTitle').attr('data-template-id');
     });
 });
 

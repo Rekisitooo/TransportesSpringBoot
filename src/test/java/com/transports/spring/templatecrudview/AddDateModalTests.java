@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
-public class AddDateModalTests {
+class AddDateModalTests {
 
     private Playwright playwright;
     private Browser browser;
     private Page page;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.playwright = Playwright.create();
         this.browser = this.playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
         this.page = this.browser.newPage();
@@ -37,7 +37,7 @@ public class AddDateModalTests {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         this.page.close();
         this.browser.close();
         this.playwright.close();

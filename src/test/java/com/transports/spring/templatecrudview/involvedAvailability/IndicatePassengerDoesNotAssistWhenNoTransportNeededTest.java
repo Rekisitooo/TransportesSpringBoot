@@ -31,7 +31,7 @@ class IndicatePassengerDoesNotAssistWhenNoTransportNeededTest extends AbstractPa
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         super.page.close();
         super.browser.close();
         super.playwright.close();

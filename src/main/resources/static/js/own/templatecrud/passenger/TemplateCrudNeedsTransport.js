@@ -3,7 +3,6 @@ import { changeElementDisplayNone, changeElementClass } from '../TemplateCrudCom
 
 function changePassengerNeedForTransport() {
     const needTransportIcon = $(this);
-    const driverForPassengerSelect = needTransportIcon.attr('data-passenger-select');
     let passengerNeedsTransport = needTransportIcon.attr('data-needs-transport');
     const passengerId = needTransportIcon.attr('data-t');
     const dateId = needTransportIcon.attr('data-y');

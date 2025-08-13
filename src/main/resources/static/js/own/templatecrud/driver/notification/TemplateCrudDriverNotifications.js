@@ -96,7 +96,7 @@ async function createDriverNotification(data, alertIcon) {
  * Deletes the driver notification in db and changes icon to red
  */
 async function deleteDriverNotification(data, alertIcon) {
-    if (ajaxRequestDeleteDriverNotification(data)) {
+    if (await ajaxRequestDeleteDriverNotification(data)) {
         changeAlertIconToNotNotified(alertIcon);
     }
 }

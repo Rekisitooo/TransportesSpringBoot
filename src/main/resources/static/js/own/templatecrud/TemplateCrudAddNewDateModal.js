@@ -39,11 +39,7 @@ function isValidEventName(eventName) {
     const eventNameWidth = span.offsetWidth;
 
     span.style.visibility = "hidden";
-    if (eventNameWidth > maximumLarge) {
-        return false;
-    } else {
-        return true;
-    }
+    return eventNameWidth <= maximumLarge;
 }
 
 function addInvolvedAvailabilityToAddDateCard() {

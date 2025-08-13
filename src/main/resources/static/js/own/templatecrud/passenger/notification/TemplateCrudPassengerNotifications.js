@@ -83,7 +83,7 @@ async function createPassengerNotification(data, alertIcon, driverSelectedId) {
 
         const passengerNotificationCreationResponse = await ajaxRequestCreatePassengerNotification(newData, alertIcon);
         if (passengerNotificationCreationResponse) {
-            await changeAlertIconToNotified(alertIcon);
+            changeAlertIconToNotified(alertIcon);
         }
     } catch (error) {
         showNotificationError();

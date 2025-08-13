@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         super.playwright = Playwright.create();
         super.browser = this.playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
         super.page = this.browser.newPage();
@@ -31,7 +31,7 @@ class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         super.page.close();
         super.browser.close();
         super.playwright.close();
