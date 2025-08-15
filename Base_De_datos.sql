@@ -279,7 +279,7 @@ BEGIN
 	
     DECLARE esInvolucradoConductor BOOLEAN;
     
-    SELECT 
+    SELECT DISTINCT
 		CASE WHEN 
 			ipp.COD_ROL = 2 THEN TRUE
 			ELSE FALSE
@@ -306,7 +306,12 @@ BEGIN
             AND t.COD_FECHA_TRANSPORTE = OLD.COD_FECHA_TRANSPORTE;
         
 	END IF;
-
+	
+    -- Se borran los avisos del propio involucrado
+	DELETE FROM AVISO_POR_INVOLUCRADO api
+		WHERE 
+			api.COD_INVOLUCRADO_AVISADO = OLD.COD_INVOLUCRADO
+            AND api.COD_FECHA_TRANSPORTE = OLD.COD_FECHA_TRANSPORTE;
 END //
 DELIMITER ;
                     
