@@ -12,11 +12,6 @@ import lombok.*;
 @Table(name = "USUARIO")
 public final class AppUser {
 
-    /*
-        Pbkdf2PasswordEncoder encoder = Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-        String result = encoder.encode("myPassword");
-        assertTrue(encoder.matches("myPassword", result));
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

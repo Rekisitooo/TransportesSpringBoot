@@ -2,7 +2,6 @@ package com.transports.spring.controller;
 
 import com.transports.spring.model.UserGroup;
 import com.transports.spring.repository.IUserGroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/user_group")
 public final class UserGroupController {
 
-    @Autowired
     private IUserGroupRepository userGroupRepository;
+
+    public UserGroupController(IUserGroupRepository userGroupRepository) {
+        this.userGroupRepository = userGroupRepository;
+    }
 
     @GetMapping("/getById")
     public UserGroup getById(@PathVariable (value = "id") final int userGroupId) {

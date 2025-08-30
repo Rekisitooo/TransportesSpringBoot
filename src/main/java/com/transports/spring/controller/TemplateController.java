@@ -94,18 +94,16 @@ public final class TemplateController {
         model.addAttribute("templateYear", template.getYear());
         model.addAttribute("templateId", template.getId());
 
+        final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
+        model.addAttribute("templateDates", templateDates);
+
         final DtoPassengerList dtoPassengerList = this.involvedByTemplateService.getAllPassengersFromTemplateForTemplateView(templateId);
         final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
         model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
-        model.addAttribute("passengerSeatsAmount", dtoPassengerList.getTotalPassengerSeats());
 
         final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
         final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
         model.addAttribute("driversFromTemplateList", driversFromTemplateList);
-        model.addAttribute("availableDriverSeatsAmount", dtoDriverList.getTotalDriverAvailableSeats());
-
-        final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
-        model.addAttribute("templateDates", templateDates);
 
         final Map<Integer, Map<Integer, Transport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
         model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);

@@ -12,13 +12,11 @@ public class AddNewDateToTemplateService {
 
     private final EventService eventService;
     private final TemplateService templateService;
-    private final InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService;
     private final TransportDateByTemplateService transportDateByTemplateService;
 
-    public AddNewDateToTemplateService(EventService eventService, TemplateService templateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TransportDateByTemplateService transportDateByTemplateService) {
+    public AddNewDateToTemplateService(EventService eventService, TemplateService templateService, TransportDateByTemplateService transportDateByTemplateService) {
         this.eventService = eventService;
         this.templateService = templateService;
-        this.involvedAvailabiltyForTransportDateService = involvedAvailabiltyForTransportDateService;
         this.transportDateByTemplateService = transportDateByTemplateService;
     }
 

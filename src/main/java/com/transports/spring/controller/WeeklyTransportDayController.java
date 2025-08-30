@@ -2,17 +2,21 @@ package com.transports.spring.controller;
 
 import com.transports.spring.model.WeeklyTransportDay;
 import com.transports.spring.repository.IWeeklyTransportDayRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
 @Controller
 public final class WeeklyTransportDayController {
 
-    @Autowired
     private IWeeklyTransportDayRepository weeklyTransportDayRepository;
+
+    public WeeklyTransportDayController(IWeeklyTransportDayRepository weeklyTransportDayRepository) {
+        this.weeklyTransportDayRepository = weeklyTransportDayRepository;
+    }
 
     @GetMapping("/getActiveWeeklyTransportDays")
     public List<WeeklyTransportDay> getActiveWeeklyTransportDays() {

@@ -17,12 +17,12 @@ public class PassengerProcedureRepository {
     public static final int FIELDS_OBTAINED_BEFORE_WEEKLY_TRANSPORT_DAYS = 9;
     private final DataSource dataSource;
 
-    public PassengerProcedureRepository(DataSource dataSource) throws SQLException {
+    public PassengerProcedureRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public List<DtoGetAllPassengers> getAllPassengers(final int userId, final Integer groupId, final Pageable pageable) throws SQLException {
-        final StringBuffer sorting = new StringBuffer();
+        final StringBuilder sorting = new StringBuilder();
         long offset = 1L;
         int pageSize = 10;
 

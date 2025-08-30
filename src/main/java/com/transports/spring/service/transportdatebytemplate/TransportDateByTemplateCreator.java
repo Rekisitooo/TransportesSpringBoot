@@ -12,6 +12,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import static java.util.Date.from;
+
 @Component
 public class TransportDateByTemplateCreator {
 
@@ -32,7 +34,7 @@ public class TransportDateByTemplateCreator {
     public TransportDateByTemplate addTransportDate(final DtoAddNewDateForm body, final DtoTemplateData template) throws TransportDateCreationException {
         final Date addDateCardDateInput = body.getAddDateCardDateInput();
         final LocalDate localDate = addDateCardDateInput.toLocalDate();
-        final java.util.Date utilDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        final java.util.Date utilDate = from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         final java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         final int dayOfTheWeek = LocalDateConverter.convertLocalDateDayOfWeekToDbDayOfWeek(localDate);
         final TransportDateByTemplate transportDate = this.transportDateByTemplateRepository.findByTransportDate(sqlDate);
