@@ -1,9 +1,10 @@
 import { genericErrorAlert } from '../alert/GenericErrorAlert.js';
 import { changeElementDisplayNone, changeElementClass } from '../TemplateCrudCommons.js';
 
-function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol) {
+async function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol) {
     const driverId = data.involvedId;
-    $.ajax({
+    // transport and notification deletions are done through a trigger
+    await $.ajax({
         url: '/involvedAvailability',
         type: 'DELETE',
         contentType: 'application/json',
@@ -20,7 +21,11 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
 
             // quitar el icono de aviso
             let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            // ponerlo en rojo si estaba en azul por si vuelve a estar disponible
+            notificationIconColClass = changeElementClass(notificationIconCol, 'text-primary', 'text-danger');
             notificationIconCol.attr('class', notificationIconColClass);
+            // marcar que el pasajero tiene el aviso pendiente
+
         },
         error: function(xhr, status, error) {
             genericErrorAlert();
@@ -28,8 +33,8 @@ function deleteDriverAssistance(data, passengerSelectsSelector, offersTransportI
     });
 }
 
-function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol) {
-    $.ajax({
+async function createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol) {
+    await $.ajax({
         url: '/involvedAvailability',
         type: 'POST',
         contentType: 'application/json',
@@ -106,7 +111,7 @@ function changeTransportOfferingIcon(dataDriverAssist, offersTransportIcon, clas
     offersTransportIcon.attr('data-driver-assist', dataDriverAssist);
 }
 
-function changeDriverAssistance() {
+async function changeDriverAssistance() {
     const offersTransportIcon = $(this);
     const driverId = offersTransportIcon.attr('data-d');
     const dateId = offersTransportIcon.attr('data-y');
@@ -114,25 +119,25 @@ function changeDriverAssistance() {
         transportDateId : dateId,
         involvedId : driverId,
     }
-    
+
     const passengerSelectsSelector = 'select[name=driverInTransportSelect][id*=' + data.transportDateId + '_select]';
     const notificationIconCol = $('#notificationIcon_' + driverId + '_' + dateId);
 
     const driverTransportOffer = offersTransportIcon.attr('data-driver-assist');
     if (driverTransportOffer === "1") {
         const driverPassengersDivId = $('div[id*=driverPassengersOnDate_' + driverId + '_' + dateId + ']');
-        deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol);
+        await deleteDriverAssistance(data, passengerSelectsSelector, offersTransportIcon, driverPassengersDivId, notificationIconCol);
 
     } else if (driverTransportOffer === "0") {
         const driverFullName = $('#' + driverId + '_th').text();
         const passengerNameCells = $('th[id*=passengerNameCell_]');
-        createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol);
+        await createDriverAssistance(data, driverFullName, passengerSelectsSelector, offersTransportIcon, passengerNameCells, notificationIconCol);
     }
 }
 
 $(document).ready(function() {
     $('#driverTransportsTable i[class*=car]').each(
-        function () {
+        async function () {
             $(this).on('click', changeDriverAssistance);
         }
     );
