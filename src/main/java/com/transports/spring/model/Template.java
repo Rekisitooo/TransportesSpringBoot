@@ -24,6 +24,9 @@ public final class Template {
     @Column(name = "MES")
     private String month;
 
+    @Column(name = "NOMBRE")
+    private String name;
+
     /**
      * @return monthName in english in lower case
      */

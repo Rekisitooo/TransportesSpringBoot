@@ -25,7 +25,8 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="icon-text" th:text="${#messages.msgOrNull(template.month)} + ' ' + ${template.year}"></div>
+                                    <div class="icon-text" th:text="${template.name}"></div>
+                                    <div class="icon-text" th:text="'(' + ${#messages.msgOrNull(template.month)} + ' ' + ${template.year} + ')'"></div>
                                 </div>
                             </div>
                         </a>
