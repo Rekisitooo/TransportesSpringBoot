@@ -1,23 +1,56 @@
 package com.transports.spring.controller;
 
-import com.transports.spring.dto.*;
-import com.transports.spring.exception.GenerateJpgFromExcelException;
-import com.transports.spring.exception.GeneratePdfFromExcelException;
-import com.transports.spring.exception.InvolvedDoesNotExistException;
-import com.transports.spring.exception.TransportsException;
-import com.transports.spring.model.*;
-import com.transports.spring.service.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import com.transports.spring.dto.DtoAddNewDateForm;
+import com.transports.spring.dto.DtoDriverList;
+import com.transports.spring.dto.DtoPassengerList;
+import com.transports.spring.dto.DtoTemplateData;
+import com.transports.spring.dto.DtoTemplateDate;
+import com.transports.spring.dto.driver.DtoScreenDriverTransportsTableInfo;
+import com.transports.spring.dto.notificationview.driver.DtoDriverNotificationVTableInfo;
+import com.transports.spring.dto.notificationview.passenger.DtoPassengerNotificationVTableInfo;
+import com.transports.spring.dto.passenger.DtoScreenPassengerTransportsTableInfo;
+import com.transports.spring.exception.GenerateJpgFromExcelException;
+import com.transports.spring.exception.GeneratePdfFromExcelException;
+import com.transports.spring.exception.InvolvedDoesNotExistException;
+import com.transports.spring.exception.TransportsException;
+import com.transports.spring.model.Driver;
+import com.transports.spring.model.Passenger;
+import com.transports.spring.model.Template;
+import com.transports.spring.operation.notificationview.driver.NotificationVDriverDataProvider;
+import com.transports.spring.operation.notificationview.passenger.NotificationVPassengerDataProvider;
+import com.transports.spring.operation.transportcrudview.driver.DriverTemplateCrudDataProvider;
+import com.transports.spring.operation.transportcrudview.passenger.PassengerTemplateCrudDataProvider;
+import com.transports.spring.service.AddNewDateToTemplateService;
+import com.transports.spring.service.InvolvedAvailabiltyForTransportDateService;
+import com.transports.spring.service.InvolvedByTemplateService;
+import com.transports.spring.service.InvolvedTransportNotificationService;
+import com.transports.spring.service.TemplateDateService;
+import com.transports.spring.service.TemplateFileService;
+import com.transports.spring.service.TemplateService;
+import com.transports.spring.service.TransportService;
+import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
+import com.transports.spring.vo.completemodel.VoCompleteNotification;
+import com.transports.spring.vo.completemodel.VoCompleteTransport;
+import com.transports.spring.vo.notificationview.driver.VoNotifVDriver;
+import com.transports.spring.vo.notificationview.passenger.VoNotifVPassenger;
+import com.transports.spring.vo.transportcrudview.driver.VoTransCVDriver;
+import com.transports.spring.vo.transportcrudview.passenger.VoTransCVPassenger;
 
 @Controller
 @RequestMapping("/template")
@@ -33,7 +66,12 @@ public final class TemplateController {
     private final TemplateFileService templateFileService;
     private final InvolvedTransportNotificationService involvedTransportNotificationService;
 
-    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService, InvolvedByTemplateService involvedByTemplateService, TransportService transportService, TemplateDateService templateDateService, InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService, TemplateFileService templateFileService, InvolvedTransportNotificationService involvedTransportNotificationService) {
+    public TemplateController(AddNewDateToTemplateService addNewDateToTemplateService, TemplateService templateService,
+            InvolvedByTemplateService involvedByTemplateService, TransportService transportService,
+            TemplateDateService templateDateService,
+            InvolvedAvailabiltyForTransportDateService involvedAvailabiltyForTransportDateService,
+            TemplateFileService templateFileService,
+            InvolvedTransportNotificationService involvedTransportNotificationService) {
         this.addNewDateToTemplateService = addNewDateToTemplateService;
         this.templateService = templateService;
         this.involvedByTemplateService = involvedByTemplateService;
@@ -45,21 +83,23 @@ public final class TemplateController {
     }
 
     @GetMapping("/openTemplate")
-    public String openTemplate(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
-        this.addDataToTemplateCrud(model, templateId);
+    public String openTemplate(final Model model, @RequestParam(value = "id") final int templateId)
+            throws InvolvedDoesNotExistException {
+        this.addDataToTransportCrud(model, templateId);
 
-        return "templateCRUD";
+        return "transportCRUD";
     }
 
     @GetMapping("/generate")
-    public String generate(final RedirectAttributes rm, final Model model, @RequestParam(value = "id") final int templateId) throws InvolvedDoesNotExistException {
+    public String generate(final RedirectAttributes rm, final Model model,
+            @RequestParam(value = "id") final int templateId) throws InvolvedDoesNotExistException {
         try {
             this.templateFileService.generateFiles(templateId);
         } catch (final IOException | GeneratePdfFromExcelException | GenerateJpgFromExcelException e) {
             rm.addFlashAttribute(GENERIC_ERROR_FLASH_ATTR, GENERIC_ERROR_FLASH_ATTR);
         }
 
-        this.addDataToTemplateCrud(model, templateId);
+        this.addDataToTransportCrud(model, templateId);
 
         return "redirect:/template/openTemplate?id=" + templateId;
     }
@@ -70,23 +110,27 @@ public final class TemplateController {
     }
 
     @GetMapping("/delete")
-    public ResponseEntity<Template> delete(@PathVariable (value = "id") final int templateId) {
+    public ResponseEntity<Template> delete(@PathVariable(value = "id") final int templateId) {
         return this.templateService.delete(templateId);
     }
 
     @PostMapping(path = "/newDate/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String newDate(final Model model, final RedirectAttributes rm, @PathVariable (value = "id") final int templateId, final DtoAddNewDateForm body) throws InvolvedDoesNotExistException {
+    public String newDate(final Model model, final RedirectAttributes rm,
+            @PathVariable(value = "id") final int templateId, final DtoAddNewDateForm body)
+            throws InvolvedDoesNotExistException {
         try {
             this.addNewDateToTemplateService.newDate(templateId, body);
         } catch (final TransportsException e) {
             rm.addFlashAttribute(GENERIC_ERROR_FLASH_ATTR, GENERIC_ERROR_FLASH_ATTR);
         }
 
-        this.addDataToTemplateCrud(model, templateId);
+        this.addDataToTransportCrud(model, templateId);
         return "redirect:/template/openTemplate?id=" + templateId;
     }
 
-    private void addDataToTemplateCrud(final Model model, final int templateId) throws InvolvedDoesNotExistException {
+    private void addDataToTransportCrud(final Model model, final int templateId) throws InvolvedDoesNotExistException {
+        final String templateIdString = String.valueOf(templateId);
+
         final DtoTemplateData template = this.templateService.getTemplateDataById(templateId);
         model.addAttribute("lastMonthDay", template.getLastMonthDay());
         model.addAttribute("monthNumber", template.getMonth());
@@ -96,70 +140,76 @@ public final class TemplateController {
 
         final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
-
+        
+        // passenger transport info
         final DtoPassengerList dtoPassengerList = this.involvedByTemplateService.getAllPassengersFromTemplateForTemplateView(templateId);
         final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
-        model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
+        final Map<Integer, Map<Integer, VoCompleteTransport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
+        final Map<Integer, Map<Integer, VoCompleteInvolvedAvailability>> passengerAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesByTemplate(templateId);
+        final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableDatesForTemplate(templateId);
+        final Map<Integer, Map<Integer, VoCompleteNotification>> passengerTransportNotifications = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateIdString);
+       
+        final DtoScreenPassengerTransportsTableInfo dtoTransportCrudScreenPassenger = new DtoScreenPassengerTransportsTableInfo(
+                templateDates, passengersFromTemplateList, allPassengerTransportsFromTemplate, passengerAssistanceDates, passengerTransportNotifications, driversAvailableForDate
+        );
 
+        final List<VoTransCVPassenger> voTransportCrudScreenPassengers = PassengerTemplateCrudDataProvider.getScreenPassengerTransportsTableInfo(dtoTransportCrudScreenPassenger);
+        model.addAttribute("passengerTransportsTableInfo", voTransportCrudScreenPassengers);
+
+        // driver assistance info
         final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
         final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
-        model.addAttribute("driversFromTemplateList", driversFromTemplateList);
+        final Map<Integer, Map<Integer, VoCompleteInvolvedAvailability>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
+        final Map<Integer, Map<Integer, List<VoCompleteNotification>>> driverTransportNotifications = this.involvedTransportNotificationService.getDriverNotificationsMapByTemplate(templateIdString);
+        final Map<Integer, Map<Integer, List<VoCompleteTransport>>> allDriverTransportsFromTemplate = this.transportService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
 
-        final Map<Integer, Map<Integer, Transport>> allPassengerTransportsFromTemplate = this.transportService.findAllPassengerTransportsFromTemplate(passengersFromTemplateList, templateId);
-        model.addAttribute("allPassengerTransportsFromTemplate", allPassengerTransportsFromTemplate);
+        final DtoScreenDriverTransportsTableInfo dtoTransportCrudScreenDriver = new DtoScreenDriverTransportsTableInfo(
+                templateDates, driversFromTemplateList, allDriverTransportsFromTemplate, driverAssistanceDates, driverTransportNotifications
+        );
 
-        final Map<Integer, Map<Integer, List<Passenger>>> allDriverTransportsFromTemplate = this.transportService.findAllDriverTransportsFromTemplate(driversFromTemplateList, templateId);
-        model.addAttribute("allDriverTransportsFromTemplate", allDriverTransportsFromTemplate);
-
-        final Map<Integer, List<Driver>> driversAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllDriversAvailableDatesForTemplate(templateId);
-        model.addAttribute("driversAvailableForDate", driversAvailableForDate);
-
-        final Map<Integer, List<Passenger>> passengersAvailableForDate = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDatesForTemplate(templateId);
-        model.addAttribute("passengersAvailableForDate", passengersAvailableForDate);
-
-        final Map<Integer, Map<LocalDate, DtoTemplateDay>> passengerAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
-        model.addAttribute("passengersAssistanceDates", passengerAssistanceDates);
-
-        final Map<Integer, Map<LocalDate, DtoTemplateDay>> driverAssistanceDates = this.involvedAvailabiltyForTransportDateService.findAllDriversAssistanceDates(templateId);
-        model.addAttribute("driverAssistanceDates", driverAssistanceDates);
-
-        Map<Integer, List<Integer>> involvedTransportNotifications = this.involvedTransportNotificationService.getAllNotificationsForTemplate(templateId);
-        model.addAttribute("involvedTransportNotifications", involvedTransportNotifications);
-
-        final Map<Integer, List<Integer>> allInvolvedNotifications = this.involvedTransportNotificationService.getAllInvolvedNotifications(templateId);
-        model.addAttribute("allInvolvedNotifications", allInvolvedNotifications);
+        final List<VoTransCVDriver> voTransportCrudScreenDrivers = DriverTemplateCrudDataProvider.getScreenDriverTransportsTableInfo(dtoTransportCrudScreenDriver);
+        model.addAttribute("driverTransportsTableInfo", voTransportCrudScreenDrivers);
     }
 
     @GetMapping("/openNotificationsTab")
-    public String openNotificationsTab(final Model model, @RequestParam (value = "id") final int templateId) {
+    public String openNotificationsTab(final Model model, @RequestParam(value = "id") final int templateId) {
+        final String templateIdString = String.valueOf(templateId);
+
         final List<DtoTemplateDate> templateDates = this.templateDateService.findAllMonthDatesWithNameDayOfTheWeekByTemplateId(templateId);
         model.addAttribute("templateDates", templateDates);
 
-        final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
-        final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
-        model.addAttribute("driversFromTemplateList", driversFromTemplateList);
-
+        // passenger transport info
         final DtoPassengerList dtoPassengerList = this.involvedByTemplateService.getAllPassengersFromTemplateForTemplateView(templateId);
         final List<Passenger> passengersFromTemplateList = dtoPassengerList.getPassengersFromTemplateList();
-        model.addAttribute("passengersFromTemplateList", passengersFromTemplateList);
+        final Map<Integer, Map<Integer, VoCompleteNotification>> passengerTransportNotifications = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateIdString);    
 
-        final String templateIdString = String.valueOf(templateId);
-        final Map<Integer, Map<Integer, List<String>>> driverNotificationsMap = this.involvedTransportNotificationService.getDriverNotificationsMapByTemplate(templateIdString);
-        model.addAttribute("driverNotificationsMap", driverNotificationsMap);
+        final DtoPassengerNotificationVTableInfo dtoPassengerNotificationVTableInfo = new DtoPassengerNotificationVTableInfo(
+                templateDates, passengersFromTemplateList, passengerTransportNotifications
+        );
 
-        final Map<Integer, Map<Integer, String>> passengerNotificationsMap = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateIdString);
-        model.addAttribute("passengerNotificationsMap", passengerNotificationsMap);
+        final List<VoNotifVPassenger> voTransportCrudScreenPassengers = NotificationVPassengerDataProvider.getScreenPassengerNotificationsTableInfo(dtoPassengerNotificationVTableInfo);
+        model.addAttribute("passengerNotificationsTableInfo", voTransportCrudScreenPassengers);
 
-        final Map<Integer, List<Integer>> allInvolvedNotifications = this.involvedTransportNotificationService.getAllInvolvedNotifications(templateId);
-        model.addAttribute("allInvolvedNotifications", allInvolvedNotifications);
+        // driver transport info
+        final DtoDriverList dtoDriverList = this.involvedByTemplateService.getAllDriversFromTemplateForTemplateView(templateId);
+        final List<Driver> driversFromTemplateList = dtoDriverList.getDriversFromTemplateList();
+        final Map<Integer, Map<Integer, List<VoCompleteNotification>>> driverTransportNotifications = this.involvedTransportNotificationService.getDriverNotificationsMapByTemplate(templateIdString);
 
-        return "components/templatecrud/notifications/notifications :: notifications";
+        final DtoDriverNotificationVTableInfo dtoDriverNotificationVTableInfo = new DtoDriverNotificationVTableInfo(
+                templateDates, driversFromTemplateList, driverTransportNotifications
+        );
+
+        final List<VoNotifVDriver> voTransportCrudScreenDrivers = NotificationVDriverDataProvider.getScreenDriverNotificationsTableInfo(dtoDriverNotificationVTableInfo);
+        model.addAttribute("driverNotificationsTableInfo", voTransportCrudScreenDrivers);
+
+        return "components/transportcrud/notifications/notifications :: notifications";
     }
 
     @GetMapping("/openTransportsTab")
-    public String openTransportsTab(final Model model, @RequestParam (value = "id") final int templateId) throws InvolvedDoesNotExistException {
-        this.addDataToTemplateCrud(model, templateId);
+    public String openTransportsTab(final Model model, @RequestParam(value = "id") final int templateId)
+            throws InvolvedDoesNotExistException {
+        this.addDataToTransportCrud(model, templateId);
 
-        return "components/templatecrud/transports/transports :: transports";
+        return "components/transportcrud/transports/transports :: transports";
     }
 }

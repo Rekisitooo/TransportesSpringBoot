@@ -1,47 +1,55 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.model.InvolvedTransportNotification;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.UUID;
+import com.transports.spring.model.InvolvedTransportNotification;
+import com.transports.spring.vo.completemodel.VoCompleteNotification;
 
 public interface IInvolvedTransportNotificationRepository extends JpaRepository<InvolvedTransportNotification, UUID> {
 
-    @Query("SELECT " +
-            "   api.notifiedInvolvedId, " +
-            "   api.transportDateCode, " +
-            "   concat(ippdriver.name, ' ', ippdriver.surname)" +
+        @Query("SELECT " +
+            "   new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
+            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats)," +
+            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats)," +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
+            "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
+            "   )" +
             "FROM InvolvedTransportNotification api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
-            "   INNER JOIN InvolvedByTemplate ipp" +
-            "       ON ipp.involvedByTemplateKey.involvedCode = api.notifiedInvolvedId" +
-            "   INNER JOIN InvolvedByTemplate ippdriver" +
-            "       ON ippdriver.involvedByTemplateKey.involvedCode = api.driverCode" +
+            "   INNER JOIN InvolvedByTemplate passenger" +
+            "       ON passenger.involvedByTemplateKey.involvedCode = api.notifiedInvolvedId" +
+            "   INNER JOIN InvolvedByTemplate driver" +
+            "       ON driver.involvedByTemplateKey.involvedCode = api.driverCode" +
             "   WHERE " +
             "       ftpp.templateCode = :templateId" +
-            "       AND ipp.roleCode = 1")
-    List<Object[]> getAllPassengerNotificationsForTemplate(@Param("templateId") String templateId);
+            "       AND passenger.roleCode = 1")
+    List<VoCompleteNotification> getAllPassengerNotificationsForTemplate(@Param("templateId") String templateId);
 
-    @Query("SELECT " +
-            "   api.notifiedInvolvedId, " +
-            "   api.transportDateCode, " +
-            "   concat(ipppassenger.name, ' ', ipppassenger.surname)" +
+    @Query("SELECT DISTINCT " +
+            "   new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
+            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats)," +
+            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats)," +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
+            "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
+            "   )" +
             "FROM InvolvedTransportNotification api " +
             "   INNER JOIN TransportDateByTemplate ftpp " +
             "       ON ftpp.id = api.transportDateCode" +
-            "   INNER JOIN InvolvedByTemplate ipp" +
-            "       ON ipp.involvedByTemplateKey.involvedCode = api.notifiedInvolvedId" +
-            "   INNER JOIN InvolvedByTemplate ipppassenger" +
-            "       ON ipppassenger.involvedByTemplateKey.involvedCode = api.passengerCode" +
+            "   INNER JOIN InvolvedByTemplate driver" +
+            "       ON driver.involvedByTemplateKey.involvedCode = api.driverCode" +
+            "   INNER JOIN InvolvedByTemplate passenger" +
+            "       ON passenger.involvedByTemplateKey.involvedCode = api.passengerCode" +
             "   WHERE " +
             "       ftpp.templateCode = :templateId" +
-            "       AND ipp.roleCode = 2")
-    List<Object[]> getAllDriverNotificationsForTemplate(@Param("templateId") String templateId);
+            "       AND driver.roleCode = 2")
+    List<VoCompleteNotification> getAllDriverNotificationsForTemplate(@Param("templateId") String templateId);
 
     @Query("SELECT new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +
             "FROM InvolvedTransportNotification api " +

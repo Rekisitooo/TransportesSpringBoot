@@ -1,14 +1,15 @@
 package com.transports.spring.service;
 
-import com.transports.spring.dto.DtoTemplateData;
-import com.transports.spring.model.Template;
-import com.transports.spring.repository.ITemplateRepository;
+import java.util.Calendar;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Calendar;
-import java.util.List;
+import com.transports.spring.dto.DtoTemplateData;
+import com.transports.spring.model.Template;
+import com.transports.spring.repository.ITemplateRepository;
 
 @Service
 public class TemplateService {
@@ -55,4 +56,42 @@ public class TemplateService {
         this.templateRepository.delete(existingTemplate);
         return ResponseEntity.ok().build();
     }
+/* 
+    public List<VoScreenPassengerTransportsTableInfo> getScreenPassengerTransportsTableInfo(VoScreenPassengerTransportsTableInfo voScreenPassengerTransportsTableInfo)  {
+        
+        VoScreenPassengerTransportsTableInfo = new VoScreenPassengerTransportsTableInfo();
+        List<DtoTransportCrudScreenPassenger> listDtoTransportCrudScreenPassenger = new ArrayList<>();
+
+
+        for each Passenger
+
+            GeneralPassengerIcon = PassengerIconCalculator.calculateGeneralPassengerIcons(
+                passengerNotifications.get(passengerId), 
+                passengerTransports.get(PassengerId)
+            )
+
+            DtoTransportCrudScreenPassenger = new DtoTransportCrudScreenPassenger(Passenger, GeneralPassengerIcon)
+            
+            for each Date
+                assistsOnDate = passengersAssistanceDates.get(Date.id).indexOf(Passenger).get(Passenger); 
+                needsTransport = passengersAssistanceDates.get(Passenger.id).get(Date.id).needsTransport();
+                NotificationIconDisplay = 																NotificationIconDisplay.calculateDatePassengerIcon(
+                        passengerNotifications.get(PassengerId).get(Date.id), 
+                        passengerTransports.get(PassengerId).get(Date.id)
+                    )
+                
+                PassengerTransportDisplay = new PassengerTransportDisplay(
+                    passengerTransports.get(PassengerId).get(Date.id),
+                    driversAvailableByDate.get(Date.id)
+                )
+
+                ScreenPassenger = new ScreenPassenger(assistsOnDate, needsTransport, NotificationIconDisplay, PassengerTransportDisplay)
+                DtoTransportCrudScreenPassenger.add(Date.id, ScreenPassenger)
+            end for each Date
+
+        end for each Passenger
+
+        return listDtoTransportCrudScreenPassenger;
+       
+    } */
 }

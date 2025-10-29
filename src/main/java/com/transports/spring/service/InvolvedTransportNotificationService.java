@@ -1,17 +1,20 @@
 package com.transports.spring.service;
 
-import com.transports.spring.model.InvolvedTransportNotification;
-import com.transports.spring.repository.IInvolvedTransportNotificationRepository;
-import com.transports.spring.service.response.ServiceResponse;
-import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.transports.spring.model.InvolvedTransportNotification;
+import com.transports.spring.repository.IInvolvedTransportNotificationRepository;
+import com.transports.spring.service.response.ServiceResponse;
+import com.transports.spring.vo.completemodel.VoCompleteNotification;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class InvolvedTransportNotificationService {
@@ -82,6 +85,7 @@ public class InvolvedTransportNotificationService {
             } else {
                 transportDateList = new ArrayList<>();
                 transportDateList.add(transportDateId);
+                result.put(involvedId, transportDateList);
             }
         }
     }
@@ -89,32 +93,27 @@ public class InvolvedTransportNotificationService {
     /**
      * Returns a map with passenger transport assignments for a template.
      * @param templateId consulted template
-     * @return Map<passengerId, Map<transportDateId, driverName>>
+     * @return Map<passengerId, Map<transportDateId, VoCompleteNotification>>
      */
-    public Map<Integer, Map<Integer, String>> getPassengerNotificationsMapByTemplate(final String templateId) {
-        final Map<Integer, Map<Integer, String>> passengerNotificationsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, VoCompleteNotification>> getPassengerNotificationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, VoCompleteNotification>> passengerNotificationsMap = new HashMap<>();
 
-        final List<Object[]> allPassengerNotificationsForTemplate =
+        final List<VoCompleteNotification> allPassengerNotificationsForTemplate =
                 this.notificationForInvolvedRepository.getAllPassengerNotificationsForTemplate(templateId);
 
-        for (final Object[] row : allPassengerNotificationsForTemplate) {
-            final Integer passengerId = (Integer) row[0]; // notifiedInvolvedId
-            final Integer transportDateId = (Integer) row[1]; // transportDateCode
-            String driverName = (String) row[2]; // driver name + surname
-
-            if (driverName == null) {
-                driverName = "";
-            }
+        for (final VoCompleteNotification voCompleteNotification : allPassengerNotificationsForTemplate) {
+            final Integer passengerId = voCompleteNotification.getPassenger().getId();
+            final Integer transportDateId = voCompleteNotification.getTransportDateByTemplate().getId();
 
             // Get or create the transport map for this passenger
-            Map<Integer, String> passengerTransports = passengerNotificationsMap.get(passengerId);
+            Map<Integer, VoCompleteNotification> passengerTransports = passengerNotificationsMap.get(passengerId);
             if (passengerTransports == null) {
                 passengerTransports = new HashMap<>();
-                passengerNotificationsMap.put(passengerId, passengerTransports);
             }
 
-            // Add the transport assignment (transportDateId -> driverName)
-            passengerTransports.put(transportDateId, driverName);
+            // Add the transport assignment (transportDateId -> passengerNotification)
+            passengerTransports.put(transportDateId, voCompleteNotification);
+            passengerNotificationsMap.put(passengerId, passengerTransports);
         }
 
         return passengerNotificationsMap;
@@ -124,18 +123,52 @@ public class InvolvedTransportNotificationService {
     /**
      * Returns a map with driver transport assignments for a template.
      * @param templateId consulted template
+     * @return Map<driverId, Map<transportDateId, List<VoCompleteNotification>>>
+     */
+    public Map<Integer, Map<Integer, List<VoCompleteNotification>>> getDriverNotificationsMapByTemplate(final String templateId) {
+        final Map<Integer, Map<Integer, List<VoCompleteNotification>>> driverNotificationsMap = new HashMap<>();
+
+        final List<VoCompleteNotification> allDriverNotificationsForTemplate = this.notificationForInvolvedRepository.getAllDriverNotificationsForTemplate(templateId);
+
+        for (final VoCompleteNotification voCompleteNotification : allDriverNotificationsForTemplate) {
+            final Integer driverId = voCompleteNotification.getDriver().getId();
+            final Integer transportDateId = voCompleteNotification.getTransportDateByTemplate().getId();
+
+            // Get or create the transport map for this driver
+            Map<Integer, List<VoCompleteNotification>> driverNotifications = driverNotificationsMap.get(driverId);
+            if (driverNotifications == null) {
+                driverNotifications = new HashMap<>();
+            }
+
+            // Get or create the notification list for this transport date
+            List<VoCompleteNotification> notificationList = driverNotifications.get(transportDateId);
+            if (notificationList == null) {
+                notificationList = new ArrayList<>();
+            }
+
+             // Add the driver notification to the notificationList list
+            notificationList.add(voCompleteNotification);
+            driverNotifications.put(transportDateId, notificationList);
+            driverNotificationsMap.put(driverId, driverNotifications);
+        }
+
+        return driverNotificationsMap;
+    }
+
+     /**
+     * Returns a map with driver transport assignments for a template.
+     * @param templateId consulted template
      * @return Map<driverId, Map<transportDateId, List<passengerName>>>
      */
-    public Map<Integer, Map<Integer, List<String>>> getDriverNotificationsMapByTemplate(final String templateId) {
+    public Map<Integer, Map<Integer, List<String>>> getDriverNotificationsMapWithNamesByTemplate(final String templateId) {
         final Map<Integer, Map<Integer, List<String>>> driverNotificationsMap = new HashMap<>();
 
-        final List<Object[]> allDriverNotificationsForTemplate =
-                this.notificationForInvolvedRepository.getAllDriverNotificationsForTemplate(templateId);
+        final List<VoCompleteNotification> allDriverNotificationsForTemplate = this.notificationForInvolvedRepository.getAllDriverNotificationsForTemplate(templateId);
 
-        for (final Object[] row : allDriverNotificationsForTemplate) {
-            final Integer driverId = (Integer) row[0]; // notifiedInvolvedId
-            final Integer transportDateId = (Integer) row[1]; // transportDateCode
-            String passengerName = (String) row[2]; // passenger name + surname
+        for (final VoCompleteNotification voCompleteNotification : allDriverNotificationsForTemplate) {
+            final Integer driverId = voCompleteNotification.getDriver().getId();
+            final Integer transportDateId = voCompleteNotification.getTransportDateByTemplate().getId();
+            String passengerName = voCompleteNotification.getPassenger().getName() + " " + voCompleteNotification.getPassenger().getSurname();
 
             if (passengerName == null) {
                 passengerName = "";
@@ -145,20 +178,21 @@ public class InvolvedTransportNotificationService {
             Map<Integer, List<String>> driverTransports = driverNotificationsMap.get(driverId);
             if (driverTransports == null) {
                 driverTransports = new HashMap<>();
-                driverNotificationsMap.put(driverId, driverTransports);
             }
 
             // Get or create the passenger list for this transport date
             List<String> passengerList = driverTransports.get(transportDateId);
             if (passengerList == null) {
                 passengerList = new ArrayList<>();
-                driverTransports.put(transportDateId, passengerList);
             }
 
             // Add the passenger name to the list if not already present
             if (!passengerList.contains(passengerName)) {
                 passengerList.add(passengerName);
             }
+
+            driverTransports.put(transportDateId, passengerList);
+            driverNotificationsMap.put(driverId, driverTransports);
         }
 
         return driverNotificationsMap;

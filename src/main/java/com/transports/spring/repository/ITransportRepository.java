@@ -1,24 +1,33 @@
 package com.transports.spring.repository;
 
-import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
-import com.transports.spring.dto.DtoInvolvedTransport;
-import com.transports.spring.model.Transport;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
+import com.transports.spring.dto.DtoInvolvedTransport;
+import com.transports.spring.model.Transport;
+import com.transports.spring.vo.completemodel.VoCompleteTransport;
 
 @Repository
 public interface ITransportRepository extends JpaRepository<Transport, Integer> {
 
     @Query("SELECT DISTINCT" +
-            "   new Transport(passenger.involvedByTemplateKey.involvedCode, driver.involvedByTemplateKey.involvedCode, ftpp.id)" +
+            "   new com.transports.spring.vo.completemodel.VoCompleteTransport(" +
+            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats)," +
+            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats)," +
+            "       new com.transports.spring.model.Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)," +
+            "       new com.transports.spring.dto.DtoTemplateDate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName, ds.name, 'transportDate')" +
+            "   )" +
             "       FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN DayOfTheWeek ds" +
+            "               ON ftpp.dayOfTheWeekCode = ds.id" +
             "           INNER JOIN InvolvedByTemplate passenger" +
             "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
             "           INNER JOIN InvolvedByTemplate driver" +
@@ -26,13 +35,20 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       WHERE " +
             "           t.transportKey.passengerId = :passengerId" +
             "           AND ftpp.templateCode = :templateId")
-    List<Transport> findAllPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
+    List<VoCompleteTransport> findAllPassengerTransportsFromTemplate(@Param("passengerId") int passengerId, @Param("templateId") int templateId);
 
     @Query("SELECT DISTINCT" +
-            "   new Transport(passenger.involvedByTemplateKey.involvedCode, driver.involvedByTemplateKey.involvedCode, ftpp.id)" +
-            "       FROM Transport t" +
+            "   new com.transports.spring.vo.completemodel.VoCompleteTransport(" +
+            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats)," +
+            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats)," +
+            "       new com.transports.spring.model.Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)," +
+            "       new com.transports.spring.dto.DtoTemplateDate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName, ds.name, 'transportDate')" +
+            "   )" +
+            "   FROM Transport t" +
             "           INNER JOIN TransportDateByTemplate ftpp" +
             "               ON t.transportKey.transportDateId = ftpp.id" +
+            "           INNER JOIN DayOfTheWeek ds" +
+            "               ON ftpp.dayOfTheWeekCode = ds.id" +
             "           INNER JOIN InvolvedByTemplate passenger" +
             "               ON t.transportKey.passengerId = passenger.involvedByTemplateKey.involvedCode" +
             "           INNER JOIN InvolvedByTemplate driver" +
@@ -40,7 +56,7 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
             "       WHERE " +
             "           t.transportKey.driverId = :driverId" +
             "           AND ftpp.templateCode = :templateId")
-    List<Transport> findAllDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
+    List<VoCompleteTransport> findAllDriverTransportsFromTemplate(@Param("driverId") int driverId, @Param("templateId") int templateId);
 
     @Modifying
     @Query("UPDATE Transport t" +

@@ -1,21 +1,24 @@
 package com.transports.spring.model.templategeneration.passenger;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.time.LocalDate;
+import java.util.Calendar;
+
+import org.junit.jupiter.api.Test;
+
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDate;
-import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
+import com.transports.spring.model.InvolvedAvailabiltyForTransportDate;
+import com.transports.spring.model.TransportDateByTemplate;
 import com.transports.spring.model.templategeneration.common.cell.styler.AbstractDateCellGroupStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.DefaultDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.EventDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.TransportDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.passenger.NoDriversAvailableForTransportDateCellStyler;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.util.Calendar;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
 
 class PassengerTemplateExcelBodyGeneratorTest {
 
@@ -23,7 +26,7 @@ class PassengerTemplateExcelBodyGeneratorTest {
     void testEmptyDate() {
         final PassengerTemplateExcelBodyGenerator bodyGenerator = new PassengerTemplateExcelBodyGenerator(Calendar.getInstance(), LocalDate.now());
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
-                null, 1,null, null,null);
+                null, 1, null, null,null);
 
         final AbstractDateCellGroupStyler cellStyler = dtoCellGroup.getCellStyler();
         final boolean isCorrectCellStyle = (cellStyler instanceof DefaultDateCellStyler);
@@ -48,7 +51,7 @@ class PassengerTemplateExcelBodyGeneratorTest {
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
                 null, 1,
                 new DtoTemplateDate("transportDate", "Reunión Vida y Ministerio"),
-                new DtoTemplateDay(""),
+                new VoCompleteInvolvedAvailability(),
                 null
         );
 
@@ -72,10 +75,12 @@ class PassengerTemplateExcelBodyGeneratorTest {
     @Test
     void testCellGroupForTransportDatesButNoDriversForCurrentPassenger() {
         final PassengerTemplateExcelBodyGenerator bodyGenerator = new PassengerTemplateExcelBodyGenerator(Calendar.getInstance(), LocalDate.now());
+        
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
-                null, 1,
+                null, 
+                1,
                 new DtoTemplateDate("Reunión Vida y Ministerio", "transportDate"),
-                new DtoTemplateDay("transport Date but no drivers for you"),
+                new VoCompleteInvolvedAvailability(null, new TransportDateByTemplate("transport Date but no drivers for you")),
                 null
         );
 
@@ -102,7 +107,7 @@ class PassengerTemplateExcelBodyGeneratorTest {
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
                 null, 1,
                 new DtoTemplateDate("Reunión Vida y Ministerio", "transportDate"),
-                new DtoTemplateDay(),
+                new VoCompleteInvolvedAvailability(),
                 new DtoPassengerTransport("Día de transporte", "Pepito de los palotes")
         );
 
@@ -129,7 +134,7 @@ class PassengerTemplateExcelBodyGeneratorTest {
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
                 null, 1,
                 new DtoTemplateDate("Asamblea", "event"),
-                new DtoTemplateDay(),
+                new VoCompleteInvolvedAvailability(),
                 null);
 
         testCellGroupForEventsAndNoNeedTransportDates(dtoCellGroup, "Asamblea");
@@ -141,7 +146,7 @@ class PassengerTemplateExcelBodyGeneratorTest {
         final DtoTemplateExcelTransportCellGroup dtoCellGroup = bodyGenerator.getDtoTemplateExcelTransportCellGroup(
                 null, 1,
                 new DtoTemplateDate("Reunión Vida y Ministerio", "transportDate"),
-                new DtoTemplateDay(0),
+                new VoCompleteInvolvedAvailability(new InvolvedAvailabiltyForTransportDate(false), null),
                 null);
 
         testCellGroupForEventsAndNoNeedTransportDates(dtoCellGroup, "Reunión Vida y Ministerio");

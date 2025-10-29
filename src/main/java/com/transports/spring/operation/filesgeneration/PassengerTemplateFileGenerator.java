@@ -12,6 +12,8 @@ import com.transports.spring.exception.GenerateJpgFromExcelException;
 import com.transports.spring.exception.GeneratePdfFromExcelException;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.templategeneration.passenger.PassengerTemplateFile;
+import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
+
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +64,8 @@ public final class PassengerTemplateFileGenerator {
     private static DtoTemplateExcelPassengerBody getDtoTemplateExcelPassengerBody(final DtoGeneratePassengerFile dtoGeneratePassengerFile,
               final Passenger passenger, final Map<LocalDate, DtoPassengerTransport> passengerTransportsByDayMap) {
 
-        final Map<Integer, Map<LocalDate, DtoTemplateDay>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
-        final Map<LocalDate, DtoTemplateDay> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
+        final Map<Integer, Map<LocalDate, VoCompleteInvolvedAvailability>> allPassengersAssistanceDatesMap = dtoGeneratePassengerFile.getAllPassengersAssistanceDatesMap();
+        final Map<LocalDate, VoCompleteInvolvedAvailability> passengerAssistanceDatesMap = allPassengersAssistanceDatesMap.get(passenger.getId());
         final Map<LocalDate, DtoTemplateDate> monthTransportDatesList = dtoGeneratePassengerFile.getMonthTransportDatesList();
 
         return new DtoTemplateExcelPassengerBody(passengerAssistanceDatesMap, monthTransportDatesList, passengerTransportsByDayMap);

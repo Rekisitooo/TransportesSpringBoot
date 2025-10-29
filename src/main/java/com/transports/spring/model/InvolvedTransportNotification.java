@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.UUID;
 
 @Builder
@@ -33,4 +34,12 @@ public final class InvolvedTransportNotification {
 
     @Column(name = "FECHA_AVISO", nullable = false)
     private Timestamp notificationDate;
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.passengerCode);
+        return hash;
+    }
+    
 }

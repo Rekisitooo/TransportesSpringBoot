@@ -15,6 +15,8 @@ import com.transports.spring.model.Month;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Template;
 import com.transports.spring.operation.filesgeneration.TemplateFileGenerator;
+import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -56,7 +58,7 @@ public final class TemplateFileService {
 
             final Map<Passenger, Map<LocalDate, DtoPassengerTransport>> passengerTransports = this.getPassengerTransports(templateId);
             final Map<LocalDate, DtoTemplateDate> templateMonthDateByDayMap = this.transportDateByTemplateService.getTransportDateByDayMap(templateId);
-            final Map<Integer, Map<LocalDate, DtoTemplateDay>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
+            final Map<Integer, Map<LocalDate, VoCompleteInvolvedAvailability>> allPassengersAssistanceDatesMap = this.involvedAvailabiltyForTransportDateService.findAllPassengersAssistanceDates(templateId);
 
             final Map<Driver, Map<LocalDate, DtoDriverTransport>> driverTransports = this.getDriverTransports(templateId);
 

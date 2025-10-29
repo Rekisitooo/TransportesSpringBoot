@@ -50,4 +50,8 @@ public final class TransportDateByTemplate {
         this.transportDate = transportDate;
         this.dayOfTheWeekCode = dayOfTheWeekCode;
     }
+
+    public TransportDateByTemplate(String eventName) {
+        this.eventName = eventName;
+    }
 }

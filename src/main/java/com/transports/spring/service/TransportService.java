@@ -11,6 +11,8 @@ import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.repository.ITransportRepository;
+import com.transports.spring.vo.completemodel.VoCompleteTransport;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,16 +33,16 @@ public class TransportService {
     /**
      * @param passengerList passengers available in the consulted template
      * @param templateId consulted template
-     * @return Map<passengerId, Map<transportDateId, Transport>>
+     * @return Map<passengerId, Map<transportDateId, VoCompleteTransport>>
      */
-    public Map<Integer, Map<Integer, Transport>> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
-        final Map<Integer, Map<Integer, Transport>> passengerTransportsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, VoCompleteTransport>> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
+        final Map<Integer, Map<Integer, VoCompleteTransport>> passengerTransportsMap = new HashMap<>();
         for (final Passenger passenger : passengerList) {
 
-            Map<Integer, Transport> transportsMap = new HashMap<>();
-            final List<Transport> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
-            for (final Transport transportByTemplate : allPassengerTransportsFromTemplate) {
-                transportsMap.put(transportByTemplate.getTransportKey().getTransportDateId(), transportByTemplate);
+            Map<Integer, VoCompleteTransport> transportsMap = new HashMap<>();
+            final List<VoCompleteTransport> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
+            for (final VoCompleteTransport voCompleteTransport : allPassengerTransportsFromTemplate) {
+                transportsMap.put(voCompleteTransport.getTransport().getTransportKey().getTransportDateId(), voCompleteTransport);
             }
             passengerTransportsMap.put(passenger.getId(), transportsMap);
         }
@@ -51,26 +53,25 @@ public class TransportService {
     /**
      * @param driverList drivers available in the consulted template
      * @param templateId consulted template
-     * @return Map<driverId, Map<transportDateId, List<Passenger>>>
+     * @return Map<driverId, Map<transportDateId, List<VoCompleteTransport>>>
      */
-    public Map<Integer, Map<Integer, List<Passenger>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) throws InvolvedDoesNotExistException {
-        final Map<Integer, Map<Integer, List<Passenger>>> driverTransportsMap = new HashMap<>();
+    public Map<Integer, Map<Integer, List<VoCompleteTransport>>> findAllDriverTransportsFromTemplate(final List<Driver> driverList, final int templateId) throws InvolvedDoesNotExistException {
+        final Map<Integer, Map<Integer, List<VoCompleteTransport>>> driverTransportsMap = new HashMap<>();
 
         for (final Driver driver : driverList) {
-            final List<Transport> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
-            Map<Integer, List<Passenger>> transportPassengersMap = new HashMap<>();
+            final List<VoCompleteTransport> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
+            Map<Integer, List<VoCompleteTransport>> transportPassengersMap = new HashMap<>();
             driverTransportsMap.put(driver.getId(), transportPassengersMap);
 
-            for (final Transport transport : allDriverTransportsFromTemplate) {
-                final Integer transportDateId = transport.getTransportKey().getTransportDateId();
-                final Passenger passenger = this.involvedByTemplateService.getPassengerByIdAndTemplate(transport.getTransportKey().getPassengerId(), templateId);
+            for (final VoCompleteTransport voCompleteTransport : allDriverTransportsFromTemplate) {
+                final Integer transportDateId = voCompleteTransport.getTransport().getTransportKey().getTransportDateId();
 
-                List<Passenger> transportPassengerList = transportPassengersMap.get(transportDateId);
+                List<VoCompleteTransport> transportPassengerList = transportPassengersMap.get(transportDateId);
                 if (transportPassengerList == null) {
-                    transportPassengerList = new ArrayList<>(Collections.singletonList(passenger));
+                    transportPassengerList = new ArrayList<>(Arrays.asList(voCompleteTransport));
                     transportPassengersMap.put(transportDateId, transportPassengerList);
                 } else {
-                    transportPassengerList.add(passenger);
+                    transportPassengerList.add(voCompleteTransport);
                 }
             }
         }
@@ -78,11 +79,11 @@ public class TransportService {
         return driverTransportsMap;
     }
 
-    public List<Transport> findAllPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
+    public List<VoCompleteTransport> findAllPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
         return this.transportByTemplateRepository.findAllPassengerTransportsFromTemplate(passengerId, templateId);
     }
 
-    public List<Transport> findAllDriverTransportsFromTemplate(final int driverId, final int templateId) {
+    public List<VoCompleteTransport> findAllDriverTransportsFromTemplate(final int driverId, final int templateId) {
         return this.transportByTemplateRepository.findAllDriverTransportsFromTemplate(driverId, templateId);
     }
 

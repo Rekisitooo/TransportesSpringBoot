@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>Transport Crud Tabs</title>
+        <link href="/css/own/transportcrud/tabs/transportCrudTabs.css" rel="stylesheet">
+    </head>
+    <body>
+        <ul th:fragment="tabs" class="nav nav-tabs mt-3 mb-4" id="templateTabs" role="tablist" xmlns:th="http://www.w3.org/1999/xhtml">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="transports-tab" data-bs-toggle="tab"
+                        data-bs-target="#transportsTab" type="button" role="tab"
+                        aria-controls="transportsTab" aria-selected="true" data-call="TransportsTab">
+                    <i class="fas fa-car text-primary"></i>
+                    <span th:text="#{transportCRUD.tabs.transports}"></span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notifications-tab" data-bs-toggle="tab"
+                        data-bs-target="#notificationsTab" type="button" role="tab"
+                        aria-controls="notificationsTab" aria-selected="false" data-call="NotificationsTab">
+                    <i class="fas fa-exclamation-circle text-danger"></i>
+                    <span th:text="#{transportCRUD.tabs.notifications}"></span>
+                </button>
+            </li>
+        </ul>
+
+        <script src="/js/own/transportcrud/tabs/TransportCrudToggleTabs.js" type="module"></script>
+
+    </body>
+</html>

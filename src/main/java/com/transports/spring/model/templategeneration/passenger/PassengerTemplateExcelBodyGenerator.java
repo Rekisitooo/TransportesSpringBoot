@@ -2,7 +2,6 @@ package com.transports.spring.model.templategeneration.passenger;
 
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDate;
-import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelPassengerBody;
 import com.transports.spring.dto.generatefiles.excel.DtoTemplateExcelTransportCellGroup;
 import com.transports.spring.model.templategeneration.common.AbstractTemplateExcelBodyGenerator;
@@ -10,6 +9,8 @@ import com.transports.spring.model.templategeneration.common.cell.styler.Default
 import com.transports.spring.model.templategeneration.common.cell.styler.EventDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.TransportDateCellStyler;
 import com.transports.spring.model.templategeneration.common.cell.styler.passenger.NoDriversAvailableForTransportDateCellStyler;
+import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
+
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.time.LocalDate;
@@ -25,15 +26,15 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
     public void generate(final XSSFSheet excelSheet, final DtoTemplateExcelPassengerBody dtoPassengerBody) {
         final Map<LocalDate, DtoPassengerTransport> passengerTransportDateMap = dtoPassengerBody.getAllTemplatePassengerTransportsByDayMap();
         final Map<LocalDate, DtoTemplateDate> transportDateMap = dtoPassengerBody.getMonthTransportDateByDayMap();
-        final Map<LocalDate, DtoTemplateDay> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
+        final Map<LocalDate, VoCompleteInvolvedAvailability> passengerAssistanceDates = dtoPassengerBody.getPassengerAssistanceDateList();
 
         for (int currentDayOfMonth = 1; currentDayOfMonth <= this.lastMonthDay; currentDayOfMonth++) {
             jumpToNextRowIfOutOfScope();
             final DtoTemplateDate dtoTemplateTransportDate = transportDateMap.get(super.templateDate);
-            final DtoTemplateDay dtoPassengerAssistance = passengerAssistanceDates.get(super.templateDate);
+            final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability = passengerAssistanceDates.get(super.templateDate);
             final DtoPassengerTransport dtoPassengerTransport = passengerTransportDateMap.get(super.templateDate);
 
-            final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = getDtoTemplateExcelTransportCellGroup(excelSheet, currentDayOfMonth, dtoTemplateTransportDate, dtoPassengerAssistance, dtoPassengerTransport);
+            final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup = getDtoTemplateExcelTransportCellGroup(excelSheet, currentDayOfMonth, dtoTemplateTransportDate, voCompleteInvolvedAvailability, dtoPassengerTransport);
             super.generateCustomTemplateExcelTransportDayCellGroup(dtoTemplateExcelTransportCellGroup, excelSheet);
 
             this.currentCol += 2;
@@ -45,17 +46,17 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
             final XSSFSheet excelSheet,
             final int currentDayOfMonth,
             final DtoTemplateDate dtoTemplateTransportDate,
-            final DtoTemplateDay dtoPassengerAssistance,
+            final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability,
             final DtoPassengerTransport passengerTransport
     ) {
         final DtoTemplateExcelTransportCellGroup dtoTemplateExcelTransportCellGroup =
                 new DtoTemplateExcelTransportCellGroup(this.currentCol, this.currentRow, excelSheet, String.valueOf(currentDayOfMonth));
 
         //date is a transport date and passenger assists
-        if (dtoTemplateTransportDate != null && dtoPassengerAssistance != null) {
+        if (dtoTemplateTransportDate != null && voCompleteInvolvedAvailability != null) {
 
             //date is an event but passenger does not need transport for this date
-            if (dtoTemplateTransportDate.getDateType().equals("event") || dtoPassengerAssistance.getNeedsTransport() == 0) {
+            if (dtoTemplateTransportDate.getDateType().equals("event") || voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getNeedsTransport() == 0) {
                 dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dtoTemplateTransportDate.getEventName());
                 dtoTemplateExcelTransportCellGroup.setBodyText("No hay arreglos.");
                 dtoTemplateExcelTransportCellGroup.setCellStyler(new EventDateCellStyler());
@@ -67,7 +68,7 @@ public class PassengerTemplateExcelBodyGenerator extends AbstractTemplateExcelBo
                     dtoTemplateExcelTransportCellGroup.setBodyText(passengerTransport.getDriverFullName());
                     dtoTemplateExcelTransportCellGroup.setCellStyler(new TransportDateCellStyler());
                 } else {
-                    final String dateEventName = dtoPassengerAssistance.getEventName();
+                    final String dateEventName = voCompleteInvolvedAvailability.getTransportDateByTemplate().getEventName();
                     if (isPassengerAssistingOnActualDate(dateEventName)) {
                         dtoTemplateExcelTransportCellGroup.setCellNumberText(currentDayOfMonth + " " + dateEventName);
                         dtoTemplateExcelTransportCellGroup.setBodyText("No hay suficientes conductores disponibles en el arreglo.");

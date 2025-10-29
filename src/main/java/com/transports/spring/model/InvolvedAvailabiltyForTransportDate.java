@@ -21,6 +21,9 @@ public final class InvolvedAvailabiltyForTransportDate {
     @Column(name = "NECESITA_TRANSPORTE")
     private int needsTransport = 1;
 
+    public InvolvedAvailabiltyForTransportDate(boolean needsTransport) {
+        this.needsTransport = needsTransport ? 1 : 0;
+    }
     public InvolvedAvailabiltyForTransportDate(int involvedCode, int transportDateCode) {
         this.involvedAvailabilityForTransportDateKey = new InvolvedAvailabilityForTransportDateKey(involvedCode, transportDateCode);
     }
