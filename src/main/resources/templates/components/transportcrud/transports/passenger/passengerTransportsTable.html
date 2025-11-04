@@ -138,7 +138,7 @@
                                        th:data-t="${passenger.id}"
                                        th:data-y="${date.id}"
                                        th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
-                                       th:data-passenger-assist="${(passengerScreenInfo.assistsOnDate) ? 0 : 1}"
+                                       th:data-passenger-assist="${(passengerScreenInfo.assistsOnDate) ? 1 : 0}"
                                        th:title="#{transportCRUD.titleCalendarIconPassengerAssistsOnTransportForDate}"
                                        role="button"
                                        th:class="${(passengerScreenInfo.assistsOnDate) ?
