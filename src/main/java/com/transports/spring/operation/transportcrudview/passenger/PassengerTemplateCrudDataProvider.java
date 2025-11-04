@@ -7,15 +7,15 @@ import java.util.Map;
 import com.transports.spring.dto.DtoTemplateDate;
 import com.transports.spring.dto.passenger.DtoScreenPassengerTransportsTableInfo;
 import com.transports.spring.model.Passenger;
+import com.transports.spring.operation.transportcrudview.passenger.notification.PassengerNotificationIconCalculator;
 import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
 import com.transports.spring.vo.completemodel.VoCompleteNotification;
 import com.transports.spring.vo.completemodel.VoCompleteTransport;
 import com.transports.spring.vo.transportcrudview.notification.VoTCVNotificationIconDisplay;
+import com.transports.spring.vo.transportcrudview.passenger.VoTransCVGeneralPassengerIcon;
 import com.transports.spring.vo.transportcrudview.passenger.VoTransCVPassenger;
 import com.transports.spring.vo.transportcrudview.passenger.VoTransCVPassengerDateInfo;
-import com.transports.spring.vo.transportcrudview.passenger.VoTransCVGeneralPassengerIcon;
 import com.transports.spring.vo.transportcrudview.passenger.transport.VoPassengerTransportDisplay;
-import com.transports.spring.operation.transportcrudview.passenger.notification.PassengerNotificationIconCalculator;
 
 public class PassengerTemplateCrudDataProvider {
 
@@ -69,7 +69,7 @@ public class PassengerTemplateCrudDataProvider {
 
                                         screenPassenger.setAssistsOnDate(voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getInvolvedCode() == passenger.getId());
                                         // if passenger does not assists, it does not need transport either
-                                        screenPassenger.setNeedsTransport(voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getNeedsTransport() == 1 && screenPassenger.isAssistsOnDate());
+                                        screenPassenger.setNeedsTransport(voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getNeedsTransport() == 1);
 
                                         // info for the passenger notification icon
                                         if (passengerHasOneOrMoreNotifications && passengerHasOneOrMoreTransports) {
