@@ -28,6 +28,7 @@ function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenge
 
             // esconder el icono de aviso
             let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
+            notificationIconCol.attr('class', notificationIconColClass);
             // poner el icon de aviso en rojo si estaba en azul por si vuelve a estar disponible
             notificationIconColClass = changeElementClass(notificationIconCol, 'text-primary', 'text-danger');
             notificationIconCol.attr('class', notificationIconColClass);
