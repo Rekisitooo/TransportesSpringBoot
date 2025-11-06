@@ -80,6 +80,9 @@ public class PassengerTemplateCrudDataProvider {
                                         } else if (passengerHasOneOrMoreNotifications || passengerHasOneOrMoreTransports) {
                                                 notificationIconDisplay = new VoTCVNotificationIconDisplay(true, "red");
                                         }
+                                
+                                        // if the passenger does not assist on that date or does not need transport, no icon is shown
+                                        notificationIconDisplay.setShowIcon(screenPassenger.isAssistsOnDate() && screenPassenger.isNeedsTransport());
                                         
                                         // info for the passenger transport
                                         final boolean passengerHasTransportOnDate = (allPassengerTransports.get(passenger.getId()) != null && allPassengerTransports.get(passenger.getId()).get(dateId) != null);

@@ -151,12 +151,12 @@
                                 <!-- Notification icon div -->
                                 <div
                                      th:id="${'notificationIcon_' + passenger.id + '_' + date.id}"
-                                     th:class="'col-2 ' + ${(passengerScreenInfo.assistsOnDate) and (passengerScreenInfo.needsTransport) ? '' : 'd-none'}">
+                                     th:class="'col-2 ' + ${(passengerScreenInfo.voNotificationIconDisplay.showIcon) ? '' : 'd-none'}">
 
                                     <!-- Notification icon -->
                                     <i
                                         th:class="'fas fa-exclamation-circle ' +
-                                            ${(passengerScreenInfo.voNotificationIconDisplay.showIcon) ? 'text-primary' : 'text-danger'}"
+                                            ${(passengerScreenInfo.voNotificationIconDisplay.iconColor.equals('blue')) ? 'text-primary' : 'text-danger'}"
                                         role="button"
                                         th:title="#{transportCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{transportCRUD.titleMarkNotificationEnd} + ' ' + ${date.transportDate}"
                                         th:data-drivers-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
