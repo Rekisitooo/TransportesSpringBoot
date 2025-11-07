@@ -1,11 +1,18 @@
 package com.transports.spring.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.sql.Timestamp;
-import java.util.Objects;
-import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @AllArgsConstructor
@@ -18,7 +25,7 @@ public final class InvolvedTransportNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "COD_INVOLUCRADO_AVISADO", nullable = false)
     private Integer notifiedInvolvedId;
@@ -34,12 +41,4 @@ public final class InvolvedTransportNotification {
 
     @Column(name = "FECHA_AVISO", nullable = false)
     private Timestamp notificationDate;
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.passengerCode);
-        return hash;
-    }
-    
 }
