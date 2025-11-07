@@ -1,6 +1,6 @@
 import { temporalErrorAlert } from '../../alert/GenericErrorAlert.js';
 import { changeElementClass } from '../../TransportCrudCommons.js';
-import { getInvolvedNotifications } from '../../../NotificationAJAX.js';
+import { getInvolvedNotifications, updatePassengerNotification, createPassengerNotification, deletePassengerNotification } from '../../../NotificationAJAX.js';
 import { getDriverForPassengerByDate } from '../../../TransportAJAX.js';
 
 $(function() {
@@ -19,25 +19,11 @@ $(function() {
                     const driverSelectSelector = $(this).attr('data-drivers-selector');
                     const driverSelect = $('#' + driverSelectSelector);
                     const driverSelectedId = driverSelect.val();
-
-                    // if now the passenger does not have driver
-                    if (driverSelectedId === undefined || driverSelectedId === '') {
-                        await ajaxRequestDeletePassengerNotification(data);
-
-                        const passengerNotification = await getInvolvedNotifications(data);
-                        // if it had a notification, button should show in red
-                        if (passengerNotification?.data?.length) {
-                            $(this).removeClass('text-primary');
-                            $(this).addClass('text-danger');
-
-                        }
-
-                    } else {
-                        await notifyTransport(data, $(this), driverSelectedId);
-                    }
+                        
+                    await notifyTransport(data, $(this), driverSelectedId);
 
                 } else if ($(this).attr('class').includes('text-primary')) {
-                    await deletePassengerNotification(data, $(this));
+                    await deleteNotification(data, $(this));
                 }
 
                  // hide or show the button to mark all the month transports have been notified to the passenger
@@ -48,57 +34,78 @@ $(function() {
     );
 });
 
+/**
+ * Checks if a notification exists for the passenger.
+ * If it exists, updates it with the new driver.
+ * If it does not exist, creates a new one.
+ * 
+ * The icon is changed if the operation is successful.
+ * 
+ * @param {Object} data 
+ * @param {Object} alertIcon 
+ * @param {number} driverSelectedId 
+ */
 async function notifyTransport(data, alertIcon, driverSelectedId) {
     try {
-        const response = await $.ajax({
-            type: 'GET',
-            url: '/involvedTransportNotification/get',
-            data: data
-        });
+        const response = await getInvolvedNotifications(data);
 
         if (!response?.data?.length) {
-            await createPassengerNotification(data, alertIcon, driverSelectedId);
+            await createNotification(data, alertIcon, driverSelectedId);
         } else {
             await updatePassengerNotifications(response.data[0], alertIcon, driverSelectedId);
         }
+
     } catch (error) {
         showNotificationError();
     }
 }
 
-async function createPassengerNotification(data, alertIcon, driverSelectedId) {
+/**
+ * Creates a new passenger notification in db
+ * and changes the alert icon if successful.
+ * 
+ * @param {Object} data 
+ * @param {Object} alertIcon 
+ * @param {number} driverSelectedId 
+ */
+async function createNotification(data, alertIcon, driverSelectedId) {
     try {
-        let getDriverForPassengerByDateData = {
-            transportDateId: data.transportDateCode,
-            passengerId: data.notifiedInvolvedId
-        }
-        const response = await getDriverForPassengerByDate(getDriverForPassengerByDateData);
-
         const newData = {
             ...data,
-            notificationDate: Date.now(),
+            notificationDate: new Date().toJSON(),
             driverCode: driverSelectedId,
             passengerCode: data.notifiedInvolvedId
         };
 
-        const passengerNotificationCreationResponse = await ajaxRequestCreatePassengerNotification(newData, alertIcon);
-        if (passengerNotificationCreationResponse) {
+        if (await createPassengerNotification(newData, alertIcon) == null) {
+            showNotificationError();
+        } else {
             changeAlertIconToNotified(alertIcon);
         }
+
     } catch (error) {
         showNotificationError();
     }
 }
 
+/**
+ * Updates the passenger notification with a new driver in db
+ * and changes the alert icon if successful.
+ * 
+ * @param {*} data 
+ * @param {*} alertIcon 
+ * @param {*} driverSelectedId 
+ */
 async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
     try {
-        const isNotificationDeleted = await ajaxRequestDeletePassengerNotification(data);
-        if (isNotificationDeleted) {
-            const notification = {
-                transportDateCode: data.transportDateCode,
-                notifiedInvolvedId: data.notifiedInvolvedId
-            };
-            await createPassengerNotification(notification, alertIcon, driverSelectedId);
+        const isNotificationUpdated = await updatePassengerNotification({
+            transportDateCode: data.transportDateCode,
+            notifiedInvolvedId: data.notifiedInvolvedId,
+            driverCode: driverSelectedId
+        });
+        
+        if (isNotificationUpdated) {
+            changeAlertIconToNotified(alertIcon);
         }
 
     } catch (error) {
@@ -106,55 +113,41 @@ async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
     }
 }
 
-async function deletePassengerNotification(data, alertIcon) {
-    if (await ajaxRequestDeletePassengerNotification(data)) {
+/**
+ * Deletes the passenger notification from db
+ * and changes the alert icon if successful.
+ * 
+ * @param {Object} data 
+ * @param {*} alertIcon 
+ */
+async function deleteNotification(data, alertIcon) {
+    if (await deletePassengerNotification(data)) {
         changeAlertIconToNotNotified(alertIcon);
-    }
-}
-
-async function ajaxRequestCreatePassengerNotification(data, alertIcon) {
-    try {
-        await $.ajax({
-            type: 'POST',
-            contentType: 'application/json',
-            url: '/involvedTransportNotification/createNotification',
-            data: JSON.stringify(data),
-            dataType: 'json'
-        });
-        return true;
-
-    } catch (error) {
+    } else {
         showNotificationError();
-        return false;
     }
 }
 
-async function ajaxRequestDeletePassengerNotification(data) {
-    try {
-        await $.ajax({
-            type: 'DELETE',
-            contentType: 'application/json',
-            url: '/involvedTransportNotification',
-            data: JSON.stringify(data),
-            dataType: 'json'
-        });
-        return true;
-
-    } catch (error) {
-        temporalErrorAlert("Ha ocurrido un error al indicar que el transporte se ha comunicado.");
-        return false;
-    }
-}
-
+/**
+ * Shows an error alert when notification actions fail.
+ */
 function showNotificationError() {
     temporalErrorAlert("Ha ocurrido un error al indicar que se ha avisado del transporte al viajero.");
 }
 
+/**
+ * Changes the alert icon to indicate the transport has been notified.
+ * @param {Object} alertIcon 
+ */
 function changeAlertIconToNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-primary', 'text-danger');
     alertIcon.attr('class', notifyTransportIconClass);
 }
 
+/**
+ * Changes the alert icon to indicate the transport has not been notified.
+ * @param {Object} alertIcon 
+ */
 function changeAlertIconToNotNotified(alertIcon) {
     let notifyTransportIconClass = changeElementClass(alertIcon, 'text-danger', 'text-primary');
     alertIcon.attr('class', notifyTransportIconClass);
@@ -178,7 +171,7 @@ export async function showHidePassengerNotificationsButton(passengerId, template
             }
         });
 
-        // if the driver has more than 2 transports without notification, the icon shows
+        // if the driver has more than 2 transports without notification, the icon is shown
         if ((response?.data?.length) < 2) {
             $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + '] i')
                 .addClass('d-none');

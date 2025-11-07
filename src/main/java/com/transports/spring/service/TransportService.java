@@ -166,8 +166,12 @@ public class TransportService {
         final List<InvolvedTransportNotification> passengerNotificationsWithoutTransport = this.involvedTransportNotificationService.getPassengerNotificationsWithoutTransport(templateId, passengerId);
 
         for (final InvolvedTransportNotification notif : passengerNotificationsWithoutTransport) {
-            final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
-            passengerTransportsWithoutNotification.add(transport);
+
+            //A passenger can be notified that he does not have a driver assigned
+            if (notif.getDriverCode() != null) {
+                final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
+                passengerTransportsWithoutNotification.add(transport);
+            }
         }
 
         return passengerTransportsWithoutNotification;

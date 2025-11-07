@@ -1,5 +1,6 @@
 package com.transports.spring.repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
