@@ -54,10 +54,11 @@
 
                             <!-- Notification icon -->
                             <div class="row">
-                                <div class="col" th:id="'markAsNotifiedPassengerButtonDiv_' + ${passenger.id}">
+                                <div th:class="'col' + ${(generalPassengerIcons.voNotificationIconDisplay.showIcon) ? '' : 'd-none'}"
+                                        th:id="'markAsNotifiedPassengerButtonDiv_' + ${passenger.id}">
                                     <i th:class="
-                                            'fas fa-exclamation-circle text-danger ' +
-                                            ${(generalPassengerIcons.voNotificationIconDisplay.showIcon) ? '' : 'd-none'}"
+                                            'fas fa-exclamation-circle ' +
+                                            ${(generalPassengerIcons.voNotificationIconDisplay.iconColor.equals('red')) ? 'text-danger' : 'text-primary'}"
                                        role="button"
                                        th:title="#{transportCRUD.titleMarkNotificationStart} + ' ' + ${passenger.name} + ' ' + ${passenger.surname} + ' ' + #{transportCRUD.titleMarkAllNotificationsEnd}"
                                        th:id="'markAsNotifiedPassegerButton_' + ${passenger.id}"
