@@ -1,138 +1,157 @@
 import { genericErrorAlert } from '../alert/GenericErrorAlert.js';
-import { changeElementDisplayNone, changeElementClass } from '../TransportCrudCommons.js';
+import { deleteInvolvedAssistance, createInvolvedAssistance } from '../../InvolvedAvailabilityAJAX.js';
 
-function deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotNeedTransportSpan, doesNotAssistSpan, notificationIconCol) {
-    const driverId = driverSelectForPassenger.val();
-
-    $.ajax({
-        url: '/involvedAvailability',
-        type: 'DELETE',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response) {
-            //Quitar pasajeros de la tabla de conductores
-            removePassengerInDriverTable(driverId, data.involvedId, data.transportDateId);
-
-            //poner 'no asiste'
-            changeElementDisplay(doesNotAssistSpan);
-
-            //quitar columna icono necesita transporte
-            const needsTransportIcon = needsTransportIconCol.find('i[class*=fa-car]');
-            needsTransportIcon.attr('data-needs-transport', 0);
-            let needsTransportIconClass = changeElementClass(needsTransportIcon, 'text-primary', 'text-muted');
-            needsTransportIcon.attr('class', needsTransportIconClass);
-
-            // quitar el icono de asistencia
-            let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
-            needsTransportIconCol.attr('class', needsTransportIconColClass);
-
-            // esconder el icono de aviso
-            let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
-            notificationIconCol.attr('class', notificationIconColClass);
-            // poner el icon de aviso en rojo si estaba en azul por si vuelve a estar disponible
-            notificationIconColClass = changeElementClass(notificationIconCol, 'text-primary', 'text-danger');
-            notificationIconCol.attr('class', notificationIconColClass);
-            // marcar que el conductor tiene el aviso pendiente
-
-            //cambia el icono de asistencia
-            changeAssistanceIcon(0, assistanceIcon, 'text-primary', 'text-muted');
-
-            //si está el combo de conductores, se quita y se cambian los name para que hagan create
-            if (!driverSelectForPassenger.attr('class').includes('d-none')) {
-                 changeElementDisplay(driverSelectForPassenger);
-                 driverSelectForPassenger.val('');
-                 driverSelectForPassenger.children('option:not(:first)').attr('name', 'c');
-            }
-
-            //si está el 'no necesita transporte' se lo quitas
-            if (!doesNotNeedTransportSpan.attr('class').includes('d-none')) {
-                changeElementDisplay(doesNotNeedTransportSpan);
-            }
-        },
-        error: function(xhr, status, error) {
-            genericErrorAlert();
+$(function() {
+    $('#passengerTransportsTable i[class*=fa-calendar]').each(
+        function () {
+            $(this).on('click', async function(){
+                await changePassengerAssistance($(this));
+            });
         }
-    });
+    );
+});
+
+/**
+ * Change passenger assistance for transport
+ * and updates all the icons and combos in the row accordingly
+ * 
+ * @param {Object} assistanceIcon
+ */
+async function changePassengerAssistance(assistanceIcon) {
+    const passengerId = assistanceIcon.attr('data-t');
+    const dateId = assistanceIcon.attr('data-y');
+    const ajaxData = {
+        transportDateId : dateId,
+        involvedId : passengerId,
+    };
+
+    const passengerDateIcons = {
+        assistanceIcon: assistanceIcon,
+        driverSelectForPassenger: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select'),
+        needsTransportIconCol: $('#needsTransportIcon_' + passengerId + '_' + dateId),
+        doesNotNeedTransportSpan: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotNeedTransportSpan'),
+        doesNotAssistSpan: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotAssistSpan'),
+        notificationIconCol: $('#notificationIcon_' + passengerId + '_' + dateId)
+    };
+
+    const passengerAssistance = assistanceIcon.attr('data-passenger-assist');
+    if (passengerAssistance === "1") {
+        await deletePassengerAssistance(ajaxData, passengerDateIcons);
+
+    } else if (passengerAssistance === "0") {
+       await createPassengerAssistance(ajaxData, passengerDateIcons);
+
+    } else {
+        genericErrorAlert();
+    }
 }
 
-function createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotAssistSpan, notificationIconCol) {
-    $.ajax({
-        url: '/involvedAvailability',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response) {
-            //poner el combo de conductores
-            changeElementDisplay(driverSelectForPassenger);
-            driverSelectForPassenger.first().attr("name", "d");
-            driverSelectForPassenger.not(':first').attr("name", "c");
 
-            //cambiar el iconito de asistencia
-            changeAssistanceIcon(1, assistanceIcon, 'text-muted', 'text-primary');
+/**
+ * Delete passenger assistance and changes all the icons and texts for the date
+ * @param {Object} ajaxData with transportDateId and involvedId
+ * @param {Object} passengerDateIcons with all the jQuery objects for the icons and combos in the passenger date row
+ */
+async function deletePassengerAssistance(ajaxData, passengerDateIcons) {
+    const driverId = passengerDateIcons.driverSelectForPassenger.val();
 
-            //mostrar el icono de necesita transporte
-            let needsTransportIconColClass = changeElementDisplayNone(needsTransportIconCol);
-            needsTransportIconCol.attr('class', needsTransportIconColClass);
+    if (await deleteInvolvedAssistance(ajaxData)) {
+        
+        // remove passengers from the driver table
+        removePassengerInDriverTable(driverId, ajaxData.involvedId, ajaxData.transportDateId);
 
-            //mostrar el icono de avisos en rojo
-            let notificationIconColClass = changeElementDisplayNone(notificationIconCol);
-            notificationIconCol.attr('class', notificationIconColClass);
+        // show 'does not assist' span
+        passengerDateIcons.doesNotAssistSpan.removeClass('d-none');
 
-            //pone el texto 'no asiste'
-            changeElementDisplay(doesNotAssistSpan);
-        },
-        error: function(xhr, status, error) {
-            genericErrorAlert();
+        // change needs transport icon data-needs-transport to 0
+        passengerDateIcons.needsTransportIconCol.find('i[class*=fa-car]').attr('data-needs-transport', 0);
+
+        // hide needs transport icon (div)
+        passengerDateIcons.needsTransportIconCol.addClass('d-none');
+
+        // hide transport notification icon
+        passengerDateIcons.notificationIconCol.addClass('d-none');
+
+        // the transport notification icon should be red, because when passenger does not assist, it is understood that they are notified
+        const notificationIcon = passengerDateIcons.notificationIconCol.find('i[class*=fa-exclamation-circle]');
+        notificationIcon.addClass('text-danger');
+        notificationIcon.removeClass('text-primary');
+
+        // TODO mark driver needs to be notified = icon in red
+
+        // change assistance icon to gray
+        passengerDateIcons.assistanceIcon.removeClass('text-primary');
+        passengerDateIcons.assistanceIcon.addClass('text-muted');
+        passengerDateIcons.assistanceIcon.attr('data-passenger-assist', 0);
+
+        // if the driver's combo is shown, it is hidden and names are changed to order a create
+        if (!passengerDateIcons.driverSelectForPassenger.hasClass('d-none')) {
+            passengerDateIcons.driverSelectForPassenger.children('option:not(:first)').attr('name', 'c');
+            passengerDateIcons.driverSelectForPassenger.val('');
+            passengerDateIcons.driverSelectForPassenger.addClass('d-none');
         }
-    });
+
+        // hide does not need transport span if shown
+        if (!passengerDateIcons.doesNotNeedTransportSpan.hasClass('d-none')) {
+            passengerDateIcons.doesNotNeedTransportSpan.addClass('d-none');
+        }
+
+    } else {
+        genericErrorAlert();
+    }
 }
 
+/**
+ * Creates the passenger assistance and changes all the icons and texts for the date
+ * @param {Object} ajaxData with transportDateId and involvedId
+ * @param {Object} passengerDateIcons with all the jQuery objects for the icons and combos in the passenger date r
+ */
+async function createPassengerAssistance(ajaxData, passengerDateIcons) {
+
+    if (await createInvolvedAssistance(ajaxData)) {
+
+        // show drivers combo
+        passengerDateIcons.driverSelectForPassenger.removeClass('d-none');
+        passengerDateIcons.driverSelectForPassenger.first().attr("name", "d");
+        passengerDateIcons.driverSelectForPassenger.not(':first').attr("name", "c");
+
+        // show assistance icon in blue
+        passengerDateIcons.assistanceIcon.removeClass('text-muted');
+        passengerDateIcons.assistanceIcon.addClass('text-primary');
+        passengerDateIcons.assistanceIcon.attr('data-passenger-assist', 1);
+
+        // turn needs transport icon to blue, as need for transport is assumed when passenger assists
+        passengerDateIcons.needsTransportIconCol.removeClass('d-none');
+        const needsTransportIcon = passengerDateIcons.needsTransportIconCol.find('i[class*=fa-car]');
+        needsTransportIcon.addClass('text-primary');
+        needsTransportIcon.removeClass('text-muted');
+
+        // show transport notification icon
+        passengerDateIcons.notificationIconCol.removeClass('d-none');
+
+        // turn transport notification red
+        const notificationIcon = passengerDateIcons.notificationIconCol.find('i[class*=fa-exclamation-circle]');
+        notificationIcon.addClass('text-danger');
+        notificationIcon.removeClass('text-primary');
+
+        // hide does not assist span
+        passengerDateIcons.doesNotAssistSpan.addClass('d-none');
+        
+    } else {
+        genericErrorAlert();
+    }
+}
+
+/**
+ * Remove a passenger from the driver's table for a specific date.
+ * 
+ * @param {number} driverId 
+ * @param {number} passengerId 
+ * @param {number} dateId 
+ */
 function removePassengerInDriverTable(driverId, passengerId, dateId) {
     if (driverId != null && driverId !== "") {
         const passengerNameDiv = $('div[id=driverPassengersOnDate_' + driverId + '_' + dateId + '_' + passengerId + ']');
         passengerNameDiv.remove();
     }
 }
-
-function changeElementDisplay(element) {
-    let elementClass = changeElementDisplayNone(element);
-    element.attr('class', elementClass);
-}
-
-function changeAssistanceIcon(dataPassengerAssist, assistanceIcon, classReplace, classToBeReplaced) {
-    let assistanceIconClass = changeElementClass(assistanceIcon, classToBeReplaced, classReplace);
-    assistanceIcon.attr('class', assistanceIconClass);
-
-    assistanceIcon.attr('data-passenger-assist', dataPassengerAssist);
-}
-
-function changePassengerAssistance() {
-    const assistanceIcon = $(this);
-    const passengerId = assistanceIcon.attr('data-t');
-    const dateId = assistanceIcon.attr('data-y');
-    const data = {
-        transportDateId : dateId,
-        involvedId : passengerId,
-    }
-
-    const driverSelectForPassenger = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select');
-    const needsTransportIconCol = $('#needsTransportIcon_' + passengerId + '_' + dateId);
-    const notificationIconCol = $('#notificationIcon_' + passengerId + '_' + dateId);
-    const doesNotNeedTransportSpan = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotNeedTransportSpan');
-    const doesNotAssistSpan = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotAssistSpan');
-
-    const passengerAssistance = assistanceIcon.attr('data-passenger-assist');
-    if (passengerAssistance === "1") {
-        deletePassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotNeedTransportSpan, doesNotAssistSpan, notificationIconCol);
-    } else if (passengerAssistance === "0") {
-       createPassengerAssistance(data, assistanceIcon, driverSelectForPassenger, needsTransportIconCol, doesNotAssistSpan, notificationIconCol);
-    }
-}
-
-$(document).ready(function() {
-    $('#passengerTransportsTable i[class*="fas fa-calendar"]').each(
-        function () {
-            $(this).on('click', changePassengerAssistance);
-        }
-    );
-});
