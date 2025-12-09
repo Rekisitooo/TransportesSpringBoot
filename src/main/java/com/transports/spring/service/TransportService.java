@@ -1,5 +1,13 @@
 package com.transports.spring.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.transports.spring.dto.DtoDriverTransport;
 import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
 import com.transports.spring.dto.DtoInvolvedTransport;
@@ -12,10 +20,6 @@ import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.repository.ITransportRepository;
 import com.transports.spring.vo.completemodel.VoCompleteTransport;
-
-import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 public class TransportService {
@@ -189,8 +193,10 @@ public class TransportService {
         final List<InvolvedTransportNotification> getDriverNotificationsWithoutTransport = this.involvedTransportNotificationService.getDriverNotificationsWithoutTransport(templateId, driverId);
 
         for (final InvolvedTransportNotification notif : getDriverNotificationsWithoutTransport) {
-            final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
-            driverTransportsWithoutNotification.add(transport);
+            if (notif.getPassengerCode() != null) {
+                final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
+                driverTransportsWithoutNotification.add(transport);
+            }
         }
 
         return driverTransportsWithoutNotification;
