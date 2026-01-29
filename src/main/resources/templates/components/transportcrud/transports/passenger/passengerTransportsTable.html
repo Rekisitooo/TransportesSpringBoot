@@ -174,31 +174,39 @@
                             <!-- Div for transport info -->
                             <div class="d-table-cell row h-75 mt-2 d-flex justify-content-center align-items-center">
                                 <div class="col">
-                                    <!-- Drivers select -->
-                                    <!-- show only if passenger needs transport -->
-                                    <select name="driverInTransportSelect"
-                                            th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{transportCRUD.driverFor} + ' ' + ${dateObj.dayOfTheWeekName} + ' ' + ${date.transportDate}"
-                                            class="bg-transparent border border-0"
-                                            th:data-t="${passenger.id}"
-                                            th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
-                                            th:class="${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate) ?
-                                                        'bg-transparent border border-0 w-100' : 'bg-transparent border border-0 w-100 d-none'}">
-
-                                        <!-- option for deleting the transport -->
-                                        <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
-
-                                        <!-- driver options-->
-                                        <option
-                                                th:each="driver : ${driversAvailableForDate}"
-                                                th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
-                                                th:text="${driver.name}"
-                                                th:value="${driver.id}"
-                                                th:data-d="${date.id}"
+                                        <!-- Drivers select -->
+                                        <!-- show only if passenger needs transport -->
+                                        <select name="driverInTransportSelect"
+                                                th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{transportCRUD.driverFor} + ' ' + ${dateObj.dayOfTheWeekName} + ' ' + ${date.transportDate}"
+                                                class="bg-transparent border border-0"
                                                 th:data-t="${passenger.id}"
-                                                th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
-                                                th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
-                                        ></option>
-                                    </select>
+                                                th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
+                                                th:class="'bg-transparent border border-0 w-100 ' + 
+                                                            ${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
+                                                                and #lists.isEmpty(driversAvailableForDate) == false) ? '' : 'd-none'}">
+
+                                            <!-- option for deleting the transport -->
+                                            <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
+
+                                            <!-- driver options-->
+                                            <option
+                                                    th:each="driver : ${driversAvailableForDate}"
+                                                    th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
+                                                    th:text="${driver.name}"
+                                                    th:value="${driver.id}"
+                                                    th:data-d="${date.id}"
+                                                    th:data-t="${passenger.id}"
+                                                    th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
+                                                    th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
+                                            ></option>
+                                        </select>
+
+                                        <!-- 'There are no drivers available' -->
+                                        <!-- If there are no drivers available for date -->
+                                        <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_noDriversAvailableSpan'}"
+                                                th:text="#{transportCRUD.noDriversAvailable}" 
+                                                th:class="${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
+                                                                and #lists.isEmpty(driversAvailableForDate) == true) ? '' : 'd-none'}"> </span>
 
                                     <!-- 'Does not need transport' Span -->
                                     <!-- If passenger does not need transport -->
