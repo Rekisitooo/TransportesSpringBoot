@@ -19,7 +19,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String index(final Model model) {
-        final List<Template> templateList = this.templateService.getAllWithMonthNames();
+        final List<List<Template>> templateList = this.templateService.getAllWithMonthNamesTemplateSelectionView();
         model.addAttribute("templateList", templateList);
         model.addAttribute("username", "Username");
         return "index";

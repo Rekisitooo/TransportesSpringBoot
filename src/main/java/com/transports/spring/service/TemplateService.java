@@ -1,5 +1,6 @@
 package com.transports.spring.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,6 +46,16 @@ public class TemplateService {
         }
 
         return templateList;
+    }
+
+    @GetMapping("/getAllWithMonthNamesTemplateSelectionView")
+    public List<List<Template>> getAllWithMonthNamesTemplateSelectionView() {
+        final List<List<Template>> templateListList = new ArrayList<>();
+        final List<Template> templateList = this.getAllWithMonthNames();
+        for (int i = 0; i < templateList.size(); i += 6) {
+            templateListList.add(templateList.subList(i, Math.min(i + 6, templateList.size())));
+        }
+        return templateListList;
     }
 
     public Template create(final Template template) {
