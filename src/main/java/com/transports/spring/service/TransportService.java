@@ -87,10 +87,9 @@ public class TransportService {
      * @param templateId consulted template
      * @return Map<transportDateId, List<VoCompleteTransport>>
      */
-    public Map<Integer, List<VoCompleteTransport>> findDriverTransportsFromTemplate(final Driver driver, final int templateId) {
-        final Map<Integer, List<VoCompleteTransport>> driverTransportsMap = new HashMap<>();
-        
+    public Map<Integer, List<VoCompleteTransport>> findDriverTransportsFromTemplate(final Driver driver, final int templateId) {        
         final Map<Integer, List<VoCompleteTransport>> transportPassengersMap = new HashMap<>();
+
         final List<VoCompleteTransport> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
         for (final VoCompleteTransport voCompleteTransport : allDriverTransportsFromTemplate) {
             final Integer transportDateId = voCompleteTransport.getTransport().getTransportKey().getTransportDateId();
@@ -104,7 +103,7 @@ public class TransportService {
             }
         }
         
-        return driverTransportsMap;
+        return transportPassengersMap;
     }
 
     public List<VoCompleteTransport> findAllPassengerTransportsFromTemplate(final int passengerId, final int templateId) {
