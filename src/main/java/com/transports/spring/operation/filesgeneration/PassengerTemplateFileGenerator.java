@@ -2,7 +2,6 @@ package com.transports.spring.operation.filesgeneration;
 
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.dto.DtoTemplateDate;
-import com.transports.spring.dto.DtoTemplateDay;
 import com.transports.spring.dto.generatefiles.DtoGenerateFile;
 import com.transports.spring.dto.generatefiles.DtoGeneratePassengerFile;
 import com.transports.spring.dto.generatefiles.DtoTemplateFileDir;

@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.transports.spring.model.Driver;
 import com.transports.spring.model.InvolvedTransportNotification;
+import com.transports.spring.model.Passenger;
 import com.transports.spring.repository.IInvolvedTransportNotificationRepository;
 import com.transports.spring.service.response.ServiceResponse;
 import com.transports.spring.vo.completemodel.VoCompleteNotification;
@@ -53,44 +55,6 @@ public class InvolvedTransportNotificationService {
     }
 
     /**
-     * Returns a map with the notifications for the template.
-     * @param templateId - The template id.
-     * @return  Map<InvolvedId, List<dateId>>
-     */
-    public Map<Integer, List<Integer>> getAllNotificationsForTemplate(Integer templateId) {
-        Map<Integer, List<Integer>> result = new HashMap<>();
-
-        List<Object[]> driverNotifications = this.notificationForInvolvedRepository.getDriverNotificationsByTemplate(templateId);
-        processNotifications(driverNotifications, result);
-
-        List<Object[]> passengerNotifications = this.notificationForInvolvedRepository.getPassengerNotificationsByTemplate(templateId);
-        processNotifications(passengerNotifications, result);
-
-        return result;
-    }
-
-    /**
-     * Process the notifications and update the result map.
-     * @param notifications List of notifications to process.
-     * @param result Map to update with the processed notifications.
-     */
-    private static void processNotifications(List<Object[]> notifications, Map<Integer, List<Integer>> result) {
-        for (final Object[] row : notifications) {
-            final Integer transportDateId = (Integer) row[0];
-            final Integer involvedId = (Integer) row[1];
-
-            List<Integer> transportDateList = result.get(involvedId);
-            if (transportDateList != null) {
-                transportDateList.add(transportDateId);
-            } else {
-                transportDateList = new ArrayList<>();
-                transportDateList.add(transportDateId);
-                result.put(involvedId, transportDateList);
-            }
-        }
-    }
-
-    /**
      * Returns a map with passenger transport assignments for a template.
      * @param templateId consulted template
      * @return Map<passengerId, Map<transportDateId, VoCompleteNotification>>
@@ -119,6 +83,25 @@ public class InvolvedTransportNotificationService {
         return passengerNotificationsMap;
     }
 
+    /**
+     * Returns a map with passenger's transport assignments for a template.
+     * @param templateId consulted template
+     * @param passenger passenger from the template (only with id)
+     * @return Map<transportDateId, VoCompleteNotification>
+     */
+    public Map<Integer, VoCompleteNotification> getPassengerNotificationsMapByTemplate(final Integer templateId, final Passenger passenger) {
+        final Map<Integer, VoCompleteNotification> passengerNotificationsMap = new HashMap<>();
+
+        final List<VoCompleteNotification> allPassengerNotificationsForTemplate =
+                this.notificationForInvolvedRepository.getPassengerNotificationsByTemplate(templateId, passenger.getId());
+
+        for (final VoCompleteNotification voCompleteNotification : allPassengerNotificationsForTemplate) {
+            final Integer transportDateId = voCompleteNotification.getTransportDateByTemplate().getId();
+            passengerNotificationsMap.put(transportDateId, voCompleteNotification);
+        }
+
+        return passengerNotificationsMap;
+    }
 
     /**
      * Returns a map with driver transport assignments for a template.
@@ -155,6 +138,35 @@ public class InvolvedTransportNotificationService {
         return driverNotificationsMap;
     }
 
+    /**
+     * Returns a map with the driver's transport assignments for a template.
+     * @param templateId consulted template
+     * @return Map<transportDateId, List<VoCompleteNotification>>
+     */
+    public Map<Integer, List<VoCompleteNotification>> getDriverNotificationsMapByTemplate(final Integer templateId, final Driver driver) {
+        final Map<Integer, List<VoCompleteNotification>> driverNotificationsMap = new HashMap<>();
+
+        final List<VoCompleteNotification> allDriverNotificationsForTemplate =
+                this.notificationForInvolvedRepository.getDriverNotificationsByTemplate(templateId, driver.getId());
+
+        for (final VoCompleteNotification voCompleteNotification : allDriverNotificationsForTemplate) {
+            final Integer transportDateCode = voCompleteNotification.getTransportDateByTemplate().getId();
+
+            // Get or create the transport map for this driver
+            List<VoCompleteNotification> driverNotifications = driverNotificationsMap.get(transportDateCode);
+            if (driverNotifications == null) {
+                driverNotifications = new ArrayList<>();
+            }
+
+            driverNotifications.add(voCompleteNotification);
+
+             // Add the driver notification to the notificationList list
+            driverNotificationsMap.put(transportDateCode, driverNotifications);
+        }
+
+        return driverNotificationsMap;
+    }
+    
      /**
      * Returns a map with driver transport assignments for a template.
      * @param templateId consulted template
@@ -169,10 +181,6 @@ public class InvolvedTransportNotificationService {
             final Integer driverId = voCompleteNotification.getDriver().getId();
             final Integer transportDateId = voCompleteNotification.getTransportDateByTemplate().getId();
             String passengerName = voCompleteNotification.getPassenger().getName() + " " + voCompleteNotification.getPassenger().getSurname();
-
-            if (passengerName == null) {
-                passengerName = "";
-            }
 
             // Get or create the transport map for this driver
             Map<Integer, List<String>> driverTransports = driverNotificationsMap.get(driverId);
@@ -196,18 +204,6 @@ public class InvolvedTransportNotificationService {
         }
 
         return driverNotificationsMap;
-    }
-
-    /**
-     * Returns a map that indicates whether the icon to mark all of the transports as notified
-     * should show or not.
-     * If it has two or more transports without notification, it shows.
-     *
-     * @param templateId - The template id.
-     * @return  Map<InvolvedId, Boolean (true if button has to appear)>>
-     */
-    public Map<Integer, List<Integer>> getAllInvolvedNotifications(final Integer templateId) {
-        return this.getAllNotificationsForTemplate(templateId);
     }
 
     /**

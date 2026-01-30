@@ -15,12 +15,12 @@ public class DriverIconCalculator {
      * Calculates the general icons for a driver based on their notifications and transports.
      * @return
      */
-    public static VoTransCVGeneralDriverIcon calculateGeneralDriverIcons(final Map<Integer, List<VoCompleteNotification>> driverNotificationMap, final Map<Integer, List<VoCompleteTransport>> driverTransportMap) {
+    public static VoTransCVGeneralDriverIcon calculateGeneralNotificationDriverIcon(final Map<Integer, List<VoCompleteNotification>> driverNotificationMap, final Map<Integer, List<VoCompleteTransport>> driverTransportMap) {
         VoTransCVGeneralDriverIcon generalDriverIcon;
         
         final DriverNotificationIconCalculator driverNotificationIconCalculator = new DriverNotificationIconCalculator();
-        final VoTCVNotificationIconDisplay VoNotificationIconDisplay = driverNotificationIconCalculator.calculateGeneralDriverIcon(driverNotificationMap, driverTransportMap);
-
+        final VoTCVNotificationIconDisplay VoNotificationIconDisplay = driverNotificationIconCalculator.calculateGeneralNotificationDriverIcon(driverNotificationMap, driverTransportMap);
+        
         if (VoNotificationIconDisplay.isShowIcon()) {
             generalDriverIcon = new VoTransCVGeneralDriverIcon(true, VoNotificationIconDisplay);
         } else {

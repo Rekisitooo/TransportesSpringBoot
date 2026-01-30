@@ -20,7 +20,7 @@ public class PassengerNotificationIconCalculator {
      *                                 by DateId
      * @return NotificationIconDisplay
      */
-    public VoTCVNotificationIconDisplay calculateGeneralPassengerIcon(final Map<Integer, VoCompleteNotification> passengerNotificationMap, Map<Integer, VoCompleteTransport> passengerTransportMap) {
+    public VoTCVNotificationIconDisplay calculateGeneralNotificationsPassengerIcon(final Map<Integer, VoCompleteNotification> passengerNotificationMap, Map<Integer, VoCompleteTransport> passengerTransportMap) {
         VoTCVNotificationIconDisplay VoTCVNotificationIconDisplay;
 
         // if there are the same amount of notifications than transports, calculate the icon

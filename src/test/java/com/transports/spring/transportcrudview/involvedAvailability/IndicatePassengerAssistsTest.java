@@ -1,16 +1,17 @@
 package com.transports.spring.transportcrudview.involvedAvailability;
 
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Playwright;
-import com.transports.spring.TestConstants;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static com.transports.spring.templatecrudview.TransportCrudConstants.PASSENGER_TABLE_ID;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Playwright;
+import com.transports.spring.TestConstants;
+import com.transports.spring.transportcrudview.TransportCrudConstants;
 
 @SpringBootTest
 class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
@@ -42,7 +43,7 @@ class IndicatePassengerAssistsTest extends AbstractPassengerAssists {
      */
     @Test
     void indicatePassengerAssists() {
-        final String passengerTdSelector = "#" + PASSENGER_TABLE_ID + " tbody tr:nth-child(1) td:nth-child(3)";
+        final String passengerTdSelector = "#" + TransportCrudConstants.PASSENGER_TABLE_ID + " tbody tr:nth-child(1) td:nth-child(3)";
         final String assistanceIconSelector = passengerTdSelector + ASSISTANCE_ICON_SELECTOR;
 
         this.assistanceIconElement = this.page.querySelector(assistanceIconSelector);

@@ -15,10 +15,6 @@ public class VoNotifVDriverDateInfo {
         this.notifiedPassengerNameList = new ArrayList<>();
     }
 
-    private VoNotifVDriverDateInfo(final List<String> notifiedPassengerNameList) {
-        this.notifiedPassengerNameList = new ArrayList<>();
-    }
-
     public void addNotifiedPassengerName(final String passengerName) {
         this.notifiedPassengerNameList.add(passengerName);
     }

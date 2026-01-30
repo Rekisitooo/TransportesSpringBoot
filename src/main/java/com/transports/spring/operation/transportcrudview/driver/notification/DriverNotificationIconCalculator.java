@@ -17,7 +17,7 @@ public class DriverNotificationIconCalculator {
      * @param driverTransportMap A map of transports for the driver, keyed by DateId
      * @return NotificationIconDisplay
     */
-    public VoTCVNotificationIconDisplay calculateGeneralDriverIcon(final Map<Integer, List<VoCompleteNotification>> driverNotificationMap, final Map<Integer, List<VoCompleteTransport>> driverTransportMap) {
+    public VoTCVNotificationIconDisplay calculateGeneralNotificationDriverIcon(final Map<Integer, List<VoCompleteNotification>> driverNotificationMap, final Map<Integer, List<VoCompleteTransport>> driverTransportMap) {
 		VoTCVNotificationIconDisplay voNotificationIconDisplay;
 
         // if there are the same amount of notifications than transports, calculate the icon

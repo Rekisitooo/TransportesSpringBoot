@@ -25,16 +25,13 @@ import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
 public class InvolvedAvailabiltyForTransportDateService {
 
     private final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository;
-    private final TransportDateByTemplateService transportDateByTemplateService;
     private final InvolvedByTemplateService involvedByTemplateService;
     private final TransportService transportService;
 
     public InvolvedAvailabiltyForTransportDateService(
             final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository,
-            TransportDateByTemplateService transportDateByTemplateService,
             InvolvedByTemplateService involvedByTemplateService, TransportService transportService) {
         this.involvedAvailabiltyForTransportDateRepository = involvedAvailabiltyForTransportDateRepository;
-        this.transportDateByTemplateService = transportDateByTemplateService;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
     }

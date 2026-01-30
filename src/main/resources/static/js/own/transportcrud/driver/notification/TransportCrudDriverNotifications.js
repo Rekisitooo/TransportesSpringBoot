@@ -173,15 +173,15 @@ export async function showHideDriverNotificationsButton(driverId, templateId) {
     try {
         const response = await $.ajax({
             type: 'GET',
-            url: '/t/getDriverTransportsWithoutNotification',
+            url: '/t/getGeneralDriverNotificationIconStatus',
             data: {
                 templateId : templateId,
                 driverId : driverId
             }
         });
 
-        // if the driver has more than 2 transports without notification, the icon shows
-        if (response?.data?.length < 2) {
+        // icon shows
+        if (response?.data?.showIcon) {
             $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + '] i')
                 .addClass('d-none');
 

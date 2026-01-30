@@ -1,6 +1,5 @@
 package com.transports.spring.repository;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,33 +81,43 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
     void deleteNotificationsForInvolvedInDate(@Param("involvedId") Integer involvedId, @Param("transportDateId") Integer transportDateId);
 
     @Query("SELECT DISTINCT" +
-            "   api.transportDateCode, " +
-            "   api.driverCode " +
+            " new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
+            "       new Driver(api.driverCode, null)," +
+            "       new Passenger(api.passengerCode, null)," +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
+            "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
+            "   )" + 
             "      FROM Transport t " +
             "           INNER JOIN InvolvedTransportNotification api " +
             "               ON api.transportDateCode = t.transportKey.transportDateId" +
             "               AND api.passengerCode = t.transportKey.passengerId" +
             "               AND api.driverCode = t.transportKey.driverId" +
             "               AND api.notifiedInvolvedId = t.transportKey.driverId " +
-            "           INNER JOIN TransportDateByTemplate td " +
-            "               ON td.id = api.transportDateCode " +
+            "           INNER JOIN TransportDateByTemplate ftpp " +
+            "               ON ftpp.id = api.transportDateCode " +
             "       WHERE " +
-            "           td.templateCode = :templateId")
-    List<Object[]> getDriverNotificationsByTemplate(@Param("templateId") Integer templateId);
+            "           ftpp.templateCode = :templateId" + 
+            "                   AND api.driverCode = :driverCode")
+    List<VoCompleteNotification> getDriverNotificationsByTemplate(@Param("templateId") Integer templateId, @Param("driverCode") Integer driverId);
 
     @Query("SELECT DISTINCT" +
-            "   api.transportDateCode, " +
-            "   api.passengerCode " +
+            " new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
+            "       new Driver(api.driverCode, null)," +
+            "       new Passenger(api.passengerCode, null)," +
+            "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
+            "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
+            "   )" + 
             "      FROM Transport t" +
             "           INNER JOIN InvolvedTransportNotification api" +
             "               ON api.transportDateCode = t.transportKey.transportDateId" +
             "               AND api.driverCode = t.transportKey.driverId" +
             "               AND api.passengerCode = t.transportKey.passengerId" +
             "               AND api.notifiedInvolvedId = t.transportKey.passengerId" +
-            "           INNER JOIN TransportDateByTemplate td " +
-            "               ON td.id = api.transportDateCode" +
-            "       WHERE td.templateCode = :templateId")
-    List<Object[]> getPassengerNotificationsByTemplate(@Param("templateId") Integer templateId);
+            "           INNER JOIN TransportDateByTemplate ftpp " +
+            "               ON ftpp.id = api.transportDateCode" +
+            "       WHERE ftpp.templateCode = :templateId" + 
+            "                   AND api.passengerCode = :passengerCode")
+    List<VoCompleteNotification> getPassengerNotificationsByTemplate(@Param("templateId") Integer templateId, @Param("passengerCode") Integer passengerId);
 
     @Query("SELECT DISTINCT" +
             "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate) " +

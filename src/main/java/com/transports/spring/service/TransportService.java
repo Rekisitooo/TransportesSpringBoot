@@ -14,23 +14,24 @@ import com.transports.spring.dto.DtoInvolvedTransport;
 import com.transports.spring.dto.DtoPassengerTransport;
 import com.transports.spring.exception.InvolvedDoesNotExistException;
 import com.transports.spring.model.Driver;
-import com.transports.spring.model.InvolvedTransportNotification;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
+import com.transports.spring.operation.transportcrudview.driver.notification.DriverNotificationIconCalculator;
+import com.transports.spring.operation.transportcrudview.passenger.notification.PassengerNotificationIconCalculator;
 import com.transports.spring.repository.ITransportRepository;
+import com.transports.spring.vo.completemodel.VoCompleteNotification;
 import com.transports.spring.vo.completemodel.VoCompleteTransport;
+import com.transports.spring.vo.transportcrudview.notification.VoTCVNotificationIconDisplay;
 
 @Service
 public class TransportService {
 
     private final ITransportRepository transportByTemplateRepository;
-    private final InvolvedByTemplateService involvedByTemplateService;
     private final InvolvedTransportNotificationService involvedTransportNotificationService;
 
-    public TransportService(final ITransportRepository transportByTemplateRepository, InvolvedByTemplateService involvedByTemplateService, InvolvedTransportNotificationService involvedTransportNotificationService) {
+    public TransportService(final ITransportRepository transportByTemplateRepository, InvolvedTransportNotificationService involvedTransportNotificationService) {
         this.transportByTemplateRepository = transportByTemplateRepository;
-        this.involvedByTemplateService = involvedByTemplateService;
         this.involvedTransportNotificationService = involvedTransportNotificationService;
     }
 
@@ -42,13 +43,24 @@ public class TransportService {
     public Map<Integer, Map<Integer, VoCompleteTransport>> findAllPassengerTransportsFromTemplate(final List<Passenger> passengerList, final int templateId) {
         final Map<Integer, Map<Integer, VoCompleteTransport>> passengerTransportsMap = new HashMap<>();
         for (final Passenger passenger : passengerList) {
-
-            Map<Integer, VoCompleteTransport> transportsMap = new HashMap<>();
-            final List<VoCompleteTransport> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
-            for (final VoCompleteTransport voCompleteTransport : allPassengerTransportsFromTemplate) {
-                transportsMap.put(voCompleteTransport.getTransport().getTransportKey().getTransportDateId(), voCompleteTransport);
-            }
+            final Map<Integer, VoCompleteTransport> transportsMap = this.findPassengerTransportsFromTemplate(passenger, templateId);
             passengerTransportsMap.put(passenger.getId(), transportsMap);
+        }
+
+        return passengerTransportsMap;
+    }
+
+    /**
+     * @param passenger passenger from the template
+     * @param templateId consulted template
+     * @return Map<transportDateId, VoCompleteTransport>
+     */
+    public Map<Integer, VoCompleteTransport> findPassengerTransportsFromTemplate(final Passenger passenger, final int templateId) {
+        final Map<Integer, VoCompleteTransport> passengerTransportsMap = new HashMap<>();
+
+        final List<VoCompleteTransport> allPassengerTransportsFromTemplate = this.findAllPassengerTransportsFromTemplate(passenger.getId(), templateId);
+        for (final VoCompleteTransport voCompleteTransport : allPassengerTransportsFromTemplate) {
+            passengerTransportsMap.put(voCompleteTransport.getTransport().getTransportKey().getTransportDateId(), voCompleteTransport);
         }
 
         return passengerTransportsMap;
@@ -63,23 +75,35 @@ public class TransportService {
         final Map<Integer, Map<Integer, List<VoCompleteTransport>>> driverTransportsMap = new HashMap<>();
 
         for (final Driver driver : driverList) {
-            final List<VoCompleteTransport> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
-            Map<Integer, List<VoCompleteTransport>> transportPassengersMap = new HashMap<>();
+            final Map<Integer, List<VoCompleteTransport>> transportPassengersMap = this.findDriverTransportsFromTemplate(driver, templateId);
             driverTransportsMap.put(driver.getId(), transportPassengersMap);
-
-            for (final VoCompleteTransport voCompleteTransport : allDriverTransportsFromTemplate) {
-                final Integer transportDateId = voCompleteTransport.getTransport().getTransportKey().getTransportDateId();
-
-                List<VoCompleteTransport> transportPassengerList = transportPassengersMap.get(transportDateId);
-                if (transportPassengerList == null) {
-                    transportPassengerList = new ArrayList<>(Arrays.asList(voCompleteTransport));
-                    transportPassengersMap.put(transportDateId, transportPassengerList);
-                } else {
-                    transportPassengerList.add(voCompleteTransport);
-                }
-            }
         }
 
+        return driverTransportsMap;
+    }
+
+    /**
+     * @param driver driver from the template
+     * @param templateId consulted template
+     * @return Map<transportDateId, List<VoCompleteTransport>>
+     */
+    public Map<Integer, List<VoCompleteTransport>> findDriverTransportsFromTemplate(final Driver driver, final int templateId) {
+        final Map<Integer, List<VoCompleteTransport>> driverTransportsMap = new HashMap<>();
+        
+        final Map<Integer, List<VoCompleteTransport>> transportPassengersMap = new HashMap<>();
+        final List<VoCompleteTransport> allDriverTransportsFromTemplate = this.findAllDriverTransportsFromTemplate(driver.getId(), templateId);
+        for (final VoCompleteTransport voCompleteTransport : allDriverTransportsFromTemplate) {
+            final Integer transportDateId = voCompleteTransport.getTransport().getTransportKey().getTransportDateId();
+
+            List<VoCompleteTransport> transportPassengerList = transportPassengersMap.get(transportDateId);
+            if (transportPassengerList == null) {
+                transportPassengerList = new ArrayList<>(Arrays.asList(voCompleteTransport));
+                transportPassengersMap.put(transportDateId, transportPassengerList);
+            } else {
+                transportPassengerList.add(voCompleteTransport);
+            }
+        }
+        
         return driverTransportsMap;
     }
 
@@ -159,46 +183,30 @@ public class TransportService {
     //TODO check if transport allready existed
 
     /**
-     * Gets all the passenger transports that have not been notified to him/her.
-     * As JPQL does not supports unions, it has to be done adding the items manually
+     * Gets how the general driver notification icon should be at the moment: red, invisible...
      * @param templateId
      * @param passengerId
-     * @return list of transports
+     * @return
      */
-    public List<Transport> getPassengerTransportsWithoutNotification(final Integer templateId, final Integer passengerId) {
-        final List<Transport> passengerTransportsWithoutNotification = this.transportByTemplateRepository.getPassengerTransportsWithoutNotification(templateId, passengerId);
-        final List<InvolvedTransportNotification> passengerNotificationsWithoutTransport = this.involvedTransportNotificationService.getPassengerNotificationsWithoutTransport(templateId, passengerId);
-
-        for (final InvolvedTransportNotification notif : passengerNotificationsWithoutTransport) {
-
-            //A passenger can be notified that he does not have a driver assigned
-            if (notif.getDriverCode() != null) {
-                final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
-                passengerTransportsWithoutNotification.add(transport);
-            }
-        }
-
-        return passengerTransportsWithoutNotification;
+    public VoTCVNotificationIconDisplay getGeneralPassengerNotificationIconStatus(final Integer templateId, final Integer passengerId) {
+        final Passenger passenger = new Passenger(passengerId, null);
+        final Map<Integer, VoCompleteNotification> passengerNotificationsMap = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateId, passenger);
+        final Map<Integer, VoCompleteTransport> passengerTransportsMap =  this.findPassengerTransportsFromTemplate(passenger, templateId);
+        
+        return new PassengerNotificationIconCalculator().calculateGeneralNotificationsPassengerIcon(passengerNotificationsMap, passengerTransportsMap);
     }
 
     /**
-     * Gets all the driver transports that have not been notified to him/her
-     * As JPQL does not supports unions, it has to be done adding the items manually
+     * Gets how the general driver notification icon should be at the moment: red, invisible...
      * @param templateId
      * @param driverId
-     * @return list of transports
+     * @return
      */
-    public List<Transport> getDriverTransportsWithoutNotification(final Integer templateId, final Integer driverId) {
-        final List<Transport> driverTransportsWithoutNotification = this.transportByTemplateRepository.getDriverTransportsWithoutNotification(templateId, driverId);
-        final List<InvolvedTransportNotification> getDriverNotificationsWithoutTransport = this.involvedTransportNotificationService.getDriverNotificationsWithoutTransport(templateId, driverId);
-
-        for (final InvolvedTransportNotification notif : getDriverNotificationsWithoutTransport) {
-            if (notif.getPassengerCode() != null) {
-                final Transport transport = new Transport(notif.getPassengerCode(), notif.getDriverCode(), notif.getTransportDateCode());
-                driverTransportsWithoutNotification.add(transport);
-            }
-        }
-
-        return driverTransportsWithoutNotification;
+    public VoTCVNotificationIconDisplay getGeneralDriverNotificationIconStatus(final Integer templateId, final Integer driverId) {
+        final Driver driver = new Driver(driverId, null);
+        final Map<Integer, List<VoCompleteNotification>> driverNotificationsMap = this.involvedTransportNotificationService.getDriverNotificationsMapByTemplate(templateId, driver);
+        final Map<Integer, List<VoCompleteTransport>> driverTransportsMap =  this.findDriverTransportsFromTemplate(driver, templateId);
+        
+        return new DriverNotificationIconCalculator().calculateGeneralNotificationDriverIcon(driverNotificationsMap, driverTransportsMap);
     }
 }

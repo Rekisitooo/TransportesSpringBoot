@@ -9,7 +9,6 @@ import com.transports.spring.dto.driver.DtoScreenDriverTransportsTableInfo;
 import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.operation.transportcrudview.driver.notification.DriverNotificationIconCalculator;
-import com.transports.spring.operation.transportcrudview.passenger.notification.PassengerNotificationIconCalculator;
 import com.transports.spring.vo.completemodel.VoCompleteInvolvedAvailability;
 import com.transports.spring.vo.completemodel.VoCompleteNotification;
 import com.transports.spring.vo.completemodel.VoCompleteTransport;
@@ -42,7 +41,7 @@ public class DriverTemplateCrudDataProvider {
                         final boolean driverHasOneOrMoreTransports = (allDriverTransports.get(driver.getId()) != null);
 
                         // info to draw the general driver icons
-                        final VoTransCVGeneralDriverIcon voGeneralDriverIcon = DriverIconCalculator.calculateGeneralDriverIcons(
+                        final VoTransCVGeneralDriverIcon voGeneralDriverIcon = DriverIconCalculator.calculateGeneralNotificationDriverIcon(
                                                         allDriverNotifications.get(driver.getId()),
                                                         allDriverTransports.get(driver.getId()));
 

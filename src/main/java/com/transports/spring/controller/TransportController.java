@@ -6,6 +6,8 @@ import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.service.TransportService;
 import com.transports.spring.service.response.ServiceResponse;
+import com.transports.spring.vo.transportcrudview.notification.VoTCVNotificationIconDisplay;
+
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,10 +95,10 @@ public class TransportController {
      * @param passengerId
      * @return list of transports
      */
-    @GetMapping("/getPassengerTransportsWithoutNotification")
-    public ResponseEntity<Object> getPassengerTransportsWithoutNotification(@RequestParam Integer templateId, @RequestParam Integer passengerId) {
-        final List<Transport> passengerTransportsWithoutNotification = this.transportService.getPassengerTransportsWithoutNotification(templateId, passengerId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", passengerTransportsWithoutNotification));
+    @GetMapping("/getGeneralPassengerNotificationIconStatus")
+    public ResponseEntity<Object> getGeneralPassengerNotificationIconStatus(@RequestParam Integer templateId, @RequestParam Integer passengerId) {
+        final VoTCVNotificationIconDisplay passengerGeneralNotifIcon = this.transportService.getGeneralPassengerNotificationIconStatus(templateId, passengerId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", passengerGeneralNotifIcon));
     }
 
     /**
@@ -105,9 +107,9 @@ public class TransportController {
      * @param driverId
      * @return list of transports
      */
-    @GetMapping("/getDriverTransportsWithoutNotification")
-    public ResponseEntity<Object> getDriverTransportsWithoutNotification(@RequestParam Integer templateId, @RequestParam Integer driverId) {
-        final List<Transport> driverTransportsWithoutNotification = this.transportService.getDriverTransportsWithoutNotification(templateId, driverId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", driverTransportsWithoutNotification));
+    @GetMapping("/getGeneralDriverNotificationIconStatus")
+    public ResponseEntity<Object> getGeneralDriverNotificationIconStatus(@RequestParam Integer templateId, @RequestParam Integer driverId) {
+        final VoTCVNotificationIconDisplay driverGeneralNotifIcon = this.transportService.getGeneralDriverNotificationIconStatus(templateId, driverId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", driverGeneralNotifIcon));
     }
 }
