@@ -38,9 +38,19 @@ public class NotificationVDriverDataProvider {
                                 // there can be no notifications for this driver
                                 if (notificationsByDate != null && notificationsByDate.get(date.getId()) != null) {
                                         final List<VoCompleteNotification> notifications = notificationsByDate.get(date.getId());
+                                        int emptyPassengerNotifNames = 0;
                                         for (final VoCompleteNotification notification : notifications) {
-                                                dateInfo.addNotifiedPassengerName(notification.getPassenger().getFullName()); 
-                                        }   
+                                                if (notification.getPassenger().getFullName().isBlank()) {
+                                                        emptyPassengerNotifNames++;
+                                                } else {
+                                                        dateInfo.addNotifiedPassengerName(notification.getPassenger().getFullName()); 
+                                                }
+                                        }
+
+                                        // set null to show 'No passengers assigned'
+                                        if (emptyPassengerNotifNames == notifications.size()) {
+                                                dateInfo.setNotifiedPassengerNameList(null);
+                                        }
                                 }
 
                                 voNotifVDriver.addDriverInfo(date.getId(), dateInfo);

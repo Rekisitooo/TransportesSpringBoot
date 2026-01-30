@@ -61,7 +61,10 @@
                     <!-- Transport Date display -->
                     <div th:unless="${'event' == dateObj.dateType}" class="d-flex flex-column">
                         <!-- Driver name -->
-                        <span th:text="${(passengerScreenInfo.notifiedDriverName != null) ? passengerScreenInfo.notifiedDriverName : ''}"></span>
+                        <span th:text="${''.equals(passengerScreenInfo.notifiedDriverName)} ? 
+                            #{notificationTab.noDriverAssigned} : 
+                                (${passengerScreenInfo.notifiedDriverName != null} ? ${passengerScreenInfo.notifiedDriverName} : '')">
+                        </span>
                     </div>
                     <!-- Transport Date display -->
                 </td>

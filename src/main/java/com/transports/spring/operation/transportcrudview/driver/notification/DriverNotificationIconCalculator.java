@@ -21,7 +21,9 @@ public class DriverNotificationIconCalculator {
 		VoTCVNotificationIconDisplay voNotificationIconDisplay;
 
         // if there are the same amount of notifications than transports, calculate the icon
-        if ((driverNotificationMap != null && driverTransportMap != null) && (driverNotificationMap.size() - driverTransportMap.size()) <= 1) {
+        if ((driverNotificationMap != null && driverTransportMap != null) 
+            && (driverNotificationMap.size() - driverTransportMap.size()) <= 1) {
+        
             int redIconCount = 0;
 
             // count how many red icons there are

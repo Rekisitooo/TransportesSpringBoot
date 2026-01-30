@@ -60,12 +60,16 @@
 
                         <!-- Div to show drivers assigned to transport on current date -->
                         <div class="row h-75 mt-1 ml-0">
-                            <div class="col" th:id="'driverPassengersNotificationsForDateDiv_' + ${driver.id} + '_' + ${date.id}"
-                                 th:if="${!driverScreenInfo.notifiedPassengerNameList.isEmpty()}">
+                            <div class="col" th:id="'driverPassengersNotificationsForDateDiv_' + ${driver.id} + '_' + ${date.id}">
 
-                                <div class="row"
-                                     th:each="passenger : ${driverScreenInfo.notifiedPassengerNameList}"
-                                     th:id="'driverPassengersNotificationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger}"
+                                <div th:if="${driverScreenInfo.notifiedPassengerNameList == null}">
+                                   <span th:text="#{notificationTab.noPassengersAssigned}"></span>
+                                </div>
+
+                                <div class="row" 
+                                    th:if="${driverScreenInfo.notifiedPassengerNameList != null && !driverScreenInfo.notifiedPassengerNameList.isEmpty()}"
+                                    th:each="passenger : ${driverScreenInfo.notifiedPassengerNameList}"
+                                    th:id="'driverPassengersNotificationsOnDate_' + ${driver.id} + '_' + ${date.id} + '_' + ${passenger}"
                                 >
                                     <span th:text="${passenger}"></span>
                                 </div>

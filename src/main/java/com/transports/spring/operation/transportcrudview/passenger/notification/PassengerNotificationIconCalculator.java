@@ -24,7 +24,9 @@ public class PassengerNotificationIconCalculator {
         VoTCVNotificationIconDisplay VoTCVNotificationIconDisplay;
 
         // if there are the same amount of notifications than transports, calculate the icon
-        if ((passengerNotificationMap != null && passengerTransportMap != null) && (passengerNotificationMap.size() - passengerTransportMap.size()) <= 1) {
+        if ((passengerNotificationMap != null && passengerTransportMap != null)
+            && (passengerNotificationMap.size() - passengerTransportMap.size()) <= 1) {
+
             int redIconCount = 0;
 
             // count how many red icons there are

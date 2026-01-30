@@ -38,8 +38,13 @@ public class NotificationVPassengerDataProvider {
                                 // there can be no notifications for this passenger
                                 if (notificationsByDate != null) {
                                         final VoCompleteNotification notification = notificationsByDate.get(date.getId());
-                                        if (notification != null && notification.getDriver() != null) {
-                                                dateInfo.setNotifiedDriverName(notification.getDriver().getFullName());
+                                        if (notification != null) {
+                                                // setNotifiedDriverName to "" to show "No driver assigned"
+                                                if (notification.getDriver() != null) {
+                                                        dateInfo.setNotifiedDriverName(notification.getDriver().getFullName());
+                                                } else {
+                                                        dateInfo.setNotifiedDriverName("");
+                                                }
                                         }
                                 }
 
