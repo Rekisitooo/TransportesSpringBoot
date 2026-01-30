@@ -101,7 +101,8 @@ async function updatePassengerNotifications(data, alertIcon, driverSelectedId) {
         const isNotificationUpdated = await updatePassengerNotification({
             transportDateCode: data.transportDateCode,
             notifiedInvolvedId: data.notifiedInvolvedId,
-            driverCode: driverSelectedId
+            driverCode: driverSelectedId,
+            passengerCode: data.passengerCode
         });
         
         if (isNotificationUpdated) {
