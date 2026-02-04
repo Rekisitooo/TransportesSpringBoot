@@ -58,15 +58,16 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
         "               new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, dipft.needsTransport)," +
         "               new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
         "       ) " +
-        "   FROM InvolvedByTemplate ipp " +
-        "           INNER JOIN InvolvedRole passenger_role" +
-        "                   ON ipp.roleCode = passenger_role.id" +
-        "                   AND passenger_role.description = 'Viajero'" +
-        "           INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-        "                   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
-        "           INNER JOIN TransportDateByTemplate ftpp" +
-        "                   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
-        "   WHERE " +
+        "       FROM InvolvedByTemplate ipp " +
+        "               INNER JOIN InvolvedRole passenger_role" +
+        "                       ON ipp.roleCode = passenger_role.id" +
+        "                       AND passenger_role.description = 'Viajero'" +
+        "               INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
+        "                       ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+        "               INNER JOIN TransportDateByTemplate ftpp" +
+        "                       ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
+        "                       AND ipp.involvedByTemplateKey.templateCode = ftpp.templateCode" +
+        "       WHERE " +
         "           ipp.involvedByTemplateKey.involvedCode = :passengerId" +
         "           AND ipp.involvedByTemplateKey.templateCode = :templateId")
     List<VoCompleteInvolvedAvailability> findAllPassengerAssistanceDatesForTemplate(@Param("templateId") int templateId, @Param("passengerId") int passengerId);
@@ -76,17 +77,18 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
         "               new InvolvedAvailabiltyForTransportDate(ipp.involvedByTemplateKey.involvedCode, ftpp.id, dipft.needsTransport)," +
         "               new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
         "       ) " +
-        " FROM InvolvedByTemplate ipp " +
-        "  INNER JOIN InvolvedRole passenger_role" +
-        "   ON ipp.roleCode = passenger_role.id" +
-        "            AND passenger_role.description = 'Conductor'" +
-        "  INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
-        "   ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
-        "  INNER JOIN TransportDateByTemplate ftpp" +
-        "   ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
-        " WHERE " +
-        "  ipp.involvedByTemplateKey.involvedCode = :driverId" +
-        "  AND ipp.involvedByTemplateKey.templateCode = :templateId")
+        "       FROM InvolvedByTemplate ipp " +
+        "               INNER JOIN InvolvedRole passenger_role" +
+        "                       ON ipp.roleCode = passenger_role.id" +
+        "                       AND passenger_role.description = 'Conductor'" +
+        "               INNER JOIN InvolvedAvailabiltyForTransportDate dipft" +
+        "                       ON dipft.involvedAvailabilityForTransportDateKey.involvedCode = ipp.involvedByTemplateKey.involvedCode" +
+        "               INNER JOIN TransportDateByTemplate ftpp" +
+        "                       ON dipft.involvedAvailabilityForTransportDateKey.transportDateCode = ftpp.id" +
+        "                       AND ipp.involvedByTemplateKey.templateCode = ftpp.templateCode" +
+        "       WHERE " +
+        "               ipp.involvedByTemplateKey.involvedCode = :driverId" +
+        "               AND ipp.involvedByTemplateKey.templateCode = :templateId")
     List<VoCompleteInvolvedAvailability> findAllDriversAssistanceDatesForTemplate(@Param("templateId") int templateId, @Param("driverId") int driverId);
 
     @Modifying
