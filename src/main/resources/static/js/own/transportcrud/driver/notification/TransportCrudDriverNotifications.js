@@ -183,11 +183,11 @@ export async function showHideDriverNotificationsButton(driverId, templateId) {
         // icon shows
         if (response?.data?.showIcon) {
             $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + '] i')
-                .addClass('d-none');
+                .removeClass('d-none');
 
         } else {
             $('#driverTransportsTable tr td:first-child div[id=markAsNotifiedDriverButtonDiv_' + driverId + '] i')
-                .removeClass('d-none');
+                .addClass('d-none');
         }
 
     } catch (error) {

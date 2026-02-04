@@ -175,11 +175,11 @@ export async function showHidePassengerNotificationsButton(passengerId, template
         // icon shows
         if (response?.data?.showIcon) {
             $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + '] i')
-                .addClass('d-none');
+                .removeClass('d-none');
 
         } else {
             $('#passengerTransportsTable tr td:first-child div[id=markAsNotifiedPassengerButtonDiv_' + passengerId + '] i')
-                .removeClass('d-none');
+                .addClass('d-none');
         }
     } catch (error) {
         console.error('Error updating passengers whole month notification button');
