@@ -1,28 +1,41 @@
 package com.transports.spring.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.transports.spring.dto.DtoGetPassengersForDriverByDate;
 import com.transports.spring.dto.DtoTransport;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
 import com.transports.spring.service.TransportService;
+import com.transports.spring.service.notification.GeneralNotifIconService;
 import com.transports.spring.service.response.ServiceResponse;
 import com.transports.spring.vo.transportcrudview.notification.VoTCVNotificationIconDisplay;
 
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/t")
 public class TransportController {
 
     private final TransportService transportService;
+    private final GeneralNotifIconService generalNotifIconService;
 
-    public TransportController(TransportService transportService){
+    public TransportController( 
+        final TransportService transportService, 
+        final GeneralNotifIconService generalNotifIconService){
         this.transportService = transportService;
+        this.generalNotifIconService = generalNotifIconService;
     }
 
     @Transactional
@@ -97,7 +110,7 @@ public class TransportController {
      */
     @GetMapping("/getGeneralPassengerNotificationIconStatus")
     public ResponseEntity<Object> getGeneralPassengerNotificationIconStatus(@RequestParam Integer templateId, @RequestParam Integer passengerId) {
-        final VoTCVNotificationIconDisplay passengerGeneralNotifIcon = this.transportService.getGeneralPassengerNotificationIconStatus(templateId, passengerId);
+        final VoTCVNotificationIconDisplay passengerGeneralNotifIcon = this.generalNotifIconService.getGeneralPassengerNotificationIconStatus(templateId, passengerId);
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", passengerGeneralNotifIcon));
     }
 
@@ -109,7 +122,7 @@ public class TransportController {
      */
     @GetMapping("/getGeneralDriverNotificationIconStatus")
     public ResponseEntity<Object> getGeneralDriverNotificationIconStatus(@RequestParam Integer templateId, @RequestParam Integer driverId) {
-        final VoTCVNotificationIconDisplay driverGeneralNotifIcon = this.transportService.getGeneralDriverNotificationIconStatus(templateId, driverId);
+        final VoTCVNotificationIconDisplay driverGeneralNotifIcon = this.generalNotifIconService.getGeneralDriverNotificationIconStatus(templateId, driverId);
         return ResponseEntity.status(HttpStatus.OK).body(new ServiceResponse<>("ok", driverGeneralNotifIcon));
     }
 }

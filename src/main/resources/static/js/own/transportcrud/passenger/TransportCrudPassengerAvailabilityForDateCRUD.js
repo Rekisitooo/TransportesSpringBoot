@@ -21,6 +21,7 @@ async function changePassengerAssistance(assistanceIcon) {
     const passengerId = assistanceIcon.attr('data-t');
     const dateId = assistanceIcon.attr('data-y');
     const ajaxData = {
+        needsTransport : 1,
         transportDateId : dateId,
         involvedId : passengerId,
     };

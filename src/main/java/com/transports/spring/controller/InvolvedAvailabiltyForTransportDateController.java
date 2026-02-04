@@ -21,8 +21,7 @@ public final class InvolvedAvailabiltyForTransportDateController {
 
     @PatchMapping("/updateNeedForTransport/{passengerId}")
     public ResponseEntity<InvolvedAvailabiltyForTransportDate> updateInvolvedNeedForTransport(final Model model, @PathVariable final int passengerId, @RequestBody DtoUpdateNeedForTransport body) {
-        return this.involvedAvailabiltyForTransportDateService.
-                updateInvolvedNeedForTransport(body, passengerId);
+        return this.involvedAvailabiltyForTransportDateService.updateInvolvedNeedForTransport(body, passengerId);
     }
 
     @DeleteMapping

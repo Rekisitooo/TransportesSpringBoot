@@ -39,18 +39,14 @@ public class PassengerTemplateCrudDataProvider {
 
                         final boolean passengerHasOneOrMoreNotifications = (allPassengerNotifications.get(passenger.getId()) != null);
                         final boolean passengerHasOneOrMoreTransports = (allPassengerTransports.get(passenger.getId()) != null);
+                        final Map<Integer, VoCompleteInvolvedAvailability> passengerAssistanceDates = allPassengersAssistanceDates.get(passenger.getId());
+                        int redShownNotifIcons = 0;
 
                         // info to draw the general passenger icons
-                        final VoTransCVGeneralPassengerIcon voGeneralPassengerIcon = PassengerIconCalculator.calculateGeneralPassengerIcons(
-                                                        allPassengerNotifications.get(passenger.getId()),
-                                                        allPassengerTransports.get(passenger.getId()));
-                        
-                        // vo with all the passenger info
-                        final VoTransCVPassenger voTransportCrudScreenPassenger = new VoTransCVPassenger(
-                                        voGeneralPassengerIcon,
-                                        passenger);
+                        final VoTransCVGeneralPassengerIcon voGeneralPassengerIcon = new VoTransCVGeneralPassengerIcon();
 
-                        final Map<Integer, VoCompleteInvolvedAvailability> passengerAssistanceDates = allPassengersAssistanceDates.get(passenger.getId());
+                        // vo with all the passenger info
+                        final VoTransCVPassenger voTransportCrudScreenPassenger = new VoTransCVPassenger(voGeneralPassengerIcon, passenger);
 
                         // info for each date
                         for (final DtoTemplateDate templateDate : templateDateList) {
@@ -67,13 +63,16 @@ public class PassengerTemplateCrudDataProvider {
                                 final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability = passengerAssistanceDates.get(dateId);
                                 if (voCompleteInvolvedAvailability != null) {
 
-                                        screenPassenger.setAssistsOnDate(voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getInvolvedCode() == passenger.getId());
+                                        screenPassenger.setAssistsOnDate(
+                                                voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getInvolvedCode() == passenger.getId());
+                                        
                                         // if passenger does not assists, it does not need transport either
-                                        screenPassenger.setNeedsTransport(voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getNeedsTransport() == 1);
+                                        screenPassenger.setNeedsTransport(
+                                                voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getNeedsTransport() == 1);
 
                                         // info for the passenger notification icon
                                         if (passengerHasOneOrMoreNotifications && passengerHasOneOrMoreTransports) {
-                                                notificationIconDisplay = PassengerNotificationIconCalculator.calculateDatePassengerIcon(
+                                                notificationIconDisplay = PassengerNotificationIconCalculator.calculateDatePassengerNotifIcon(
                                                         allPassengerNotifications.get(passenger.getId()).get(dateId),
                                                         allPassengerTransports.get(passenger.getId()).get(dateId));
 
@@ -82,25 +81,48 @@ public class PassengerTemplateCrudDataProvider {
                                         }
                                 
                                         // if the passenger does not assist on that date or does not need transport, no icon is shown
-                                        notificationIconDisplay.setShowIcon(screenPassenger.isAssistsOnDate() && screenPassenger.isNeedsTransport());
+                                        notificationIconDisplay.setShowIcon(
+                                                screenPassenger.isAssistsOnDate() && screenPassenger.isNeedsTransport());
                                         
-                                        // info for the passenger transport
-                                        final boolean passengerHasTransportOnDate = (allPassengerTransports.get(passenger.getId()) != null && allPassengerTransports.get(passenger.getId()).get(dateId) != null);
-                                        if (passengerHasTransportOnDate) {
-                                                passengerTransportDisplay.setSelectedDriverId(allPassengerTransports.get(passenger.getId()).get(dateId).getTransport().getTransportKey().getDriverId());
-                                                screenPassenger.setAssignedDriverName(allPassengerTransports.get(passenger.getId()).get(dateId).getDriver().getName());
+                                        // increase the red notification icons count for the general notif icon
+                                        if (notificationIconDisplay.isShowIcon() && "red".equalsIgnoreCase(notificationIconDisplay.getIconColor())) {
+                                            redShownNotifIcons++;    
                                         }
 
-                                        final boolean passengerHasNotificationOnDate = (passengerHasOneOrMoreNotifications && allPassengerNotifications.get(passenger.getId()).get(dateId) != null);
-                                        if (passengerHasNotificationOnDate) {
-                                                screenPassenger.setNotifiedDriverName(allPassengerNotifications.get(passenger.getId()).get(dateId).getDriver().getName());
+                                        // info for the passenger transport
+                                        final boolean passengerHasTransportOnDate = 
+                                                (allPassengerTransports.get(passenger.getId()) != null
+                                                 && allPassengerTransports.get(passenger.getId()).get(dateId) != null);
+
+                                        if (passengerHasTransportOnDate) {
+
+                                                passengerTransportDisplay.setSelectedDriverId(
+                                                        allPassengerTransports.get(passenger.getId()).get(dateId).getTransport().getTransportKey().getDriverId());
+                                                
+                                                screenPassenger.setAssignedDriverName(
+                                                        allPassengerTransports.get(passenger.getId()).get(dateId).getDriver().getName());
                                         }
+
+                                        final boolean passengerHasNotificationOnDate = 
+                                                (passengerHasOneOrMoreNotifications && allPassengerNotifications.get(passenger.getId()).get(dateId) != null);
+
+                                        if (passengerHasNotificationOnDate) {
+                                                screenPassenger.setNotifiedDriverName(
+                                                        allPassengerNotifications.get(passenger.getId()).get(dateId).getDriver().getName());
+                                        }
+
                                 }
 
                                 screenPassenger.setVoNotificationIconDisplay(notificationIconDisplay);
                                 screenPassenger.setVoPassengerTransportDisplay(passengerTransportDisplay);
                                 voTransportCrudScreenPassenger.addPassengerInfo(dateId, screenPassenger);
                         
+                        }
+                
+                        if (redShownNotifIcons > 1) {
+                                voGeneralPassengerIcon.setVoNotificationIconDisplay(new VoTCVNotificationIconDisplay(true, "red"));
+                        } else {
+                                voGeneralPassengerIcon.setVoNotificationIconDisplay(new VoTCVNotificationIconDisplay(false, "red"));
                         }
 
                         // add passenger info to the list

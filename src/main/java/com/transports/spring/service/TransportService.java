@@ -17,22 +17,16 @@ import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
 import com.transports.spring.model.key.TransportKey;
-import com.transports.spring.operation.transportcrudview.driver.notification.DriverNotificationIconCalculator;
-import com.transports.spring.operation.transportcrudview.passenger.notification.PassengerNotificationIconCalculator;
 import com.transports.spring.repository.ITransportRepository;
-import com.transports.spring.vo.completemodel.VoCompleteNotification;
 import com.transports.spring.vo.completemodel.VoCompleteTransport;
-import com.transports.spring.vo.transportcrudview.notification.VoTCVNotificationIconDisplay;
 
 @Service
 public class TransportService {
 
     private final ITransportRepository transportByTemplateRepository;
-    private final InvolvedTransportNotificationService involvedTransportNotificationService;
 
-    public TransportService(final ITransportRepository transportByTemplateRepository, InvolvedTransportNotificationService involvedTransportNotificationService) {
+    public TransportService(final ITransportRepository transportByTemplateRepository) {
         this.transportByTemplateRepository = transportByTemplateRepository;
-        this.involvedTransportNotificationService = involvedTransportNotificationService;
     }
 
     /**
@@ -180,32 +174,4 @@ public class TransportService {
     //TODO check driver has available seats
     //TODO check input data
     //TODO check if transport allready existed
-
-    /**
-     * Gets how the general driver notification icon should be at the moment: red, invisible...
-     * @param templateId
-     * @param passengerId
-     * @return
-     */
-    public VoTCVNotificationIconDisplay getGeneralPassengerNotificationIconStatus(final Integer templateId, final Integer passengerId) {
-        final Passenger passenger = new Passenger(passengerId, null);
-        final Map<Integer, VoCompleteNotification> passengerNotificationsMap = this.involvedTransportNotificationService.getPassengerNotificationsMapByTemplate(templateId, passenger);
-        final Map<Integer, VoCompleteTransport> passengerTransportsMap =  this.findPassengerTransportsFromTemplate(passenger, templateId);
-        
-        return new PassengerNotificationIconCalculator().calculateGeneralNotificationsPassengerIcon(passengerNotificationsMap, passengerTransportsMap);
-    }
-
-    /**
-     * Gets how the general driver notification icon should be at the moment: red, invisible...
-     * @param templateId
-     * @param driverId
-     * @return
-     */
-    public VoTCVNotificationIconDisplay getGeneralDriverNotificationIconStatus(final Integer templateId, final Integer driverId) {
-        final Driver driver = new Driver(driverId, null);
-        final Map<Integer, List<VoCompleteNotification>> driverNotificationsMap = this.involvedTransportNotificationService.getDriverNotificationsMapByTemplate(templateId, driver);
-        final Map<Integer, List<VoCompleteTransport>> driverTransportsMap =  this.findDriverTransportsFromTemplate(driver, templateId);
-        
-        return new DriverNotificationIconCalculator().calculateGeneralNotificationDriverIcon(driverNotificationsMap, driverTransportsMap);
-    }
 }

@@ -30,7 +30,9 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     public InvolvedAvailabiltyForTransportDateService(
             final IInvolvedAvailabiltyForTransportDateRepository involvedAvailabiltyForTransportDateRepository,
-            InvolvedByTemplateService involvedByTemplateService, TransportService transportService) {
+            final InvolvedByTemplateService involvedByTemplateService, 
+            final TransportService transportService) {
+
         this.involvedAvailabiltyForTransportDateRepository = involvedAvailabiltyForTransportDateRepository;
         this.involvedByTemplateService = involvedByTemplateService;
         this.transportService = transportService;
@@ -93,7 +95,7 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<PassengerId, Map<LocalDate, DtoTemplateDay>>
+     * @return Map<PassengerId, Map<LocalDate, VoCompleteInvolvedAvailability>>
      */
     public Map<Integer, Map<LocalDate, VoCompleteInvolvedAvailability>> findAllPassengersAssistanceDates(final int templateId) {
         final Map<Integer, Map<LocalDate, VoCompleteInvolvedAvailability>> allPassengersAssistanceDatesMap = new HashMap<>();
@@ -118,24 +120,35 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<DriverId, Map<DateId, DtoTemplateDay>>
+     * @param passenger with the id
+     * @return Map<DateId, VoCompleteInvolvedAvailability>>
+     */
+    public Map<Integer, VoCompleteInvolvedAvailability> findPassengersAssistanceDates(final int templateId, final Passenger passenger) {
+            final List<VoCompleteInvolvedAvailability> passengerAvailabilityForDate = this.involvedAvailabiltyForTransportDateRepository.findAllPassengerAssistanceDatesForTemplate(templateId, passenger.getId());
+            final Map<Integer, VoCompleteInvolvedAvailability> passengersAssistanceDates = new HashMap<>();
+
+            for (final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability : passengerAvailabilityForDate) {
+                passengersAssistanceDates.put(
+                    voCompleteInvolvedAvailability.getInvolvedAvailabiltyForTransportDate().getTransportDateCode(), 
+                    voCompleteInvolvedAvailability);
+            }
+
+        return passengersAssistanceDates;
+    }
+
+    /**
+     * @param templateId
+     * @return Map<DriverId, Map<DateId, VoCompleteInvolvedAvailability>>
      */
     public Map<Integer, Map<Integer, VoCompleteInvolvedAvailability>> findAllDriversAssistanceDates(final int templateId) {
         final Map<Integer, Map<Integer, VoCompleteInvolvedAvailability>> allDriversAssistanceDatesMap = new HashMap<>();
 
         final List<Driver> driverList = this.involvedByTemplateService.getAllDriversFromTemplate(templateId);
         for (final Driver driver : driverList) {
-            final int id = driver.getId();
-            final List<VoCompleteInvolvedAvailability> availablePassengersForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAssistanceDatesForTemplate(templateId, id);
+            final Map<Integer, VoCompleteInvolvedAvailability> driversAssistanceDates = 
+                this.findDriverAssistanceDatesForTemplate(templateId, driver);
 
-            final Map<Integer, VoCompleteInvolvedAvailability> driversAssistanceDates = new HashMap<>();
-            for (final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability : availablePassengersForDate) {
-                final int transportDateId = voCompleteInvolvedAvailability.getTransportDateByTemplate().getId();
-
-                driversAssistanceDates.put(transportDateId, voCompleteInvolvedAvailability);
-            }
-
-            allDriversAssistanceDatesMap.put(id, driversAssistanceDates);
+            allDriversAssistanceDatesMap.put(driver.getId(), driversAssistanceDates);
         }
 
         return allDriversAssistanceDatesMap;
