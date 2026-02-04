@@ -39,18 +39,18 @@ public class DriverTemplateCrudDataProvider {
 
                         final boolean driverHasOneOrMoreNotifications = (allDriverNotifications.get(driver.getId()) != null);
                         final boolean driverHasOneOrMoreTransports = (allDriverTransports.get(driver.getId()) != null);
+                        final Map<Integer, VoCompleteInvolvedAvailability> driverAssistanceDates = allDriversAssistanceDates.get(driver.getId());
+                        int redShownNotifIcons = 0;
 
                         // info to draw the general driver icons
                         final VoTransCVGeneralDriverIcon voGeneralDriverIcon = DriverIconCalculator.calculateGeneralNotificationDriverIcon(
-                                                        allDriverNotifications.get(driver.getId()),
-                                                        allDriverTransports.get(driver.getId()));
+                                allDriverNotifications.get(driver.getId()),
+                                allDriverTransports.get(driver.getId()),
+                                driverAssistanceDates
+                        );
 
                         // vo with all the driver info
-                        final VoTransCVDriver voTransportCrudScreenDriver = new VoTransCVDriver(
-                                        voGeneralDriverIcon,
-                                        driver);
-
-                        final Map<Integer, VoCompleteInvolvedAvailability> driverAssistanceDates = allDriversAssistanceDates.get(driver.getId());
+                        final VoTransCVDriver voTransportCrudScreenDriver = new VoTransCVDriver(voGeneralDriverIcon, driver);
 
                         // info for each date
                         for (final DtoTemplateDate templateDate : templateDateList) {
@@ -65,12 +65,17 @@ public class DriverTemplateCrudDataProvider {
 
                                         // info for the driver notification icon
                                         if (driverHasOneOrMoreNotifications && driverHasOneOrMoreTransports) {
-                                                notificationIconDisplay = DriverNotificationIconCalculator.calculateDateDriverIcon(
+                                                notificationIconDisplay = DriverNotificationIconCalculator.calculateDateDriverNotifIcon(
                                                         allDriverNotifications.get(driver.getId()).get(dateId),
                                                         allDriverTransports.get(driver.getId()).get(dateId));
 
                                         } else if (driverHasOneOrMoreNotifications || driverHasOneOrMoreTransports) {
                                                 notificationIconDisplay = new VoTCVNotificationIconDisplay(true, "red");
+                                        }
+
+                                        // increase the red notification icons count for the general notif icon
+                                        if (notificationIconDisplay.isShowIcon() && "red".equalsIgnoreCase(notificationIconDisplay.getIconColor())) {
+                                            redShownNotifIcons++;    
                                         }
 
                                         // info for the driver transport
@@ -90,10 +95,17 @@ public class DriverTemplateCrudDataProvider {
                                                         screenDriver.addNotifiedPassenger(assignedPassenger.getPassenger());
                                                 }
                                         }
+
                                 }
 
                                 screenDriver.setVoNotificationIconDisplay(notificationIconDisplay);
                                 voTransportCrudScreenDriver.addDriverInfo(dateId, screenDriver);
+                        }
+
+                        if (redShownNotifIcons > 1) {
+                                voGeneralDriverIcon.setVoNotificationIconDisplay(new VoTCVNotificationIconDisplay(true, "red"));
+                        } else {
+                                voGeneralDriverIcon.setVoNotificationIconDisplay(new VoTCVNotificationIconDisplay(false, "red"));
                         }
 
                         // add driver info to the list

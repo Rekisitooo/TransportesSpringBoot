@@ -23,4 +23,8 @@ public class VoCompleteNotification {
     public Integer getPassengerId() {
         return ((this.passenger != null) ? this.passenger.getId() : null);
     }
+
+    public Integer getDriverId() {
+        return ((this.driver != null) ? this.driver.getId() : null);
+    }
 }

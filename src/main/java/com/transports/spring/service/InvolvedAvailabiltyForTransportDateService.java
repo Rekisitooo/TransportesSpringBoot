@@ -143,7 +143,7 @@ public class InvolvedAvailabiltyForTransportDateService {
 
     /**
      * @param templateId
-     * @return Map<DateId, Driver (id, completeName)>
+     * @return Map<DateId, List<Driver>>
      */
     public Map<Integer, List<Driver>> findAllDriversAvailableDatesForTemplate(final int templateId) {
         final List<DtoInvolvedAvailabiltyForTransportDate> availableDriversForDate = this.involvedAvailabiltyForTransportDateRepository.findAllDriversAvailableDatesForTemplate(templateId);
@@ -168,18 +168,41 @@ public class InvolvedAvailabiltyForTransportDateService {
         return availableDriversForDateMap;
     }
 
+   /**
+     * @param templateId
+     * @param driver
+     * @return Map<DateId, VoCompleteInvolvedAvailability>
+     */
+    public Map<Integer, VoCompleteInvolvedAvailability> findDriverAssistanceDatesForTemplate(final int templateId, final Driver driver) {
+            final Map<Integer, VoCompleteInvolvedAvailability> driversAssistanceDates = new HashMap<>();
+
+            final List<VoCompleteInvolvedAvailability> availablePassengersForDate = 
+                this.involvedAvailabiltyForTransportDateRepository.findAllDriversAssistanceDatesForTemplate(templateId, driver.getId());
+
+            for (final VoCompleteInvolvedAvailability voCompleteInvolvedAvailability : availablePassengersForDate) {
+                final int transportDateId = voCompleteInvolvedAvailability.getTransportDateByTemplate().getId();
+
+                driversAssistanceDates.put(transportDateId, voCompleteInvolvedAvailability);
+            }
+
+        return driversAssistanceDates;
+    }
+
     @Transactional
     public ResponseEntity<InvolvedAvailabiltyForTransportDate> updateInvolvedNeedForTransport(final DtoUpdateNeedForTransport body, final Integer passengerId) {
         final Integer transportDateId = body.getTransportDateId();
         final Integer needsTransport = body.getPassengerNeedsTransport();
         final Integer driverId = body.getDriverId();
+        
         if (driverId != null) {
             final Transport transportByPassenger = this.transportService.findTransportByPassenger(transportDateId, passengerId);
             if (transportByPassenger != null) {
                 this.transportService.deleteTransport(new TransportKey(passengerId, driverId, transportDateId));
             }
         }
+
         this.involvedAvailabiltyForTransportDateRepository.updateInvolvedNeedForTransport(needsTransport, passengerId, transportDateId);
+        
         return ResponseEntity.ok().build();
     }
 
