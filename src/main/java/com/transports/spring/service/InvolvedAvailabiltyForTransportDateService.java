@@ -166,6 +166,8 @@ public class InvolvedAvailabiltyForTransportDateService {
             final InvolvedAvailabiltyForTransportDate involvedAvailabiltyForTransportDate = transportByTemplate.getInvolvedAvailabiltyForTransportDate();
             final int transportDateId = involvedAvailabiltyForTransportDate.getTransportDateCode();
             final Driver driver = new Driver(involvedAvailabiltyForTransportDate.getInvolvedCode(), transportByTemplate.getInvolvedCompleteName());
+            driver.setMinistryGroup(transportByTemplate.getInvolvedByTemplate().getMinistryGroup());
+            
             List<Driver> availableDriversForTransportDate = availableDriversForDateMap.get(transportDateId);
 
             if (availableDriversForTransportDate == null) {

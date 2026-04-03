@@ -53,7 +53,7 @@ public class PassengerTemplateCrudDataProvider {
                                 final Integer dateId = templateDate.getId();
                                 
                                 final VoPassengerTransportDisplay passengerTransportDisplay = new VoPassengerTransportDisplay();
-                                passengerTransportDisplay.setAvailableDriverList(dtoScreenPassengerTransportsTableInfo.getDriversAvailableByDate().get(dateId));
+                                passengerTransportDisplay.setAvailableDriverList(dtoScreenPassengerTransportsTableInfo.getDriversAvailableByDate().get(dateId), passenger);
 
                                 VoTCVNotificationIconDisplay notificationIconDisplay = new VoTCVNotificationIconDisplay(false, "red");
 

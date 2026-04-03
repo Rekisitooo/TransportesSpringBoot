@@ -20,7 +20,7 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "               ipp.involvedByTemplateKey.involvedCode," +
             "               ftpp.id" +
             "           )," +
-            "            concat(ipp.name, ' ',ipp.surname)" +
+            "           ipp" +
             "       )" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole rol_conductor" +
@@ -39,7 +39,7 @@ public interface IInvolvedAvailabiltyForTransportDateRepository extends JpaRepos
             "               ipp.involvedByTemplateKey.involvedCode," +
             "               ftpp.id" +
             "           )," +
-            "            concat(ipp.name, ' ',ipp.surname)" +
+            "           ipp" +
             "       )" +
             " FROM InvolvedByTemplate ipp " +
             "  INNER JOIN InvolvedRole passenger_role" +

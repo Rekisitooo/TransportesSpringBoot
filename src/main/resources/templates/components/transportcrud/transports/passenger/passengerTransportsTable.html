@@ -88,7 +88,9 @@
                     th:with="
                             date=${dateObj.transportDateByTemplate},
                             passengerScreenInfo=${passengerInfoMap.get(date.id)},
-                            driversAvailableForDate=${passengerScreenInfo.voPassengerTransportDisplay.availableDriverList}"
+                            differentGroupAvailableForDateDrivers=${passengerScreenInfo.voPassengerTransportDisplay.differentGroupAvailableDrivers},
+                            sameGroupAvailableForDateDrivers=${passengerScreenInfo.voPassengerTransportDisplay.sameGroupAvailableDrivers}
+                            "
 
                     th:class="${((dateObj.dateType == 'event') or (dateObj.dateType == 'transportDate')) ? 'text-center' : ''}"
                     th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
@@ -183,14 +185,18 @@
                                                 th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                                 th:class="'bg-transparent border border-0 w-100 ' + 
                                                             ${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
-                                                                and #lists.isEmpty(driversAvailableForDate) == false) ? '' : 'd-none'}">
+                                                                and (#lists.isEmpty(differentGroupAvailableForDateDrivers) == false or 
+                                                                        #lists.isEmpty(sameGroupAvailableForDateDrivers) == false)) ? '' : 'd-none'}">
 
                                             <!-- option for deleting the transport -->
                                             <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
 
-                                            <!-- driver options-->
-                                            <option
-                                                    th:each="driver : ${driversAvailableForDate}"
+                                             <!-- same group driver options-->
+                                             <optgroup th:if="${#lists.isEmpty(sameGroupAvailableForDateDrivers) == false}" 
+                                                        th:label="#{transportCRUD.sameGroupDrivers}">
+
+                                                <option
+                                                    th:each="driver : ${sameGroupAvailableForDateDrivers}"
                                                     th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
                                                     th:text="${driver.name}"
                                                     th:value="${driver.id}"
@@ -198,7 +204,25 @@
                                                     th:data-t="${passenger.id}"
                                                     th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
                                                     th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
-                                            ></option>
+                                                ></option>
+                                            </optgroup>
+                                            
+                                            <!-- different group driver options-->
+                                             <optgroup th:if="${#lists.isEmpty(differentGroupAvailableForDateDrivers) == false}" 
+                                                        th:label="#{transportCRUD.differentGroupDrivers}">
+
+                                                <option
+                                                    th:each="driver : ${differentGroupAvailableForDateDrivers}"
+                                                    th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
+                                                    th:text="${driver.name}"
+                                                    th:value="${driver.id}"
+                                                    th:data-d="${date.id}"
+                                                    th:data-t="${passenger.id}"
+                                                    th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
+                                                    th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
+                                                ></option>
+                                            </optgroup>
+
                                         </select>
 
                                         <!-- 'There are no drivers available' -->
@@ -206,7 +230,7 @@
                                         <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_noDriversAvailableSpan'}"
                                                 th:text="#{transportCRUD.noDriversAvailable}" 
                                                 th:class="${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
-                                                                and #lists.isEmpty(driversAvailableForDate) == true) ? '' : 'd-none'}"> </span>
+                                                                and #lists.isEmpty(differentGroupAvailableForDateDrivers) == true) ? '' : 'd-none'}"> </span>
 
                                     <!-- 'Does not need transport' Span -->
                                     <!-- If passenger does not need transport -->
