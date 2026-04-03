@@ -14,7 +14,7 @@ import java.util.List;
 public interface IInvolvedByTemplateRepository extends JpaRepository<Involved, Integer> {
 
     @Query("SELECT " +
-            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats, ipp.ministryGroup)" +
             "       FROM InvolvedByTemplate ipp" +
             "           INNER JOIN InvolvedRole rol " +
             "               ON ipp.roleCode = rol.id" +
@@ -24,7 +24,7 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<Involved, I
     List<Passenger> getAllPassengersFromTemplate(@Param("templateCode") final int templateId);
 
     @Query("SELECT " +
-            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats, ipp.ministryGroup)" +
             "       FROM InvolvedByTemplate ipp" +
             "           INNER JOIN InvolvedRole rol " +
             "               ON ipp.roleCode = rol.id" +
@@ -34,7 +34,7 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<Involved, I
     List<Driver> getAllDriversFromTemplate(@Param("templateCode") final int templateId);
 
     @Query("SELECT " +
-            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "   new Passenger(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats, ipp.ministryGroup)" +
             "       FROM InvolvedByTemplate ipp" +
             "           INNER JOIN InvolvedRole rol " +
             "               ON ipp.roleCode = rol.id" +
@@ -45,7 +45,7 @@ public interface IInvolvedByTemplateRepository extends JpaRepository<Involved, I
     Passenger getPassengerByIdAndTemplate(@Param("passengerId") int passengerId, @Param("templateCode") final int templateId);
 
     @Query("SELECT " +
-            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats)" +
+            "   new Driver(ipp.involvedByTemplateKey.involvedCode, ipp.name, ipp.surname, ipp.roleCode, ipp.seats, ipp.ministryGroup)" +
             "       FROM InvolvedByTemplate ipp" +
             "           INNER JOIN InvolvedRole rol " +
             "               ON ipp.roleCode = rol.id" +

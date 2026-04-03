@@ -75,7 +75,7 @@
                     <div class="row mt-1">
                         <div class="col">
                             <span
-                                    th:text="${passenger.name} + ' ' + ${passenger.surname}"
+                                    th:text="${passenger.name} + ' ' + ${passenger.surname} + ' (' + ${passenger.ministryGroup} + ')'"
                                     th:id="${passenger.id} + '_th_passenger_name_span'" >
                             </span>
                         </div>

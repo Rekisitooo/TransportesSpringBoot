@@ -28,4 +28,7 @@ public final class InvolvedByTemplate {
     @Column(name = "COD_ROL")
     private int roleCode;
 
+    @Column(name = "GRUPO_MINISTERIO")
+    private int ministryGroup;
+
 }

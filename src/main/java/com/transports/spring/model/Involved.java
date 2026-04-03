@@ -36,13 +36,17 @@ public class Involved {
     @Column(name = "COD_GRUPO_USUARIO")
     protected Integer userCodeGroup;
 
-    public Involved(Integer id, String name, String surname, int roleCode, int userCode, Integer userCodeGroup) {
+    @Column(name = "CODIGO_GRUPO_MINISTERIO")
+    protected Integer ministryGroup;
+
+    public Involved(Integer id, String name, String surname, int roleCode, int userCode, Integer userCodeGroup, Integer ministryGroup) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.roleCode = roleCode;
         this.userCode = userCode;
         this.userCodeGroup = userCodeGroup;
+        this.ministryGroup = ministryGroup;
     }
 
     protected Involved(int id, String completeName){
