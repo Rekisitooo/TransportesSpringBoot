@@ -14,12 +14,12 @@ import java.io.Serializable;
 public final class TransportKey implements Serializable {
 
     @Column(name = "COD_VIAJERO", nullable = false)
-    private int passengerId;
+    private Integer passengerId;
 
     @Column(name = "COD_CONDUCTOR", nullable = false)
-    private int driverId;
+    private Integer driverId;
 
     @Column(name = "COD_FECHA_TRANSPORTE", nullable = false)
-    private int transportDateId;
+    private Integer transportDateId;
 
 }
