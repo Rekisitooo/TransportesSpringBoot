@@ -29,6 +29,8 @@ public final class InvolvedByTemplate {
     private int roleCode;
 
     @Column(name = "GRUPO_MINISTERIO")
-    private int ministryGroup;
+    private Integer ministryGroup;
 
+    @Column(name = "COD_COLOR")
+    private Integer colorCode;
 }

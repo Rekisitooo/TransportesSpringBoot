@@ -65,7 +65,6 @@ public class PassengerNotificationIconCalculator {
             
         int visibleNotificationIcons = 0;
 
-
         // each passenger assistance date
         for (final Map.Entry<Integer, VoCompleteInvolvedAvailability> passengerAvailability : passengerAssistanceDates.entrySet()) {
 
@@ -104,23 +103,23 @@ public class PassengerNotificationIconCalculator {
         final VoCompleteNotification voCompleteNotification,
         final VoCompleteTransport voCompleteTransport) {
 
-        VoTCVNotificationIconDisplay VoTCVNotificationIconDisplay;
+        VoTCVNotificationIconDisplay voTCVNotificationIconDisplay;
 
         if (voCompleteNotification != null && voCompleteTransport != null) {
             final InvolvedTransportNotification notification = voCompleteNotification.getInvolvedTransportNotification();
             final Transport transport = voCompleteTransport.getTransport();
 
             if (notification.getDriverCode() != null && notification.getDriverCode().equals(transport.getTransportKey().getDriverId())) {
-                VoTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(true, "blue");
+                voTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(true, "blue");
             } else {
-                VoTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(true, "red");
+                voTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(true, "red");
             }
 
         } else {
-            VoTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(false, "red");
+            voTCVNotificationIconDisplay = new VoTCVNotificationIconDisplay(false, "red");
         }
 
-        return VoTCVNotificationIconDisplay;
+        return voTCVNotificationIconDisplay;
     }
 
 }

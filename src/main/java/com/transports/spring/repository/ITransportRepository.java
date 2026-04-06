@@ -18,8 +18,8 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
 
     @Query("SELECT DISTINCT" +
             "   new com.transports.spring.vo.completemodel.VoCompleteTransport(" +
-            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup)," +
-            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup)," +
+            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup, driver.colorCode)," +
+            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup, passenger.colorCode)," +
             "       new com.transports.spring.model.Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)," +
             "       new com.transports.spring.dto.DtoTemplateDate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName, ds.name, 'transportDate')" +
             "   )" +
@@ -39,8 +39,8 @@ public interface ITransportRepository extends JpaRepository<Transport, Integer> 
 
     @Query("SELECT DISTINCT" +
             "   new com.transports.spring.vo.completemodel.VoCompleteTransport(" +
-            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup)," +
-            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup)," +
+            "       new com.transports.spring.model.Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup, driver.colorCode)," +
+            "       new com.transports.spring.model.Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup, passenger.colorCode)," +
             "       new com.transports.spring.model.Transport(t.transportKey.passengerId, t.transportKey.driverId, t.transportKey.transportDateId)," +
             "       new com.transports.spring.dto.DtoTemplateDate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName, ds.name, 'transportDate')" +
             "   )" +

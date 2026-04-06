@@ -17,20 +17,21 @@ public final class Passenger extends Involved implements IPassengerDtoGetAllPass
     @Column(name = "NUMERO_PLAZAS")
     private int occupiedSeats;
 
-    public Passenger(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int occupiedSeats, Integer ministryGroup) {
+    public Passenger(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int occupiedSeats, Integer ministryGroup, Integer colorCode) {
         super();
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.isActive = isActive;
         this.roleCode = roleCode;
-        this.userCode = userCode;
+        this.userCode = userCode;   
         this.userCodeGroup = userCodeGroup;
         this.occupiedSeats = occupiedSeats;
         this.ministryGroup = ministryGroup;
+        this.colorCode = colorCode;
     }
 
-    public Passenger(int id, String name, String surname, int roleCode, int occupiedSeats, Integer ministryGroup) {
+    public Passenger(int id, String name, String surname, int roleCode, int occupiedSeats, Integer ministryGroup, Integer colorCode) {
         super();
         this.id = id;
         this.name = name;
@@ -38,6 +39,7 @@ public final class Passenger extends Involved implements IPassengerDtoGetAllPass
         this.roleCode = roleCode;
         this.occupiedSeats = occupiedSeats;
         this.ministryGroup = ministryGroup;
+        this.colorCode = colorCode;
     }
 
     public Passenger(int id, String completeName){

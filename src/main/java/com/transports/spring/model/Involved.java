@@ -39,7 +39,10 @@ public class Involved {
     @Column(name = "CODIGO_GRUPO_MINISTERIO")
     protected Integer ministryGroup;
 
-    public Involved(Integer id, String name, String surname, int roleCode, int userCode, Integer userCodeGroup, Integer ministryGroup) {
+    @Column(name = "COD_COLOR")
+    protected Integer colorCode;
+
+    public Involved(Integer id, String name, String surname, int roleCode, int userCode, Integer userCodeGroup, Integer ministryGroup, Integer colorCode) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -47,6 +50,7 @@ public class Involved {
         this.userCode = userCode;
         this.userCodeGroup = userCodeGroup;
         this.ministryGroup = ministryGroup;
+        this.colorCode = colorCode;
     }
 
     protected Involved(int id, String completeName){

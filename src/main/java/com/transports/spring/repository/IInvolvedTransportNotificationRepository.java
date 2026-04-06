@@ -15,8 +15,8 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
 
         @Query("SELECT " +
             "   new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
-            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup)," +
-            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup)," +
+            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup, driver.colorCode)," +
+            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup, passenger.colorCode)," +
             "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
             "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
             "   )" +
@@ -34,8 +34,8 @@ public interface IInvolvedTransportNotificationRepository extends JpaRepository<
 
     @Query("SELECT DISTINCT " +
             "   new com.transports.spring.vo.completemodel.VoCompleteNotification(" +
-            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup)," +
-            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup)," +
+            "       new Driver(driver.involvedByTemplateKey.involvedCode, driver.name, driver.surname, true, driver.roleCode, 0, null, driver.seats, driver.ministryGroup, driver.colorCode)," +
+            "       new Passenger(passenger.involvedByTemplateKey.involvedCode, passenger.name, passenger.surname, true, passenger.roleCode, 0, null, passenger.seats, passenger.ministryGroup, passenger.colorCode)," +
             "       new InvolvedTransportNotification(api.id, api.notifiedInvolvedId, api.transportDateCode, api.driverCode, api.passengerCode, api.notificationDate)," +
             "       new TransportDateByTemplate(ftpp.id, ftpp.templateCode, ftpp.transportDate, ftpp.dayOfTheWeekCode, ftpp.eventName)" +
             "   )" +

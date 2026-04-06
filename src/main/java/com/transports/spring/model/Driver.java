@@ -20,7 +20,7 @@ public final class Driver extends Involved implements IDriverDtoGetAllDriversCom
     @Column(name = "NUMERO_PLAZAS")
     private int availableSeats;
 
-    public Driver(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int availableSeats, Integer ministryGroup) {
+    public Driver(int id, String name, String surname, boolean isActive, int roleCode, int userCode, Integer userCodeGroup, int availableSeats, Integer ministryGroup, Integer colorCode) {
         super();
         this.id = id;
         this.name = name;
@@ -31,15 +31,17 @@ public final class Driver extends Involved implements IDriverDtoGetAllDriversCom
         this.userCodeGroup = userCodeGroup;
         this.availableSeats = availableSeats;
         this.ministryGroup = ministryGroup;
+        this.colorCode = colorCode;
     }
 
-    public Driver(int id, String name, String surname, int roleCode, int availableSeats, Integer ministryGroup) {
+    public Driver(int id, String name, String surname, int roleCode, int availableSeats, Integer ministryGroup, Integer colorCode) {
         super();
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.roleCode = roleCode;
         this.ministryGroup = ministryGroup;
+        this.colorCode = colorCode;
         this.availableSeats = availableSeats;
     }
 
