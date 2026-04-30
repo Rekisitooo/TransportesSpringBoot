@@ -50,68 +50,72 @@
                         <!-- End of Page Heading -->
 
                         <!-- Driver Statistics -->
-                         <!-- Last Year Driver Statistics -->
-                            <div class="container py-4 mb-2" style="max-width:720px;">
-                                <h5 th:text="#{stats.lastYearStats.tittle}" class="mt-2 mb-2"></h5>
+                        <!-- Last Year Driver Statistics -->
+                        <div class="container py-4 mb-2">
+                            <h5 th:text="#{stats.lastYearStats.tittle} + ' (' + ${transportDatesOnLastYear} + ' ' + #{stats.transportDatesString} + ')'" class="mt-2 mb-2"></h5>
 
-                                <div th:each="driver : ${lastYearDrivers}" class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <small th:text="${driver.involvedByTemplate.name + ' ' + driver.involvedByTemplate.surname}"></small>
-                                        <small th:text="${driver.totalTransports}"></small>
-                                    </div>
-                                    <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                                        <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        <span class="ml-1" th:text="${driver.totalTransports}"></span>
-                                    </div>
+                            <div th:each="driver : ${lastYearDrivers}" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small th:text="${driver.driver.name + ' ' + driver.driver.surname}"></small>
+                                </div>
+                                <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
+                                    <div class="progress-bar" role="progressbar" 
+                                        th:style="'width:' + ${driver.transportPercentage} + '%; background-color: ' + (${driver.color != null} ? ${driver.color.getLightModeRGB()} : 'black') + ';'" 
+                                        th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <span class="ml-1" th:text="${driver.totalTransports}"></span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Last nine months Driver Statistics
-                            <div class="container py-4 mb-2" style="max-width:720px;">
-                                <h5 th:text="#{stats.lastYearStats.tittle}" class="mt-2 mb-2"></h5>
+                        <!-- Last nine months Driver Statistics -->
+                        <div class="container py-4 mb-2">
+                            <h5 th:text="#{stats.lastNineMonthsStats.tittle} + ' (' + ${transportDatesOnLastNineMonths} + ' ' + #{stats.transportDatesString} + ')'" class="mt-2 mb-2"></h5>
 
-                                <div th:each="driver : ${lastNineMonthsDrivers}" class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <small th:text="${driver.involvedByTemplate.name + ' ' + driver.involvedByTemplate.surname}"></small>
-                                        <small th:text="${driver.totalTransports}"></small>
-                                    </div>
-                                    <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                                        <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        <span class="ml-1" th:text="${driver.totalTransports}"></span>
-                                    </div>
+                            <div th:each="driver : ${lastNineMonthsDrivers}" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small th:text="${driver.driver.name + ' ' + driver.driver.surname}"></small>
                                 </div>
-                            </div> -->
-
-                            <!-- Last Six Months Driver Statistics -->
-                            <div class="container py-4 mb-2" style="max-width:720px;">
-                                <h5 th:text="#{stats.lastSixMonthsStats.tittle}" class="mt-2 mb-2"></h5>
-
-                                <div th:each="driver : ${lastSixMonthsDrivers}" class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <small th:text="${driver.involvedByTemplate.name + ' ' + driver.involvedByTemplate.surname}"></small>
-                                    </div>
-                                    <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                                        <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        <span class="ml-1" th:text="${driver.totalTransports}"></span>
-                                    </div>
+                                <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
+                                    <div class="progress-bar" role="progressbar" 
+                                            th:style="'width:' + ${driver.transportPercentage} + '%; background-color:' + (${driver.color != null} ? ${driver.color.getLightModeRGB()} : 'black')" 
+                                            th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <span class="ml-1" th:text="${driver.totalTransports}"></span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Last three months Driver Statistics -->
-                            <div class="container py-4 mb-2" style="max-width:720px;">
-                                <h5 th:text="#{stats.lastThreeMonthsStats.tittle}" class="mt-2 mb-2"></h5>
+                        <!-- Last Six Months Driver Statistics -->
+                        <div class="container py-4 mb-2 ">
+                            <h5 th:text="#{stats.lastSixMonthsStats.tittle} + ' (' + ${transportDatesOnLastSixMonths} + ' ' + #{stats.transportDatesString} + ')'" class="mt-2 mb-2"></h5>
 
-                                <div th:each="driver : ${lastThreeMonthsDrivers}" class="mb-3">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <small th:text="${driver.involvedByTemplate.name + ' ' + driver.involvedByTemplate.surname}"></small>
-                                        <small th:text="${driver.totalTransports}"></small>
-                                    </div>
-                                    <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                                        <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        <span class="ml-1" th:text="${driver.totalTransports}"></span>
-                                    </div>
+                            <div th:each="driver : ${lastSixMonthsDrivers}" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small th:text="${driver.driver.name + ' ' + driver.driver.surname}"></small>
+                                </div>
+                                <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
+                                    <div class="progress-bar" role="progressbar" 
+                                            th:style="'width:' + ${driver.transportPercentage} + '%; background-color: ' + (${driver.color != null} ? ${driver.color.getLightModeRGB()} : 'black')" 
+                                            th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <span class="ml-1" th:text="${driver.totalTransports}"></span>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Last three months Driver Statistics -->
+                        <div class="container py-4 mb-2">
+                            <h5 th:text="#{stats.lastThreeMonthsStats.tittle} + ' (' + ${transportDatesOnLastThreeMonths} + ' ' + #{stats.transportDatesString} + ')'" class="mt-2 mb-2"></h5>
+
+                            <div th:each="driver : ${lastThreeMonthsDrivers}" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <small th:text="${driver.driver.name + ' ' + driver.driver.surname}"></small>
+                                </div>
+                                <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
+                                    <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + (${driver.color != null} ? ${driver.color.getLightModeRGB()} : 'black')" 
+                                    th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <span class="ml-1" th:text="${driver.totalTransports}"></span>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                     <!-- End Page Content -->

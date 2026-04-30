@@ -47,6 +47,19 @@ public class TransportDateByTemplateService {
     }
 
     /**
+     * Returns a list of TransportDateByTemplate objects for transport dates on the last specified number of months.
+     * @param months the number of months to look back for transport date data
+     * @return a list of TransportDateByTemplate objects with transport date information
+     */
+    public List<TransportDateByTemplate> findTransportsDatesOnMonths(final int months) {
+        final LocalDate start = LocalDate.now().minusMonths(months - 1).withDayOfMonth(1);
+        final java.sql.Date initialDate = java.sql.Date.valueOf(start);
+        final java.sql.Date finalDate = java.sql.Date.valueOf(LocalDate.now());
+
+        return this.transportDateByTemplateRepository.findTransportsDatesOnMonths(initialDate, finalDate);
+    }
+
+    /**
      * adds a transport date in a template.
      * @param body
      * @param template

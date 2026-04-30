@@ -10,7 +10,7 @@
                 <small th:text="${driver.totalTransports}"></small>
             </div>
             <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? ${driver.color.getLightModeRGB()} : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
                 <span class="ml-1" th:text="${driver.totalTransports}"></span>
             </div>
         </div>
@@ -26,7 +26,7 @@
                 <small th:text="${driver.totalTransports}"></small>
             </div>
             <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? ${driver.color.getLightModeRGB()} : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
                 <span class="ml-1" th:text="${driver.totalTransports}"></span>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <small th:text="${driver.involvedByTemplate.name + ' ' + driver.involvedByTemplate.surname}"></small>
             </div>
             <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? ${driver.color.getLightModeRGB()} : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
                 <span class="ml-1" th:text="${driver.totalTransports}"></span>
             </div>
         </div>
@@ -57,7 +57,7 @@
                 <small th:text="${driver.totalTransports}"></small>
             </div>
             <div class="progress" style="height:1.25rem; background-color:transparent; line-height: 170%; ">
-                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? driver.color.getLightModeRGB() : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar" role="progressbar" th:style="'width: ' + ${driver.transportPercentage} + '%; background-color:' + ${(driver.color != null) ? ${driver.color.getLightModeRGB()} : 'black'} + '" th:aria-valuenow="${driver.totalTransports}" aria-valuemin="0" aria-valuemax="100"></div>
                 <span class="ml-1" th:text="${driver.totalTransports}"></span>
             </div>
         </div>
