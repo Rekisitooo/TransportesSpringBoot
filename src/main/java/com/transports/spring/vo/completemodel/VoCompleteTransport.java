@@ -5,15 +5,18 @@ import com.transports.spring.model.Driver;
 import com.transports.spring.model.Passenger;
 import com.transports.spring.model.Transport;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 public class VoCompleteTransport {
     private Driver driver;
     private Passenger passenger;
     private DtoTemplateDate dtoTemplateDate;
+    @EqualsAndHashCode.Include
     private Transport transport;
 
     public VoCompleteTransport(Driver driver, Passenger passenger, Transport transport, DtoTemplateDate dtoTemplateDate) {
@@ -30,4 +33,5 @@ public class VoCompleteTransport {
     public Integer getDriverId() {
         return ((this.driver != null) ? this.driver.getId() : null);
     }
+    
 }

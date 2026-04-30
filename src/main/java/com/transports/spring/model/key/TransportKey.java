@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 
+@EqualsAndHashCode
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +19,6 @@ public final class TransportKey implements Serializable {
 
     @Column(name = "COD_CONDUCTOR", nullable = false)
     private Integer driverId;
-
     @Column(name = "COD_FECHA_TRANSPORTE", nullable = false)
     private Integer transportDateId;
 

@@ -4,6 +4,7 @@ import com.transports.spring.model.key.TransportKey;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

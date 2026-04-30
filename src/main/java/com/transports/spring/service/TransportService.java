@@ -93,7 +93,9 @@ public class TransportService {
                 transportPassengerList = new ArrayList<>(Arrays.asList(voCompleteTransport));
                 transportPassengersMap.put(transportDateId, transportPassengerList);
             } else {
-                transportPassengerList.add(voCompleteTransport);
+                if (!transportPassengerList.contains(voCompleteTransport)) {
+                    transportPassengerList.add(voCompleteTransport);
+                }
             }
         }
         
