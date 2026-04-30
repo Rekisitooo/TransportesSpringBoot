@@ -23,11 +23,11 @@ public class VoPassengerTransportDisplay {
     public void setAvailableDriverList(final List<Driver> availableDriverList, final Passenger passenger) {
         if (availableDriverList != null) {
             this.sameGroupAvailableDrivers = availableDriverList.stream()
-                .filter(driver -> passenger.getMinistryGroup().equals(driver.getMinistryGroup()))
+                .filter(driver -> passenger.getMinistryGroup() != null && passenger.getMinistryGroup().equals(driver.getMinistryGroup()))
                 .collect(Collectors.toList());
 
             this.differentGroupAvailableDrivers = availableDriverList.stream()
-                .filter(driver -> !passenger.getMinistryGroup().equals(driver.getMinistryGroup()))
+                .filter(driver -> passenger.getMinistryGroup() != null && !passenger.getMinistryGroup().equals(driver.getMinistryGroup()))
                 .collect(Collectors.toList());
         }
     }
