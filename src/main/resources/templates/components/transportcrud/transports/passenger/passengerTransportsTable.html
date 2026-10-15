@@ -228,9 +228,9 @@
                                         <!-- 'There are no drivers available' -->
                                         <!-- If there are no drivers available for date -->
                                         <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_noDriversAvailableSpan'}"
-                                                th:text="#{transportCRUD.noDriversAvailable}" 
+                                                th:text="#{transportCRUD.noDriversAvailable}"
                                                 th:class="${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
-                                                                and #lists.isEmpty(differentGroupAvailableForDateDrivers) == true) ? '' : 'd-none'}"> </span>
+                                                                and #lists.isEmpty(differentGroupAvailableForDateDrivers) == true) ? 'd-none' : ''}"> </span>
 
                                     <!-- 'Does not need transport' Span -->
                                     <!-- If passenger does not need transport -->
