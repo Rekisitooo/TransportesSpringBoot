@@ -140,14 +140,14 @@ function changeTransportOfferingIcon(dataDriverAssist, offersTransportIcon, clas
 async function changeDriverAssistance() {
     const offersTransportIcon = $(this);
     const driverId = offersTransportIcon.attr('data-d');
-    const dateId = offersTransportIcon.attr('data-y');
+    const dateId = offersTransportIcon.attr('data-date-id');
     const formData = {
         transportDateId : dateId,
         involvedId : driverId,
     }
 
     const passengerSelectsSelector = 'select[name=driverInTransportSelect][id*=' + formData.transportDateId + '_select]';
-    const notificationIconCol = $('#notificationIcon_' + driverId + '_' + dateId);
+    const notificationIconCol = $('#notificationIcon_' + driverId + '_t' + dateId);
 
     const driverTransportOffer = offersTransportIcon.attr('data-driver-assist');
     if (driverTransportOffer === "1") {

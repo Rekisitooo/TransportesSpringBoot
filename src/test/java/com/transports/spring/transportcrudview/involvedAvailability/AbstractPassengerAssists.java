@@ -100,8 +100,8 @@ abstract class AbstractPassengerAssists extends TestConstants {
         if (selectedDriverIdForTransport != null && !selectedDriverIdForTransport.isBlank() && !selectedDriverIdForTransport.isEmpty()) {
             final ElementHandle passengerTd = this.page.querySelector(passengerTdSelector);
             final String passengerId = passengerTd.getAttribute("data-t");
-            final String dateId = passengerTd.getAttribute("data-y");
-            final ElementHandle passengerSpanInDriversTd = this.page.querySelector("#driverTransportsTable tbody tr td span[id*=" + dateId + "]");
+            final String dateId = passengerTd.getAttribute("data-date-id");
+            final ElementHandle passengerSpanInDriversTd = this.page.querySelector("#driverTransportsTable tbody tr td span[id*=t" + dateId + "]");
             final String driversTdPassengerId = passengerSpanInDriversTd.getAttribute("data-p-span-id");
             isPassengerEliminatedFromDriversTd = driversTdPassengerId.equalsIgnoreCase(passengerId);
         } else {

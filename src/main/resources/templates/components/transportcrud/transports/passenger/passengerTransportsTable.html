@@ -96,7 +96,6 @@
                     th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
                     th:data-t="${passenger.id}"
                     th:data-date-id="${date.id}"
-                    th:data-y="'t' + ${date.id}"
                     th:data-tr-ref="'passenger_row_' + ${passenger.id}"
                     th:data-driver-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                     data-passenger-td="data-passenger-td"
@@ -121,7 +120,7 @@
                                     <!-- Needs Transport icon -->
                                     <i
                                         th:data-t="${passenger.id}"
-                                        th:data-y="${date.id}"
+                                        th:data-date-id="${date.id}"
                                         th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
                                         th:data-needs-transport="${(passengerScreenInfo.needsTransport) ? 1 : 0}"
                                         th:class="'position-relative fas fa-car ' + ${(!passengerScreenInfo.assistsOnDate or passengerScreenInfo.needsTransport) ? 'text-primary' : 'text-muted'}"
@@ -139,7 +138,7 @@
                                     <!-- Assistance icon -->
                                     <i class="fas fa-calendar-check"
                                        th:data-t="${passenger.id}"
-                                       th:data-y="${date.id}"
+                                       th:data-date-id="${date.id}"
                                        th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
                                        th:data-passenger-assist="${(passengerScreenInfo.assistsOnDate) ? 1 : 0}"
                                        th:title="#{transportCRUD.titleCalendarIconPassengerAssistsOnTransportForDate}"

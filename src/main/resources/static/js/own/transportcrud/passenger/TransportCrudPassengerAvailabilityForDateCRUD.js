@@ -19,7 +19,7 @@ $(function() {
  */
 async function changePassengerAssistance(assistanceIcon) {
     const passengerId = assistanceIcon.attr('data-t');
-    const dateId = assistanceIcon.attr('data-y');
+    const dateId = assistanceIcon.attr('data-date-id');
     const ajaxData = {
         needsTransport : 1,
         transportDateId : dateId,
@@ -28,11 +28,11 @@ async function changePassengerAssistance(assistanceIcon) {
 
     const passengerDateIcons = {
         assistanceIcon: assistanceIcon,
-        driverSelectForPassenger: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select'),
-        needsTransportIconCol: $('#needsTransportIcon_' + passengerId + '_' + dateId),
-        doesNotNeedTransportSpan: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotNeedTransportSpan'),
-        doesNotAssistSpan: $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_doesNotAssistSpan'),
-        notificationIconCol: $('#notificationIcon_' + passengerId + '_' + dateId)
+        driverSelectForPassenger: $('#selectDriverForPassenger_' + passengerId + '_t' + dateId + '_select'),
+        needsTransportIconCol: $('#needsTransportIcon_' + passengerId + '_t' + dateId),
+        doesNotNeedTransportSpan: $('#selectDriverForPassenger_' + passengerId + '_t' + dateId + '_doesNotNeedTransportSpan'),
+        doesNotAssistSpan: $('#selectDriverForPassenger_' + passengerId + '_t' + dateId + '_doesNotAssistSpan'),
+        notificationIconCol: $('#notificationIcon_' + passengerId + '_t' + dateId)
     };
 
     const passengerAssistance = assistanceIcon.attr('data-passenger-assist');
