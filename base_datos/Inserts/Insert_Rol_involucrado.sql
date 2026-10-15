@@ -1,0 +1,4 @@
+INSERT INTO ROL_INVOLUCRADO (ID, DESCRIPCION)
+VALUES 
+	(1, 'Viajero'),
+	(2, 'Conductor');
