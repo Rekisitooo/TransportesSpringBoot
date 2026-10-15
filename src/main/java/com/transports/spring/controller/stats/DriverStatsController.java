@@ -27,29 +27,29 @@ public final class DriverStatsController {
     @GetMapping("/openStats")
     public String openStats(final Model model) {
         
-        final List<DtoDriverStats> lastYearDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(12);
-        model.addAttribute("lastYearDrivers", lastYearDrivers);
-
         final List<TransportDateByTemplate> transportDatesOnLastYear = this.transportDateByTemplateService.findTransportsDatesOnMonths(12);
         model.addAttribute("transportDatesOnLastYear", transportDatesOnLastYear.size());
 
-        final List<DtoDriverStats> lastNineMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(9);
-        model.addAttribute("lastNineMonthsDrivers", lastNineMonthsDrivers);
+        final List<DtoDriverStats> lastYearDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(12, transportDatesOnLastYear.size());
+        model.addAttribute("lastYearDrivers", lastYearDrivers);
 
         final List<TransportDateByTemplate> transportDatesOnLastNineMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(9);
         model.addAttribute("transportDatesOnLastNineMonths", transportDatesOnLastNineMonths.size());
 
-        final List<DtoDriverStats> lastSixMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(6);
-        model.addAttribute("lastSixMonthsDrivers", lastSixMonthsDrivers);
+        final List<DtoDriverStats> lastNineMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(9, transportDatesOnLastNineMonths.size());
+        model.addAttribute("lastNineMonthsDrivers", lastNineMonthsDrivers);
 
         final List<TransportDateByTemplate> transportDatesOnLastSixMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(6);
         model.addAttribute("transportDatesOnLastSixMonths", transportDatesOnLastSixMonths.size());
 
-        final List<DtoDriverStats> lastThreeMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(1);
-        model.addAttribute("lastThreeMonthsDrivers", lastThreeMonthsDrivers);
+        final List<DtoDriverStats> lastSixMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(6, transportDatesOnLastSixMonths.size());
+        model.addAttribute("lastSixMonthsDrivers", lastSixMonthsDrivers);
 
-        final List<TransportDateByTemplate> transportDatesOnLastThreeMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(1);
+        final List<TransportDateByTemplate> transportDatesOnLastThreeMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(3);
         model.addAttribute("transportDatesOnLastThreeMonths", transportDatesOnLastThreeMonths.size());
+
+        final List<DtoDriverStats> lastThreeMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(3, transportDatesOnLastThreeMonths.size());
+        model.addAttribute("lastThreeMonthsDrivers", lastThreeMonthsDrivers);
 
         return "stats/stats";
     }
@@ -57,16 +57,29 @@ public final class DriverStatsController {
     
     @GetMapping("/showDriverStats")
     public String showDriverStats(final Model model) {
-        final List<DtoDriverStats> lastYearDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(12);
-        model.addAttribute("lastYearDrivers", lastYearDrivers);
         
-        final List<DtoDriverStats> lastNineMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(9);
+        final List<TransportDateByTemplate> transportDatesOnLastYear = this.transportDateByTemplateService.findTransportsDatesOnMonths(12);
+        model.addAttribute("transportDatesOnLastYear", transportDatesOnLastYear.size());
+
+        final List<DtoDriverStats> lastYearDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(12, transportDatesOnLastYear.size());
+        model.addAttribute("lastYearDrivers", lastYearDrivers);
+
+        final List<TransportDateByTemplate> transportDatesOnLastNineMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(9);
+        model.addAttribute("transportDatesOnLastNineMonths", transportDatesOnLastNineMonths.size());
+
+        final List<DtoDriverStats> lastNineMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(9, transportDatesOnLastNineMonths.size());
         model.addAttribute("lastNineMonthsDrivers", lastNineMonthsDrivers);
 
-        final List<DtoDriverStats> lastSixMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(6);
+        final List<TransportDateByTemplate> transportDatesOnLastSixMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(6);
+        model.addAttribute("transportDatesOnLastSixMonths", transportDatesOnLastSixMonths.size());
+
+        final List<DtoDriverStats> lastSixMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(6, transportDatesOnLastSixMonths.size());
         model.addAttribute("lastSixMonthsDrivers", lastSixMonthsDrivers);
-        
-        final List<DtoDriverStats> lastThreeMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(3);
+
+        final List<TransportDateByTemplate> transportDatesOnLastThreeMonths = this.transportDateByTemplateService.findTransportsDatesOnMonths(3);
+        model.addAttribute("transportDatesOnLastThreeMonths", transportDatesOnLastThreeMonths.size());
+
+        final List<DtoDriverStats> lastThreeMonthsDrivers = this.driverStatsService.findTotalDriverTransportsOverLastMonths(3, transportDatesOnLastThreeMonths.size());
         model.addAttribute("lastThreeMonthsDrivers", lastThreeMonthsDrivers);
 
         return "components/driver :: driverStats";

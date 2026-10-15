@@ -26,7 +26,7 @@ public class DriverStatsService {
      * @param months the number of months to look back for transport data
      * @return a list of DtoDriverStats objects with driver statistics
      */
-    public List<DtoDriverStats> findTotalDriverTransportsOverLastMonths(final int months) {
+    public List<DtoDriverStats> findTotalDriverTransportsOverLastMonths(final int months, final int transportDatesNumber) {
         final LocalDate start = LocalDate.now().minusMonths(months - 1).withDayOfMonth(1);
         final java.sql.Date initialDate = java.sql.Date.valueOf(start);
         final java.sql.Date finalDate = java.sql.Date.valueOf(LocalDate.now());
@@ -46,7 +46,6 @@ public class DriverStatsService {
         
         // set the transport percentage for each driver based on the maximum number of transports
         if (driverTransportList != null && !driverTransportList.isEmpty()) {
-            int maxTransports = 0;
 
             // Map the number of transports for each driver
             for (final Transport driverTransport : driverTransportList) {
@@ -54,12 +53,6 @@ public class DriverStatsService {
                 
                 if (transportCount != null) {
                     driverTransportCountMap.put(driverTransport.getTransportKey().getDriverId(), transportCount + 1);
-
-                    // to obtain the maximum number of transports for any driver, we compare the current transport count with the maximum
-                    if (transportCount + 1 > maxTransports) {
-                        maxTransports = transportCount + 1;
-                    }
-
                 } else {
                     driverTransportCountMap.put(driverTransport.getTransportKey().getDriverId(), 1);
                 }
@@ -73,8 +66,8 @@ public class DriverStatsService {
                 if (transportCount != null) {
                     driverStats.setTotalTransports(transportCount.longValue());
                     
-                    if (transportCount > 0 && maxTransports > 0) {
-                        driverStats.setTransportPercentage((int) ((transportCount * 100) / maxTransports));
+                    if (transportCount > 0 && transportDatesNumber > 0) {
+                        driverStats.setTransportPercentage((int) ((transportCount * 100) / transportDatesNumber));
                     }  
                 }
             }
