@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
+		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.transports</groupId>
@@ -84,11 +84,6 @@
 			<groupId>com.aspose</groupId>
 			<artifactId>aspose-pdf</artifactId>
 			<version>25.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.playwright</groupId>
-			<artifactId>playwright</artifactId>
-			<version>1.50.0</version>
 		</dependency>
 	</dependencies>
     <repositories>
