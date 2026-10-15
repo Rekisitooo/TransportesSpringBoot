@@ -18,7 +18,7 @@ $(function() {
  */
 async function changePassengerNeedForTransport(needTransportIcon) {
     let passengerNeedsTransport = needTransportIcon.attr('data-needs-transport');
-    const passengerId = needTransportIcon.attr('data-t');
+    const passengerId = needTransportIcon.attr('data-passenger-id');
     const dateId = needTransportIcon.attr('data-date-id');
 
     const driverSelectForPassenger = $('#selectDriverForPassenger_' + passengerId + '_' + dateId + '_select');

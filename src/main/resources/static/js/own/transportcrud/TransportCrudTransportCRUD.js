@@ -17,7 +17,7 @@ $(function() {
         const newDriverId = $(this).val();
         const previousDriverId = $(this).data('previous-driver-id');
         const selectedOption = $(this).find('option:selected');
-        const passengerId = selectedOption.attr('data-t');
+        const passengerId = selectedOption.attr('data-passenger-id');
 
         await operate(this, previousDriverId, newDriverId, passengerId);
         $(this).data('previous-driver-id', $(this).val());
@@ -217,7 +217,7 @@ function deletePassengerInDriverTransportsTable(transportDateId, passengerId, ol
  */
 async function operate(actualSelect, previousDriverId, newDriverId, passengerId) {
     const selectedOption = $(actualSelect).find('option:selected');
-    const transportDateId = selectedOption.attr('data-d');
+    const transportDateId = selectedOption.attr('data-date-id');
     const passengerFullName = selectedOption.attr('data-passenger-name');
     const methodName = selectedOption.attr('name');
 

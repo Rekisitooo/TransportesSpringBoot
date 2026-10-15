@@ -41,7 +41,7 @@
                 <!-- Passenger name -->
                 <td
                     th:id="'passengerNameCell_' + ${passenger.id}"
-                    th:data-t="${passenger.id}"
+                    th:data-passenger-id="${passenger.id}"
                     th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                     class="text-nowrap text-left"
                     style="cursor:move"
@@ -94,7 +94,7 @@
 
                     th:class="${((dateObj.dateType == 'event') or (dateObj.dateType == 'transportDate')) ? 'text-center' : ''}"
                     th:id="'p' + ${passenger.id} + 't' + ${date.id} + '_date_td'"
-                    th:data-t="${passenger.id}"
+                    th:data-passenger-id="${passenger.id}"
                     th:data-date-id="${date.id}"
                     th:data-tr-ref="'passenger_row_' + ${passenger.id}"
                     th:data-driver-selector="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
@@ -119,7 +119,7 @@
 
                                     <!-- Needs Transport icon -->
                                     <i
-                                        th:data-t="${passenger.id}"
+                                        th:data-passenger-id="${passenger.id}"
                                         th:data-date-id="${date.id}"
                                         th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
                                         th:data-needs-transport="${(passengerScreenInfo.needsTransport) ? 1 : 0}"
@@ -137,7 +137,7 @@
 
                                     <!-- Assistance icon -->
                                     <i class="fas fa-calendar-check"
-                                       th:data-t="${passenger.id}"
+                                       th:data-passenger-id="${passenger.id}"
                                        th:data-date-id="${date.id}"
                                        th:data-passenger-select="${'selectDriverForPassenger_' + passenger.id + '_' + date.id}"
                                        th:data-passenger-assist="${(passengerScreenInfo.assistsOnDate) ? 1 : 0}"
@@ -180,7 +180,7 @@
                                         <select name="driverInTransportSelect"
                                                 th:aria-label="${passenger.name} + ' ' + ${passenger.surname} + ': ' + #{transportCRUD.driverFor} + ' ' + ${dateObj.dayOfTheWeekName} + ' ' + ${date.transportDate}"
                                                 class="bg-transparent border border-0"
-                                                th:data-t="${passenger.id}"
+                                                th:data-passenger-id="${passenger.id}"
                                                 th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_select'}"
                                                 th:class="'bg-transparent border border-0 w-100 ' + 
                                                             ${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
@@ -188,7 +188,7 @@
                                                                         #lists.isEmpty(sameGroupAvailableForDateDrivers) == false)) ? '' : 'd-none'}">
 
                                             <!-- option for deleting the transport -->
-                                            <option selected="selected" name="d" th:data-d="${date.id}" th:data-t="${passenger.id}"></option>
+                                            <option selected="selected" name="d" th:data-date-id="${date.id}" th:data-passenger-id="${passenger.id}"></option>
 
                                              <!-- same group driver options-->
                                              <optgroup th:if="${#lists.isEmpty(sameGroupAvailableForDateDrivers) == false}" 
@@ -199,8 +199,8 @@
                                                     th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
                                                     th:text="${driver.name}"
                                                     th:value="${driver.id}"
-                                                    th:data-d="${date.id}"
-                                                    th:data-t="${passenger.id}"
+                                                    th:data-date-id="${date.id}"
+                                                    th:data-passenger-id="${passenger.id}"
                                                     th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
                                                     th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
                                                 ></option>
@@ -215,8 +215,8 @@
                                                     th:selected="${(passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == driver.id)}"
                                                     th:text="${driver.name}"
                                                     th:value="${driver.id}"
-                                                    th:data-d="${date.id}"
-                                                    th:data-t="${passenger.id}"
+                                                    th:data-date-id="${date.id}"
+                                                    th:data-passenger-id="${passenger.id}"
                                                     th:data-passenger-name="${passenger.name} + ' ' + ${passenger.surname}"
                                                     th:name="${passengerScreenInfo.voPassengerTransportDisplay.selectedDriverId == null}? 'c' : 'u'"
                                                 ></option>

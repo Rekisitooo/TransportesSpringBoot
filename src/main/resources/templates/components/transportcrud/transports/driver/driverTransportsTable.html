@@ -34,7 +34,7 @@
                 <!-- Driver Name -->
                 <td
                     th:id="${driver.id} + '_th'"
-                    th:data-d="${driver.id}"
+                    th:data-driver-id="${driver.id}"
                     th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'"
                     class="text-nowrap text-left"
                     style="cursor:move"
@@ -100,7 +100,7 @@
 
                                 <!-- Assistance icon -->
                                 <i
-                                    th:data-d="${driver.id}"
+                                    th:data-driver-id="${driver.id}"
                                     th:data-date-id="${date.id}"
                                     th:data-driver-assist="${(driverScreenInfo.providesTransport) ? 1 : 0}"
                                     th:title="#{transportCRUD.titleCalendarIconDriverAssistsOnTransportForDate}"

@@ -8,7 +8,7 @@ $(function() {
         function () {
             $(this).on('click', async function() {
                 const passengerThId = $(this).attr('data-passenger-th');
-                const passengerId = $('td[id=' + passengerThId + ']').attr('data-t');
+                const passengerId = $('td[id=' + passengerThId + ']').attr('data-passenger-id');
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),

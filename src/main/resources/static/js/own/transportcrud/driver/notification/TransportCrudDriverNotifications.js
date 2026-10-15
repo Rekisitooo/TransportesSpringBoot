@@ -8,7 +8,7 @@ $(function() {
         function () {
             $(this).on('click', async function() {
                 const driverThId = $(this).attr('data-driver-th');
-                const driverId = $('td[id=' + driverThId + ']').attr('data-d');
+                const driverId = $('td[id=' + driverThId + ']').attr('data-driver-id');
                 const dataDateTd = $(this).attr('data-date-td');
                 const data = {
                     transportDateCode : $('td[id=' + dataDateTd + ']').attr('data-date-id'),

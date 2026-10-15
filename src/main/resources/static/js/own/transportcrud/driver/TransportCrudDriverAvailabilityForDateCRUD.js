@@ -111,14 +111,14 @@ function addDriverInPassengerTable(data, iconsData) {
                 operationToPerform = 'd';
             }
 
-            const passengerId = $(this).attr('data-t');
+            const passengerId = $(this).attr('data-passenger-id');
             const passengerTh = iconsData.passengerNameCells.filter('[data-t=' + passengerId + ']');
             const passengerName = passengerTh.text();
             const $newDriverOption = $('<option>',
                 {
                     'value'                 :       data.involvedId,
-                    'data-d'                :       data.transportDateId,
-                    'data-t'                :       passengerId,
+                    'data-date-id'                :       data.transportDateId,
+                    'data-passenger-id'     :       passengerId,
                     'text'                  :       iconsData.driverFullName,
                     'name'                  :       operationToPerform,
                     'data-passenger-name'   :       passengerName

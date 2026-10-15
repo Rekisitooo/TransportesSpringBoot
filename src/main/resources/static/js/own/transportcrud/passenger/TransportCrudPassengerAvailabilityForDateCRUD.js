@@ -18,7 +18,7 @@ $(function() {
  * @param {Object} assistanceIcon
  */
 async function changePassengerAssistance(assistanceIcon) {
-    const passengerId = assistanceIcon.attr('data-t');
+    const passengerId = assistanceIcon.attr('data-passenger-id');
     const dateId = assistanceIcon.attr('data-date-id');
     const ajaxData = {
         needsTransport : 1,
