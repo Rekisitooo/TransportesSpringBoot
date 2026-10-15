@@ -5,25 +5,23 @@
 
     <table class="table table-striped table-bordered shadow-lg" id="driverTransportsTable">
         <thead class="bg-light">
+            <!-- Event Name row -->
+            <tr>
+                <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+                <th th:each="dateObj: ${templateDates}" th:with="date=${dateObj.transportDateByTemplate}" th:data-date="${dateObj.transportDate}" th:text="${dateObj.eventName}" class="text-nowrap"></th>
+            </tr>
 
-        <!-- Event Name row -->
-        <tr>
-            <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
-            <th th:each="dateObj: ${templateDates}" th:with="date=${dateObj.transportDateByTemplate}" th:data-date="${dateObj.transportDate}" th:text="${dateObj.eventName}" class="text-nowrap"></th>
-        </tr>
-
-        <!-- Days of the week row -->
-        <tr>
-            <!-- empty for the drivers column -->
-            <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
-            <th th:each="dateObj: ${templateDates}"
-                th:with="date=${dateObj.transportDateByTemplate}"
-                th:data-date="${date.transportDate}"
-                th:text="${#messages.msgOrNull(dateObj.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
-                class="text-nowrap"
-            ></th>
-        </tr>
-
+            <!-- Days of the week row -->
+            <tr>
+                <!-- empty for the drivers column -->
+                <th th:data-date="${templateYear} + '-' + ${monthNumber} + '-' + '00'" class="text-nowrap"></th>
+                <th th:each="dateObj: ${templateDates}"
+                    th:with="date=${dateObj.transportDateByTemplate}"
+                    th:data-date="${date.transportDate}"
+                    th:text="${#messages.msgOrNull(dateObj.dayOfTheWeekName) + ' ' + date.transportDate.toString().substring(8)}"
+                    class="text-nowrap"
+                ></th>
+            </tr>
         </thead>
         <tbody>
             <tr th:each="driverObj : ${driverTransportsTableInfo}" 
