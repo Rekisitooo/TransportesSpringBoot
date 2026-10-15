@@ -36,7 +36,7 @@ public class Involved {
     @Column(name = "COD_GRUPO_USUARIO")
     protected Integer userCodeGroup;
 
-    @Column(name = "CODIGO_GRUPO_MINISTERIO")
+    @Column(name = "COD_GRUPO_MINISTERIO")
     protected Integer ministryGroup;
 
     @Column(name = "COD_COLOR")
