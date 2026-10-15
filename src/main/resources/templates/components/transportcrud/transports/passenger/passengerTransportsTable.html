@@ -231,18 +231,6 @@
                                                 th:text="#{transportCRUD.noDriversAvailable}"
                                                 th:class="${(passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate 
                                                                 and #lists.isEmpty(differentGroupAvailableForDateDrivers) == true) ? '' : 'd-none'}"> </span>
-
-                                    <!-- 'Does not need transport' Span -->
-                                    <!-- If passenger does not need transport -->
-                                    <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_doesNotNeedTransportSpan'}"
-                                            th:class="${(!passengerScreenInfo.needsTransport and passengerScreenInfo.assistsOnDate) ? ' ' : 'd-none'}"
-                                          th:text="#{transportCRUD.doesNotNeedTransport}"></span>
-
-                                    <!-- 'Does not asist' Span -->
-                                    <!-- If passenger does not assist on this date -->
-                                    <span th:id="${'selectDriverForPassenger_' + passenger.id + '_' + date.id + '_doesNotAssistSpan'}"
-                                            th:class="${(passengerScreenInfo.assistsOnDate)? 'd-none' : ' '}"
-                                          th:text="#{transportCRUD.doesNotAssist}"></span>
                                 </div>
 
                             </div>
